@@ -1,9 +1,9 @@
 {
-    "mod_id": "AutoExecuteNode",
-    "name": "AutoExecuteNode",
-    "author": "cfloutier",
-    "description": "A TEST GUI keybind is ALT+D.",
-    "source": "link_to_github_if_you_want",
+    "mod_id": "K2D2",
+    "name": "K2D2",
+    "author": "cfloutier, ",
+    "description": "Small set of navigation tools. use Alt+O to open",
+    "source": "https://github.com/cfloutier/k2d2",
     "version": "0.1.0",
     "dependencies": [],
     "ksp2_version": {

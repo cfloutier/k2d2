@@ -6,16 +6,16 @@ using System.Reflection;
 using BepInEx.Logging;
 using Newtonsoft.Json;
 
-namespace COSMAT
+namespace K2D2
 {
-    public class AutoExecuteNodeSettings
+    public class K2D2Settings
     {
         public MainUI.InterfaceMode defaultMode = MainUI.InterfaceMode.ExeNode;
     }
 
     public class Settings
     {
-        public static AutoExecuteNodeSettings settings { get; set; }
+        public static K2D2Settings settings { get; set; }
         public static string settings_path;
 
         private static ManualLogSource logger;
@@ -43,18 +43,18 @@ namespace COSMAT
         {
             try
             {
-                settings = JsonConvert.DeserializeObject<AutoExecuteNodeSettings>(File.ReadAllText(settings_path));
+                settings = JsonConvert.DeserializeObject<K2D2Settings>(File.ReadAllText(settings_path));
             }
 
             catch (FileNotFoundException ex)
             {
                 Settings.logger.LogWarning($"Load exception {ex}");
-                settings = new AutoExecuteNodeSettings();
+                settings = new K2D2Settings();
             }
             catch (Exception ex)
             {
                 Settings.logger.LogError($"Save exception {ex}");
-                settings = new AutoExecuteNodeSettings();
+                settings = new K2D2Settings();
             }
         }
     }

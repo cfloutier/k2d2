@@ -4,7 +4,7 @@ using KSP.Sim;
 using BepInEx.Logging;
 using SpaceWarp.API.Assets;
 
-namespace COSMAT
+namespace K2D2
 {
     public class Styles
     {
@@ -28,7 +28,7 @@ namespace COSMAT
         // BEPEXVersion
         public static Texture2D loadIcon(string path)
         {
-           var imageTexture = AssetManager.GetAsset<Texture2D>($"{AutoExecuteNode.mod_id}/images/{path}.png");
+           var imageTexture = AssetManager.GetAsset<Texture2D>($"{K2D2_Plugin.mod_id}/images/{path}.png");
 
             //   Check if the texture is null
             if (imageTexture == null)

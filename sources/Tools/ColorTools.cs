@@ -3,7 +3,7 @@ using System.Collections;
 using System;
 using System.Globalization;
 
-namespace COSMAT
+namespace K2D2
 {
     /// <summary>
     /// A set of simple tools for colors that is missing in the main unity API

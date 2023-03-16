@@ -7,8 +7,8 @@
     <ProjectGuid>{C0BDE81C-46FF-40A1-B3A1-07E40830115C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>AutoExecuteNode</RootNamespace>
-    <AssemblyName>AutoExecuteNode</AssemblyName>
+    <RootNamespace>K2D2</RootNamespace>
+    <AssemblyName>K2D2</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -79,19 +79,18 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="My_Plugin.cs" />
-
-    <Compile Include="MainUI.cs" />
-    <Compile Include="Styles.cs" />
-    <Compile Include="Settings.cs" />
-    <Compile Include="AutoExecuteManeuver.cs" />
-    <Compile Include="sub_pilots\BasePilot.cs" />
-    <Compile Include="sub_pilots\TurnToManeuvre.cs" />
-    <Compile Include="sub_pilots\WarpToManeuvre.cs" />
-    <Compile Include="sub_pilots\BurnManeuvre.cs" />
-    <Compile Include="Tools\ColorTools.cs" />
-    <Compile Include="Tools\Tools.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="sources\My_Plugin.cs" />
+    <Compile Include="sources\MainUI.cs" />
+    <Compile Include="sources\Styles.cs" />
+    <Compile Include="sources\Settings.cs" />
+    <Compile Include="sources\AutoExecuteManeuver.cs" />
+    <Compile Include="sources\sub_pilots\BasePilot.cs" />
+    <Compile Include="sources\sub_pilots\TurnToManeuvre.cs" />
+    <Compile Include="sources\sub_pilots\WarpToManeuvre.cs" />
+    <Compile Include="sources\sub_pilots\BurnManeuvre.cs" />
+    <Compile Include="sources\Tools\ColorTools.cs" />
+    <Compile Include="sources\Tools\Tools.cs" />
+    <Compile Include="sources\Properties\AssemblyInfo.cs" />
 
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
@@ -103,7 +102,7 @@ echo $(TargetDir)
 taskkill /f /im KSP2_x64.exe
 timeout 1
 
-cd $(ProjectDir)\..
+cd $(ProjectDir)
 
 call make_zip.bat
 call copy_to_ksp.bat

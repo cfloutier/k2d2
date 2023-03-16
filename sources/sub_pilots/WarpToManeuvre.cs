@@ -6,7 +6,7 @@ using UnityEngine;
 using KSP.Sim.impl;
 using KSP.Sim.Maneuver;
 
-namespace COSMAT
+namespace K2D2
 {
     public class WarpToManeuvre : BasePilot
     {

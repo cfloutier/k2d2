@@ -7,7 +7,7 @@ using KSP.Game;
 
 using System.Reflection;
 
-namespace COSMAT
+namespace K2D2
 {
     public class Tools
     {

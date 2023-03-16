@@ -4,7 +4,7 @@ using KSP.Sim;
 using BepInEx.Logging;
 using SpaceWarp.API.Assets;
 
-namespace COSMAT
+namespace K2D2
 {
     public class MainUI
     {
@@ -21,7 +21,7 @@ namespace COSMAT
             set
             {
                 if (value == Settings.settings.defaultMode) return;
-                // logger.LogInfo("Value is different to " + AutoExecuteNode.settings.defaultMode);
+                // logger.LogInfo("Value is different to " + K2D2.settings.defaultMode);
                 logger.LogInfo("InterfaceMode set " + value);
                 Settings.settings.defaultMode = value;
 

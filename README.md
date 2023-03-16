@@ -1,6 +1,8 @@
-# Auto Execute Maneuvre Node
+# K.2.D.2
 
-Simply execute the next maneuvre node.
+A set of tools to Help Space Navigation.
+
+Simply execute the next maneuvre node for the moment.
 The UI can be opened using `Alt-O` or using AppBar.
 
 There is no use of the SAS for the moment (very early version). The pilot, wait for a good pointing attitude, do auto-warp and then auto-burn.
@@ -9,6 +11,7 @@ All of those phases must be enhanced.
 It's working better than I can do by hand. But could me more precise. Especially the burning phase. There is always some small amount of dv Missing... It's based on Burn Duration of the Node and this is not perfect.
 
 # Next
+
 
 * Burn based on real dv
 * We could stop burning if the atitude of the vessel is out of the node direction.
@@ -52,5 +55,5 @@ Thanks for this excellent first step ! a light code, simple and very well writte
 
 # License
 
-AutoExecuteNode is distributed under the CC BY-SA 4.0 license. Read about the license here before redistributing:
+K2D2 is distributed under the CC BY-SA 4.0 license. Read about the license here before redistributing:
 https://creativecommons.org/licenses/by-sa/4.0/

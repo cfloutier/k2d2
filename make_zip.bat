@@ -1,4 +1,6 @@
-set PROJECT_NAME=AutoExecuteNode
+@REM Create the zip fro SpaceDocks
+
+set PROJECT_NAME=K2D2
 set CONFIG=Debug
 
 set OUTPUT=output
@@ -28,7 +30,7 @@ copy /Y README.md %LOCAL_DIR%\
 md %LOCAL_DIR%\assets
 md %LOCAL_DIR%\assets\images
 copy /Y icon.png %LOCAL_DIR%\assets\images
-copy /Y AutoExecuteNode\icons\*.png %LOCAL_DIR%\assets\images
+copy /Y K2D2\icons\*.png %LOCAL_DIR%\assets\images
 
 copy /Y %PROJECT_NAME%\obj\%CONFIG%\%PROJECT_NAME%.dll %LOCAL_DIR%
 

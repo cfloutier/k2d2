@@ -2,10 +2,9 @@
 
 
 echo off
-set PROJECT_NAME=AutoExecuteNode
 
 set OUTPUT=output
-set DEST_DIR=.\%PROJECT_NAME%\external_dlls
+set DEST_DIR=external_dlls
 
 echo Dest_Dir is : %DEST_DIR%
 

@@ -1,5 +1,5 @@
 echo off
-set PROJECT_NAME=AutoExecuteNode
+set PROJECT_NAME=K2D2
 set CONFIG=Debug
 
 set OUTPUT=output

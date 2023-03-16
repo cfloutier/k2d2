@@ -19,23 +19,23 @@ using SpaceWarp.API.UI;
 using SpaceWarp.API.UI.Appbar;
 using BepInEx.Logging;
 
-namespace COSMAT
+namespace K2D2
 {
     [BepInDependency(SpaceWarpPlugin.ModGuid,SpaceWarpPlugin.ModVer)]
     [BepInPlugin(ModGuid, ModName, ModVer)]
-    public class AutoExecuteNode : BaseSpaceWarpPlugin
+    public class K2D2_Plugin : BaseSpaceWarpPlugin
     {
-        public static AutoExecuteNode Instance { get; set; }
+        public static K2D2_Plugin Instance { get; set; }
 
-        public const string ModGuid = "AutoExecuteNode";
-        public const string ModName = "AutoExecuteNode";
+        public const string ModGuid = "K2D2";
+        public const string ModName = "K2D2";
         public const string ModVer = "0.1.0";
 
         #region Fields
 
         // Main.
         public static bool loaded = false;
-        public static AutoExecuteNode instance;
+        public static K2D2_Plugin instance;
 
         // Paths.
         private static string _assemblyFolder;
@@ -80,7 +80,7 @@ namespace COSMAT
                 Destroy(this);
             }
 
-            logger = BepInEx.Logging.Logger.CreateLogSource("AutoExecuteNode");
+            logger = BepInEx.Logging.Logger.CreateLogSource("K2D2");
 
             mod_id = SpaceWarpMetadata.ModID;
 
@@ -95,11 +95,9 @@ namespace COSMAT
             main_ui = new MainUI(logger);
             Settings.Init(SettingsPath, logger);
 
-
             Appbar.RegisterAppButton(
-                // "C.O.S.M.A.T",
-                "Auto-Node",
-                "BTN-AutoExecuteNodeButton",
+                "K.2.D.2",
+                "BTN-K2D2Button",
                 AssetManager.GetAsset<Texture2D>($"{SpaceWarpMetadata.ModID}/images/icon.png"),
                 ToggleButton);
         }
@@ -133,8 +131,7 @@ namespace COSMAT
                     GUIUtility.GetControlID(FocusType.Passive),
                     windowRect,
                     FillWindow,
-                    // "<color=#00D346>C.O.S.M.A.T</color>",
-                    "<color=#00D346>Auto-Node</color>",
+                    "<color=#00D346>K.2.D.2</color>",
                     Styles.window,
                     GUILayout.Height(0),
                     GUILayout.Width(350));
@@ -144,7 +141,7 @@ namespace COSMAT
         public void ToggleButton(bool toggle)
         {
             drawUI = toggle;
-            GameObject.Find("BTN-AutoExecuteNodeButton")?.GetComponent<UIValue_WriteBool_Toggle>()?.SetValue(toggle);
+            GameObject.Find("BTN-K2D2Button")?.GetComponent<UIValue_WriteBool_Toggle>()?.SetValue(toggle);
         }
 
 

@@ -15,7 +15,7 @@ using KSP.Sim.ResourceSystem;
 using BepInEx.Logging;
 using KSP.ScriptInterop.impl.moonsharp;
 
-namespace COSMAT
+namespace K2D2
 {
     /// base class for all pilot tools
     // it includes update call and gui
