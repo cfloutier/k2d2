@@ -1,0 +1,23 @@
+{
+    "folders": [
+		{
+			"path": ".."
+		},
+		{
+			"path": "../../AutoBurn"
+		},
+		{
+			"path": "D:/SteamLibrary/steamapps/common/Kerbal Space Program 2"
+		},
+		{
+			"path": "../../../../Users/cfloutier/AppData/LocalLow/Intercept Games/Kerbal Space Program 2/Saves"
+		},
+		{
+			"path": "../../LazyOrbit"
+		},
+		{
+			"path": "../../SpaceWarp"
+		}
+	],
+    "settings": {}
+}
