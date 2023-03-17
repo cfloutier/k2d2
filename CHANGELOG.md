@@ -13,7 +13,6 @@
 * added Ugly icon in the app bar and title bar
 * Renamed to K2-D2
 
-
 # v0.1.0
 
 * Very first implementation.

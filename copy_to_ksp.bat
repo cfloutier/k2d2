@@ -5,6 +5,9 @@ set CONFIG=Debug
 set OUTPUT=output
 set LOCAL_DIR=%OUTPUT%\BepInEx\plugins\%PROJECT_NAME%
 
+@REM call the ksp_location 
+call ksp_location.bat
+
 @REM create local dir
 if not exist %OUTPUT% (
     echo %OUTPUT% is missing
@@ -14,7 +17,7 @@ if not exist %OUTPUT% (
 echo ####################### Copy to target Ksp dir #######################
 echo on
 
-set DEST_PATH="D:\SteamLibrary\steamapps\common\Kerbal Space Program 2\BepInEx\plugins\%PROJECT_NAME%"
+set DEST_PATH="%KSP2_LOCATION%\BepInEx\plugins\%PROJECT_NAME%"
 echo dest path is : %DEST_PATH%
 
 rd /s/q %DEST_PATH%
