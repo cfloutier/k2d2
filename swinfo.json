@@ -4,7 +4,7 @@
     "author": "cfloutier, ",
     "description": "Small set of navigation tools. use Alt+O to open",
     "source": "https://github.com/cfloutier/k2d2",
-    "version": "0.2.1",
+    "version": "0.3.0",
     "dependencies": [],
     "ksp2_version": {
         "min": "0.1.0",

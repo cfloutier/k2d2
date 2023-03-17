@@ -15,20 +15,6 @@ namespace K2D2
         public enum InterfaceMode { ExeNode, SAS, Vessel }
         private static string[] interfaceModes = { "Auto Execute", "SAS Infos", "Vessel Infos" };
 
-        private InterfaceMode CurrentInterfaceMode
-        {
-            get => Settings.settings.current_mode;
-            set
-            {
-                if (value == Settings.settings.current_mode) return;
-                // logger.LogInfo("Value is different to " + K2D2.settings.defaultMode);
-                logger.LogInfo("InterfaceMode set " + value);
-                Settings.settings.current_mode = value;
-
-                Settings.Save();
-            }
-        }
-
         #endregion
 
         public MainUI(ManualLogSource src_logger)
@@ -61,17 +47,14 @@ namespace K2D2
             // ############# Uncomment this to get tabs in UI ###################
 
             // Mode selection.
-            // GUILayout.BeginHorizontal();
-            // CurrentInterfaceMode = (InterfaceMode)GUILayout.SelectionGrid((int)CurrentInterfaceMode, interfaceModes, 4);
-            // GUILayout.EndHorizontal();
-
+            GUILayout.BeginHorizontal();
+            Settings.current_interface_mode = (InterfaceMode)GUILayout.SelectionGrid((int)Settings.current_interface_mode, interfaceModes, 4);
+            GUILayout.EndHorizontal();
             // #############  ###################
-
-            CurrentInterfaceMode = InterfaceMode.ExeNode;
 
             // return;
             // Draw one of the modes.
-            switch (CurrentInterfaceMode)
+            switch (Settings.current_interface_mode)
             {
                 case InterfaceMode.ExeNode:
                     if (AutoExecuteManeuver.Instance != null)

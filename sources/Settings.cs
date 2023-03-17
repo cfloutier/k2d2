@@ -17,59 +17,32 @@ namespace K2D2
 
     public class Settings
     {
-        public static K2D2Settings settings { get; set; }
-        public static string settings_path;
+        public static SettingsFile s_settings_file = null;
+        public static string s_settings_path;
 
         private static ManualLogSource logger;
 
-        public static void Init(string settings_path, ManualLogSource logger )
+        public static void Init(string settings_path)
         {
-            Settings.settings_path = settings_path;
-            Settings.logger = logger;
-            Load();
+            s_settings_file = new SettingsFile(settings_path);
         }
+
+        // each setting is defined by an accessor pointing on s_settings_file
+        // the convertion to type is made here
+        // this way we can have any kind of settings without hard work 
 
         public static bool debug_mode
-         {
-            get => Settings.settings.debug_mode;
-            set {
-                    if (value == Settings.settings.debug_mode) return;
-                    Settings.settings.debug_mode = value;
-                    Settings.Save();
-            }
-        }
-
-
-        static public void Save()
         {
-            try 
-            {
-                File.WriteAllText(settings_path, JsonConvert.SerializeObject(settings));
-            }
-            catch (Exception ex)
-            {
-                logger.LogError($"Save exception {ex}");
-            }
+            get => s_settings_file.GetBool("debug_mode", false);
+            set {  s_settings_file.SetBool("debug_mode", value); }
         }
 
-        static void Load()
+        public static MainUI.InterfaceMode current_interface_mode
         {
-            try
-            {
-                settings = JsonConvert.DeserializeObject<K2D2Settings>(File.ReadAllText(settings_path));
-            }
-
-            catch (FileNotFoundException ex)
-            {
-                Settings.logger.LogWarning($"Load exception {ex}");
-                settings = new K2D2Settings();
-            }
-            catch (Exception ex)
-            {
-                Settings.logger.LogError($"Save exception {ex}");
-                settings = new K2D2Settings();
-            }
+            get { return s_settings_file.GetEnum< MainUI.InterfaceMode> ("interface_setting", MainUI.InterfaceMode.ExeNode); }
+            set{  s_settings_file.SetEnum< MainUI.InterfaceMode>("interface_setting", value); }
         }
+
     }
 
 }

@@ -29,7 +29,7 @@ namespace K2D2
 
         public const string ModGuid = "K2D2";
         public const string ModName = "K2D2";
-        public const string ModVer = "0.2.1";
+        public const string ModVer = "0.3.0";
 
         #region Fields
 
@@ -63,7 +63,6 @@ namespace K2D2
             return validScenes.Contains(state);
         }
 
-
         MainUI main_ui;
         AutoExecuteManeuver auto_execute_maneuver;
 
@@ -71,13 +70,14 @@ namespace K2D2
 
         #endregion
 
-
         public override void OnInitialized()
         {
             if (loaded)
             {
                 Destroy(this);
             }
+
+            Settings.Init(SettingsPath);
 
             logger = BepInEx.Logging.Logger.CreateLogSource("K2D2");
 
@@ -92,7 +92,6 @@ namespace K2D2
             logger.LogMessage("building AutoExecuteManeuver");
             auto_execute_maneuver = new AutoExecuteManeuver(logger);
             main_ui = new MainUI(logger);
-            Settings.Init(SettingsPath, logger);
 
             Appbar.RegisterAppButton(
                 "K2-D2",

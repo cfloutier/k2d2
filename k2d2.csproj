@@ -89,7 +89,8 @@
     <Compile Include="sources\pilots\WarpToManeuvre.cs" />
     <Compile Include="sources\pilots\BurnManeuvre.cs" />
     <Compile Include="sources\Tools\ColorTools.cs" />
-    <Compile Include="sources\Tools\Tools.cs" />
+    <Compile Include="sources\Tools\KSP2Tools.cs" />
+    <Compile Include="sources\Tools\SettingsFile.cs" />
     <Compile Include="sources\Properties\AssemblyInfo.cs" />
 
   </ItemGroup>
