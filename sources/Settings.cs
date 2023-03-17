@@ -1,3 +1,4 @@
+using UnityEngine;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -43,6 +44,14 @@ namespace K2D2
             set{  s_settings_file.SetEnum< MainUI.InterfaceMode>("interface_setting", value); }
         }
 
+    }
+
+    public class SettingsUI
+    {
+        public static void onGui()
+        {
+            Settings.debug_mode = GUILayout.Toggle(Settings.debug_mode, "debug mode");
+        }
     }
 
 }

@@ -149,7 +149,7 @@ namespace K2D2
                     Stop();
             }
 
-            Settings.debug_mode = GUILayout.Toggle(Settings.debug_mode, "debug mode");
+            
 
             node_infos();
 
@@ -203,7 +203,6 @@ namespace K2D2
                 var telemetry = SASInfos.getTelemetry();
 
                 Vector3 maneuvre_dir = telemetry.ManeuverDirection.vector;
-
 
                 GUILayout.Label($"maneuvre_dir {Tools.printVector(maneuvre_dir)}");
             }

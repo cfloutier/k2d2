@@ -17,6 +17,8 @@ namespace K2D2
 
         #endregion
 
+        
+
         public MainUI(ManualLogSource src_logger)
         {
             logger = src_logger;
