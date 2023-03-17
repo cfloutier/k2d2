@@ -296,5 +296,5 @@ namespace K2D2
             SetString(name, text);
         }
     }
-
+    
 }

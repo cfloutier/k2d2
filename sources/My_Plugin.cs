@@ -18,6 +18,8 @@ using SpaceWarp.API.Assets;
 using SpaceWarp.API.UI;
 using SpaceWarp.API.UI.Appbar;
 using BepInEx.Logging;
+using K2D2.Controller;
+using K2D2;
 
 namespace K2D2
 {
@@ -62,9 +64,11 @@ namespace K2D2
             var state = Tools.Game().GlobalGameState.GetState();
             return validScenes.Contains(state);
         }
-
+        // Controllers
         MainUI main_ui;
         AutoExecuteManeuver auto_execute_maneuver;
+        CircularizeController circularizeController;
+        
 
         public static string mod_id;
 
@@ -90,7 +94,11 @@ namespace K2D2
             DontDestroyOnLoad(gameObject);
 
             logger.LogMessage("building AutoExecuteManeuver");
+
+            // Controllers
             auto_execute_maneuver = new AutoExecuteManeuver(logger);
+            circularizeController = new CircularizeController(logger);
+            
             main_ui = new MainUI(logger);
 
             Appbar.RegisterAppButton(

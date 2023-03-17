@@ -234,3 +234,6 @@ $RECYCLE.BIN/
 
 *.exe
 output/
+
+# Riderfiles
+.idea/

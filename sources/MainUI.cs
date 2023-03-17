@@ -3,6 +3,7 @@ using UnityEngine;
 using KSP.Sim;
 using BepInEx.Logging;
 using SpaceWarp.API.Assets;
+using K2D2.Controller;
 
 namespace K2D2
 {
@@ -12,8 +13,8 @@ namespace K2D2
 
         #region interfaces modes
 
-        public enum InterfaceMode { ExeNode, SAS, Vessel }
-        private static string[] interfaceModes = { "Auto Execute", "SAS Infos", "Vessel Infos" };
+        public enum InterfaceMode { ExeNode, SAS, Vessel, Circularize }
+        private static string[] interfaceModes = { "Auto Execute", "SAS Infos", "Vessel Infos", "Circularization" };
 
         #endregion
 
@@ -64,6 +65,10 @@ namespace K2D2
                     break;
                 case InterfaceMode.SAS: SASInfos(); break;
                 case InterfaceMode.Vessel: VesselInfo(); break;
+                case InterfaceMode.Circularize: 
+                    CircularizeController.Instance.onGUI(); 
+                    break;
+                
                 default:
                     break;
             }
