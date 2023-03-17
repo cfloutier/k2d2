@@ -84,10 +84,10 @@
     <Compile Include="sources\Styles.cs" />
     <Compile Include="sources\Settings.cs" />
     <Compile Include="sources\AutoExecuteManeuver.cs" />
-    <Compile Include="sources\sub_pilots\BasePilot.cs" />
-    <Compile Include="sources\sub_pilots\TurnToManeuvre.cs" />
-    <Compile Include="sources\sub_pilots\WarpToManeuvre.cs" />
-    <Compile Include="sources\sub_pilots\BurnManeuvre.cs" />
+    <Compile Include="sources\pilots\BasePilot.cs" />
+    <Compile Include="sources\pilots\TurnToManeuvre.cs" />
+    <Compile Include="sources\pilots\WarpToManeuvre.cs" />
+    <Compile Include="sources\pilots\BurnManeuvre.cs" />
     <Compile Include="sources\Tools\ColorTools.cs" />
     <Compile Include="sources\Tools\Tools.cs" />
     <Compile Include="sources\Properties\AssemblyInfo.cs" />

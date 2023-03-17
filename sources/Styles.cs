@@ -13,8 +13,9 @@ namespace K2D2
         public static GUIStyle box, window, error, warning, button, button_on, small_button;
 
         public static GUIStyle console, phase_ok, phase_warning, phase_error;
+        public static GUIStyle icons_label;
 
-        public static Texture2D gear;
+        public static Texture2D gear, icon;
         public static Color labelColor;
 
         public static void Init()
@@ -102,7 +103,7 @@ namespace K2D2
             window.overflow = new RectOffset(0, 0, 0, 0);
 
             window.fontSize = 20;
-            window.contentOffset = new Vector2(7, -36);
+            window.contentOffset = new Vector2(31, -40);
 
             // Set the background color of the window
             window.normal.background = loadIcon("window");
@@ -153,6 +154,14 @@ namespace K2D2
 
             // GEAR icon
             gear = loadIcon("gear");
+            icon = loadIcon("icon");
+
+            icons_label = new GUIStyle(GUI.skin.GetStyle("Label"));
+            icons_label.border = new RectOffset(0, 0, 0, 0);
+            icons_label.padding = new RectOffset(0, 0, 0, 0);
+            icons_label.margin = new RectOffset(0, 0, 0, 0);
+            icons_label.overflow = new RectOffset(0, 0, 0, 0);
+
 
             error = new GUIStyle(GUI.skin.GetStyle("Label"));
             warning = new GUIStyle(GUI.skin.GetStyle("Label"));

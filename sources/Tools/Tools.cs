@@ -162,7 +162,6 @@ namespace K2D2
 
     }
 
-
     class VesselInfos
     {
         static public VesselComponent currentVessel()

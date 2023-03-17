@@ -10,7 +10,9 @@ namespace K2D2
 {
     public class K2D2Settings
     {
-        public MainUI.InterfaceMode defaultMode = MainUI.InterfaceMode.ExeNode;
+        public MainUI.InterfaceMode current_mode = MainUI.InterfaceMode.ExeNode;
+
+        public bool debug_mode = false;
     }
 
     public class Settings
@@ -21,15 +23,26 @@ namespace K2D2
         private static ManualLogSource logger;
 
         public static void Init(string settings_path, ManualLogSource logger )
-        { 
+        {
             Settings.settings_path = settings_path;
             Settings.logger = logger;
             Load();
         }
 
+        public static bool debug_mode
+         {
+            get => Settings.settings.debug_mode;
+            set {
+                    if (value == Settings.settings.debug_mode) return;
+                    Settings.settings.debug_mode = value;
+                    Settings.Save();
+            }
+        }
+
+
         static public void Save()
         {
-            try
+            try 
             {
                 File.WriteAllText(settings_path, JsonConvert.SerializeObject(settings));
             }

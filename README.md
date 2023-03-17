@@ -1,4 +1,5 @@
-# K.2.D.2
+# K2-D2
+The KSP astromech
 
 A set of tools to Help Space Navigation.
 
@@ -10,23 +11,20 @@ There is no use of the SAS for the moment (very early version). The pilot, wait 
 All of those phases must be enhanced.
 It's working better than I can do by hand. But could me more precise. Especially the burning phase. There is always some small amount of dv Missing... It's based on Burn Duration of the Node and this is not perfect.
 
-# Next
+----------------
+Project is renamed from AutoExecuteNode.
 
+We are starting a collaboration with [Mole](https://github.com/Mole1803)
+
+Thanks to Opus (#Opus#7354) for the name of the Mod !
+
+# Next
 
 * Burn based on real dv
 * We could stop burning if the atitude of the vessel is out of the node direction.
 * SAS use or another way to point in the node direction (SMART SAS like mechjeb ??)
 * Options page ?
 
-# Future ?
-
-This could be the first tool of a more large set of small navigation Toolbox.
-I would like to make more of them in the future :
-- Docking and Rendez vous assistant.
-- Auto Landing and , kill vertical or horizontal speed
-- Auto Ascent.
-
-But this plan should change depending on my skill and motivation.
 
 # Installation
 
@@ -55,5 +53,5 @@ Thanks for this excellent first step ! a light code, simple and very well writte
 
 # License
 
-K2D2 is distributed under the CC BY-SA 4.0 license. Read about the license here before redistributing:
+K2-D2 is distributed under the CC BY-SA 4.0 license. Read about the license here before redistributing:
 https://creativecommons.org/licenses/by-sa/4.0/

@@ -18,6 +18,7 @@ using KSP.ScriptInterop.impl.moonsharp;
 
 namespace K2D2
 {
+
     public class TurnToManeuvre : BasePilot
     {
         public AutoExecuteManeuver parent;
@@ -40,6 +41,13 @@ namespace K2D2
         {
             finished = false;
 
+            var autopilot = VesselInfos.currentVessel().Autopilot;
+
+            // force autopilot 
+            autopilot.Enabled = true;
+            if (autopilot.AutopilotMode != AutopilotMode.Maneuver)
+                autopilot.SetMode(AutopilotMode.Maneuver);
+
             if (!checkManeuvreDirection())
                 return;
 
@@ -58,7 +66,6 @@ namespace K2D2
             if (!telemetry.HasManeuver)
                 return false;
 
-            // 
             Vector maneuvre_dir = telemetry.ManeuverDirection;
             Rotation vessel_rotation = VesselInfos.GetRotation();
 
@@ -74,7 +81,7 @@ namespace K2D2
 
         public bool checkAngularRotation()
         {
-            double max_angular_speed = 2;
+            double max_angular_speed = 1;
 
             var angular_rotation_pc = VesselInfos.GetAngularSpeed().vector;
 
@@ -91,7 +98,6 @@ namespace K2D2
             return true;
         }
 
-
         public override void onGui()
         {
             GUILayout.Label("Check Attitude", Styles.phase_ok);
@@ -99,14 +105,14 @@ namespace K2D2
 
             // GUILayout.Label($"sas.sas_response v {Tools.print_vector(sas_response)}");
 
-            if (parent.debug_infos)
+            if (Settings.debug_mode)
             {
                 var telemetry = SASInfos.getTelemetry();
                 if (!telemetry.HasManeuver)
                     return;
 
                 var autopilot = VesselInfos.currentVessel().Autopilot;
-                // var sas = autopilot.SAS;
+                // ;
 
                 // var angulor_vel_coord = VesselInfos.GetAngularSpeed().coordinateSystem;
                 var angularVelocity = VesselInfos.GetAngularSpeed().vector;
@@ -127,8 +133,6 @@ namespace K2D2
 
                 GUILayout.Label($"finished {finished}");
             }
-
-            
         }
     }
 

@@ -53,7 +53,7 @@ namespace K2D2
             GUILayout.Label("Burn !", Styles.phase_ok);
             GUILayout.Label(status_line, Styles.console);
 
-            if (parent.debug_infos)
+            if (Settings.debug_mode)
             {
                 var current_maneuvre_node = parent.current_maneuvre_node;
                 if (current_maneuvre_node == null) return;

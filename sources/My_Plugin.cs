@@ -29,7 +29,7 @@ namespace K2D2
 
         public const string ModGuid = "K2D2";
         public const string ModName = "K2D2";
-        public const string ModVer = "0.1.0";
+        public const string ModVer = "0.2.1";
 
         #region Fields
 
@@ -45,7 +45,6 @@ namespace K2D2
         private static string _settingsPath;
         private static string SettingsPath =>
             _settingsPath ?? (_settingsPath = Path.Combine(AssemblyFolder, "settings.json"));
-
 
         public ManualLogSource logger;
         // GUI.
@@ -96,7 +95,7 @@ namespace K2D2
             Settings.Init(SettingsPath, logger);
 
             Appbar.RegisterAppButton(
-                "K.2.D.2",
+                "K2-D2",
                 "BTN-K2D2Button",
                 AssetManager.GetAsset<Texture2D>($"{SpaceWarpMetadata.ModID}/images/icon.png"),
                 ToggleButton);
@@ -131,7 +130,7 @@ namespace K2D2
                     GUIUtility.GetControlID(FocusType.Passive),
                     windowRect,
                     FillWindow,
-                    "<color=#00D346>K.2.D.2</color>",
+                    "<color=#00D346>K2-D2</color>",
                     Styles.window,
                     GUILayout.Height(0),
                     GUILayout.Width(350));
@@ -148,6 +147,8 @@ namespace K2D2
         private void FillWindow(int windowID)
         {
             GUILayout.BeginVertical();
+
+            GUI.Label(new Rect(22, 2, 24, 24), Styles.icon, Styles.icons_label);
 
             if (GUI.Button(new Rect(windowRect.width - 30, 4, 25, 25), "X", Styles.small_button))
                 ToggleButton(false);

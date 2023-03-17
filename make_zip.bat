@@ -30,7 +30,7 @@ copy /Y README.md %LOCAL_DIR%\
 md %LOCAL_DIR%\assets
 md %LOCAL_DIR%\assets\images
 copy /Y icon.png %LOCAL_DIR%\assets\images
-copy /Y K2D2\icons\*.png %LOCAL_DIR%\assets\images
+copy /Y sources\images\*.png %LOCAL_DIR%\assets\images
 
 copy /Y %PROJECT_NAME%\obj\%CONFIG%\%PROJECT_NAME%.dll %LOCAL_DIR%
 

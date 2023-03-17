@@ -66,7 +66,7 @@ namespace K2D2
 
             if (time_warp == null) return;
 
-            if (parent.debug_infos)
+            if (Settings.debug_mode)
             {
                 GUILayout.Label($"CurrentRateIndex {time_warp.CurrentRateIndex}");
                 GUILayout.Label($"CurrentRate x{time_warp.CurrentRate}");

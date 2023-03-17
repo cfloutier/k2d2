@@ -17,13 +17,13 @@ namespace K2D2
 
         private InterfaceMode CurrentInterfaceMode
         {
-            get => Settings.settings.defaultMode;
+            get => Settings.settings.current_mode;
             set
             {
-                if (value == Settings.settings.defaultMode) return;
+                if (value == Settings.settings.current_mode) return;
                 // logger.LogInfo("Value is different to " + K2D2.settings.defaultMode);
                 logger.LogInfo("InterfaceMode set " + value);
-                Settings.settings.defaultMode = value;
+                Settings.settings.current_mode = value;
 
                 Settings.Save();
             }
@@ -39,8 +39,6 @@ namespace K2D2
 
         public void onGui()
         {
-            Styles.Init();
-
             if (VesselInfos.currentVessel() == null)
             {
                 GUILayout.FlexibleSpace();
@@ -60,17 +58,16 @@ namespace K2D2
 
             GUILayout.BeginVertical();
 
-            // GUILayout.Label($"Active Vessel: {VesselInfos.CurrentVessel()}");
-            // GUILayout.Label($"body : {VesselInfos.CurrentBody()}");
+            // ############# Uncomment this to get tabs in UI ###################
 
             // Mode selection.
             // GUILayout.BeginHorizontal();
             // CurrentInterfaceMode = (InterfaceMode)GUILayout.SelectionGrid((int)CurrentInterfaceMode, interfaceModes, 4);
             // GUILayout.EndHorizontal();
 
-            CurrentInterfaceMode = InterfaceMode.ExeNode;
+            // #############  ###################
 
-            // GUILayout.EndVertical();
+            CurrentInterfaceMode = InterfaceMode.ExeNode;
 
             // return;
             // Draw one of the modes.
@@ -89,11 +86,9 @@ namespace K2D2
             }
 
             GUILayout.EndVertical();
-
-
             GUI.DragWindow(new Rect(0, 0, 10000, 500));
         }
-        
+
         public static void SASInfos()
         {
             var sas = VesselInfos.currentVessel().Autopilot.SAS;
@@ -132,7 +127,6 @@ namespace K2D2
             GUILayout.Label($"Lat {vehicle.Latitude:n2} Lon {vehicle.Longitude:n2}");
             GUILayout.Label($"IsInAtmosphere {vehicle.IsInAtmosphere}");
             GUILayout.Label($"LandedOrSplashed {vehicle.LandedOrSplashed}");
-
 
             var body = VesselInfos.currentBody();
             var coord = body.coordinateSystem;

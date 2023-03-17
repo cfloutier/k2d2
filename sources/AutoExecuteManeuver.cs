@@ -53,8 +53,6 @@ namespace K2D2
             Burn
         }
 
-        public bool debug_infos = false;
-
         public Mode mode = Mode.Off;
 
         public void setMode(Mode mode)
@@ -151,7 +149,7 @@ namespace K2D2
                     Stop();
             }
 
-            //debug_infos = GUILayout.Toggle(debug_infos, "debug mode");
+            Settings.debug_mode = GUILayout.Toggle(Settings.debug_mode, "debug mode");
 
             node_infos();
 
@@ -159,7 +157,7 @@ namespace K2D2
             {
                 current_pilot.onGui();
 
-                if (debug_infos)
+                if (Settings.debug_mode)
                 {
                     if (GUILayout.Button("Next"))
                         nextMode();
@@ -178,7 +176,7 @@ namespace K2D2
             if (current_pilot != null)
             {
                 current_pilot.onUpdate();
-                if (current_pilot.finished && !debug_infos)
+                if (current_pilot.finished && !Settings.debug_mode)
                 {
                     // auto next
                     nextMode();
@@ -188,7 +186,7 @@ namespace K2D2
 
         void node_infos()
         {
-            if (debug_infos)
+            if (Settings.debug_mode)
             {
                 var dt = Tools.remainingStartTime(current_maneuvre_node);
                 GUILayout.Label($"tic tac {Tools.printDuration(dt)} s ");
