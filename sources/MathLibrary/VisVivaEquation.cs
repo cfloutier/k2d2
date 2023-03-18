@@ -32,6 +32,12 @@ namespace KSP2FlightAssistant.MathLibrary
             return Math.Sqrt(gravitation * ((2 / CurrentDistance) - (1 / semiMajorAxis)));
         }
 
+        public static double CalculateGravitation(double CurrentDistance, double Apoapsis, double Periapsis,
+            double Velocity)
+        {
+            double MajorSemiAxis = (Apoapsis + Periapsis) / 2;
+            return (Velocity*Velocity)/(2/CurrentDistance-1/MajorSemiAxis);
+        }
 
 
 

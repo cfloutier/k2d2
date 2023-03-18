@@ -3,6 +3,7 @@ using KSP.Sim;
 using KSP.Sim.impl;
 using KSP.Sim.State;
 using System;
+using KSP.Api;
 using KSP.Sim;
 using KSP.Sim.impl;
 using KSP.Sim.Maneuver;
@@ -329,6 +330,45 @@ namespace K2D2.KSPService
         {
             return Game.ViewController.DataProvider.TelemetryDataProvider.SpeedDisplayMode.GetValue();
         }
+        
+        public double getApoapsis()
+        {
+            return VesselComponent.Orbit.Apoapsis;
+        }
+        
+        public double getPeriapsis()
+        {
+            return VesselComponent.Orbit.Periapsis;
+        }
+        
+        public double getCurrenOrbitHeight()
+        {
+            return VesselComponent.Orbit.radius;
+
+        }
+        
+        public double getCurrentOrbitSpeed()
+        {
+            return VesselComponent.Orbit.orbitalSpeed;
+        }
+        
+        public double getEccentricity()
+        {
+            return VesselComponent.Orbit.eccentricity;
+        }
+        
+        public double getInclination()
+        {
+            return VesselComponent.Orbit.inclination;
+        }
+        
+        public Vector getOrbitalVelocity()
+        {
+            return VesselComponent.OrbitalVelocity;
+        }
+        
+        
+        
 
         // =================================================================================================================
 

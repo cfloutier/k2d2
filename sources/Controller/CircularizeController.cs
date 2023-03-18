@@ -7,6 +7,7 @@ using UnityEngine;
 using KSP.Game;
 using K2D2.KSPService;
 using K2D2;
+using KSP2FlightAssistant.MathLibrary;
 
 
 namespace K2D2.Controller
@@ -15,17 +16,12 @@ namespace K2D2.Controller
     {
         ManualLogSource logger;
         public static CircularizeController Instance { get; set; }
+        public GameInstance Game { get; set; }
         
-        public bool circularize = false;
-        public bool printMyNameB = false;
-        public bool printYourNameB = false;
+        
+        private bool _circularize = false;
 
-
-
-
-
-
-        public KSPVessel vessel;
+        private KSPVessel _vessel;
 
         public CircularizeController(ManualLogSource logger)
         {
@@ -34,39 +30,53 @@ namespace K2D2.Controller
             this.logger = logger;
             logger.LogMessage("CircularizeController !");
             
-            buttons.Add(new Switch());
-            buttons.Add(new Button());
+            /*buttons.Add(new Switch());
+            buttons.Add(new Button());*/
+            
+            applicableStates.Add(GameState.FlightView);
+            applicableStates.Add(GameState.Map3DView);
         }
         
-
-
-
-
-
-
-
-
+        /*public override void Reinitialize()
+        {
+            logger.LogMessage("CircularizeController Reinitialize !");
+            Game = Tools.Game();
+            _vessel = new KSPVessel(Game);
+        }*/
+        
+        public override void Update()
+        {
+            logger.LogMessage("CircularizeController Reinitialize !");
+            Game = Tools.Game();
+            _vessel = new KSPVessel(Game);
+        }
 
         public override void onGUI()
         {
 
-            if(vessel==null)
+
+            if(_vessel==null)
             {
-                this.vessel = new KSPVessel(Tools.Game());
+                _vessel = new KSPVessel(Game);
                 return;
             }
+
             GUILayout.Label(
-                $"Circularize Node {vessel.GetDisplayAltitude()}");
+                $"Circularize Node {_vessel.GetDisplayAltitude()}");
+            
+            GUILayout.Label($"Periapsis: {_vessel.getPeriapsis().ToString()}");
+            GUILayout.Label($"Apoapsis: {_vessel.getApoapsis().ToString()}");
+            GUILayout.Label($"Current Orbit Height: {_vessel.getCurrenOrbitHeight().ToString()}");
+            GUILayout.Label($"Current Orbit Speed: {_vessel.getCurrentOrbitSpeed().ToString()}");
+            GUILayout.Label($"Planetary Mass: {VisVivaEquation.CalculateGravitation(_vessel.getCurrenOrbitHeight(), _vessel.getApoapsis(), _vessel.getPeriapsis(), _vessel.getCurrentOrbitSpeed()).ToString()}");
 
-
-            //logger.LogMessage("CircularizeController onGui !");
+            
 
             if (GUILayout.Button("Circularize Node", Styles.button, GUILayout.Height(40)))
             {
-                circularize = !circularize;
+                _circularize = !_circularize;
             }
             Run();
         }
     }
-
 }

@@ -36,6 +36,11 @@ namespace KSP2FlightAssistant.KSPService
 
         }
         
+        /*public double GetApoapsis()
+        {
+            return TelemetryDataProvider.
+        }*/
+        
 
         
     }
