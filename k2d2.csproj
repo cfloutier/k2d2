@@ -91,6 +91,7 @@
     <Compile Include="sources\Tools\ColorTools.cs" />
     <Compile Include="sources\Tools\KSP2Tools.cs" />
     <Compile Include="sources\Tools\SettingsFile.cs" />
+    <Compile Include="sources\Tools\UITools.cs" />
     <Compile Include="sources\Properties\AssemblyInfo.cs" />
 
   </ItemGroup>
@@ -104,14 +105,12 @@ taskkill /f /im KSP2_x64.exe
 timeout 1
 
 cd $(ProjectDir)
+dir 
 
-call make_zip.bat
+<!-- echo "ConfigurationName:" $(ConfigurationName) -->
+
+<!-- call make_zip.bat $(ConfigurationName) -->
 call copy_to_ksp.bat
-
-SET KSP2=D:\SteamLibrary\steamapps\common\Kerbal Space Program 2
-
-copy /Y "$(TargetDir)$(ProjectName).dll" "%KSP2%\BepInEx\plugins\$(ProjectName)\$(ProjectName).dll"
-copy /Y "$(TargetDir)$(Targetname).pdb" "%KSP2%\BepInEx\plugins\$(ProjectName)"
 
 </PostBuildEvent>
   </PropertyGroup>

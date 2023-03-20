@@ -15,9 +15,8 @@ if not exist %OUTPUT% (
 )
 
 echo ####################### Copy to target Ksp dir #######################
-echo on
 
-set DEST_PATH="%KSP2_LOCATION%\BepInEx\plugins\%PROJECT_NAME%"
+set DEST_PATH=%KSP2_LOCATION%\BepInEx\plugins\%PROJECT_NAME%
 echo dest path is : %DEST_PATH%
 
 rd /s/q %DEST_PATH%

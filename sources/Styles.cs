@@ -13,7 +13,9 @@ namespace K2D2
         public static GUIStyle box, window, error, warning, button, button_on, small_button;
 
         public static GUIStyle console, phase_ok, phase_warning, phase_error;
-        public static GUIStyle icons_label;
+
+
+        public static GUIStyle icons_label, title;
 
         public static Texture2D gear, icon;
         public static Color labelColor;
@@ -184,6 +186,10 @@ namespace K2D2
             console = new GUIStyle(GUI.skin.GetStyle("Label"));
             console.normal.textColor = ColorTools.parseColor("#090A0A");
             console.fontSize = 15;
+
+            title = new GUIStyle(GUI.skin.GetStyle("Label"));
+            title.normal.textColor = ColorTools.parseColor("#B7D8D8");
+            title.fontSize = 19;
 
             guiLoaded = true;
         }
