@@ -16,11 +16,11 @@ namespace KSP2FlightAssistant.MathLibrary
         /// <param name="PlanetaryMass"></param>
         /// <returns></returns>
         public static double CalculateVelocity(double CurrentDistance, double Apoapsis, double Periapsis,
-            double PlanetaryMass)
+            double gravitation)
         {
 
 
-            double gravitation = PlanetaryMass * GravityConstant;
+            //double gravitation = PlanetaryMass * GravityConstant;
 
             if (Double.IsInfinity(Apoapsis))
             {
@@ -31,6 +31,8 @@ namespace KSP2FlightAssistant.MathLibrary
             double semiMajorAxis = (Apoapsis + Periapsis) / 2;
             return Math.Sqrt(gravitation * ((2 / CurrentDistance) - (1 / semiMajorAxis)));
         }
+        
+        
 
         public static double CalculateGravitation(double CurrentDistance, double Apoapsis, double Periapsis,
             double Velocity)
@@ -38,6 +40,7 @@ namespace KSP2FlightAssistant.MathLibrary
             double MajorSemiAxis = (Apoapsis + Periapsis) / 2;
             return (Velocity*Velocity)/(2/CurrentDistance-1/MajorSemiAxis);
         }
+        
 
 
 
