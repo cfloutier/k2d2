@@ -45,7 +45,7 @@ namespace K2D2
             if (time_warp.CurrentRateIndex != wanted_warp_index)
                 time_warp.SetRateIndex(wanted_warp_index, false);
 
-            if (dt < 10)
+            if (dt < Settings.warp_safe_duration)
             {
                 finished = true;
             }
@@ -53,7 +53,7 @@ namespace K2D2
 
         int compute_wanted_warp_index(double dt)
         {
-            double factor = 5;
+            double factor = Settings.warp_speed;
             double ratio = dt / factor;
 
             return TimeWarpTools.ratioToIndex((float)ratio);
@@ -62,7 +62,7 @@ namespace K2D2
         public override void onGui()
         {
             GUILayout.Label("Time Warp", Styles.phase_ok);
-            GUILayout.Label(status_line, Styles.console);
+            GUILayout.Label(status_line, Styles.small_dark_text);
 
             if (time_warp == null) return;
 

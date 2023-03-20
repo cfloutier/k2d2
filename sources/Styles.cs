@@ -12,7 +12,7 @@ namespace K2D2
 
         public static GUIStyle box, window, error, warning, button, button_on, small_button;
 
-        public static GUIStyle console, phase_ok, phase_warning, phase_error;
+        public static GUIStyle small_dark_text, phase_ok, phase_warning, phase_error;
 
 
         public static GUIStyle icons_label, title;
@@ -183,9 +183,9 @@ namespace K2D2
             phase_error.normal.textColor = ColorTools.parseColor("#B30F0F");
             phase_error.fontSize = 20;
 
-            console = new GUIStyle(GUI.skin.GetStyle("Label"));
-            console.normal.textColor = ColorTools.parseColor("#090A0A");
-            console.fontSize = 15;
+            small_dark_text = new GUIStyle(GUI.skin.GetStyle("Label"));
+            small_dark_text.normal.textColor = ColorTools.parseColor("#090A0A");
+            small_dark_text.fontSize = 15;
 
             title = new GUIStyle(GUI.skin.GetStyle("Label"));
             title.normal.textColor = ColorTools.parseColor("#B7D8D8");

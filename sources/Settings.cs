@@ -30,11 +30,7 @@ namespace K2D2
 
         // each setting is defined by an accessor pointing on s_settings_file
         // the convertion to type is made here
-        // this way we can have any kind of settings without hard work 
-
-
-
-
+        // this way we can have any kind of settings without hard work
         public static bool debug_mode
         {
             get => s_settings_file.GetBool("debug_mode", false);
@@ -60,7 +56,7 @@ namespace K2D2
                 if (value < 5) value = 5;
                 s_settings_file.SetInt("warp.safe_duration", value); }
         }
-    }
+    } 
 
     public class SettingsUI
     {
@@ -68,20 +64,18 @@ namespace K2D2
         {
             GUILayout.Label("Settings", Styles.title);
 
-            GUILayout.Label("Debug mode open work in progress features and verbose information.", Styles.console);
+            GUILayout.Label("Debug mode open work in progress features and verbose information.", Styles.small_dark_text);
             Settings.debug_mode = GUILayout.Toggle(Settings.debug_mode, "debug mode");
 
             GUILayout.Label("Warp", Styles.title);
 
+            Settings.warp_speed = UI_Tools.LayoutIntSlider("Warp Speed" , Settings.warp_speed, 1, 20);
+            GUILayout.Label("(1 : quick, 10 slow) ", Styles.small_dark_text);
 
-            GUILayout.Label("Warp Speed ", Styles.console);
-            Settings.warp_speed = (int) GUILayout.HorizontalSlider((int) Settings.warp_speed, 1, 10);
-            GUILayout.Label("(1 : quick, 10 slow) ", Styles.console);
+            GUILayout.Label("Safe time", Styles.small_dark_text);
 
-            GUILayout.Label("Warp Speed ", Styles.console);
             Settings.warp_safe_duration = UI_Tools.LayoutIntField(Settings.warp_safe_duration);
-            GUILayout.Label("nb seconds before launch ", Styles.console);
-
+            GUILayout.Label("nb seconds in x1 before launch (min:5)", Styles.small_dark_text);
         }
     }
 

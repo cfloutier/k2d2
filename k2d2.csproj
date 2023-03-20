@@ -105,11 +105,9 @@ taskkill /f /im KSP2_x64.exe
 timeout 1
 
 cd $(ProjectDir)
-dir 
 
-<!-- echo "ConfigurationName:" $(ConfigurationName) -->
-
-<!-- call make_zip.bat $(ConfigurationName) -->
+echo "ConfigurationName:" $(ConfigurationName)
+call make_zip.bat $(ConfigurationName)
 call copy_to_ksp.bat
 
 </PostBuildEvent>

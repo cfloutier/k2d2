@@ -8,6 +8,13 @@ namespace K2D2
     /// </summary>
     public class UI_Tools
     {
+        public static int LayoutIntSlider(string txt, int value, int min, int max )
+        {
+            GUILayout.Label(txt + $" : {value}");
+            value = (int) GUILayout.HorizontalSlider((int) value, min, max);
+            return value;
+        }
+
 
         public static int LayoutIntField(int value)
         {

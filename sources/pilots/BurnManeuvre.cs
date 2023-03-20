@@ -51,7 +51,7 @@ namespace K2D2
         {
 
             GUILayout.Label("Burn !", Styles.phase_ok);
-            GUILayout.Label(status_line, Styles.console);
+            GUILayout.Label(status_line, Styles.small_dark_text);
 
             if (Settings.debug_mode)
             {
