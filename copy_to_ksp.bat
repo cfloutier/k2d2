@@ -19,8 +19,8 @@ echo ####################### Copy to target Ksp dir #######################
 set DEST_PATH=%KSP2_LOCATION%\BepInEx\plugins\%PROJECT_NAME%
 echo dest path is : %DEST_PATH%
 
-rd /s/q %DEST_PATH%
-mkdir  %DEST_PATH%
+@REM rd /s/q %DEST_PATH%
 if not exist %DEST_PATH% mkdir %DEST_PATH%
-xcopy /s /d %LOCAL_DIR% %DEST_PATH%
+
+xcopy /Y /s /d %LOCAL_DIR% %DEST_PATH%
 

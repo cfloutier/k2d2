@@ -44,7 +44,6 @@ namespace K2D2
             Stop();
         }
 
-
         public enum Mode
         {
             Off,
@@ -135,21 +134,19 @@ namespace K2D2
             {
                 if (!canStart())
                 {
-                    GUILayout.Button("Run", Styles.button, GUILayout.Height(40));
+                    // UI_Tools.BigButton("Run");
                     GUILayout.Label("no Maneuver none in the future");
                     return;
                 }
 
-                if (GUILayout.Button("Run", Styles.button, GUILayout.Height(40)))
+                if (UI_Tools.BigButton("Run"))
                     Run();
             }
             else
             {
-                if (GUILayout.Button("Stop !!!", Styles.button_on, GUILayout.Height(40)))
+                if (UI_Tools.BigButton("Stop !!", true))
                     Stop();
             }
-
-            
 
             node_infos();
 
@@ -157,7 +154,7 @@ namespace K2D2
             {
                 current_pilot.onGui();
 
-                if (Settings.debug_mode)
+                if (!Settings.auto_next)
                 {
                     if (GUILayout.Button("Next"))
                         nextMode();
@@ -176,7 +173,7 @@ namespace K2D2
             if (current_pilot != null)
             {
                 current_pilot.onUpdate();
-                if (current_pilot.finished && !Settings.debug_mode)
+                if (current_pilot.finished && Settings.auto_next)
                 {
                     // auto next
                     nextMode();
@@ -206,8 +203,6 @@ namespace K2D2
 
                 GUILayout.Label($"maneuvre_dir {Tools.printVector(maneuvre_dir)}");
             }
-
-            //GUILayout.Label($"Time {nextNode.Time}");
         }
 
         public void Run()

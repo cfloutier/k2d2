@@ -126,7 +126,7 @@ namespace K2D2
             button.padding = new RectOffset(6, 6, 3, 7);
             button.overflow = new RectOffset(4, 4, 4, 4);
 
-            // On Button 
+            // On Button
 
             button_on = new GUIStyle(GUI.skin.GetStyle("Button"));
             button_on.normal.background = loadIcon("Button-active");

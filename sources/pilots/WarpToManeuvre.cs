@@ -31,24 +31,20 @@ namespace K2D2
             if (next_node == null) return;
 
             var dt = Tools.remainingStartTime(next_node);
-            if (dt < 0)
-            {
-                status_line = $"dt ({dt:n2}) < 0";
-                // parent.Stop();
-            }
+            dt = dt  - Settings.warp_safe_duration;
 
             wanted_warp_index = compute_wanted_warp_index(dt);
             float wanted_rate = TimeWarpTools.indexToRatio(wanted_warp_index);
 
-            status_line = $"{Tools.printDuration(dt)} | x{wanted_rate}";
-
-            if (time_warp.CurrentRateIndex != wanted_warp_index)
-                time_warp.SetRateIndex(wanted_warp_index, false);
-
-            if (dt < Settings.warp_safe_duration)
+            if (dt < 0)
             {
+                wanted_warp_index = 0;
                 finished = true;
             }
+
+            status_line = $"{Tools.printDuration(dt)} | x{wanted_rate}";
+            if (time_warp.CurrentRateIndex != wanted_warp_index)
+                time_warp.SetRateIndex(wanted_warp_index, false);
         }
 
         int compute_wanted_warp_index(double dt)

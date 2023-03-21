@@ -49,7 +49,6 @@ namespace K2D2
 
         public override void onGui()
         {
-
             GUILayout.Label("Burn !", Styles.phase_ok);
             GUILayout.Label(status_line, Styles.small_dark_text);
 
@@ -61,8 +60,8 @@ namespace K2D2
                 var dt = Tools.remainingStartTime(current_maneuvre_node);
                 var end_dt = Tools.remainingEndTime(current_maneuvre_node);
 
-                GUILayout.Label($"dt {dt}");
-                GUILayout.Label($"dt {end_dt}");
+                GUILayout.Label($"start_dt {dt}");
+                GUILayout.Label($"end_dt {end_dt}");
             }
         }
     }

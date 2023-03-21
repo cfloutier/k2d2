@@ -81,8 +81,8 @@
   <ItemGroup>
     <Compile Include="sources\My_Plugin.cs" />
     <Compile Include="sources\MainUI.cs" />
-    <Compile Include="sources\Styles.cs" />
     <Compile Include="sources\Settings.cs" />
+
     <Compile Include="sources\AutoExecuteManeuver.cs" />
     <Compile Include="sources\pilots\BasePilot.cs" />
     <Compile Include="sources\pilots\TurnToManeuvre.cs" />
@@ -92,12 +92,14 @@
     <Compile Include="sources\Tools\KSP2Tools.cs" />
     <Compile Include="sources\Tools\SettingsFile.cs" />
     <Compile Include="sources\Tools\UITools.cs" />
+    <Compile Include="sources\Tools\Styles.cs" />
     <Compile Include="sources\Properties\AssemblyInfo.cs" />
 
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>
+
 echo on
 echo $(TargetDir)
 

@@ -7,7 +7,6 @@ set build_mode=%1
 IF [%build_mode%] == [] set build_mode=Debug
 
 set PROJECT_NAME=K2D2
-set CONFIG=Debug
 
 set OUTPUT=output
 set LOCAL_DIR=%OUTPUT%\BepInEx\plugins\%PROJECT_NAME%
@@ -35,9 +34,9 @@ copy /Y icon.png %LOCAL_DIR%\assets\images
 copy /Y sources\images\*.png %LOCAL_DIR%\assets\images
 
 @REM Copy Dll
-copy /Y obj\%CONFIG%\%PROJECT_NAME%.dll %LOCAL_DIR%
+copy /Y obj\%build_mode%\%PROJECT_NAME%.dll %LOCAL_DIR%
 @REM Copy Pdb
-IF [%build_mode%] == [Debug] copy /Y obj\%CONFIG%\%PROJECT_NAME%.pdb %LOCAL_DIR%
+copy /Y obj\%build_mode%\%PROJECT_NAME%.pdb %LOCAL_DIR%
 
 set CWD=%cd%
 
