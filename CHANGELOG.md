@@ -6,7 +6,6 @@
 * Time Warp Phase : Added Settings and a more precise safe duration before burn
 
 # v0.2.1
-
 * Rebuild for ksp2 v0.1.1
 
 # v0.2.0
