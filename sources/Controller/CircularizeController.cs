@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection.Emit;
 using AwesomeTechnologies.VegetationSystem;
 using BepInEx.Logging;
 using JetBrains.Annotations;
@@ -18,11 +19,12 @@ namespace K2D2.Controller
         ManualLogSource logger;
         public static CircularizeController Instance { get; set; }
         public GameInstance Game { get; set; }
-        
-        
-        private bool _circularize = false;
 
-        private KSPVessel _vessel;
+
+        private bool _circularizeApoapsis,_circularizePeriapsis = false;
+
+
+        private Maneuver _maneuver;
 
         public CircularizeController(ManualLogSource logger)
         {
@@ -30,66 +32,104 @@ namespace K2D2.Controller
 
             this.logger = logger;
             logger.LogMessage("CircularizeController !");
-            
+
             buttons.Add(new Switch());
             //buttons.Add(new Button());*/
-            
+
             applicableStates.Add(GameState.FlightView);
             applicableStates.Add(GameState.Map3DView);
         }
-       
-        
-        /*public override void Reinitialize()
-        {
-            logger.LogMessage("CircularizeController Reinitialize !");
-            Game = Tools.Game();
-            _vessel = new KSPVessel(Game);
-        }*/
-        
+
+
         public override void Update()
         {
             //logger.LogMessage("CircularizeController Reinitialize !");
             Game = Tools.Game();
-            _vessel = new KSPVessel(Game);
+
+            _maneuver = new Maneuver(Game);
         }
 
         public override void onGUI()
         {
-
-
-            if(_vessel==null)
+            if (_maneuver == null)
             {
-                _vessel = new KSPVessel(Game);
                 return;
             }
 
-            GUILayout.Label(
-                $"Altitude {_vessel.GetDisplayAltitude()}");
-            
-            GUILayout.Label($"Periapsis: {_vessel.getPeriapsis().ToString()}");
-            GUILayout.Label($"Apoapsis: {_vessel.getApoapsis().ToString()}");
-            GUILayout.Label($"Current Orbit Height: {_vessel.getCurrenOrbitHeight().ToString()}");
-            GUILayout.Label($"Current Orbit Speed: {_vessel.getCurrentOrbitSpeed().ToString()}");
-            GUILayout.Label($"Planetary Mass: {VisVivaEquation.CalculateGravitation(_vessel.getCurrenOrbitHeight(), _vessel.getApoapsis(), _vessel.getPeriapsis(), _vessel.getCurrentOrbitSpeed()).ToString()}");
-            GUILayout.Label($"ZUP Vector: {_vessel.VesselComponent.Orbit.GetFrameVelAtUTZup(_vessel.VesselComponent.Orbit.GetUTforTrueAnomaly(180,0)).x}");
-            GUILayout.Label($"ZUP Vector: {_vessel.VesselComponent.Orbit.GetFrameVelAtUTZup(_vessel.VesselComponent.Orbit.GetUTforTrueAnomaly(180,0)).y}");
-            GUILayout.Label($"ZUP Vector: {_vessel.VesselComponent.Orbit.GetFrameVelAtUTZup(_vessel.VesselComponent.Orbit.GetUTforTrueAnomaly(180,0)).z}");
-            GUILayout.Label($"Longitude of Ascending Node: {_vessel.VesselComponent.Orbit.longitudeOfAscendingNode}");
-            GUILayout.Label($"Inclination: {_vessel.VesselComponent.Orbit.inclination}");
-            
+            /*if (Game.GlobalGameState.GetState() != GameState.Map3DView)
+            {
+                GUILayout.Label("Map must be opened to use this feature");
+                return;
+            }*/
 
-            if (GUILayout.Button("Circularize Node", Styles.button, GUILayout.Height(40)))
+
+            if (Settings.debug_mode)
             {
-                _circularize = !_circularize;
+                GUILayout.Label(
+                    $"Debug Mode: {Settings.debug_mode}");
+                GUILayout.Label(
+                    $"Altitude {_maneuver.kspVessel.GetDisplayAltitude()}");
+
+                GUILayout.Label($"Periapsis: {_maneuver.kspVessel.getPeriapsis().ToString()}");
+                GUILayout.Label($"Apoapsis: {_maneuver.kspVessel.getApoapsis().ToString()}");
+                GUILayout.Label($"Current Orbit Height: {_maneuver.kspVessel.getCurrenOrbitHeight().ToString()}");
+                GUILayout.Label($"Current Orbit Speed: {_maneuver.kspVessel.getCurrentOrbitSpeed().ToString()}");
+                GUILayout.Label(
+                    $"Planetary Mass: {VisVivaEquation.CalculateGravitation(_maneuver.kspVessel.getCurrenOrbitHeight(), _maneuver.kspVessel.getApoapsis(), _maneuver.kspVessel.getPeriapsis(), _maneuver.kspVessel.getCurrentOrbitSpeed()).ToString()}");
+                GUILayout.Label(
+                    $"ZUP Vector: {_maneuver.kspVessel.VesselComponent.Orbit.GetFrameVelAtUTZup(_maneuver.kspVessel.VesselComponent.Orbit.GetUTforTrueAnomaly(180, 0)).x}");
+                GUILayout.Label(
+                    $"ZUP Vector: {_maneuver.kspVessel.VesselComponent.Orbit.GetFrameVelAtUTZup(_maneuver.kspVessel.VesselComponent.Orbit.GetUTforTrueAnomaly(180, 0)).y}");
+                GUILayout.Label(
+                    $"ZUP Vector: {_maneuver.kspVessel.VesselComponent.Orbit.GetFrameVelAtUTZup(_maneuver.kspVessel.VesselComponent.Orbit.GetUTforTrueAnomaly(180, 0)).z}");
+                GUILayout.Label(
+                    $"Longitude of Ascending Node: {_maneuver.kspVessel.VesselComponent.Orbit.longitudeOfAscendingNode}");
+                GUILayout.Label($"Inclination: {_maneuver.kspVessel.VesselComponent.Orbit.inclination}");
+            }
+
+            
+            if (GUILayout.Button("Circularize Node in Apoapsis", Styles.button, GUILayout.Height(40)))
+            {
+                _circularizeApoapsis = !_circularizeApoapsis;
+            }
+
+            if (_circularizeApoapsis)
+            {
+                try
+                {
+                    double deltaV = _maneuver.CircularizeOrbitApoapsis();
+                    GUILayout.Label($"Required dV: {deltaV}");
+                    _circularizeApoapsis = !_circularizeApoapsis;
+                }
+                catch (Exception e)
+                {
+                    logger.LogError(e.Message);
+                }
+
+                return;
             }
             
-            if (_circularize)
+            
+            if (GUILayout.Button("Circularize Node in Periapsis", Styles.button, GUILayout.Height(40)))
             {
-               // Vector3d myBurnVector = new Vector3d(0, 100, 100);
-                //_vessel.CreateManeuverNode(myBurnVector,180);//Game.UniverseModel.UniversalTime+100
-                _vessel.CircularizeOrbit();
-                _circularize = !_circularize;
+                _circularizePeriapsis = !_circularizePeriapsis;
             }
+
+            if (!_circularizePeriapsis)
+            {
+                try
+                {
+                    double deltaV = _maneuver.CircularizeOrbitPeriapsis();
+                    GUILayout.Label($"Required dV: {deltaV}");
+                    _circularizePeriapsis = !_circularizePeriapsis;
+                }
+                catch (Exception e)
+                {
+                    logger.LogError(e.Message);
+                }
+                
+            }
+
             Run();
         }
     }

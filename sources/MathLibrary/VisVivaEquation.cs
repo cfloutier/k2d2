@@ -19,14 +19,15 @@ namespace KSP2FlightAssistant.MathLibrary
             double gravitation)
         {
 
-
-            //double gravitation = PlanetaryMass * GravityConstant;
-
+            
             if (Double.IsInfinity(Apoapsis))
             {
                 // Parabolic orbit (apoapsis is infinity)
                 return Math.Sqrt(gravitation * (2 / CurrentDistance));
             }
+            
+            if(Apoapsis-Periapsis<100)
+                return Math.Sqrt(gravitation / CurrentDistance);
 
             double semiMajorAxis = (Apoapsis + Periapsis) / 2;
             return Math.Sqrt(gravitation * ((2 / CurrentDistance) - (1 / semiMajorAxis)));
