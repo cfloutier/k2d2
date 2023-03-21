@@ -31,29 +31,25 @@ namespace K2D2
             if (next_node == null) return;
 
             var dt = Tools.remainingStartTime(next_node);
-            if (dt < 0)
-            {
-                status_line = $"dt ({dt:n2}) < 0";
-                // parent.Stop();
-            }
+            dt = dt  - Settings.warp_safe_duration;
 
             wanted_warp_index = compute_wanted_warp_index(dt);
             float wanted_rate = TimeWarpTools.indexToRatio(wanted_warp_index);
 
-            status_line = $"{Tools.printDuration(dt)} | x{wanted_rate}";
-
-            if (time_warp.CurrentRateIndex != wanted_warp_index)
-                time_warp.SetRateIndex(wanted_warp_index, false);
-
-            if (dt < 10)
+            if (dt < 0)
             {
+                wanted_warp_index = 0;
                 finished = true;
             }
+
+            status_line = $"{Tools.printDuration(dt)} | x{wanted_rate}";
+            if (time_warp.CurrentRateIndex != wanted_warp_index)
+                time_warp.SetRateIndex(wanted_warp_index, false);
         }
 
         int compute_wanted_warp_index(double dt)
         {
-            double factor = 5;
+            double factor = Settings.warp_speed;
             double ratio = dt / factor;
 
             return TimeWarpTools.ratioToIndex((float)ratio);
@@ -62,7 +58,7 @@ namespace K2D2
         public override void onGui()
         {
             GUILayout.Label("Time Warp", Styles.phase_ok);
-            GUILayout.Label(status_line, Styles.console);
+            GUILayout.Label(status_line, Styles.small_dark_text);
 
             if (time_warp == null) return;
 

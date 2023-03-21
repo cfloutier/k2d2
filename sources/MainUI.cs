@@ -18,6 +18,8 @@ namespace K2D2
 
         #endregion
 
+        
+
         public MainUI(ManualLogSource src_logger)
         {
             logger = src_logger;
@@ -43,15 +45,16 @@ namespace K2D2
                 return;
             }
 
-            GUILayout.BeginVertical();
-
             // ############# Uncomment this to get tabs in UI ###################
 
-            // Mode selection.
-            GUILayout.BeginHorizontal();
-            Settings.current_interface_mode = (InterfaceMode)GUILayout.SelectionGrid((int)Settings.current_interface_mode, interfaceModes, 4);
-            GUILayout.EndHorizontal();
-            // #############  ###################
+            if (Settings.debug_mode){
+                // Mode selection.
+                Settings.current_interface_mode = (InterfaceMode)GUILayout.SelectionGrid((int)Settings.current_interface_mode, interfaceModes, 3);
+                // #############  ###################
+            }
+            else
+                Settings.current_interface_mode = InterfaceMode.ExeNode;
+
 
             // return;
             // Draw one of the modes.
@@ -72,9 +75,6 @@ namespace K2D2
                 default:
                     break;
             }
-
-            GUILayout.EndVertical();
-            GUI.DragWindow(new Rect(0, 0, 10000, 500));
         }
 
         public static void SASInfos()

@@ -40,6 +40,15 @@
     <FinalModFolder>$(ProjectDir)$(ModName)</FinalModFolder>
   </PropertyGroup>
   
+  
+  <PropertyGroup>
+    <KSP2Path>G:\SteamLibrary\steamapps\common\Kerbal Space Program 2\</KSP2Path>
+
+    <ModName>KSP2FlightAssistant</ModName>
+    <ModPath>$(KSP2Path)BepInEx\plugins\$(ModName)</ModPath>
+    <FinalModFolder>$(ProjectDir)$(ModName)</FinalModFolder>
+  </PropertyGroup>
+  
   <ItemGroup>
     <Reference Include="Assembly-CSharp">
       <HintPath>.\external_dlls\Assembly-CSharp.dll</HintPath>
@@ -97,8 +106,8 @@
     <Compile Include="sources\Models\ControllerManager.cs" />
     <Compile Include="sources\My_Plugin.cs" />
     <Compile Include="sources\MainUI.cs" />
-    <Compile Include="sources\Styles.cs" />
     <Compile Include="sources\Settings.cs" />
+
     <Compile Include="sources\AutoExecuteManeuver.cs" />
     <Compile Include="sources\pilots\BasePilot.cs" />
     <Compile Include="sources\pilots\TurnToManeuvre.cs" />
@@ -107,12 +116,15 @@
     <Compile Include="sources\Tools\ColorTools.cs" />
     <Compile Include="sources\Tools\KSP2Tools.cs" />
     <Compile Include="sources\Tools\SettingsFile.cs" />
+    <Compile Include="sources\Tools\UITools.cs" />
+    <Compile Include="sources\Tools\Styles.cs" />
     <Compile Include="sources\Properties\AssemblyInfo.cs" />
 
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>
+
 echo on
 echo $(TargetDir)
 
@@ -121,9 +133,14 @@ timeout 1
 
 cd $(ProjectDir)
 
-call make_zip.bat
+echo "ConfigurationName:" $(ConfigurationName)
+call make_zip.bat $(ConfigurationName)
 call copy_to_ksp.bat
 
+
+
+echo "ConfigurationName:" $(ConfigurationName)
+call make_zip.bat $(ConfigurationName)
 SET KSP2=$(KSP2Path)
 
 copy /Y "$(TargetDir)$(ProjectName).dll" "%KSP2%\BepInEx\plugins\$(ProjectName)\$(ProjectName).dll"

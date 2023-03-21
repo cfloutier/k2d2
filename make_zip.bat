@@ -1,16 +1,17 @@
 @REM Create the zip fro SpaceDocks
+@REM echo off
+echo on
+set build_mode=%1
+
+@REM define the default build mode to Debug 
+IF [%build_mode%] == [] set build_mode=Debug
 
 set PROJECT_NAME=K2D2
-set CONFIG=Debug
 
 set OUTPUT=output
 set LOCAL_DIR=%OUTPUT%\BepInEx\plugins\%PROJECT_NAME%
 
 set ZIP_File=%PROJECT_NAME%.zip
-
-echo %ZIP_File%
-
-echo off
 
 echo ####################### make zip #######################
 
@@ -32,16 +33,19 @@ md %LOCAL_DIR%\assets\images
 copy /Y icon.png %LOCAL_DIR%\assets\images
 copy /Y sources\images\*.png %LOCAL_DIR%\assets\images
 
-copy /Y %PROJECT_NAME%\obj\%CONFIG%\%PROJECT_NAME%.dll %LOCAL_DIR%
+@REM Copy Dll
+copy /Y obj\%build_mode%\%PROJECT_NAME%.dll %LOCAL_DIR%
+@REM Copy Pdb
+copy /Y obj\%build_mode%\%PROJECT_NAME%.pdb %LOCAL_DIR%
 
 set CWD=%cd%
 
-del %ZIP_File%
-
 cd %OUTPUT%
 
+del %ZIP_File%
 "C:\Program Files\7-Zip\7z.exe" a %ZIP_File% BepInEx
 
 cd %CWD%
 
-dir
+
+:end

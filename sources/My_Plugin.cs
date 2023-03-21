@@ -67,6 +67,9 @@ namespace K2D2
         }
         // Controllers
         MainUI main_ui;
+
+        public bool settings_visible = false;
+
         AutoExecuteManeuver auto_execute_maneuver;
         
         ControllerManager controllerManager = new ControllerManager();
@@ -162,16 +165,28 @@ namespace K2D2
 
         private void FillWindow(int windowID)
         {
-            GUILayout.BeginVertical();
-
-            GUI.Label(new Rect(22, 2, 24, 24), Styles.icon, Styles.icons_label);
-
             if (GUI.Button(new Rect(windowRect.width - 30, 4, 25, 25), "X", Styles.small_button))
                 ToggleButton(false);
 
-            main_ui.onGui();
+            // settings button
+            if (GUI.Button(new Rect(windowRect.width - 56, 4, 25, 25), Styles.gear, Styles.small_button))
+                settings_visible = !settings_visible;
+
+            GUI.Label(new Rect(22, 2, 24, 24), Styles.icon, Styles.icons_label);
+
+            GUILayout.BeginVertical();
+
+            if (settings_visible)
+            {
+                SettingsUI.onGui();
+            }
+            else
+            {
+                main_ui.onGui();
+            }
 
             GUILayout.EndVertical();
+            GUI.DragWindow(new Rect(0, 0, 10000, 500));
         }
     }
 
