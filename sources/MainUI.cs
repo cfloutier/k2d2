@@ -3,6 +3,10 @@ using UnityEngine;
 using KSP.Sim;
 using BepInEx.Logging;
 using SpaceWarp.API.Assets;
+using KSP.Sim.DeltaV;
+
+using System.Collections.Generic;
+
 
 namespace K2D2
 {
@@ -106,17 +110,51 @@ namespace K2D2
             GUILayout.Label($"mainThrottle {vehicle.mainThrottle}");
             GUILayout.Label($"pitch {vehicle.pitch:n3} yaw {vehicle.yaw:n3} roll {vehicle.roll:n3}");
 
-            GUILayout.Label($"AltitudeFromTerrain {vehicle.AltitudeFromTerrain:n2}");
-            GUILayout.Label($"Lat {vehicle.Latitude:n2} Lon {vehicle.Longitude:n2}");
-            GUILayout.Label($"IsInAtmosphere {vehicle.IsInAtmosphere}");
-            GUILayout.Label($"LandedOrSplashed {vehicle.LandedOrSplashed}");
+            VesselDeltaVComponent delta_v = VesselInfos.currentVessel().VesselDeltaV;
+            if (delta_v == null)
+            {
+                GUILayout.Label("NO VesselDeltaVComponent");
+                return;
+            }
+            List<DeltaVEngineInfo> engineInfos = delta_v.EngineInfo;
 
-            var body = VesselInfos.currentBody();
-            var coord = body.coordinateSystem;
-            var body_location = Rotation.Reframed(vehicle.Rotation, coord);
+            int nb_engines_infos = engineInfos.Count;
 
-            GUILayout.Label($"coordinate_system {vehicle.Rotation.coordinateSystem}");
-            GUILayout.Label($"body_location {Tools.printVector(body_location.localRotation.eulerAngles)}");
+            GUILayout.Label($"nb_engines_infos {nb_engines_infos}");
+
+            for (int i =0; i < nb_engines_infos ; i++)
+            {
+                DeltaVEngineInfo engineInfo = engineInfos[i];
+
+                // Vector3 vector = ((Engine != null) ? Engine.ThrustDirRelativePartWorldSpace : (1f * Vector3.back));
+
+                GUILayout.Label($"ThrustVectorActual {Tools.printVector(engineInfo.ThrustVectorActual)}");
+                GUILayout.Label($"ThrustVectorASL {Tools.printVector(engineInfo.ThrustVectorASL)}");
+                GUILayout.Label($"ThrustVectorVac {Tools.printVector(engineInfo.ThrustVectorVac)}");
+                var totalMass = VesselInfos.currentVessel().totalMass;
+                GUILayout.Label($"totalMass {totalMass:n2}");
+                var dv = engineInfo.ThrustVectorActual.magnitude / totalMass;
+                GUILayout.Label($"dv {dv:n2}");
+
+
+            }
+
+
+
+
+            // GUILayout.Space(6);
+
+            // GUILayout.Label($"AltitudeFromTerrain {vehicle.AltitudeFromTerrain:n2}");
+            // GUILayout.Label($"Lat {vehicle.Latitude:n2} Lon {vehicle.Longitude:n2}");
+            // GUILayout.Label($"IsInAtmosphere {vehicle.IsInAtmosphere}");
+            // GUILayout.Label($"LandedOrSplashed {vehicle.LandedOrSplashed}");
+
+            // var body = VesselInfos.currentBody();
+            // var coord = body.coordinateSystem;
+            // var body_location = Rotation.Reframed(vehicle.Rotation, coord);
+
+            // GUILayout.Label($"coordinate_system {vehicle.Rotation.coordinateSystem}");
+            // GUILayout.Label($"body_location {Tools.printVector(body_location.localRotation.eulerAngles)}");
         }
     }
 }
