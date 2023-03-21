@@ -53,7 +53,9 @@ namespace K2D2
                 // #############  ###################
             }
             else
-                Settings.current_interface_mode = InterfaceMode.ExeNode;
+                //Settings.current_interface_mode = InterfaceMode.ExeNode;
+                Settings.current_interface_mode = (InterfaceMode)GUILayout.SelectionGrid((int)Settings.current_interface_mode, interfaceModes, 3);
+
 
 
             // return;

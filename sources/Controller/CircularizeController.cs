@@ -21,7 +21,8 @@ namespace K2D2.Controller
         public GameInstance Game { get; set; }
 
 
-        private bool _circularizeApoapsis,_circularizePeriapsis = false;
+        private bool _circularizeApoapsis,_circularizePeriapsis, _hohmannTransfer = false;
+        private string distanceS ="", timeS="";
 
 
         private Maneuver _maneuver;
@@ -87,9 +88,10 @@ namespace K2D2.Controller
                 GUILayout.Label($"Inclination: {_maneuver.kspVessel.VesselComponent.Orbit.inclination}");
             }
 
+
+            if (GUILayout.Button("Circularize Node in Apoapsis"))//GUILayout.Button("Circularize Node in Apoapsis", Styles.button, GUILayout.Height(40)))
+            { 
             
-            if (GUILayout.Button("Circularize Node in Apoapsis", Styles.button, GUILayout.Height(40)))
-            {
                 _circularizeApoapsis = !_circularizeApoapsis;
             }
 
@@ -110,8 +112,8 @@ namespace K2D2.Controller
             }
             
             
-            if (GUILayout.Button("Circularize Node in Periapsis", Styles.button, GUILayout.Height(40)))
-            {
+            if (GUILayout.Button("Circularize Node in Periapsis")){//GUILayout.Button("Circularize Node in Periapsis", Styles.button, GUILayout.Height(40)))
+            
                 _circularizePeriapsis = !_circularizePeriapsis;
             }
 
@@ -129,7 +131,50 @@ namespace K2D2.Controller
                 }
                 
             }
+            /*
+            GUILayout.Label("Hohmann Transfer Distance (m):");
+            distanceS = GUILayout.TextField(distanceS);
+            GUILayout.Label("Hohmann Transfer Time (s):");
+            timeS = GUILayout.TextField(timeS);
+            
+            double distance = -1;
+            double time = -1;
+            
+            
+            if (GUILayout.Button("Hohmann Transfer")){
+                try
+                {
+                    distance = Convert.ToDouble(distanceS);
+                    time = Convert.ToDouble(timeS);
+                    _hohmannTransfer = !_hohmannTransfer;
+                }
+                catch (Exception e)
+                {
+                    GUILayout.Label("Invalid input");
+                    logger.LogError(e.Message);
+                }
+                
+                
+            }
+            
 
+            if (!_hohmannTransfer)
+            {
+                try
+                {
+                    double UT = time + Game.UniverseModel.UniversalTime;
+
+                    double deltaV = _maneuver.HohmannTransfer(UT, distance);
+                    GUILayout.Label($"Required dV: {deltaV}");
+                    _hohmannTransfer = !_hohmannTransfer;
+                }
+                catch (Exception e)
+                {
+                    logger.LogError(e.Message);
+                }
+                
+            }
+*/
             Run();
         }
     }

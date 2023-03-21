@@ -67,6 +67,13 @@ namespace K2D2.KSPService
             return deltaV;
         }
 
+        public double HohmannTransfer(double UT, double OrbitDistance)
+        {
+            CircularizeOrbitApoapsis();
+            double deltaV = 0;
+            return deltaV;
+        }
+
 
         // Maneuver Service----------------------------------------------------------------------------------------------
         

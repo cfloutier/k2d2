@@ -32,13 +32,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   
-  <PropertyGroup>
-    <KSP2Path>G:\SteamLibrary\steamapps\common\Kerbal Space Program 2\</KSP2Path>
 
-    <ModName>KSP2FlightAssistant</ModName>
-    <ModPath>$(KSP2Path)BepInEx\plugins\$(ModName)</ModPath>
-    <FinalModFolder>$(ProjectDir)$(ModName)</FinalModFolder>
-  </PropertyGroup>
   
   
   <PropertyGroup>
@@ -101,6 +95,7 @@
     <Compile Include="sources\Controller\CircularizeController.cs" />
     <Compile Include="sources\KSPService\KSPVessel.cs" />
     <Compile Include="sources\KSPService\KSPVesselInformation.cs" />
+    <Compile Include="sources\KSPService\Maneuver.cs" />
     <Compile Include="sources\MathLibrary\PIDController.cs" />
     <Compile Include="sources\MathLibrary\VisVivaEquation.cs" />
     <Compile Include="sources\Models\ControllerManager.cs" />
@@ -141,10 +136,6 @@ call copy_to_ksp.bat
 
 echo "ConfigurationName:" $(ConfigurationName)
 call make_zip.bat $(ConfigurationName)
-SET KSP2=$(KSP2Path)
-
-copy /Y "$(TargetDir)$(ProjectName).dll" "%KSP2%\BepInEx\plugins\$(ProjectName)\$(ProjectName).dll"
-copy /Y "$(TargetDir)$(Targetname).pdb" "%KSP2%\BepInEx\plugins\$(ProjectName)"
 
 </PostBuildEvent>
   </PropertyGroup>

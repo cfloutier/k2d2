@@ -105,10 +105,10 @@ namespace K2D2
             // Controllers
             auto_execute_maneuver = new AutoExecuteManeuver(logger);
             
+            // Add Controllers that inherit from BaseController here:
             controllerManager.AddController(new CircularizeController(logger));
-            //circularizeController = new CircularizeController(logger);
-            
-            
+
+
             main_ui = new MainUI(logger);
 
             Appbar.RegisterAppButton(
