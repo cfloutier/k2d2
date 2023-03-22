@@ -67,9 +67,6 @@ namespace K2D2
         public bool settings_visible = false;
 
         AutoExecuteManeuver auto_execute_maneuver;
-        // just to test
-        public BurndV burn_dV = new BurndV();
-
 
         public static string mod_id;
 
@@ -129,10 +126,6 @@ namespace K2D2
             {
                 if (auto_execute_maneuver != null)
                     auto_execute_maneuver.FixedUpdate();
-
-                if (burn_dV != null)
-                    burn_dV.FixedUpdate();
-
             }
         }
 
@@ -171,7 +164,7 @@ namespace K2D2
             if (GUI.Button(new Rect(windowRect.width - 56, 4, 25, 25), Styles.gear, Styles.small_button))
                 settings_visible = !settings_visible;
 
-            GUI.Label(new Rect(22, 2, 24, 24), Styles.icon, Styles.icons_label);
+            GUI.Label(new Rect(10, 2, 29, 29), Styles.big_icon, Styles.icons_label);
 
             GUILayout.BeginVertical();
 

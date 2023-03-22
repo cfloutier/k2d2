@@ -25,6 +25,11 @@ namespace K2D2
 
         public float burned_dV = 0;
 
+        public void reset()
+        {
+            burned_dV = 0;
+        }
+
         public Vector3 actual_thrust;
         public float actual_dv
         {

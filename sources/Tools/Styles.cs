@@ -17,7 +17,7 @@ namespace K2D2
 
         public static GUIStyle icons_label, title;
 
-        public static Texture2D gear, icon;
+        public static Texture2D gear, icon, big_icon;
         public static Color labelColor;
 
         public static void Init()
@@ -157,6 +157,7 @@ namespace K2D2
             // GEAR icon
             gear = loadIcon("gear");
             icon = loadIcon("icon");
+            big_icon = loadIcon("big_icon");
 
             icons_label = new GUIStyle(GUI.skin.GetStyle("Label"));
             icons_label.border = new RectOffset(0, 0, 0, 0);

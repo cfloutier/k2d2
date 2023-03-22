@@ -9,53 +9,92 @@ namespace K2D2
     {
         public AutoExecuteManeuver parent;
 
+        BurndV burn_dV = new BurndV();
+
         public BurnManeuvre(AutoExecuteManeuver parent)
         {
             this.parent = parent;
         }
 
-        public override void onUpdate()
+        double start_dt;
+
+        public enum Mode
+        {
+            Waiting,
+            Burning
+        }
+
+        Mode mode = Mode.Waiting;
+
+        public override void Start()
         {
             finished = false;
+            mode = Mode.Waiting;
+            burn_dV.reset();
+        }
 
-            var time_warp = TimeWarpTools.time_warp();
+        public override void onUpdate()
+        {
             var current_maneuvre_node = parent.current_maneuvre_node;
             if (current_maneuvre_node == null) return;
 
+            var time_warp = TimeWarpTools.time_warp();
             if (time_warp.CurrentRateIndex != 0)
                 time_warp.SetRateIndex(0, false);
 
-            var dt = Tools.remainingStartTime(current_maneuvre_node);
-            var end_dt = Tools.remainingEndTime(current_maneuvre_node);
-
-            if (end_dt < 0)
+            if (mode == Mode.Waiting)
             {
-                status_line = $"ended";
-                VesselInfos.SetThrottle(0);
-                finished=true;
-                // mode = Mode.Off;
-            }
-            else if (dt < 0)
-            {
-                status_line = $"burning, end in {Tools.printDuration(end_dt)}";
-                VesselInfos.SetThrottle(1);
-            }
-            else
-            {
-                status_line = $"start in {Tools.printDuration(dt)}";
-                VesselInfos.SetThrottle(0);
+                start_dt = Tools.remainingStartTime(current_maneuvre_node);
+                if (start_dt > 0)
+                {
+                    status_line = $"start in {Tools.printDuration(start_dt)}";
+                    VesselInfos.SetThrottle(0);
+                    return;
+                }
+                else
+                    mode = Mode.Burning;
             }
         }
 
-
         public override void FixedUpdate()
         {
-            
+            if (mode == Mode.Burning)
+            {
+                burn_dV.FixedUpdate();
+                var current_maneuvre_node = parent.current_maneuvre_node;
+                if (current_maneuvre_node == null)
+                {
+                    finished = true;
+                    return;
+                }
+
+                var required_dv = current_maneuvre_node.BurnRequiredDV;
+                if (burn_dV.burned_dV >= required_dv)
+                {
+                    VesselInfos.SetThrottle(0);
+                    status_line = $"ended, error is {required_dv-burn_dV.burned_dV}";
+                    finished = true;
+                }
+                else
+                {
+                    VesselInfos.SetThrottle(1);
+                    status_line = $"actual dV : {burn_dV.burned_dV}";
+                }
+            }
         }
 
         public override void onGui()
         {
-            GUILayout.Label("Burn !", Styles.phase_ok);
+            switch(mode)
+            {
+                case Mode.Waiting:
+                    GUILayout.Label("Waiting !", Styles.phase_ok);
+                    break;
+                case Mode.Burning:
+                    GUILayout.Label("Burning !", Styles.warning);
+                    break;
+            }
+
             GUILayout.Label(status_line, Styles.small_dark_text);
 
             if (Settings.debug_mode)
@@ -63,11 +102,11 @@ namespace K2D2
                 var current_maneuvre_node = parent.current_maneuvre_node;
                 if (current_maneuvre_node == null) return;
 
-                var dt = Tools.remainingStartTime(current_maneuvre_node);
-                var end_dt = Tools.remainingEndTime(current_maneuvre_node);
+                GUILayout.Label($"start_dt {Tools.remainingStartTime(current_maneuvre_node)}");
+                GUILayout.Label($"end_dt {Tools.remainingEndTime(current_maneuvre_node)}");
+                GUILayout.Label($"BurnRequiredDV {current_maneuvre_node.BurnRequiredDV}");
 
-                GUILayout.Label($"start_dt {dt}");
-                GUILayout.Label($"end_dt {end_dt}");
+                burn_dV.onGUI();
             }
         }
     }

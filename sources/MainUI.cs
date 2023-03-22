@@ -109,24 +109,19 @@ namespace K2D2
             GUILayout.Label($"mainThrottle {vehicle.mainThrottle}");
             GUILayout.Label($"pitch {vehicle.pitch:n3} yaw {vehicle.yaw:n3} roll {vehicle.roll:n3}");
 
-            if (K2D2_Plugin.Instance.burn_dV != null)
-            {
-                K2D2_Plugin.Instance.burn_dV.onGUI();
-            }
+            GUILayout.Space(6);
 
-            // GUILayout.Space(6);
+            GUILayout.Label($"AltitudeFromTerrain {vehicle.AltitudeFromTerrain:n2}");
+            GUILayout.Label($"Lat {vehicle.Latitude:n2} Lon {vehicle.Longitude:n2}");
+            GUILayout.Label($"IsInAtmosphere {vehicle.IsInAtmosphere}");
+            GUILayout.Label($"LandedOrSplashed {vehicle.LandedOrSplashed}");
 
-            // GUILayout.Label($"AltitudeFromTerrain {vehicle.AltitudeFromTerrain:n2}");
-            // GUILayout.Label($"Lat {vehicle.Latitude:n2} Lon {vehicle.Longitude:n2}");
-            // GUILayout.Label($"IsInAtmosphere {vehicle.IsInAtmosphere}");
-            // GUILayout.Label($"LandedOrSplashed {vehicle.LandedOrSplashed}");
+            var body = VesselInfos.currentBody();
+            var coord = body.coordinateSystem;
+            var body_location = Rotation.Reframed(vehicle.Rotation, coord);
 
-            // var body = VesselInfos.currentBody();
-            // var coord = body.coordinateSystem;
-            // var body_location = Rotation.Reframed(vehicle.Rotation, coord);
-
-            // GUILayout.Label($"coordinate_system {vehicle.Rotation.coordinateSystem}");
-            // GUILayout.Label($"body_location {Tools.printVector(body_location.localRotation.eulerAngles)}");
+            GUILayout.Label($"coordinate_system {vehicle.Rotation.coordinateSystem}");
+            GUILayout.Label($"body_location {Tools.printVector(body_location.localRotation.eulerAngles)}");
         }
     }
 }
