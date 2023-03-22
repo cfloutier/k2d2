@@ -181,6 +181,14 @@ namespace K2D2
             }
         }
 
+        public void FixedUpdate()
+        {
+            if (current_pilot != null)
+            {
+                current_pilot.FixedUpdate();
+            }
+        }
+
         void node_infos()
         {
             if (Settings.debug_mode)

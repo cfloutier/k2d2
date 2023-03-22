@@ -25,7 +25,7 @@ namespace K2D2
     [BepInPlugin(ModGuid, ModName, ModVer)]
     public class K2D2_Plugin : BaseSpaceWarpPlugin
     {
-        public static K2D2_Plugin Instance { get; set; }
+        public static K2D2_Plugin Instance { get; private set; }
 
         public const string ModGuid = "K2D2";
         public const string ModName = "K2D2";
@@ -35,7 +35,6 @@ namespace K2D2
 
         // Main.
         public static bool loaded = false;
-        public static K2D2_Plugin instance;
 
         // Paths.
         private static string _assemblyFolder;
@@ -68,6 +67,9 @@ namespace K2D2
         public bool settings_visible = false;
 
         AutoExecuteManeuver auto_execute_maneuver;
+        // just to test
+        public BurndV burn_dV = new BurndV();
+
 
         public static string mod_id;
 
@@ -79,6 +81,7 @@ namespace K2D2
             {
                 Destroy(this);
             }
+            Instance = this;
 
             Settings.Init(SettingsPath);
 
@@ -87,7 +90,7 @@ namespace K2D2
             mod_id = SpaceWarpMetadata.ModID;
 
             loaded = true;
-            instance = this;
+            Instance = this;
 
             gameObject.hideFlags = HideFlags.HideAndDontSave;
             DontDestroyOnLoad(gameObject);
@@ -117,6 +120,19 @@ namespace K2D2
 
                 if (auto_execute_maneuver != null)
                     auto_execute_maneuver.Update();
+            }
+        }
+
+        void FixedUpdate()
+        {
+            if (ValidScene())
+            {
+                if (auto_execute_maneuver != null)
+                    auto_execute_maneuver.FixedUpdate();
+
+                if (burn_dV != null)
+                    burn_dV.FixedUpdate();
+
             }
         }
 

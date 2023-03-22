@@ -21,7 +21,7 @@ namespace K2D2
 
         #endregion
 
-        
+       
 
         public MainUI(ManualLogSource src_logger)
         {
@@ -57,7 +57,6 @@ namespace K2D2
             }
             else
                 Settings.current_interface_mode = InterfaceMode.ExeNode;
-
 
             // return;
             // Draw one of the modes.
@@ -103,44 +102,17 @@ namespace K2D2
 
             if (vehicle == null)
             {
-                GUILayout.Label("NO vessel");
+                GUILayout.Label("No vessel !");
                 return;
             }
 
             GUILayout.Label($"mainThrottle {vehicle.mainThrottle}");
             GUILayout.Label($"pitch {vehicle.pitch:n3} yaw {vehicle.yaw:n3} roll {vehicle.roll:n3}");
 
-            VesselDeltaVComponent delta_v = VesselInfos.currentVessel().VesselDeltaV;
-            if (delta_v == null)
+            if (K2D2_Plugin.Instance.burn_dV != null)
             {
-                GUILayout.Label("NO VesselDeltaVComponent");
-                return;
+                K2D2_Plugin.Instance.burn_dV.onGUI();
             }
-            List<DeltaVEngineInfo> engineInfos = delta_v.EngineInfo;
-
-            int nb_engines_infos = engineInfos.Count;
-
-            GUILayout.Label($"nb_engines_infos {nb_engines_infos}");
-
-            for (int i =0; i < nb_engines_infos ; i++)
-            {
-                DeltaVEngineInfo engineInfo = engineInfos[i];
-
-                // Vector3 vector = ((Engine != null) ? Engine.ThrustDirRelativePartWorldSpace : (1f * Vector3.back));
-
-                GUILayout.Label($"ThrustVectorActual {Tools.printVector(engineInfo.ThrustVectorActual)}");
-                GUILayout.Label($"ThrustVectorASL {Tools.printVector(engineInfo.ThrustVectorASL)}");
-                GUILayout.Label($"ThrustVectorVac {Tools.printVector(engineInfo.ThrustVectorVac)}");
-                var totalMass = VesselInfos.currentVessel().totalMass;
-                GUILayout.Label($"totalMass {totalMass:n2}");
-                var dv = engineInfo.ThrustVectorActual.magnitude / totalMass;
-                GUILayout.Label($"dv {dv:n2}");
-
-
-            }
-
-
-
 
             // GUILayout.Space(6);
 

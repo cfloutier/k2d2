@@ -164,13 +164,12 @@ namespace K2D2
 
     class VesselInfos
     {
-        
-
-
         static public VesselComponent currentVessel()
         {
             return Tools.Game().ViewController?.GetActiveSimVessel();
         }
+
+
         static public VesselVehicle currentVehicle()
         {
             if (Tools.Game().ViewController == null) return null;
@@ -196,8 +195,6 @@ namespace K2D2
 
             active_Vehicle.AtomicSet(update);
         }
-
-
 
         public static Vector GetAngularSpeed()
         {

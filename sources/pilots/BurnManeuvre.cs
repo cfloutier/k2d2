@@ -47,6 +47,12 @@ namespace K2D2
             }
         }
 
+
+        public override void FixedUpdate()
+        {
+            
+        }
+
         public override void onGui()
         {
             GUILayout.Label("Burn !", Styles.phase_ok);

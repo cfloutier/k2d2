@@ -35,12 +35,21 @@ namespace K2D2
             finished = false;
         }
 
-        // Must be implemented
+        // Must be implemented, called every frame
         // should check status and set finished to true when tasks is done
         public virtual void onUpdate()
         {
             throw new System.NotImplementedException();
         }
+
+
+        // Fixed Update is called every physic frame
+        public virtual void FixedUpdate()
+        {
+
+            // FixedUpdate is Optionnal 
+        }
+
 
         public virtual void onGui()
         {
