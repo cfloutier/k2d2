@@ -71,7 +71,7 @@ namespace K2D2
                 case InterfaceMode.SAS: SASInfos(); break;
                 case InterfaceMode.Vessel: VesselInfo(); break;
                 case InterfaceMode.Circularize: 
-                    CircularizeController.Instance.onGUI(); 
+                    SimpleManeuverController.Instance.onGUI(); 
                     break;
                 
                 default:

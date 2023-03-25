@@ -106,7 +106,7 @@ namespace K2D2
             auto_execute_maneuver = new AutoExecuteManeuver(logger);
             
             // Add Controllers that inherit from BaseController here:
-            controllerManager.AddController(new CircularizeController(logger));
+            controllerManager.AddController(new SimpleManeuverController(logger));
 
 
             main_ui = new MainUI(logger);

@@ -92,7 +92,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="sources\Controller\BaseController.cs" />
-    <Compile Include="sources\Controller\CircularizeController.cs" />
+    <Compile Include="sources\Controller\SimpleManeuverController.cs" />
     <Compile Include="sources\KSPService\KSPVessel.cs" />
     <Compile Include="sources\KSPService\KSPVesselInformation.cs" />
     <Compile Include="sources\KSPService\Maneuver.cs" />
@@ -109,6 +109,7 @@
     <Compile Include="sources\pilots\WarpToManeuvre.cs" />
     <Compile Include="sources\pilots\BurnManeuvre.cs" />
     <Compile Include="sources\Tools\ColorTools.cs" />
+    <Compile Include="sources\Tools\GeneralTools.cs" />
     <Compile Include="sources\Tools\KSP2Tools.cs" />
     <Compile Include="sources\Tools\SettingsFile.cs" />
     <Compile Include="sources\Tools\UITools.cs" />
