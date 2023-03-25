@@ -112,6 +112,7 @@ namespace K2D2
         {
             if (ValidScene())
             {
+                Debug.developerConsoleVisible = false;
                 if (Input.GetKey(KeyCode.LeftAlt) && Input.GetKeyDown(KeyCode.O) )
                     ToggleButton(!drawUI);
 
@@ -126,6 +127,15 @@ namespace K2D2
             {
                 if (auto_execute_maneuver != null)
                     auto_execute_maneuver.FixedUpdate();
+            }
+        }
+
+        private void LateUpdate()
+        {
+            if (ValidScene())
+            {
+                if (auto_execute_maneuver != null)
+                    auto_execute_maneuver.LateUpdate();
             }
         }
 
@@ -153,8 +163,6 @@ namespace K2D2
             drawUI = toggle;
             GameObject.Find("BTN-K2D2Button")?.GetComponent<UIValue_WriteBool_Toggle>()?.SetValue(toggle);
         }
-
-
         private void FillWindow(int windowID)
         {
             if (GUI.Button(new Rect(windowRect.width - 30, 4, 25, 25), "X", Styles.small_button))
@@ -164,7 +172,7 @@ namespace K2D2
             if (GUI.Button(new Rect(windowRect.width - 56, 4, 25, 25), Styles.gear, Styles.small_button))
                 settings_visible = !settings_visible;
 
-            GUI.Label(new Rect(10, 2, 29, 29), Styles.big_icon, Styles.icons_label);
+            GUI.Label(new Rect(15, 2, 29, 29), Styles.big_icon, Styles.icons_label);
 
             GUILayout.BeginVertical();
 

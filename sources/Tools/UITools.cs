@@ -26,6 +26,12 @@ namespace K2D2
             return value;
         }
 
+        public static float FloatSlider(string txt, float value, float min, float max )
+        {
+            GUILayout.Label(txt + $" : {value:n2}");
+            value = GUILayout.HorizontalSlider( value, min, max);
+            return value;
+        }
 
         public static Dictionary<string, string> temp_dict = new Dictionary<string, string>();
 

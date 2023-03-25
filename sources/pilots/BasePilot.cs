@@ -47,13 +47,28 @@ namespace K2D2
         public virtual void FixedUpdate()
         {
 
-            // FixedUpdate is Optionnal 
+            // FixedUpdate is Optionnal
         }
 
+        public virtual void LateUpdate()
+        {
+            // LateUpdate is Optionnal
+        }
 
         public virtual void onGui()
         {
-            // GUI is Optionnal 
+            // GUI is Optionnal
+        }
+    }
+
+
+    public class ManeuvrePilot : BasePilot
+    {
+        protected ManeuverNodeData maneuver = null;
+
+        public void setManeuver(ManeuverNodeData maneuver)
+        {
+            this.maneuver = maneuver;
         }
     }
 }

@@ -8,15 +8,8 @@ using KSP.Sim.Maneuver;
 
 namespace K2D2
 {
-    public class WarpToManeuvre : BasePilot
+    public class WarpToManeuvre : ManeuvrePilot
     {
-        public AutoExecuteManeuver parent;
-
-        public WarpToManeuvre(AutoExecuteManeuver parent)
-        {
-            this.parent = parent;
-        }
-
         int wanted_warp_index = 0;
 
         TimeWarp time_warp = null;
@@ -26,11 +19,9 @@ namespace K2D2
             finished = false;
             time_warp = TimeWarpTools.time_warp();
             if (time_warp == null) return;
+            if (maneuver == null) return;
 
-            ManeuverNodeData next_node = parent.current_maneuvre_node;
-            if (next_node == null) return;
-
-            var dt = Tools.remainingStartTime(next_node);
+            var dt = Tools.remainingStartTime(maneuver);
             dt = dt  - Settings.warp_safe_duration;
 
             wanted_warp_index = compute_wanted_warp_index(dt);
@@ -67,7 +58,6 @@ namespace K2D2
                 GUILayout.Label($"CurrentRateIndex {time_warp.CurrentRateIndex}");
                 GUILayout.Label($"CurrentRate x{time_warp.CurrentRate}");
                 GUILayout.Label($"index_rate x{TimeWarpTools.indexToRatio(time_warp.CurrentRateIndex)}");
-                GUILayout.Label($"finished {finished}");
             }
         }
     }

@@ -9,13 +9,6 @@ using Newtonsoft.Json;
 
 namespace K2D2
 {
-    public class K2D2Settings
-    {
-        public MainUI.InterfaceMode current_mode = MainUI.InterfaceMode.ExeNode;
-
-        public bool debug_mode = false;
-    }
-
     public class Settings
     {
         public static SettingsFile s_settings_file = null;
@@ -58,9 +51,26 @@ namespace K2D2
             get => s_settings_file.GetInt("warp.safe_duration", 10);
             set {
                 if (value < 5) value = 5;
-                s_settings_file.SetInt("warp.safe_duration", value); }
+                s_settings_file.SetInt("warp.safe_duration", value);
+            }
+        }
+
+
+        public static float burn_adjust
+        {
+            get => s_settings_file.GetFloat("warp.burn_adjust", 1.5f);
+            set {             // value = Mathf.Clamp(0.1,)
+                s_settings_file.SetFloat("warp.burn_adjust", value); }
+        }
+
+        public static float max_dv_error
+        {
+            get => s_settings_file.GetFloat("warp.max_dv_error", 0.1f);
+            set {             // value = Mathf.Clamp(0.1,)
+                s_settings_file.SetFloat("warp.max_dv_error", value); }
         }
     }
+
 
     public class SettingsUI
     {
@@ -89,12 +99,20 @@ namespace K2D2
             Settings.warp_safe_duration = UI_Tools.IntField("warp_safe_duration", Settings.warp_safe_duration, 5, int.MaxValue);
             GUILayout.Label("nb seconds in x1 before launch (min:5)", Styles.small_dark_text);
 
-            GUILayout.BeginHorizontal();
-            GUILayout.FlexibleSpace(); 
-            GUILayout.Label($"v{K2D2_Plugin.ModVer}", Styles.small_dark_text);
-            
-            GUILayout.EndHorizontal();
+            GUILayout.Label("Burn", Styles.title);
 
+            Settings.burn_adjust = UI_Tools.FloatSlider("burn_adjust", Settings.burn_adjust, 0, 2);
+            GUILayout.Label("adjusting rate", Styles.small_dark_text);
+
+            Settings.max_dv_error = UI_Tools.FloatSlider("max_dv_error", Settings.max_dv_error, 0.001f, 2);
+            GUILayout.Label("accepted dV difference (m/s)", Styles.small_dark_text);
+
+            // VERSION
+            GUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+            GUILayout.Label($"v{K2D2_Plugin.ModVer}", Styles.small_dark_text);
+
+            GUILayout.EndHorizontal();
         }
     }
 

@@ -17,12 +17,11 @@ namespace K2D2
          public SettingsFile(string file_path)
         {
             this.file_path = file_path;
-            logger = BepInEx.Logging.Logger.CreateLogSource("K2D2.SettingsFile");
             Load();
         }
 
 
-        public ManualLogSource logger;
+        public ManualLogSource logger = BepInEx.Logging.Logger.CreateLogSource("K2D2.SettingsFile");
 
         protected void Load()
         {

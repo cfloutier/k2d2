@@ -24,7 +24,7 @@ namespace K2D2
         WarpToManeuvre warp;
         BurnManeuvre burn;
 
-        BasePilot current_pilot = null;
+        ManeuvrePilot current_pilot = null;
 
         public AutoExecuteManeuver(ManualLogSource logger)
         {
@@ -34,9 +34,9 @@ namespace K2D2
 
             Tools.Game().Messages.Subscribe<VesselChangedMessage>(OnActiveVesselChanged);
 
-            turn = new TurnToManeuvre(this);
-            warp = new WarpToManeuvre(this);
-            burn = new BurnManeuvre(this);
+            turn = new TurnToManeuvre();
+            warp = new WarpToManeuvre();
+            burn = new BurnManeuvre();
         }
 
         public void OnActiveVesselChanged(MessageCenterMessage msg)
@@ -156,8 +156,17 @@ namespace K2D2
 
                 if (!Settings.auto_next)
                 {
-                    if (GUILayout.Button("Next"))
-                        nextMode();
+                    GUILayout.Label($"finished {current_pilot.finished}");
+                    if (!current_pilot.finished)
+                    {
+                        if (GUILayout.Button("Next /!\\", Styles.button))
+                            nextMode();
+                    }
+                    else
+                    {
+                        if (GUILayout.Button("Next", Styles.button_on))
+                            nextMode();
+                    }
                 }
             }
         }
@@ -172,6 +181,7 @@ namespace K2D2
 
             if (current_pilot != null)
             {
+                current_pilot.setManeuver(current_maneuvre_node);
                 current_pilot.onUpdate();
                 if (current_pilot.finished && Settings.auto_next)
                 {
@@ -186,6 +196,14 @@ namespace K2D2
             if (current_pilot != null)
             {
                 current_pilot.FixedUpdate();
+            }
+        }
+
+        public void LateUpdate()
+        {
+            if (current_pilot != null)
+            {
+                current_pilot.LateUpdate();
             }
         }
 

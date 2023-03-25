@@ -19,14 +19,8 @@ using KSP.ScriptInterop.impl.moonsharp;
 namespace K2D2
 {
 
-    public class TurnToManeuvre : BasePilot
+    public class TurnToManeuvre : ManeuvrePilot
     {
-        public AutoExecuteManeuver parent;
-
-        public TurnToManeuvre(AutoExecuteManeuver parent)
-        {
-            this.parent = parent;
-        }
 
         Vector3 maneuvre_dir = Vector3.zero;
 
@@ -39,11 +33,14 @@ namespace K2D2
 
         public override void onUpdate()
         {
+            if (maneuver == null) return;
+
             finished = false;
+            var vessel = VesselInfos.currentVessel();
+            if (vessel == null) return;
+            var autopilot = vessel.Autopilot;
 
-            var autopilot = VesselInfos.currentVessel().Autopilot;
-
-            // force autopilot 
+            // force autopilot
             autopilot.Enabled = true;
             if (autopilot.AutopilotMode != AutopilotMode.Maneuver)
                 autopilot.SetMode(AutopilotMode.Maneuver);
@@ -81,7 +78,7 @@ namespace K2D2
 
         public bool checkAngularRotation()
         {
-            double max_angular_speed = 1;
+            double max_angular_speed = 0.5;
 
             var angular_rotation_pc = VesselInfos.GetAngularSpeed().vector;
 
@@ -112,7 +109,6 @@ namespace K2D2
                     return;
 
                 var autopilot = VesselInfos.currentVessel().Autopilot;
-                // ;
 
                 // var angulor_vel_coord = VesselInfos.GetAngularSpeed().coordinateSystem;
                 var angularVelocity = VesselInfos.GetAngularSpeed().vector;
@@ -127,11 +123,6 @@ namespace K2D2
 
                 GUILayout.Label($"angularVelocity {Tools.printVector(angularVelocity)}");
                 GUILayout.Label($"autopilot {autopilot.AutopilotMode}");
-
-                if (GUILayout.Button("Force SaS"))
-                    autopilot.SetMode(AutopilotMode.Maneuver);
-
-                GUILayout.Label($"finished {finished}");
             }
         }
     }

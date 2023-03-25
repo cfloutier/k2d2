@@ -1,22 +1,15 @@
 using UnityEngine;
 
-using System;
-using KSP.Sim;
-using KSP.Sim.impl;
-using KSP.Sim.Maneuver;
-using KSP.Sim.State;
-using KSP.Game;
 using KSP.Sim.DeltaV;
-
 using System.Collections.Generic;
-
-using System.Reflection;
+using BepInEx.Logging;
 
 namespace K2D2
 {
     /// Simple class used to compute Burn DV
     public class BurndV
     {
+        public ManualLogSource logger = BepInEx.Logging.Logger.CreateLogSource("K2D2.SettingsFile");
 
         public BurndV()
         {
@@ -30,40 +23,27 @@ namespace K2D2
             burned_dV = 0;
         }
 
-        public Vector3 actual_thrust;
-        public float actual_dv
-        {
-            get
-            {
-                var vessel = VesselInfos.currentVessel();
-                if (vessel == null) return 0;
 
-                var totalMass = vessel.totalMass;
-                return (float) ( actual_thrust.magnitude / totalMass );
-            }
+        public Vector3 actual_thrust;
+        public float actual_dv;
+
+        public Vector3 full_thrust;
+        public float full_dv;
+
+        public void Update()
+        {
+
         }
 
         public void FixedUpdate()
         {
-            Compute_FullThrust();
+
             burned_dV += actual_dv * Time.fixedDeltaTime;
         }
 
-        public void Compute_FullThrust()
+        public void LateUpdate()
         {
-            var vessel = VesselInfos.currentVessel();
-            if (vessel == null) return;
-            VesselDeltaVComponent delta_v = vessel.VesselDeltaV;
-            if (delta_v == null) return;
-           
-            actual_thrust = Vector3.zero;
-            List<DeltaVEngineInfo> engineInfos = delta_v.EngineInfo;
-            for (int i = 0; i < engineInfos.Count; i++)
-            {
-                DeltaVEngineInfo engineInfo = engineInfos[i];
-
-                actual_thrust += ComputeEngine_ActualThrust(engineInfo);
-            }
+            Compute_Thrust();
         }
 
         // it is the way engine burning is computed in KSP
@@ -72,15 +52,48 @@ namespace K2D2
             return (engine_info.Engine.EngineIgnited && engine_info.Engine.RequestedMassFlow > 0f);
         }
 
-        public Vector3 ComputeEngine_ActualThrust(DeltaVEngineInfo engineInfo)
+        float compute_full_thrust(DeltaVEngineInfo engineInfo)
         {
-            if (Engine_Running(engineInfo))
+            var partref = engineInfo.PartInfo.PartRef;
+            float staticPressureAtm = partref.StaticPressureAtm;
+            if (staticPressureAtm > 0f)
             {
-                return engineInfo.ThrustVectorActual;
-
+                return engineInfo.Engine.MaxThrustOutputAtm(runningActive: false, useThrustLimiter: true, staticPressureAtm, partref.AtmosphericTemperature, partref.AtmDensity);
             }
-            return Vector3.zero;
+            else if (engineInfo.RequiresAir)
+            {
+                return 0f;
+            }
+            else
+            {
+                return engineInfo.Engine.MaxThrustOutputVac();
+            }
+         }
 
+        public void Compute_Thrust()
+        {
+            var vessel = VesselInfos.currentVessel();
+            if (vessel == null) return;
+            VesselDeltaVComponent delta_v = vessel.VesselDeltaV;
+            if (delta_v == null) return;
+
+            var totalMass = vessel.totalMass;
+
+            actual_thrust = Vector3.zero;
+            full_thrust = Vector3.zero;
+            List<DeltaVEngineInfo> engineInfos = delta_v.EngineInfo;
+            for (int i = 0; i < engineInfos.Count; i++)
+            {
+                DeltaVEngineInfo engineInfo = engineInfos[i];
+
+                Vector3 vector = ((engineInfo.Engine != null) ? engineInfo.Engine.ThrustDirRelativePartWorldSpace : (1f * Vector3.back));
+
+                actual_thrust += vector*engineInfo.Engine.FinalThrustValue;
+                full_thrust += vector * compute_full_thrust(engineInfo);
+            }
+
+            actual_dv = (float) ( actual_thrust.magnitude / totalMass );
+            full_dv = (float) ( full_thrust.magnitude / totalMass );
         }
 
         public void onGUI()
@@ -93,11 +106,25 @@ namespace K2D2
             }
             List<DeltaVEngineInfo> engineInfos = delta_v.EngineInfo;
 
-            GUILayout.Label($"nb_engines   {engineInfos.Count}  ");
+            var vehicle = VesselInfos.currentVehicle();
+            if (vehicle == null) return;
+            var mainThrottle = vehicle.mainThrottle;
 
-            GUILayout.Label($"actual_thrust  {Tools.printVector(actual_thrust)}  ");
-            GUILayout.Label($"actual_dv  {actual_dv:n2}  ");
-            GUILayout.Label($"burned_dV  {burned_dV:n2}  ");
+            GUILayout.Label($"nb_engines {engineInfos.Count}  ");
+
+            GUILayout.Space(20);
+            GUILayout.Label($"mainThrottle {mainThrottle}");
+            // GUILayout.Label($"actual_thrust  {Tools.printVector(actual_thrust)}  ");
+            GUILayout.Label($"actual_dv  {actual_dv:n5}  ");
+            GUILayout.Space(20);
+
+            // GUILayout.Label($"full_thrust  {Tools.printVector(full_thrust)}  ");
+            GUILayout.Label($"full_dv  {full_dv:n5}  ");
+
+            GUILayout.Space(20);
+
+            GUILayout.Label($"burned_dV  {burned_dV:n5}  ");
+             GUILayout.Space(5);
 
             if (GUILayout.Button("Reset"))
                 burned_dV = 0;
