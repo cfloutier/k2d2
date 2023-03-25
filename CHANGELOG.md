@@ -1,3 +1,8 @@
+# v0.4.0
+* Burn dv is computed with quite good accuracy.
+* [AutoManeuver] Use dV rather than time to compute burning durtion a thrust ratio.
+
+
 # v0.3.0
 
 * [internal] added new classes to load and save settings easily.
