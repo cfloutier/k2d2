@@ -32,7 +32,7 @@ namespace K2D2
 
         public const string ModGuid = "K2D2";
         public const string ModName = "K2D2";
-        public const string ModVer = "0.4.0";
+        public const string ModVer = "0.5.0";
 
         #region Fields
 
@@ -70,11 +70,8 @@ namespace K2D2
         public bool settings_visible = false;
 
         AutoExecuteManeuver auto_execute_maneuver;
-        
+
         ControllerManager controllerManager = new ControllerManager();
-        
-        //CircularizeController circularizeController;
-        
 
         public static string mod_id;
 
@@ -102,12 +99,9 @@ namespace K2D2
 
             logger.LogMessage("building AutoExecuteManeuver");
 
-            // Controllers
-            auto_execute_maneuver = new AutoExecuteManeuver(logger);
-            
             // Add Controllers that inherit from BaseController here:
             controllerManager.AddController(new SimpleManeuverController(logger));
-
+            controllerManager.AddController(new AutoExecuteManeuver(logger));
 
             main_ui = new MainUI(logger);
 
@@ -120,20 +114,18 @@ namespace K2D2
 
         void Awake()
         {
-            windowRect = new Rect((Screen.width * 0.7f) - (windowWidth / 2), (Screen.height / 2) - (windowHeight / 2), 0, 0);
+            windowRect = new Rect((Screen.width * 0.2f) - (windowWidth / 2), (Screen.height / 2) - (windowHeight / 2), 0, 0);
         }
 
         void Update()
         {
             if (ValidScene())
             {
-                Debug.developerConsoleVisible = false;
+                // Debug.developerConsoleVisible = false;
                 if (Input.GetKey(KeyCode.LeftAlt) && Input.GetKeyDown(KeyCode.O) )
                     ToggleButton(!drawUI);
 
-                if (auto_execute_maneuver != null)
-                    auto_execute_maneuver.Update();
-                
+
                 controllerManager.UpdateControllers();
             }
         }
@@ -142,8 +134,7 @@ namespace K2D2
         {
             if (ValidScene())
             {
-                if (auto_execute_maneuver != null)
-                    auto_execute_maneuver.FixedUpdate();
+                controllerManager.FixedUpdateControllers();
             }
         }
 
@@ -151,8 +142,7 @@ namespace K2D2
         {
             if (ValidScene())
             {
-                if (auto_execute_maneuver != null)
-                    auto_execute_maneuver.LateUpdate();
+                controllerManager.LateUpdateControllers();
             }
         }
 

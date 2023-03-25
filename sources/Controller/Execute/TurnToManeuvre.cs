@@ -16,10 +16,10 @@ using KSP.Sim.ResourceSystem;
 using BepInEx.Logging;
 using KSP.ScriptInterop.impl.moonsharp;
 
-namespace K2D2
+namespace K2D2.Controller
 {
 
-    public class TurnToManeuvre : ManeuvrePilot
+    public class TurnToManeuvre : ManeuvreController
     {
 
         Vector3 maneuvre_dir = Vector3.zero;
@@ -31,7 +31,7 @@ namespace K2D2
             time_warp.SetRateIndex(0, false);
         }
 
-        public override void onUpdate()
+        public override void Update()
         {
             if (maneuver == null) return;
 
@@ -95,7 +95,7 @@ namespace K2D2
             return true;
         }
 
-        public override void onGui()
+        public override void onGUI()
         {
             GUILayout.Label("Check Attitude", Styles.phase_ok);
             GUILayout.Label(status_line, Styles.small_dark_text);

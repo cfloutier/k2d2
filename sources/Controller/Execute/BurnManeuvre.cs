@@ -8,9 +8,9 @@ using System;
 using KSP.Sim;
 
 
-namespace K2D2
+namespace K2D2.Controller
 {
-    public class BurnManeuvre  : ManeuvrePilot
+    public class BurnManeuvre  : ManeuvreController
     {
         public ManualLogSource logger = BepInEx.Logging.Logger.CreateLogSource("K2D2.BurnManeuvre");
 
@@ -51,7 +51,7 @@ namespace K2D2
             autopilot.SetMode(AutopilotMode.StabilityAssist);
         }
 
-        public override void onUpdate()
+        public override void Update()
         {
             if (maneuver == null) return;
 
@@ -142,7 +142,7 @@ namespace K2D2
             needed_throttle = remaining_full_burn_time * Settings.burn_adjust;
         }
 
-        public override void onGui()
+        public override void onGUI()
         {
             switch(mode)
             {

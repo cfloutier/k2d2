@@ -18,14 +18,6 @@ We are starting a collaboration with [Mole](https://github.com/Mole1803)
 
 Thanks to Opus (#Opus#7354) for the name of the Mod !
 
-# Next
-
-* Burn based on real dv
-* We could stop burning if the atitude of the vessel is out of the node direction.
-* SAS use or another way to point in the node direction (SMART SAS like mechjeb ??)
-* Options page ?
-
-
 # Installation
 
 Open the game folder by right-clicking on the game in your Steam library, selecting "Manage," and then clicking "Browse local files."

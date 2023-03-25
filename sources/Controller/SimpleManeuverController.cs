@@ -15,13 +15,12 @@ using KSP.Sim.Maneuver;
 
 namespace K2D2.Controller
 {
-    public class SimpleManeuverController : BaseController
+    public class SimpleManeuverController : ButtonController
     {
-        
-        
+
         ManualLogSource logger;
         public static SimpleManeuverController Instance { get; set; }
-        public GameInstance Game { get; set; }
+        // public GameInstance Game { get; set; }
 
 
         //private bool _circularizeApoapsis = false, _circularizePeriapsis = false, _hohmannTransfer = false;
@@ -53,7 +52,7 @@ namespace K2D2.Controller
         public override void Update()
         {
             //logger.LogMessage("CircularizeController Reinitialize !");
-            Game = Tools.Game();
+            //Game = Tools.Game();
 
             _maneuver = new Maneuver(Game, logger);
         }

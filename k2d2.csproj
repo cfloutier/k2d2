@@ -92,7 +92,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="sources\Controller\BaseController.cs" />
+    <Compile Include="sources\Controller\ButtonController.cs" />
     <Compile Include="sources\Controller\SimpleManeuverController.cs" />
+    <Compile Include="sources\Controller\ExecuteManeuverController.cs" />
+    <Compile Include="sources\Controller\Execute\ExecuteController.cs" />
+    <Compile Include="sources\Controller\Execute\TurnToManeuvre.cs" />
+    <Compile Include="sources\Controller\Execute\WarpToManeuvre.cs" />
+    <Compile Include="sources\Controller\Execute\BurnManeuvre.cs" />
+
     <Compile Include="sources\KSPService\KSPVessel.cs" />
     <Compile Include="sources\KSPService\KSPVesselInformation.cs" />
     <Compile Include="sources\KSPService\Maneuver.cs" />
@@ -103,11 +110,6 @@
     <Compile Include="sources\MainUI.cs" />
     <Compile Include="sources\Settings.cs" />
 
-    <Compile Include="sources\AutoExecuteManeuver.cs" />
-    <Compile Include="sources\pilots\BasePilot.cs" />
-    <Compile Include="sources\pilots\TurnToManeuvre.cs" />
-    <Compile Include="sources\pilots\WarpToManeuvre.cs" />
-    <Compile Include="sources\pilots\BurnManeuvre.cs" />
     <Compile Include="sources\Tools\ColorTools.cs" />
     <Compile Include="sources\Tools\GeneralTools.cs" />
     <Compile Include="sources\Tools\KSP2Tools.cs" />

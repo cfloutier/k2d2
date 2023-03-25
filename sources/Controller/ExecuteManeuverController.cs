@@ -7,11 +7,9 @@ using KSP.Sim.Maneuver;
 using KSP.Messages;
 using BepInEx.Logging;
 
-
-namespace K2D2
+namespace K2D2.Controller
 {
-
-    public class AutoExecuteManeuver
+    public class AutoExecuteManeuver : BaseController
     {
         public ManualLogSource logger;
 
@@ -24,7 +22,7 @@ namespace K2D2
         WarpToManeuvre warp;
         BurnManeuvre burn;
 
-        ManeuvrePilot current_pilot = null;
+        ManeuvreController current_pilot = null;
 
         public AutoExecuteManeuver(ManualLogSource logger)
         {
@@ -122,7 +120,7 @@ namespace K2D2
             setMode(next);
         }
 
-        public void onGUI()
+        public override void onGUI()
         {
             if (current_maneuvre_node == null)
             {
@@ -152,7 +150,7 @@ namespace K2D2
 
             if (current_pilot != null)
             {
-                current_pilot.onGui();
+                current_pilot.onGUI();
 
                 if (!Settings.auto_next)
                 {
@@ -171,7 +169,7 @@ namespace K2D2
             }
         }
 
-        public void Update()
+        public override void Update()
         {
             current_maneuvre_node = Tools.getNextManeuveurNode();
             if (current_maneuvre_node == null)
@@ -182,7 +180,7 @@ namespace K2D2
             if (current_pilot != null)
             {
                 current_pilot.setManeuver(current_maneuvre_node);
-                current_pilot.onUpdate();
+                current_pilot.Update();
                 if (current_pilot.finished && Settings.auto_next)
                 {
                     // auto next
@@ -191,7 +189,7 @@ namespace K2D2
             }
         }
 
-        public void FixedUpdate()
+        public override void FixedUpdate()
         {
             if (current_pilot != null)
             {
@@ -199,7 +197,7 @@ namespace K2D2
             }
         }
 
-        public void LateUpdate()
+        public override void LateUpdate()
         {
             if (current_pilot != null)
             {

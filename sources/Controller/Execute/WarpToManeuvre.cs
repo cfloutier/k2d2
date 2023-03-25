@@ -6,15 +6,15 @@ using UnityEngine;
 using KSP.Sim.impl;
 using KSP.Sim.Maneuver;
 
-namespace K2D2
+namespace K2D2.Controller
 {
-    public class WarpToManeuvre : ManeuvrePilot
+    public class WarpToManeuvre : ManeuvreController
     {
         int wanted_warp_index = 0;
 
         TimeWarp time_warp = null;
 
-        public override void onUpdate()
+        public override void Update()
         {
             finished = false;
             time_warp = TimeWarpTools.time_warp();
@@ -46,7 +46,7 @@ namespace K2D2
             return TimeWarpTools.ratioToIndex((float)ratio);
         }
 
-        public override void onGui()
+        public override void onGUI()
         {
             GUILayout.Label("Time Warp", Styles.phase_ok);
             GUILayout.Label(status_line, Styles.small_dark_text);
