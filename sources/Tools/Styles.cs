@@ -10,10 +10,9 @@ namespace K2D2
     {
         private static bool guiLoaded = false;
 
-        public static GUIStyle box, window, error, warning, button, button_on, small_button;
+        public static GUIStyle box, window, error, warning, small_button;
 
         public static GUIStyle small_dark_text, phase_ok, phase_warning, phase_error;
-
 
         public static GUIStyle icons_label, title;
 
@@ -113,31 +112,6 @@ namespace K2D2
             resetToNormal(window);
             window.alignment = TextAnchor.UpperLeft;
             window.stretchWidth = true;
-
-            // Button //////////////////////
-
-            button = new GUIStyle(GUI.skin.GetStyle("Button"));
-            button.normal.background = loadIcon("Button-normal");
-            resetToNormal(button);
-            button.hover.background = loadIcon("Button-over");
-            button.active.background = loadIcon("Button-active");
-            button.border = new RectOffset(8, 10, 8, 10);
-            button.margin = new RectOffset(0, 0, 0, 5);
-            button.padding = new RectOffset(6, 6, 3, 7);
-            button.overflow = new RectOffset(4, 4, 4, 4);
-
-            // On Button
-
-            button_on = new GUIStyle(GUI.skin.GetStyle("Button"));
-            button_on.normal.background = loadIcon("Button-active");
-            resetToNormal(button_on);
-            button_on.hover.background = loadIcon("Button-over");
-            button_on.active.background = loadIcon("Button-normal");
-
-            button_on.border = new RectOffset(8, 10, 8, 10);
-            button_on.margin = new RectOffset(0, 0, 0, 5);
-            button_on.padding = new RectOffset(6, 6, 3, 7);
-            button_on.overflow = new RectOffset(4, 4, 4, 4);
 
 
             // Small Button

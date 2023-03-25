@@ -53,15 +53,13 @@ namespace K2D2
 
             // ############# Uncomment this to get tabs in UI ###################
 
-            if (Settings.debug_mode){
-                // Mode selection.
-                Settings.current_interface_mode = (InterfaceMode)GUILayout.SelectionGrid((int)Settings.current_interface_mode, interfaceModes_debug, 3);
-                // #############  ###################
-            }
+            if (Settings.debug_mode)
+                // Mode selection debug
+                Settings.current_interface_mode = (InterfaceMode)GUILayout.SelectionGrid((int)Settings.current_interface_mode,
+                interfaceModes_debug, interfaceModes_debug.Count());
             else
-                //Settings.current_interface_mode = InterfaceMode.ExeNode;
-                Settings.current_interface_mode = (InterfaceMode)GUILayout.SelectionGrid((int)Settings.current_interface_mode, interfaceModes, 3);
-
+                Settings.current_interface_mode = (InterfaceMode)GUILayout.SelectionGrid((int)Settings.current_interface_mode,
+                interfaceModes, interfaceModes.Count());
 
             // return;
             // Draw one of the modes.
@@ -75,10 +73,9 @@ namespace K2D2
                     break;
                 case InterfaceMode.SAS: SASInfos(); break;
                 case InterfaceMode.Vessel: VesselInfo(); break;
-                case InterfaceMode.Circularize: 
-                    SimpleManeuverController.Instance.onGUI(); 
+                case InterfaceMode.Circularize:
+                    SimpleManeuverController.Instance.onGUI();
                     break;
-                
                 default:
                     break;
             }

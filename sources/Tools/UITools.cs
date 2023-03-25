@@ -14,9 +14,7 @@ namespace K2D2
             int width_bt = 200;
             int height_bt = 40;
 
-            var style = is_on ? Styles.button_on: Styles.button;
-
-            return GUILayout.Button(txt, style, GUILayout.Height(width_bt), GUILayout.Height(height_bt));
+            return GUILayout.Button(txt, GUILayout.Height(width_bt), GUILayout.Height(height_bt));
         }
 
         public static int IntSlider(string txt, int value, int min, int max )

@@ -42,7 +42,7 @@ namespace K2D2
 
         public static int warp_speed
         {
-            get => s_settings_file.GetInt("warp.speed", 1);
+            get => s_settings_file.GetInt("warp.speed", 5);
             set {  s_settings_file.SetInt("warp.speed", value); }
         }
 

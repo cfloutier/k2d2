@@ -157,12 +157,12 @@ namespace K2D2.Controller
                     GUILayout.Label($"finished {current_pilot.finished}");
                     if (!current_pilot.finished)
                     {
-                        if (GUILayout.Button("Next /!\\", Styles.button))
+                        if (GUILayout.Button("Next /!\\"))
                             nextMode();
                     }
                     else
                     {
-                        if (GUILayout.Button("Next", Styles.button_on))
+                        if (GUILayout.Button("Next"))
                             nextMode();
                     }
                 }
@@ -210,13 +210,7 @@ namespace K2D2.Controller
             if (Settings.debug_mode)
             {
                 var dt = Tools.remainingStartTime(current_maneuvre_node);
-                GUILayout.Label($"tic tac {Tools.printDuration(dt)} s ");
-                if (dt < 0)
-                {
-                    GUILayout.Label("In The Past");
-                    return;
-                }
-
+                GUILayout.Label($"Node in {Tools.printDuration(dt)}");
                 GUILayout.Label($"BurnDuration {current_maneuvre_node.BurnDuration}");
                 GUILayout.Label($"BurnRequiredDV {current_maneuvre_node.BurnRequiredDV}");
                 GUILayout.Label($"BurnVector {Tools.printVector(current_maneuvre_node.BurnVector)}");
@@ -226,6 +220,12 @@ namespace K2D2.Controller
                 Vector3 maneuvre_dir = telemetry.ManeuverDirection.vector;
 
                 GUILayout.Label($"maneuvre_dir {Tools.printVector(maneuvre_dir)}");
+
+                if (dt < 0)
+                {
+                    GUILayout.Label("In The Past");
+                    return;
+                }
             }
         }
 

@@ -68,7 +68,7 @@ namespace K2D2.Controller
             {
                 DebugInformation();
             }
-            
+
 */
 
             if (GUILayout.Button("Circularize Node in Apoapsis"))
