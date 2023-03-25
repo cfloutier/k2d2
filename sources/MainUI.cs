@@ -17,12 +17,14 @@ namespace K2D2
 
         #region interfaces modes
 
-        public enum InterfaceMode { ExeNode, SAS, Vessel, Circularize }
-        private static string[] interfaceModes = { "Auto Execute", "SAS Infos", "Vessel Infos", "Circularization" };
+
+        public enum InterfaceMode { ExeNode, Circularize, SAS, Vessel  }
+
+        private static string[] interfaceModes = { "Execute Node", "Circularization" };
+        private static string[] interfaceModes_debug = { "Execute", "Circle", "SAS", "Vessel" };
 
         #endregion
 
-       
 
         public MainUI(ManualLogSource src_logger)
         {
@@ -53,7 +55,7 @@ namespace K2D2
 
             if (Settings.debug_mode){
                 // Mode selection.
-                Settings.current_interface_mode = (InterfaceMode)GUILayout.SelectionGrid((int)Settings.current_interface_mode, interfaceModes, 3);
+                Settings.current_interface_mode = (InterfaceMode)GUILayout.SelectionGrid((int)Settings.current_interface_mode, interfaceModes_debug, 3);
                 // #############  ###################
             }
             else

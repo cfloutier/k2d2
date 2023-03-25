@@ -64,12 +64,11 @@ namespace K2D2
             var state = Tools.Game().GlobalGameState.GetState();
             return validScenes.Contains(state);
         }
+
         // Controllers
         MainUI main_ui;
 
         public bool settings_visible = false;
-
-        AutoExecuteManeuver auto_execute_maneuver;
 
         ControllerManager controllerManager = new ControllerManager();
 
