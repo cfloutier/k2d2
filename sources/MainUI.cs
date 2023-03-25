@@ -7,6 +7,7 @@ using KSP.Sim.DeltaV;
 
 using System.Collections.Generic;
 
+using K2D2.Controller;
 
 namespace K2D2
 {
@@ -16,8 +17,8 @@ namespace K2D2
 
         #region interfaces modes
 
-        public enum InterfaceMode { ExeNode, SAS, Vessel }
-        private static string[] interfaceModes = { "Auto Execute", "SAS Infos", "Vessel Infos" };
+        public enum InterfaceMode { ExeNode, SAS, Vessel, Circularize }
+        private static string[] interfaceModes = { "Auto Execute", "SAS Infos", "Vessel Infos", "Circularization" };
 
         #endregion
 
@@ -56,7 +57,9 @@ namespace K2D2
                 // #############  ###################
             }
             else
-                Settings.current_interface_mode = InterfaceMode.ExeNode;
+                //Settings.current_interface_mode = InterfaceMode.ExeNode;
+                Settings.current_interface_mode = (InterfaceMode)GUILayout.SelectionGrid((int)Settings.current_interface_mode, interfaceModes, 3);
+
 
             // return;
             // Draw one of the modes.
@@ -70,6 +73,10 @@ namespace K2D2
                     break;
                 case InterfaceMode.SAS: SASInfos(); break;
                 case InterfaceMode.Vessel: VesselInfo(); break;
+                case InterfaceMode.Circularize: 
+                    SimpleManeuverController.Instance.onGUI(); 
+                    break;
+                
                 default:
                     break;
             }

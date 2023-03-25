@@ -31,6 +31,18 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  
+
+  
+  
+  <PropertyGroup>
+    <KSP2Path>G:\SteamLibrary\steamapps\common\Kerbal Space Program 2\</KSP2Path>
+
+    <ModName>KSP2FlightAssistant</ModName>
+    <ModPath>$(KSP2Path)BepInEx\plugins\$(ModName)</ModPath>
+    <FinalModFolder>$(ProjectDir)$(ModName)</FinalModFolder>
+  </PropertyGroup>
+  
   <ItemGroup>
     <Reference Include="Assembly-CSharp">
       <HintPath>.\external_dlls\Assembly-CSharp.dll</HintPath>
@@ -79,6 +91,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="sources\Controller\BaseController.cs" />
+    <Compile Include="sources\Controller\SimpleManeuverController.cs" />
+    <Compile Include="sources\KSPService\KSPVessel.cs" />
+    <Compile Include="sources\KSPService\KSPVesselInformation.cs" />
+    <Compile Include="sources\KSPService\Maneuver.cs" />
+    <Compile Include="sources\MathLibrary\PIDController.cs" />
+    <Compile Include="sources\MathLibrary\VisVivaEquation.cs" />
+    <Compile Include="sources\Models\ControllerManager.cs" />
     <Compile Include="sources\My_Plugin.cs" />
     <Compile Include="sources\MainUI.cs" />
     <Compile Include="sources\Settings.cs" />
@@ -89,6 +109,7 @@
     <Compile Include="sources\pilots\WarpToManeuvre.cs" />
     <Compile Include="sources\pilots\BurnManeuvre.cs" />
     <Compile Include="sources\Tools\ColorTools.cs" />
+    <Compile Include="sources\Tools\GeneralTools.cs" />
     <Compile Include="sources\Tools\KSP2Tools.cs" />
     <Compile Include="sources\Tools\SettingsFile.cs" />
     <Compile Include="sources\Tools\UITools.cs" />
@@ -112,6 +133,11 @@ cd $(ProjectDir)
 echo "ConfigurationName:" $(ConfigurationName)
 call make_zip.bat $(ConfigurationName)
 call copy_to_ksp.bat
+
+
+
+echo "ConfigurationName:" $(ConfigurationName)
+call make_zip.bat $(ConfigurationName)
 
 </PostBuildEvent>
   </PropertyGroup>
