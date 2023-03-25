@@ -106,6 +106,10 @@
     <Compile Include="sources\MathLibrary\PIDController.cs" />
     <Compile Include="sources\MathLibrary\VisVivaEquation.cs" />
     <Compile Include="sources\Models\ControllerManager.cs" />
+    <Compile Include="sources\Models\Interfaces\IDescription.cs" />
+    <Compile Include="sources\Models\Interfaces\IRunnable.cs" />
+    <Compile Include="sources\Models\ManeuverManager.cs" />
+    <Compile Include="sources\Models\CustomQueue.cs" />
     <Compile Include="sources\My_Plugin.cs" />
     <Compile Include="sources\MainUI.cs" />
     <Compile Include="sources\Settings.cs" />
