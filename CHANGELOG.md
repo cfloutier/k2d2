@@ -15,7 +15,6 @@
 * Rebuild for ksp2 v0.1.1
 
 # v0.2.0
-
 * added Ugly icon in the app bar and title bar
 * Renamed to K2-D2
 
