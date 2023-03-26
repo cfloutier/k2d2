@@ -7,13 +7,14 @@ using KSP.Sim.Maneuver;
 using KSP.Messages;
 using BepInEx.Logging;
 
+
 using K2D2.KSPService;
 
 namespace K2D2.Controller
 {
-    public class AutoExecuteManeuver : BaseController
+    public class AutoExecuteManeuver : ComplexControler
     {
-        public ManualLogSource logger;
+        public ManualLogSource logger = BepInEx.Logging.Logger.CreateLogSource("K2D2.LandingController");
 
         public static AutoExecuteManeuver Instance { get; set; }
 
@@ -24,12 +25,11 @@ namespace K2D2.Controller
         WarpToManeuvre warp;
         BurnManeuvre burn;
 
-        ManeuvreController current_pilot = null;
+        ManeuvreController __current_pilot = null;
         KSPVessel current_vessel;
 
-        public AutoExecuteManeuver(ManualLogSource logger)
+        public AutoExecuteManeuver()
         {
-            this.logger = logger;
             logger.LogMessage("AutoExecuteManeuver !");
             Instance = this;
             current_vessel = K2D2_Plugin.Instance.current_vessel;
@@ -39,6 +39,17 @@ namespace K2D2.Controller
             turn = new TurnToManeuvre();
             warp = new WarpToManeuvre();
             burn = new BurnManeuvre();
+        }
+
+        void set_current_sub(ManeuvreController current_pilot)
+        {
+            this.__current_pilot = current_pilot;
+            setSingleSubController(current_pilot);
+            if (current_pilot != null)
+            {
+                logger.LogInfo("current_pilot " + current_pilot);
+                current_pilot.Start();
+            }
         }
 
         public void OnActiveVesselChanged(MessageCenterMessage msg)
@@ -68,29 +79,25 @@ namespace K2D2.Controller
             if (mode == Mode.Off)
             {
                 TimeWarpTools.time_warp()?.SetRateIndex(0, false);
-                current_pilot = null;
+                set_current_sub(null);
                 return;
             }
 
             switch (mode)
             {
                 case Mode.Off:
-                    current_pilot = null;
+                    set_current_sub(null);
                     break;
                 case Mode.Turn:
-                    current_pilot = turn;
+                    set_current_sub(turn);
                     break;
                 case Mode.Warp:
-                    current_pilot = warp;
+                    set_current_sub(warp);
                     break;
                 case Mode.Burn:
-                    current_pilot = burn;
+                    set_current_sub(burn);
                     break;
             }
-
-            logger.LogInfo("current_pilot " + current_pilot);
-
-            current_pilot.Start();
         }
 
         public bool canStart()
@@ -152,14 +159,13 @@ namespace K2D2.Controller
 
             node_infos();
 
-            if (current_pilot != null)
+            if (__current_pilot != null)
             {
-                current_pilot.onGUI();
-
+                base.onGUI();
                 if (!Settings.auto_next)
                 {
-                    GUILayout.Label($"finished {current_pilot.finished}");
-                    if (!current_pilot.finished)
+                    GUILayout.Label($"finished {__current_pilot.finished}");
+                    if (!__current_pilot.finished)
                     {
                         if (GUILayout.Button("Next /!\\"))
                             nextMode();
@@ -175,17 +181,18 @@ namespace K2D2.Controller
 
         public override void Update()
         {
-            current_maneuvre_node = current_vessel.getNextManeuveurNode();
+            base.Update();
+
+            current_maneuvre_node = current_vessel.GetNextManeuveurNode();
             if (current_maneuvre_node == null)
             {
                 Stop();
             }
 
-            if (current_pilot != null)
+            if (__current_pilot != null)
             {
-                current_pilot.setManeuver(current_maneuvre_node);
-                current_pilot.Update();
-                if (current_pilot.finished && Settings.auto_next)
+                __current_pilot.setManeuver(current_maneuvre_node);
+                if (__current_pilot.finished && Settings.auto_next)
                 {
                     // auto next
                     nextMode();
@@ -193,21 +200,6 @@ namespace K2D2.Controller
             }
         }
 
-        public override void FixedUpdate()
-        {
-            if (current_pilot != null)
-            {
-                current_pilot.FixedUpdate();
-            }
-        }
-
-        public override void LateUpdate()
-        {
-            if (current_pilot != null)
-            {
-                current_pilot.LateUpdate();
-            }
-        }
 
         void node_infos()
         {

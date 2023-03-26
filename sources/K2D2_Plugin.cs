@@ -119,7 +119,8 @@ namespace K2D2
             
             // Add Controllers that inherit from BaseController here:
             controllerManager.AddController(new SimpleManeuverController(logger,ref _maneuverProvider));
-            controllerManager.AddController(new AutoExecuteManeuver(logger));
+            controllerManager.AddController(new AutoExecuteManeuver());
+            controllerManager.AddController(new LandingController());
             
             // Add PopUp Tabs here:
             _popUpContent = new PopUpContent(ref _popUp);

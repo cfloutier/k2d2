@@ -9,6 +9,20 @@ namespace K2D2
     /// </summary>
     public class UI_Tools
     {
+
+        public static bool ToggleButton(bool value,string txt, bool is_on = false)
+        {
+            int width_bt = 200;
+            int height_bt = 40;
+
+            GUILayout.BeginHorizontal();
+            var result = GUILayout.Toggle(value, txt, GUI.skin.button,  GUILayout.Width(width_bt), GUILayout.Height(height_bt));
+            GUILayout.EndHorizontal();
+
+            return result;
+        }
+
+
         public static bool BigButton(string txt, bool is_on = false)
         {
             int width_bt = 200;
@@ -16,6 +30,8 @@ namespace K2D2
 
             return GUILayout.Button(txt, GUILayout.Height(width_bt), GUILayout.Height(height_bt));
         }
+
+
 
         public static int IntSlider(string txt, int value, int min, int max )
         {
