@@ -63,8 +63,8 @@ namespace K2D2
 
         private static bool ValidScene()
         {
-            if (Tools.Game() == null) return false;
-            var state = Tools.Game().GlobalGameState.GetState();
+            if (GeneralTools.Game == null) return false;
+            var state = GeneralTools.Game.GlobalGameState.GetState();
             return validScenes.Contains(state);
         }
 

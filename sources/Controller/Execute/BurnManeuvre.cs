@@ -61,10 +61,10 @@ namespace K2D2.Controller
 
             if (mode == Mode.Waiting)
             {
-                start_dt = Tools.remainingStartTime(maneuver);
+                start_dt = GeneralTools.remainingStartTime(maneuver);
                 if (start_dt > 0)
                 {
-                    status_line = $"start in {Tools.printDuration(start_dt)}";
+                    status_line = $"start in {GeneralTools.DurationToString(start_dt)}";
                     set_throttle(0);
                     return;
                 }

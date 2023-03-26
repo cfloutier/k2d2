@@ -56,7 +56,7 @@ namespace K2D2.Controller
 
         public override void Update()
         {
-            _maneuver = new Maneuver(Game, logger);
+            _maneuver = new Maneuver(logger);
         }
 
         public override void onGUI()
