@@ -94,9 +94,9 @@ namespace K2D2
             GUILayout.Label($"sas.ReferenceFrame {sas.ReferenceFrame}");
             GUILayout.Label($"sas.AutoTune {sas.AutoTune}");
             GUILayout.Label($"sas.lockedMode {sas.lockedMode}");
-            GUILayout.Label($"sas.LockedRotation {Tools.printVector(sas.LockedRotation.eulerAngles)}");
+            GUILayout.Label($"sas.LockedRotation {GeneralTools.VectorToString(sas.LockedRotation.eulerAngles)}");
 
-            GUILayout.Label($"sas.TargetOrientation {Tools.printVector(sas.TargetOrientation)}");
+            GUILayout.Label($"sas.TargetOrientation {GeneralTools.VectorToString(sas.TargetOrientation)}");
             GUILayout.Label($"sas.PidLockedPitch {sas.PidLockedPitch}");
             GUILayout.Label($"sas.PidLockedRoll {sas.PidLockedRoll}");
             GUILayout.Label($"sas.PidLockedYaw {sas.PidLockedYaw}");
@@ -127,7 +127,7 @@ namespace K2D2
             var body_location = Rotation.Reframed(vehicle.Rotation, coord);
 
             GUILayout.Label($"coordinate_system {vehicle.Rotation.coordinateSystem}");
-            GUILayout.Label($"body_location {Tools.printVector(body_location.localRotation.eulerAngles)}");
+            GUILayout.Label($"body_location {GeneralTools.VectorToString(body_location.localRotation.eulerAngles)}");
         }
     }
 }

@@ -103,6 +103,10 @@
     <Compile Include="sources\KSPService\KSPVessel.cs" />
     <Compile Include="sources\KSPService\KSPVesselInformation.cs" />
     <Compile Include="sources\KSPService\Maneuver.cs" />
+    <Compile Include="sources\KSPService\BurndV.cs" />
+    <Compile Include="sources\KSPService\TimeWarpTools.cs" />
+    <Compile Include="sources\KSPService\SASInfos.cs" />
+
     <Compile Include="sources\MathLibrary\PIDController.cs" />
     <Compile Include="sources\MathLibrary\VisVivaEquation.cs" />
     <Compile Include="sources\Models\ControllerManager.cs" />
@@ -116,7 +120,7 @@
     <Compile Include="sources\Tools\SettingsFile.cs" />
     <Compile Include="sources\Tools\UITools.cs" />
     <Compile Include="sources\Tools\Styles.cs" />
-    <Compile Include="sources\Tools\BurndV.cs" />
+
     <Compile Include="sources\Properties\AssemblyInfo.cs" />
 
   </ItemGroup>
