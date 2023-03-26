@@ -98,6 +98,8 @@
 
     <Compile Include="sources\Controller\BaseController.cs" />
     <Compile Include="sources\Controller\ButtonController.cs" />
+    <Compile Include="sources\Controller\ComplexControler.cs" />
+
     <Compile Include="sources\Controller\SimpleManeuverController.cs" />
     <Compile Include="sources\Controller\ExecuteManeuverController.cs" />
     <Compile Include="sources\Controller\Execute\ExecuteController.cs" />
