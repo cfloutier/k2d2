@@ -83,21 +83,5 @@ namespace K2D2
             return dt;
         }
 
-
-        public static ManeuverNodeData getNextManeuveurNode()
-        {
-            if (Game == null) return null;
-
-            var maneuvers = Game.SpaceSimulation?.Maneuvers;
-            if (maneuvers == null) return null;
-
-            var current_vehicle = VesselInfos.currentVehicle();
-            if (current_vehicle == null) return null;
-
-            var activeNodes = maneuvers.GetNodesForVessel(current_vehicle.Guid);
-            ManeuverNodeData next_node = (activeNodes.Count() > 0) ? activeNodes[0] : null;
-            return next_node;
-        }
-
     }
 }

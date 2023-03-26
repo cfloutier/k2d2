@@ -6,7 +6,7 @@ using System.Linq;
 using UnityEngine;
 using System;
 using KSP.Sim;
-
+using K2D2.KSPService;
 
 namespace K2D2.Controller
 {
@@ -15,10 +15,11 @@ namespace K2D2.Controller
         public ManualLogSource logger = BepInEx.Logging.Logger.CreateLogSource("K2D2.BurnManeuvre");
 
         BurndV burn_dV = new BurndV();
+        KSPVessel current_vessel;
 
         public BurnManeuvre()
         {
-
+            current_vessel = K2D2_Plugin.Instance.current_vessel;
         }
 
         double start_dt;
@@ -42,9 +43,8 @@ namespace K2D2.Controller
             burn_dV.reset();
             remaining_dv = 0;
 
-            var vessel = VesselInfos.currentVessel();
-            if (vessel == null) return;
-            var autopilot = vessel.Autopilot;
+            if (current_vessel == null) return;
+            var autopilot = current_vessel.Autopilot;
 
             // force autopilot
             autopilot.Enabled = true;
@@ -114,13 +114,7 @@ namespace K2D2.Controller
         public void set_throttle(float throttle)
         {
             throttle = Mathf.Clamp01(throttle);
-            // throttle = (float) Math.Round(throttle, 2);
-
-           // if (last_throttle == throttle) return;
-
-            // logger.LogInfo($"set_throttle {throttle}");
-
-            VesselInfos.SetThrottle(throttle);
+            current_vessel.SetThrottle(throttle);
             last_throttle = throttle;
         }
 

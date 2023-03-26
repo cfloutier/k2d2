@@ -3,6 +3,7 @@ using UnityEngine;
 using KSP.Sim.DeltaV;
 using System.Collections.Generic;
 using BepInEx.Logging;
+using K2D2.KSPService;
 
 namespace K2D2
 {
@@ -11,9 +12,11 @@ namespace K2D2
     {
         public ManualLogSource logger = BepInEx.Logging.Logger.CreateLogSource("K2D2.SettingsFile");
 
+        KSPVessel current_vessel;
+
         public BurndV()
         {
-
+            current_vessel = K2D2_Plugin.Instance.current_vessel;
         }
 
         public float burned_dV = 0;
@@ -72,12 +75,12 @@ namespace K2D2
 
         public void Compute_Thrust()
         {
-            var vessel = VesselInfos.currentVessel();
-            if (vessel == null) return;
-            VesselDeltaVComponent delta_v = vessel.VesselDeltaV;
+
+            if (current_vessel.VesselComponent == null) return;
+            VesselDeltaVComponent delta_v = current_vessel.VesselComponent.VesselDeltaV;
             if (delta_v == null) return;
 
-            var totalMass = vessel.totalMass;
+            var totalMass = current_vessel.VesselComponent.totalMass;
 
             actual_thrust = Vector3.zero;
             full_thrust = Vector3.zero;
@@ -98,7 +101,8 @@ namespace K2D2
 
         public void onGUI()
         {
-            VesselDeltaVComponent delta_v = VesselInfos.currentVessel().VesselDeltaV;
+            if (current_vessel.VesselComponent == null) return;
+            VesselDeltaVComponent delta_v = current_vessel.VesselComponent.VesselDeltaV;
             if (delta_v == null)
             {
                 GUILayout.Label("NO VesselDeltaVComponent");
@@ -106,7 +110,7 @@ namespace K2D2
             }
             List<DeltaVEngineInfo> engineInfos = delta_v.EngineInfo;
 
-            var vehicle = VesselInfos.currentVehicle();
+            var vehicle = current_vessel.VesselVehicle;
             if (vehicle == null) return;
             var mainThrottle = vehicle.mainThrottle;
 
