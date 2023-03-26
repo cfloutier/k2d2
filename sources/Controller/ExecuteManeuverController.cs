@@ -7,13 +7,14 @@ using KSP.Sim.Maneuver;
 using KSP.Messages;
 using BepInEx.Logging;
 
+
 using K2D2.KSPService;
 
 namespace K2D2.Controller
 {
     public class AutoExecuteManeuver : ComplexControler
     {
-        public ManualLogSource logger;
+        public ManualLogSource logger = BepInEx.Logging.Logger.CreateLogSource("K2D2.LandingController");
 
         public static AutoExecuteManeuver Instance { get; set; }
 
@@ -27,10 +28,8 @@ namespace K2D2.Controller
         ManeuvreController __current_pilot = null;
         KSPVessel current_vessel;
 
-
-        public AutoExecuteManeuver(ManualLogSource logger)
+        public AutoExecuteManeuver()
         {
-            this.logger = logger;
             logger.LogMessage("AutoExecuteManeuver !");
             Instance = this;
             current_vessel = K2D2_Plugin.Instance.current_vessel;
@@ -134,8 +133,6 @@ namespace K2D2.Controller
 
         public override void onGUI()
         {
-            is_active = true;
-
             if (current_maneuvre_node == null)
             {
                 GUILayout.Label("no Maneuvre node");
@@ -186,7 +183,7 @@ namespace K2D2.Controller
         {
             base.Update();
 
-            current_maneuvre_node = current_vessel.getNextManeuveurNode();
+            current_maneuvre_node = current_vessel.GetNextManeuveurNode();
             if (current_maneuvre_node == null)
             {
                 Stop();

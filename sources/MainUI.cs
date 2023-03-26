@@ -20,13 +20,12 @@ namespace K2D2
         #region interfaces modes
 
 
-        public enum InterfaceMode { ExeNode, Circularize, Orbit, SAS, Vessel  }
+        public enum InterfaceMode { ExeNode, Circularize, Landing, Orbit, SAS, Vessel  }
 
         private static string[] interfaceModes = { "Execute Node", "Circularization" };
-        private static string[] interfaceModes_debug = { "Execute", "Circle", "Orbit", "SAS", "Vessel" };
+        private static string[] interfaceModes_debug = { "Execute", "Circle", "Landing", "Orbit", "SAS", "Vessel" };
 
         #endregion
-
 
         public MainUI(ManualLogSource src_logger)
         {
@@ -39,10 +38,10 @@ namespace K2D2
             if (Settings.debug_mode)
                 // Mode selection debug
                 Settings.current_interface_mode = (InterfaceMode)GUILayout.SelectionGrid((int)Settings.current_interface_mode,
-                interfaceModes_debug, interfaceModes_debug.Count());
+                                                                                    interfaceModes_debug, 4);
             else
                 Settings.current_interface_mode = (InterfaceMode)GUILayout.SelectionGrid((int)Settings.current_interface_mode,
-                interfaceModes, interfaceModes.Count());
+                                                                        interfaceModes, interfaceModes.Count());
 
             // return;
             // Draw one of the modes.
@@ -54,6 +53,10 @@ namespace K2D2
                 case InterfaceMode.Circularize:
                     SimpleManeuverController.Instance.onGUI();
                     break;
+                case InterfaceMode.Landing:
+                    LandingController.Instance.onGUI();
+                    break;
+
                 case InterfaceMode.Orbit:
                     K2D2.InfosPages.OrbitInfos.onGUI();
                     break;

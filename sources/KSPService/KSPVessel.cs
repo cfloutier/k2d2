@@ -102,7 +102,7 @@ namespace K2D2.KSPService
             return VesselVehicle.VehicleTelemetry.Rotation;
         }
 
-        public ManeuverNodeData getNextManeuveurNode()
+        public ManeuverNodeData GetNextManeuveurNode()
         {
             var maneuvers = Game.SpaceSimulation?.Maneuvers;
             if (maneuvers == null) return null;
@@ -113,6 +113,12 @@ namespace K2D2.KSPService
             var activeNodes = maneuvers.GetNodesForVessel(current_vehicle.Guid);
             ManeuverNodeData next_node = (activeNodes.Count() > 0) ? activeNodes[0] : null;
             return next_node;
+        }
+
+        public void SetSpeedMode(SpeedDisplayMode mode)
+        {
+            if (VesselVehicle == null) return;
+            VesselVehicle.SetSpeedDisplayMode(mode);
         }
 
         // Available Instructions===========================================================================================

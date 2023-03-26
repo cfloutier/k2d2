@@ -10,7 +10,6 @@ namespace K2D2.Controller
     // contains also an active flag,
     public class ComplexControler : BaseController
     {
-        public bool is_active = true;
 
         public List<ComplexControler> sub_contollers = new List<ComplexControler>();
 
@@ -24,7 +23,7 @@ namespace K2D2.Controller
         public override void onGUI()
         {
             // On GUI is used to draw UI in needed, using GUILayout
-            if (!is_active) return;
+            
             foreach (ComplexControler contoller in sub_contollers)
             {
                 contoller.onGUI();
@@ -34,7 +33,7 @@ namespace K2D2.Controller
         public override void Update()
         {
             // Update is called each frame
-            if (!is_active) return;
+            
             foreach (ComplexControler contoller in sub_contollers)
             {
                 contoller.Update();
@@ -44,7 +43,7 @@ namespace K2D2.Controller
         public override void LateUpdate()
         {
             // Late Update is called just before rendering
-            if (!is_active) return;
+           
             foreach (ComplexControler contoller in sub_contollers)
             {
                 contoller.LateUpdate();
@@ -54,7 +53,7 @@ namespace K2D2.Controller
         public override void FixedUpdate()
         {
             // Fixed Update is called on physic update
-            if (!is_active) return;
+            
             foreach (ComplexControler contoller in sub_contollers)
             {
                 contoller.FixedUpdate();
