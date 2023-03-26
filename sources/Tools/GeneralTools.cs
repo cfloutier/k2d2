@@ -15,8 +15,12 @@ namespace K2D2
             string number = Regex.Replace(str, "[^0-9.]", "");
 
             return number.Length > 0 ? double.Parse(number) : -1;
-
         }
-        
+
+        public static Guid createGuid()
+        {
+            return Guid.NewGuid();
+        }
+
     }
 }

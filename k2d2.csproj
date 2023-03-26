@@ -91,6 +91,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="sources\My_Plugin.cs" />
+    <Compile Include="sources\MainUI.cs" />
+    <Compile Include="sources\Models\BaseClasses\DetailsObject.cs" />
+    <Compile Include="sources\Models\BaseClasses\GuidTuple.cs" />
+    <Compile Include="sources\Settings.cs" />
+
+
     <Compile Include="sources\Controller\BaseController.cs" />
     <Compile Include="sources\Controller\ButtonController.cs" />
     <Compile Include="sources\Controller\SimpleManeuverController.cs" />
@@ -103,6 +110,8 @@
     <Compile Include="sources\KSPService\KSPVessel.cs" />
     <Compile Include="sources\KSPService\KSPVesselInformation.cs" />
     <Compile Include="sources\KSPService\Maneuver.cs" />
+
+
     <Compile Include="sources\MathLibrary\PIDController.cs" />
     <Compile Include="sources\MathLibrary\VisVivaEquation.cs" />
     <Compile Include="sources\Models\ControllerManager.cs" />
@@ -110,9 +119,7 @@
     <Compile Include="sources\Models\Interfaces\IRunnable.cs" />
     <Compile Include="sources\Models\ManeuverManager.cs" />
     <Compile Include="sources\Models\CustomQueue.cs" />
-    <Compile Include="sources\My_Plugin.cs" />
-    <Compile Include="sources\MainUI.cs" />
-    <Compile Include="sources\Settings.cs" />
+
 
     <Compile Include="sources\Tools\ColorTools.cs" />
     <Compile Include="sources\Tools\GeneralTools.cs" />
@@ -121,8 +128,10 @@
     <Compile Include="sources\Tools\UITools.cs" />
     <Compile Include="sources\Tools\Styles.cs" />
     <Compile Include="sources\Tools\BurndV.cs" />
+
     <Compile Include="sources\Properties\AssemblyInfo.cs" />
     <Compile Include="Views\PopUp.cs" />
+    <Compile Include="Views\PopUpContent.cs" />
 
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
