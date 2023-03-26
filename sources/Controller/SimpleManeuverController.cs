@@ -79,13 +79,12 @@ namespace K2D2.Controller
                 {
                     
                     ManeuverManager.AddManeuver("Circularize Apoapsis",new Action(() => _maneuver.CircularizeOrbitApoapsis()));
-                    //double deltaV = _maneuver.CircularizeOrbitApoapsis();
-                    //GUILayout.Label($"Required dV: {deltaV}");
+
                     
                 }
                 catch (Exception e)
                 {
-                    logger.LogError("Apoapsis Error");
+                    logger.LogError("Apoapsis Error: "+e);
                     logger.LogError(e.Message);
                 }
                 return;
@@ -98,17 +97,29 @@ namespace K2D2.Controller
                 {
                     
                     ManeuverManager.AddManeuver("Circularize Periapsis",new Action(() => _maneuver.CircularizeOrbitPeriapsis()));
-                    //double deltaV = _maneuver.CircularizeOrbitPeriapsis();
-                    //GUILayout.Label($"Required dV: {deltaV}");
-                   
+
                 }
                 catch (Exception e)
                 {
-                    logger.LogError("Periapsis Error");
+                    logger.LogError("Periapsis Error: "+e);
                     logger.LogError(e.Message);
                 }
-
                 return;
+            }
+
+            if (GUILayout.Button("Circularize Hperbolic Orbit"))
+            {
+                try
+                {
+                    ManeuverManager.AddManeuver("Circularize Hyperbolic Orbit",new Action(() => _maneuver.CircularizeHyperbolicOrbit()));
+                }
+                catch (Exception e)
+                {
+                    logger.LogError("Hyperbolic Error: "+e);
+                    logger.LogError(e.Message);
+                }
+                return;
+                
             }
             
             if(GUILayout.Button("Start Maneuver"))
