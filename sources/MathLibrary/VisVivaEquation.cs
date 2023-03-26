@@ -16,23 +16,25 @@ namespace KSP2FlightAssistant.MathLibrary
         /// <param name="PlanetaryMass"></param>
         /// <returns></returns>
         public static double CalculateVelocity(double CurrentDistance, double Apoapsis, double Periapsis,
-            double gravitation)
+            double gravitation, double eccentricity)
         {
+            if (eccentricity >= 1 || Double.IsInfinity(Apoapsis))
+                return Math.Sqrt(gravitation*(2/Periapsis-1/(Periapsis/(eccentricity-1))));
 
-            
-            if (Double.IsInfinity(Apoapsis))
-            {
-                // Parabolic orbit (apoapsis is infinity)
-                return Math.Sqrt(gravitation * (2 / CurrentDistance));
-            }
-            
             if(Apoapsis-Periapsis<100)
                 return Math.Sqrt(gravitation / CurrentDistance);
 
             double semiMajorAxis = (Apoapsis + Periapsis) / 2;
             return Math.Sqrt(gravitation * ((2 / CurrentDistance) - (1 / semiMajorAxis)));
         }
-        
+
+        public static double CalculateHyperbolicVelocity(double distance, double gravitation, double orbitalEnergy)
+        {
+
+            double a = -gravitation / (2 * orbitalEnergy);
+            return Math.Sqrt(gravitation * (2 / distance - 1 / a));
+
+        }
         
 
         public static double CalculateGravitation(double CurrentDistance, double Apoapsis, double Periapsis,

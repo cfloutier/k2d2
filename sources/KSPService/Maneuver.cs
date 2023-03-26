@@ -16,9 +16,9 @@ namespace K2D2.KSPService
     public class Maneuver
     {
         // Fields-------------------------------------------------------------------------------------------------------
-        
+
         #region fields
-        
+
         private VesselComponent _vesselComponent;
         public GameInstance Game => GameManager.Instance == null ? null : GameManager.Instance.Game;
 
@@ -38,22 +38,30 @@ namespace K2D2.KSPService
         // Functions----------------------------------------------------------------------------------------------------
 
         #region Funtions
-
+        
         public double CircularizeOrbitApoapsis()
         {
             PatchedConicsOrbit orbit = GetLastOrbit() as PatchedConicsOrbit;
+            
+            if (orbit.eccentricity >= 1)
+            {
+                logger.LogMessage("Apoapsis Circularization not possible for hyperbolic orbits");
+                CircularizeHyperbolicOrbit();
+                return 0;
+            }
             double gravitation = orbit.ReferenceBodyConstants.StandardGravitationParameter;
             double periapsis = orbit.Periapsis;
             double apoapsis = orbit.Apoapsis;
+            double eccentricity = orbit.eccentricity;
             logger.LogMessage($"AP: {orbit.Apoapsis} PE: {orbit.Periapsis}");
             //double gravitation = _vesselComponent.Orbit.ReferenceBodyConstants.StandardGravitationParameter;
             double circularizedVelocity = VisVivaEquation.CalculateVelocity(apoapsis, apoapsis,
-                apoapsis, gravitation);
+                apoapsis, gravitation,0);
 
             double apoapsisVelocity = VisVivaEquation.CalculateVelocity(apoapsis,
                 apoapsis,
                 periapsis,
-                gravitation);
+                gravitation, eccentricity);
 
             double deltaV = circularizedVelocity - apoapsisVelocity;
 
@@ -66,21 +74,28 @@ namespace K2D2.KSPService
         public double CircularizeOrbitPeriapsis()
         {
             PatchedConicsOrbit orbit = GetLastOrbit() as PatchedConicsOrbit;
+            if (orbit.eccentricity >= 1)
+            {
+                logger.LogMessage("Periapsis Circularization not possible for hyperbolic orbits");
+                CircularizeHyperbolicOrbit();
+                return 0;
+            }
 
             double periapsis = orbit.Periapsis;
             double apoapsis = orbit.Apoapsis;
+            double eccentricity = orbit.eccentricity;
             logger.LogMessage($"AP: {orbit.Apoapsis} PE: {orbit.Periapsis}");
             double gravitation = orbit.ReferenceBodyConstants.StandardGravitationParameter;
             //double gravitation = _vesselComponent.Orbit.ReferenceBodyConstants.StandardGravitationParameter;
             double circularizedVelocity = VisVivaEquation.CalculateVelocity(periapsis,
                 periapsis,
                 periapsis,
-                gravitation);
+                gravitation,0);
 
             double periapsisVelocity = VisVivaEquation.CalculateVelocity(periapsis,
                 apoapsis,
                 periapsis,
-                gravitation);
+                gravitation, eccentricity);
 
             double deltaV = periapsisVelocity - circularizedVelocity;
 
@@ -95,102 +110,110 @@ namespace K2D2.KSPService
             double deltaV = 0;
             return deltaV;
         }
-        
-        public void CreateOrbit(double Apoapsis, double Periapsis)
-        {
-            PatchedConicsOrbit orbit = GetLastOrbit() as PatchedConicsOrbit;
-            Apoapsis += orbit.ReferenceBodyConstants.Radius;
-            Periapsis += orbit.ReferenceBodyConstants.Radius;
-
-            
-            if(orbit.TimeToAp < orbit.TimeToPe)
-            {
-                ChangeApoapsis(2500000);
-                ChangePeriapsis(1000000);
-                //ChangePeriapsis(Periapsis);
-            }
-            else
-            {
-                ChangePeriapsis(1000000);
-                ChangeApoapsis(2500000);
-
-
-                //ChangeApoapsis(Apoapsis);
-            }
-        }
 
         public void ChangePeriapsis(double OrbitDistance)
         {
             PatchedConicsOrbit orbit = GetLastOrbit() as PatchedConicsOrbit;
-            
+
+
             double periapsis = orbit.Periapsis;
             double apoapsis = orbit.Apoapsis;
+            double eccentricity = orbit.eccentricity;
+            double newEccentricity = (apoapsis - OrbitDistance) / (apoapsis + OrbitDistance);
 
             double gravitation = orbit.ReferenceBodyConstants.StandardGravitationParameter;
 
             double currentPeriapsisVelocity = VisVivaEquation.CalculateVelocity(apoapsis,
                 apoapsis,
                 periapsis,
-                gravitation);
+                gravitation,eccentricity);
 
             double newPeriapsisVelocity = VisVivaEquation.CalculateVelocity(apoapsis,
                 apoapsis,
                 OrbitDistance,
-                gravitation);
+                gravitation,newEccentricity);
 
             double deltaV = newPeriapsisVelocity - currentPeriapsisVelocity;
 
             Vector3d burnVector = ProgradeBurnVector(deltaV);
             CreateManeuverNode(burnVector, 180);
-
         }
 
         public void ChangeApoapsis(double OrbitDistance)
         {
             PatchedConicsOrbit orbit = GetLastOrbit() as PatchedConicsOrbit;
 
+
             double periapsis = orbit.Periapsis;
             double apoapsis = orbit.Apoapsis;
+            double eccentricity = orbit.eccentricity;
+            double newEccentricity = (OrbitDistance - periapsis) / (OrbitDistance + periapsis);
 
             double gravitation = orbit.ReferenceBodyConstants.StandardGravitationParameter;
+            double deltaV = 0;
+
 
             double currentApoapsisVelocity = VisVivaEquation.CalculateVelocity(periapsis,
                 apoapsis,
                 periapsis,
-                gravitation);
+                gravitation, eccentricity);
 
             double newApoapsisVelocity = VisVivaEquation.CalculateVelocity(periapsis,
                 OrbitDistance,
                 periapsis,
-                gravitation);
+                gravitation, newEccentricity);
 
-            double deltaV = newApoapsisVelocity - currentApoapsisVelocity;
+            deltaV = newApoapsisVelocity - currentApoapsisVelocity;
+
 
             Vector3d burnVector = ProgradeBurnVector(deltaV);
             CreateManeuverNode(burnVector, 0);
         }
+
+        public void CircularizeHyperbolicOrbit()
+        {
+            PatchedConicsOrbit orbit = GetLastOrbit() as PatchedConicsOrbit;
+            double gravitation = orbit.ReferenceBodyConstants.StandardGravitationParameter;
+            double periapsis = orbit.Periapsis;
+            double orbitalEnergy = orbit.OrbitalEnergy;
+
+            double currentVelocity = VisVivaEquation.CalculateHyperbolicVelocity(periapsis,
+                gravitation,
+                orbitalEnergy);
         
+            double newPeriapsisVelocity = VisVivaEquation.CalculateVelocity(periapsis,
+                periapsis,
+                periapsis,
+                gravitation,0);
+
+            double deltaV = newPeriapsisVelocity - currentVelocity;
+            
+            Vector3d burnVector = ProgradeBurnVector(deltaV);
+            CreateManeuverNode(burnVector, 0);
+        }
+
         #endregion
 
         // Internal Maneuver Services-----------------------------------------------------------------------------------
 
         #region Internal Maneuver Services
-        
+
         private IPatchedOrbit GetLastOrbit()
         {
             List<ManeuverNodeData> patchList =
                 Game.SpaceSimulation.Maneuvers.GetNodesForVessel(kspVessel.GetGlobalIDActiveVessel());
-            
+
             logger.LogMessage(patchList.Count);
-            
+
             if (patchList.Count == 0)
             {
                 logger.LogMessage(_vesselComponent.Orbit);
                 return _vesselComponent.Orbit;
             }
+
             logger.LogMessage(patchList[patchList.Count - 1].ManeuverTrajectoryPatch);
             IPatchedOrbit orbit = patchList[patchList.Count - 1].ManeuverTrajectoryPatch;
-            
+
             return orbit;
         }
 
@@ -238,18 +261,18 @@ namespace K2D2.KSPService
             mapCore.map3D.ManeuverManager.UpdateAll();
             mapCore.map3D.ManeuverManager.RemoveAll();
         }
-        
+
         #endregion
 
         // Logging------------------------------------------------------------------------------------------------------
 
         #region Logging
-        
+
         public void Log(ManualLogSource logger, string message)
         {
             logger.LogMessage(message);
         }
-        
+
         public void LogOrbit()
         {
             logger.LogMessage("================= Orbit Log =================");
@@ -430,17 +453,18 @@ namespace K2D2.KSPService
             Vector3d velocityVector = rotation * perifocalVelocity;
             return velocityVector;
         }
+
         #endregion
-        
+
         // Currently Not Implemented Functions--------------------------------------------------------------------------
 
         #region Unimplemented Functions
-        
+
         public void deleteAllManeuvers()
         {
             throw new NotImplementedException();
         }
-        
+
         #endregion
     }
 }
