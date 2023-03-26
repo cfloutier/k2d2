@@ -61,7 +61,6 @@ namespace K2D2.Controller
             Vector maneuvre_dir = telemetry.ManeuverDirection;
             Rotation vessel_rotation = current_vessel.GetRotation();
 
-
             // convert rotation to maneuvre coordinates
             vessel_rotation = Rotation.Reframed(vessel_rotation, maneuvre_dir.coordinateSystem);
             Vector3d forward_direction = (vessel_rotation.localRotation * Vector3.up).normalized;

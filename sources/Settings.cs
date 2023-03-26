@@ -55,7 +55,6 @@ namespace K2D2
             }
         }
 
-
         public static float burn_adjust
         {
             get => s_settings_file.GetFloat("warp.burn_adjust", 1.5f);

@@ -20,7 +20,6 @@ namespace K2D2
             Load();
         }
 
-
         public ManualLogSource logger = BepInEx.Logging.Logger.CreateLogSource("K2D2.SettingsFile");
 
         protected void Load()

@@ -5,10 +5,12 @@ using System.Collections.Generic;
 using BepInEx.Logging;
 using K2D2.KSPService;
 
-namespace K2D2
+using K2D2.Controller;
+
+namespace K2D2.KSPService
 {
     /// Simple class used to compute Burn DV
-    public class BurndV
+    public class BurndV: BaseController
     {
         public ManualLogSource logger = BepInEx.Logging.Logger.CreateLogSource("K2D2.SettingsFile");
 
@@ -33,18 +35,13 @@ namespace K2D2
         public Vector3 full_thrust;
         public float full_dv;
 
-        public void Update()
-        {
-
-        }
-
-        public void FixedUpdate()
+        public override void FixedUpdate()
         {
 
             burned_dV += actual_dv * Time.fixedDeltaTime;
         }
 
-        public void LateUpdate()
+        public override void LateUpdate()
         {
             Compute_Thrust();
         }
@@ -99,7 +96,7 @@ namespace K2D2
             full_dv = (float) ( full_thrust.magnitude / totalMass );
         }
 
-        public void onGUI()
+        public override void onGUI()
         {
             if (current_vessel.VesselComponent == null) return;
             VesselDeltaVComponent delta_v = current_vessel.VesselComponent.VesselDeltaV;
