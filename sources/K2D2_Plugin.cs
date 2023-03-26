@@ -24,6 +24,7 @@ using K2D2;
 using K2D2.Models;
 using K2D2.sources.Models;
 using K2D2.KSPService;
+using K2D2.sources.KSPService;
 using Action = System.Action;
 
 
@@ -85,7 +86,9 @@ namespace K2D2
 
         public static string mod_id;
         
-        public ManeuverManager maneuverManager = new ManeuverManager();    
+        public ManeuverManager maneuverManager = new ManeuverManager();
+
+        private ManeuverProvider _maneuverProvider;
 
         #endregion
 
@@ -110,9 +113,12 @@ namespace K2D2
             DontDestroyOnLoad(gameObject);
 
             logger.LogMessage("building AutoExecuteManeuver");
-
+            
+            // Setups
+            _maneuverProvider = new ManeuverProvider(ref maneuverManager,logger);
+            
             // Add Controllers that inherit from BaseController here:
-            controllerManager.AddController(new SimpleManeuverController(logger,ref maneuverManager));
+            controllerManager.AddController(new SimpleManeuverController(logger,ref _maneuverProvider));
             controllerManager.AddController(new AutoExecuteManeuver(logger));
             
             // Add PopUp Tabs here:
@@ -140,9 +146,14 @@ namespace K2D2
                 // Debug.developerConsoleVisible = false;
                 if (Input.GetKey(KeyCode.LeftAlt) && Input.GetKeyDown(KeyCode.O) )
                     ToggleButton(!drawUI);
-
+                
+                // Update Models
                 current_vessel.Update();
+                _maneuverProvider.Update();
+                
+                // Update Controllers
                 controllerManager.UpdateControllers();
+                
             }
         }
 

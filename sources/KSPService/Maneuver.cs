@@ -10,6 +10,7 @@ using KSP.Sim.Maneuver;
 using KSP2FlightAssistant.KSPService;
 using KSP2FlightAssistant.MathLibrary;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 
 namespace K2D2.KSPService
 {
@@ -26,29 +27,40 @@ namespace K2D2.KSPService
 
         public ManualLogSource logger { get; set; }
 
-        public Maneuver(ManualLogSource logger = null)
+        public Maneuver()
         {
             kspVessel = K2D2_Plugin.Instance.current_vessel;
             _vesselComponent = kspVessel.GetActiveSimVessel();
+        }
+
+        public Maneuver(ManualLogSource logger = null):this()
+        {
             this.logger = logger;
+        }
+
+        public void Update()
+        {
+            kspVessel = K2D2_Plugin.Instance.current_vessel;
+            _vesselComponent = kspVessel.GetActiveSimVessel();
+            
         }
 
         #endregion
 
         // Functions----------------------------------------------------------------------------------------------------
 
-        #region Funtions
-        
+        #region CicrularizeOrbit
+
         public double CircularizeOrbitApoapsis()
         {
             PatchedConicsOrbit orbit = GetLastOrbit() as PatchedConicsOrbit;
-            
+
             if (orbit.eccentricity >= 1)
             {
                 logger.LogMessage("Apoapsis Circularization not possible for hyperbolic orbits");
-                CircularizeHyperbolicOrbit();
-                return 0;
+                return CircularizeHyperbolicOrbit();
             }
+
             double gravitation = orbit.ReferenceBodyConstants.StandardGravitationParameter;
             double periapsis = orbit.Periapsis;
             double apoapsis = orbit.Apoapsis;
@@ -56,7 +68,7 @@ namespace K2D2.KSPService
             logger.LogMessage($"AP: {orbit.Apoapsis} PE: {orbit.Periapsis}");
             //double gravitation = _vesselComponent.Orbit.ReferenceBodyConstants.StandardGravitationParameter;
             double circularizedVelocity = VisVivaEquation.CalculateVelocity(apoapsis, apoapsis,
-                apoapsis, gravitation,0);
+                apoapsis, gravitation, 0);
 
             double apoapsisVelocity = VisVivaEquation.CalculateVelocity(apoapsis,
                 apoapsis,
@@ -77,8 +89,7 @@ namespace K2D2.KSPService
             if (orbit.eccentricity >= 1)
             {
                 logger.LogMessage("Periapsis Circularization not possible for hyperbolic orbits");
-                CircularizeHyperbolicOrbit();
-                return 0;
+                return CircularizeHyperbolicOrbit();
             }
 
             double periapsis = orbit.Periapsis;
@@ -90,7 +101,7 @@ namespace K2D2.KSPService
             double circularizedVelocity = VisVivaEquation.CalculateVelocity(periapsis,
                 periapsis,
                 periapsis,
-                gravitation,0);
+                gravitation, 0);
 
             double periapsisVelocity = VisVivaEquation.CalculateVelocity(periapsis,
                 apoapsis,
@@ -104,13 +115,35 @@ namespace K2D2.KSPService
             return deltaV;
         }
 
-        public double HohmannTransfer(double UT, double OrbitDistance)
+        public double CircularizeHyperbolicOrbit()
         {
-            CircularizeOrbitApoapsis();
-            double deltaV = 0;
+            PatchedConicsOrbit orbit = GetLastOrbit() as PatchedConicsOrbit;
+            double gravitation = orbit.ReferenceBodyConstants.StandardGravitationParameter;
+            double periapsis = orbit.Periapsis;
+            double orbitalEnergy = orbit.OrbitalEnergy;
+
+            double currentVelocity = VisVivaEquation.CalculateHyperbolicVelocity(periapsis,
+                gravitation,
+                orbitalEnergy);
+
+            double newPeriapsisVelocity = VisVivaEquation.CalculateVelocity(periapsis,
+                periapsis,
+                periapsis,
+                gravitation, 0);
+
+            double deltaV = newPeriapsisVelocity - currentVelocity;
+
+            Vector3d burnVector = ProgradeBurnVector(deltaV);
+            CreateManeuverNode(burnVector, 0);
             return deltaV;
         }
 
+        #endregion
+
+        #region ChangeOrbit
+
+
+        
         public void ChangePeriapsis(double OrbitDistance)
         {
             PatchedConicsOrbit orbit = GetLastOrbit() as PatchedConicsOrbit;
@@ -126,12 +159,12 @@ namespace K2D2.KSPService
             double currentPeriapsisVelocity = VisVivaEquation.CalculateVelocity(apoapsis,
                 apoapsis,
                 periapsis,
-                gravitation,eccentricity);
+                gravitation, eccentricity);
 
             double newPeriapsisVelocity = VisVivaEquation.CalculateVelocity(apoapsis,
                 apoapsis,
                 OrbitDistance,
-                gravitation,newEccentricity);
+                gravitation, newEccentricity);
 
             double deltaV = newPeriapsisVelocity - currentPeriapsisVelocity;
 
@@ -170,26 +203,14 @@ namespace K2D2.KSPService
             CreateManeuverNode(burnVector, 0);
         }
 
-        public void CircularizeHyperbolicOrbit()
-        {
-            PatchedConicsOrbit orbit = GetLastOrbit() as PatchedConicsOrbit;
-            double gravitation = orbit.ReferenceBodyConstants.StandardGravitationParameter;
-            double periapsis = orbit.Periapsis;
-            double orbitalEnergy = orbit.OrbitalEnergy;
-
-            double currentVelocity = VisVivaEquation.CalculateHyperbolicVelocity(periapsis,
-                gravitation,
-                orbitalEnergy);
+        #endregion
         
-            double newPeriapsisVelocity = VisVivaEquation.CalculateVelocity(periapsis,
-                periapsis,
-                periapsis,
-                gravitation,0);
-
-            double deltaV = newPeriapsisVelocity - currentVelocity;
-            
-            Vector3d burnVector = ProgradeBurnVector(deltaV);
-            CreateManeuverNode(burnVector, 0);
+        #region InterplanetaryTransfer
+        public double HohmannTransfer(double UT, double OrbitDistance)
+        {
+            CircularizeOrbitApoapsis();
+            double deltaV = 0;
+            return deltaV;
         }
 
         #endregion

@@ -92,6 +92,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="sources\K2D2_Plugin.cs" />
+    <Compile Include="sources\KSPService\ManeuverProvider.cs" />
     <Compile Include="sources\MainUI.cs" />
     <Compile Include="sources\Models\BaseClasses\DetailsObject.cs" />
     <Compile Include="sources\Models\BaseClasses\GuidTuple.cs" />
