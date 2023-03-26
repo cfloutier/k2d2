@@ -47,7 +47,63 @@ namespace K2D2.sources.KSPService
             ManeuverManager.AddManeuver("Circularize Hyperbolic Orbit",new Action(() => _maneuver.CircularizeHyperbolicOrbit()));
         }
         
-        
+        public void ChangeOrbit(double periapsis, double apoapsis)
+        {
+            periapsis = _maneuver.AddRadiusOfBody(periapsis*1000);
+            apoapsis = _maneuver.AddRadiusOfBody(apoapsis*1000);
+            logger.LogMessage(apoapsis +" "+ periapsis);
+            double currentPeriapsis = _maneuver.GetCurrentPeriapsis();
+            double currentApoapsis = _maneuver.GetCurrentApoapsis();
+            
+            if (apoapsis < periapsis)
+            {
+                double temp = apoapsis;
+                periapsis = apoapsis;
+                apoapsis = temp;
+            }
+                
+            logger.LogMessage(periapsis +" "+ apoapsis);
+            if (!_maneuver.IsOrbitElliptic())
+            {
+                logger.LogMessage("Hyperbolic orbit");
+                ManeuverManager.AddManeuver("Change Apoapsis",new Action(() => _maneuver.ChangeApoapsis(apoapsis)));
+
+                if (apoapsis >currentPeriapsis)
+                {
+                    ManeuverManager.AddManeuver("Change Periapsis",new Action(() => _maneuver.ChangePeriapsis(periapsis)));
+                }
+                else
+                {
+                    ManeuverManager.AddManeuver("Change Apoapsis",new Action(() => _maneuver.ChangeApoapsis(periapsis)));
+                }
+
+                return;
+            }
+            
+            if (_maneuver.IsApoapsisFirst())
+            {
+                logger.LogMessage("Apoapsis first");
+                ManeuverManager.AddManeuver("Change Periapsis",new Action(() => _maneuver.ChangePeriapsis(periapsis)));
+                if(periapsis>currentApoapsis)
+                    ManeuverManager.AddManeuver("Change Periapapsis",new Action(() => _maneuver.ChangePeriapsis(apoapsis)));
+                else
+                    ManeuverManager.AddManeuver("Change Apoapsis",new Action(() => _maneuver.ChangeApoapsis(apoapsis)));
+
+                return;
+
+            }
+            
+            logger.LogMessage("Periapsis first");
+            ManeuverManager.AddManeuver("Change Apoapsis",new Action(() => _maneuver.ChangeApoapsis(apoapsis)));
+            if(apoapsis<currentPeriapsis)
+                ManeuverManager.AddManeuver("Change Periapsis",new Action(() => _maneuver.ChangeApoapsis(periapsis)));
+            else
+                ManeuverManager.AddManeuver("Change Apoapsis",new Action(() => _maneuver.ChangePeriapsis(periapsis)));
+            
+            
+            
+
+        }
         
         
         

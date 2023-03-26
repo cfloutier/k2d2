@@ -76,7 +76,7 @@ namespace K2D2.Controller
                 
             }
             
-            /*
+            
             GUILayout.Label("Periapsis (km):");
             periapsisS = GUILayout.TextField(periapsisS);
             GUILayout.Label("Apoapsis (km):");
@@ -84,30 +84,14 @@ namespace K2D2.Controller
 
             if (GUILayout.Button("Change Orbit"))
             {
-                try
-                {
-                    double apoapsis = GeneralTools.GetNumberString(apoapsisS);
-                    if (apoapsis < 0)
-                    {
-                        GUILayout.Label("Invalid input");
-                        logger.LogError("Invalid input: Change Apoapsis");
-                        return;
-                    }
-                    ManeuverManager.AddManeuver("Change Apoapsis",new Action(() => _maneuver.ChangeApoapsis(apoapsis)));
-                }
-                catch (Exception e)
-                {
-                    logger.LogError("Apoapsis Error: "+e);
-                    logger.LogError(e.Message);
-                }
+                logger.LogMessage(GeneralTools.GetNumberString(periapsisS));
+                logger.LogMessage(GeneralTools.GetNumberString(apoapsisS));
+                _maneuverProvider.ChangeOrbit(GeneralTools.GetNumberString(periapsisS), GeneralTools.GetNumberString(apoapsisS));
                 return;
             }
             
-            if(GUILayout.Button("Start Maneuver"))
-            {
-                ManeuverManager.StartManeuver();
-            }
-*/
+
+
             /*
             GUILayout.Label("Hohmann Transfer Distance (km):");
             distanceHohmannS = GUILayout.TextField(distanceHohmannS);

@@ -64,16 +64,14 @@ namespace K2D2.KSPService
             double gravitation = orbit.ReferenceBodyConstants.StandardGravitationParameter;
             double periapsis = orbit.Periapsis;
             double apoapsis = orbit.Apoapsis;
-            double eccentricity = orbit.eccentricity;
-            logger.LogMessage($"AP: {orbit.Apoapsis} PE: {orbit.Periapsis}");
-            //double gravitation = _vesselComponent.Orbit.ReferenceBodyConstants.StandardGravitationParameter;
+
             double circularizedVelocity = VisVivaEquation.CalculateVelocity(apoapsis, apoapsis,
-                apoapsis, gravitation, 0);
+                apoapsis, gravitation);
 
             double apoapsisVelocity = VisVivaEquation.CalculateVelocity(apoapsis,
                 apoapsis,
                 periapsis,
-                gravitation, eccentricity);
+                gravitation);
 
             double deltaV = circularizedVelocity - apoapsisVelocity;
 
@@ -101,12 +99,12 @@ namespace K2D2.KSPService
             double circularizedVelocity = VisVivaEquation.CalculateVelocity(periapsis,
                 periapsis,
                 periapsis,
-                gravitation, 0);
+                gravitation);
 
             double periapsisVelocity = VisVivaEquation.CalculateVelocity(periapsis,
                 apoapsis,
                 periapsis,
-                gravitation, eccentricity);
+                gravitation);
 
             double deltaV = periapsisVelocity - circularizedVelocity;
 
@@ -129,7 +127,7 @@ namespace K2D2.KSPService
             double newPeriapsisVelocity = VisVivaEquation.CalculateVelocity(periapsis,
                 periapsis,
                 periapsis,
-                gravitation, 0);
+                gravitation);
 
             double deltaV = newPeriapsisVelocity - currentVelocity;
 
@@ -152,19 +150,23 @@ namespace K2D2.KSPService
             double periapsis = orbit.Periapsis;
             double apoapsis = orbit.Apoapsis;
             double eccentricity = orbit.eccentricity;
-            double newEccentricity = (apoapsis - OrbitDistance) / (apoapsis + OrbitDistance);
-
             double gravitation = orbit.ReferenceBodyConstants.StandardGravitationParameter;
+            
+            if(eccentricity >= 1)
+            {
+                logger.LogMessage("Periapsis Change not possible for hyperbolic orbits");
+                return;
+            }
 
             double currentPeriapsisVelocity = VisVivaEquation.CalculateVelocity(apoapsis,
                 apoapsis,
                 periapsis,
-                gravitation, eccentricity);
+                gravitation);
 
             double newPeriapsisVelocity = VisVivaEquation.CalculateVelocity(apoapsis,
                 apoapsis,
                 OrbitDistance,
-                gravitation, newEccentricity);
+                gravitation);
 
             double deltaV = newPeriapsisVelocity - currentPeriapsisVelocity;
 
@@ -184,17 +186,26 @@ namespace K2D2.KSPService
 
             double gravitation = orbit.ReferenceBodyConstants.StandardGravitationParameter;
             double deltaV = 0;
+            double currentApoapsisVelocity;
 
-
-            double currentApoapsisVelocity = VisVivaEquation.CalculateVelocity(periapsis,
-                apoapsis,
-                periapsis,
-                gravitation, eccentricity);
+            if (eccentricity >= 1)
+            {
+                currentApoapsisVelocity = VisVivaEquation.CalculateHyperbolicVelocity(periapsis,
+                    gravitation,
+                    orbit.OrbitalEnergy);
+            }
+            else
+            {
+                currentApoapsisVelocity = VisVivaEquation.CalculateVelocity(periapsis,
+                    apoapsis,
+                    periapsis,
+                    gravitation);
+            }
 
             double newApoapsisVelocity = VisVivaEquation.CalculateVelocity(periapsis,
                 OrbitDistance,
                 periapsis,
-                gravitation, newEccentricity);
+                gravitation);
 
             deltaV = newApoapsisVelocity - currentApoapsisVelocity;
 
@@ -383,6 +394,38 @@ namespace K2D2.KSPService
 
         #region Custom Functions
 
+        public bool IsApoapsisFirst()
+        {
+            PatchedConicsOrbit orbit = GetLastOrbit() as PatchedConicsOrbit;
+            double timePE = orbit.GetUTforTrueAnomaly(0, 0);
+            double timeAP = orbit.GetUTforTrueAnomaly(Math.PI, 0);
+            return timePE > timeAP;
+        }
+        
+        public bool IsOrbitElliptic()
+        {
+            PatchedConicsOrbit orbit = GetLastOrbit() as PatchedConicsOrbit;
+            return orbit.eccentricity < 1;
+        }
+        
+        public double AddRadiusOfBody(double radius)
+        {
+            PatchedConicsOrbit orbit = GetLastOrbit() as PatchedConicsOrbit;
+            return radius + orbit.ReferenceBodyConstants.Radius;
+        }
+        
+        public double GetCurrentPeriapsis()
+        {
+            PatchedConicsOrbit orbit = GetLastOrbit() as PatchedConicsOrbit;
+            return orbit.Periapsis;
+        }
+        
+        public double GetCurrentApoapsis()
+        {
+            PatchedConicsOrbit orbit = GetLastOrbit() as PatchedConicsOrbit;
+            return orbit.Apoapsis;
+        }
+
         public Vector3d GetOrbitalVelocityAtUT(double UT)
         {
             double inclination = _vesselComponent.Orbit.inclination;
@@ -487,5 +530,6 @@ namespace K2D2.KSPService
         }
 
         #endregion
+        
     }
 }
