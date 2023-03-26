@@ -21,6 +21,7 @@ using BepInEx.Logging;
 using K2D2.Controller;
 using K2D2;
 using K2D2.Models;
+using K2D2.sources.Models;
 
 namespace K2D2
 {
@@ -55,6 +56,8 @@ namespace K2D2
         private Rect windowRect;
         private int windowWidth = 500;
         private int windowHeight = 700;
+        
+        private PopUp popUp = new PopUp();
 
         private static GameState[] validScenes = new[] { GameState.FlightView, GameState.Map3DView };
 
@@ -73,6 +76,8 @@ namespace K2D2
         ControllerManager controllerManager = new ControllerManager();
 
         public static string mod_id;
+        
+        public ManeuverManager maneuverManager = new ManeuverManager();    
 
         #endregion
 
@@ -99,7 +104,7 @@ namespace K2D2
             logger.LogMessage("building AutoExecuteManeuver");
 
             // Add Controllers that inherit from BaseController here:
-            controllerManager.AddController(new SimpleManeuverController(logger));
+            controllerManager.AddController(new SimpleManeuverController(logger,ref maneuverManager));
             controllerManager.AddController(new AutoExecuteManeuver(logger));
 
             main_ui = new MainUI(logger);
@@ -147,7 +152,10 @@ namespace K2D2
 
         void OnGUI()
         {
-            if (drawUI && ValidScene())
+            if(!ValidScene())
+                return;
+            
+            if (drawUI)
             {
 
                 GUI.skin = Skins.ConsoleSkin;
@@ -162,6 +170,11 @@ namespace K2D2
                     GUILayout.Height(0),
                     GUILayout.Width(350));
             }
+            if (popUp.isPopupVisible)
+            {
+                popUp.OnGUI();
+            }
+            
         }
 
         public void ToggleButton(bool toggle)
@@ -177,6 +190,11 @@ namespace K2D2
             // settings button
             if (GUI.Button(new Rect(windowRect.width - 56, 4, 25, 25), Styles.gear, Styles.small_button))
                 settings_visible = !settings_visible;
+            
+            if(GUI.Button(new Rect(windowRect.width - 81, 4, 25, 25), "P", Styles.small_button))
+                popUp.isPopupVisible = !popUp.isPopupVisible;
+            
+            
 
             GUI.Label(new Rect(15, 2, 29, 29), Styles.big_icon, Styles.icons_label);
 

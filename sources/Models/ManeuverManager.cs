@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace K2D2.sources.Models
 {
@@ -12,19 +13,33 @@ namespace K2D2.sources.Models
             
         }
         
-        public void AddManeuver(Delegate innerfunc, params object[] parameters)
+        public void AddManeuver(Delegate innerFunction, params object[] parameters)
         {
-            _customQueue.Add(innerfunc, parameters);
+            _customQueue.Add(innerFunction, parameters);
+        }
+        
+        public void AddManeuver(string description, Delegate innerFunction, params object[] parameters)
+        {
+            _customQueue.Add(description,innerFunction, parameters);
         }
         
         
-        public void StartManeuver()
+        public string StartManeuver()
         {
             if (_customQueue.HasNext())
             {
-                _customQueue.Pop();
-                return;
+                return _customQueue.PopAndRun();
+
             }
+            else
+            {
+                return "No more Maneuvers";
+            }
+        }
+        
+        public List<string> GetDescriptionOfAllManeuvers()
+        {
+            return _customQueue.ViewQueue();
         }
         
     }

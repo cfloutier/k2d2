@@ -112,6 +112,7 @@
     <Compile Include="sources\Models\CustomQueue.cs" />
     <Compile Include="sources\My_Plugin.cs" />
     <Compile Include="sources\MainUI.cs" />
+    <Compile Include="sources\PopUp.cs" />
     <Compile Include="sources\Settings.cs" />
 
     <Compile Include="sources\Tools\ColorTools.cs" />

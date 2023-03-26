@@ -8,6 +8,7 @@ using UnityEngine;
 using KSP.Game;
 using K2D2.KSPService;
 using K2D2;
+using K2D2.sources.Models;
 using KSP.Map;
 using KSP2FlightAssistant.MathLibrary;
 using KSP.Sim.Maneuver;
@@ -19,6 +20,8 @@ namespace K2D2.Controller
     {
 
         ManualLogSource logger;
+        public Rect windowRect { get; set; }
+        
         public static SimpleManeuverController Instance { get; set; }
         // public GameInstance Game { get; set; }
 
@@ -27,33 +30,32 @@ namespace K2D2.Controller
         private string distanceHohmannS ="0", timeHohmannS="0";
         double distanceHohmann = 0, timeHohmann = 0;
         string periapsisS = "0", apoapsisS = "0";
+        
+        
 
-
+        public ManeuverManager ManeuverManager { get; set; }
         private Maneuver _maneuver;
         
-        public SimpleManeuverController()
+        public SimpleManeuverController(ref ManeuverManager maneuverManager)
         {
             Instance = this;
-
-            buttons.Add(new Switch());
-            //buttons.Add(new Button());*/
+            ManeuverManager = maneuverManager;
 
             applicableStates.Add(GameState.FlightView);
             applicableStates.Add(GameState.Map3DView);
+            
+
         }
         
-        public SimpleManeuverController(ManualLogSource logger):this()
+        public SimpleManeuverController(ManualLogSource logger, ref ManeuverManager maneuverManager):this(ref maneuverManager)
         {
             this.logger = logger;
             logger.LogMessage("SimpleManeuverController !");
         }
-
+        
 
         public override void Update()
         {
-            //logger.LogMessage("CircularizeController Reinitialize !");
-            //Game = Tools.Game();
-
             _maneuver = new Maneuver(Game, logger);
         }
 
@@ -75,8 +77,10 @@ namespace K2D2.Controller
             {
                 try
                 {
-                    double deltaV = _maneuver.CircularizeOrbitApoapsis();
-                    GUILayout.Label($"Required dV: {deltaV}");
+                    
+                    ManeuverManager.AddManeuver("Circularize Apoapsis",new Action(() => _maneuver.CircularizeOrbitApoapsis()));
+                    //double deltaV = _maneuver.CircularizeOrbitApoapsis();
+                    //GUILayout.Label($"Required dV: {deltaV}");
                     
                 }
                 catch (Exception e)
@@ -92,8 +96,10 @@ namespace K2D2.Controller
             {
                 try
                 {
-                    double deltaV = _maneuver.CircularizeOrbitPeriapsis();
-                    GUILayout.Label($"Required dV: {deltaV}");
+                    
+                    ManeuverManager.AddManeuver("Circularize Periapsis",new Action(() => _maneuver.CircularizeOrbitPeriapsis()));
+                    //double deltaV = _maneuver.CircularizeOrbitPeriapsis();
+                    //GUILayout.Label($"Required dV: {deltaV}");
                    
                 }
                 catch (Exception e)
@@ -107,10 +113,26 @@ namespace K2D2.Controller
             
             if(GUILayout.Button("Start Maneuver"))
             {
+                ManeuverManager.StartManeuver();
                 
                 
             }
+            foreach (string description in ManeuverManager.GetDescriptionOfAllManeuvers())
+            {
+                GUILayout.Label(description);
+            }
 
+            GUILayout.BeginHorizontal();
+            GUILayout.BeginScrollView(new Vector2(0, 0), new GUIStyle(), new GUIStyle());
+            foreach (string description in ManeuverManager.GetDescriptionOfAllManeuvers())
+            {
+                GUILayout.BeginHorizontal();
+                GUILayout.Label(description);
+                GUILayout.EndHorizontal();
+
+            }
+            GUILayout.EndScrollView();
+            GUILayout.EndHorizontal();
 
                 /*
                 GUILayout.Label("Hohmann Transfer Distance (km):");
@@ -190,11 +212,12 @@ namespace K2D2.Controller
                     
                 }
                 */
+            //PopUp();
             Run();
         }
 
 
-        public void DebugInformation()
+        /*public void DebugInformation()
         {
                 GUILayout.Label(
                     $"Debug Mode: {Settings.debug_mode}");
@@ -217,5 +240,26 @@ namespace K2D2.Controller
                     $"Longitude of Ascending Node: {_maneuver.kspVessel.VesselComponent.Orbit.longitudeOfAscendingNode}");
                 GUILayout.Label($"Inclination: {_maneuver.kspVessel.VesselComponent.Orbit.inclination}");
         }
+
+        public void PopUpAwake()
+        {
+            windowRect = new Rect(0, 0, 200, 400);
+        }
+        
+        public void PopUp()
+        {
+            windowRect = GUILayout.Window(GUIUtility.GetControlID(FocusType.Passive), (Rect)windowRect, PopOpContent, "<color=#00D346>K2-D2</color>", Styles.window, GUILayout.Height(200), GUILayout.Width(400));
+        }
+
+        
+
+        public void PopOpContent(int windowID)
+        {
+            GUILayout.BeginHorizontal();
+            GUILayout.BeginVertical();
+            GUILayout.Label("A pop up window");
+            GUILayout.EndVertical();
+            GUILayout.EndHorizontal();
+        }*/
     }
 }

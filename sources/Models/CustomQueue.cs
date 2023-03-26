@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using K2D2.sources.Models;
+using KSP.UI.Binding.Widget;
 
 namespace K2D2
 {
@@ -128,12 +130,30 @@ namespace K2D2
             cache.next = new Element<FunctionObject>(functionObject);
         }
 
-        public void PopAndRun()
+        public string PopAndRun()
         {
+            string description ="No description";
             if (_head == null)
                 throw new Exception("Queue is empty");
+            
+            if(_head.content is IDescription)
+                description = _head.content.GetDescription();
             _head.content.Run();
             _head = _head.next;
+            return description;
+        }
+        
+        public List<string> ViewQueue()
+        {
+            Element<FunctionObject> cache = _head;
+            List<string> descriptions = new List<string>();
+            while (cache != null)
+            {
+                if(cache.content is IDescription)
+                    descriptions.Add(cache.content.GetDescription());
+                cache = cache.next;
+            }
+            return descriptions;
         }
         
     }
