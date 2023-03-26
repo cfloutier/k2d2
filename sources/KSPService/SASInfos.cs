@@ -13,12 +13,12 @@ namespace K2D2
     {
         public static VesselAutopilot currentAutoPilot()
         {
-            return VesselInfos.currentVessel()?.Autopilot;
+            return K2D2_Plugin.Instance.current_vessel?.VesselComponent?.Autopilot;
         }
 
         public static VesselSAS currentSas()
         {
-            return VesselInfos.currentVessel()?.Autopilot?.SAS;
+            return K2D2_Plugin.Instance.current_vessel?.VesselComponent?.Autopilot?.SAS;
         }
 
         public static double getSasResponsePC()
@@ -27,7 +27,7 @@ namespace K2D2
                 return 0;
 
 
-            var my_obj = Reflex.GetInstanceField(typeof(VesselSAS), currentSas(), "sasResponse");
+            var my_obj = ReflexionTool.GetInstanceField(typeof(VesselSAS), currentSas(), "sasResponse");
             return  ((Vector3d) my_obj).magnitude * 100;
         }
 
@@ -36,7 +36,7 @@ namespace K2D2
             if (currentSas() == null)
                 return Vector3d.zero;
 
-            var my_obj = Reflex.GetInstanceField(typeof(VesselSAS), currentSas(), "angularDelta");
+            var my_obj = ReflexionTool.GetInstanceField(typeof(VesselSAS), currentSas(), "angularDelta");
             return GeneralTools.correctEuler(((Vector3d)  my_obj));
         }
 
@@ -45,7 +45,7 @@ namespace K2D2
             if (currentAutoPilot() == null)
                 return null;
 
-            var my_obj = Reflex.GetInstanceField(typeof(VesselAutopilot), currentAutoPilot(), "_telemetry");
+            var my_obj = ReflexionTool.GetInstanceField(typeof(VesselAutopilot), currentAutoPilot(), "_telemetry");
             return my_obj as TelemetryComponent;
         }
     }

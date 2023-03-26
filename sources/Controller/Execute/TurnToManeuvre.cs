@@ -6,15 +6,7 @@ using System.Linq;
 using UnityEngine;
 
 using KSP.Sim;
-using KSP.Sim.impl;
-using KSP.Sim.Maneuver;
-using KSP.Game;
-using KSP.Sim.ResourceSystem;
-
-
-
-using BepInEx.Logging;
-using KSP.ScriptInterop.impl.moonsharp;
+using K2D2.KSPService;
 
 namespace K2D2.Controller
 {
@@ -24,11 +16,16 @@ namespace K2D2.Controller
 
         Vector3 maneuvre_dir = Vector3.zero;
 
+        KSPVessel current_vessel;
+
         public override void Start()
         {
+            current_vessel = K2D2_Plugin.Instance.current_vessel;
             // reset time warp
             var time_warp = TimeWarpTools.time_warp();
             time_warp.SetRateIndex(0, false);
+            current_vessel = K2D2_Plugin.Instance.current_vessel;
+
         }
 
         public override void Update()
@@ -36,9 +33,7 @@ namespace K2D2.Controller
             if (maneuver == null) return;
 
             finished = false;
-            var vessel = VesselInfos.currentVessel();
-            if (vessel == null) return;
-            var autopilot = vessel.Autopilot;
+            var autopilot = current_vessel.Autopilot;
 
             // force autopilot
             autopilot.Enabled = true;
@@ -64,7 +59,8 @@ namespace K2D2.Controller
                 return false;
 
             Vector maneuvre_dir = telemetry.ManeuverDirection;
-            Rotation vessel_rotation = VesselInfos.GetRotation();
+            Rotation vessel_rotation = current_vessel.GetRotation();
+
 
             // convert rotation to maneuvre coordinates
             vessel_rotation = Rotation.Reframed(vessel_rotation, maneuvre_dir.coordinateSystem);
@@ -79,8 +75,7 @@ namespace K2D2.Controller
         public bool checkAngularRotation()
         {
             double max_angular_speed = 0.5;
-
-            var angular_rotation_pc = VesselInfos.GetAngularSpeed().vector;
+            var angular_rotation_pc = current_vessel.GetAngularSpeed().vector;
 
             status_line = "Waiting for stabilisation";
             if (System.Math.Abs(angular_rotation_pc.x) > max_angular_speed)
@@ -108,10 +103,10 @@ namespace K2D2.Controller
                 if (!telemetry.HasManeuver)
                     return;
 
-                var autopilot = VesselInfos.currentVessel().Autopilot;
+                var autopilot = current_vessel.Autopilot;
 
                 // var angulor_vel_coord = VesselInfos.GetAngularSpeed().coordinateSystem;
-                var angularVelocity = VesselInfos.GetAngularSpeed().vector;
+                var angularVelocity = current_vessel.GetAngularSpeed().vector;
 
                 // GUILayout.Label($"angulor_vel_coord {angulor_vel_coord}");
                 Vector maneuvre_dir = telemetry.ManeuverDirection;

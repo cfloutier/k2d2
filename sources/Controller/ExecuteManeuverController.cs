@@ -7,6 +7,8 @@ using KSP.Sim.Maneuver;
 using KSP.Messages;
 using BepInEx.Logging;
 
+using K2D2.KSPService;
+
 namespace K2D2.Controller
 {
     public class AutoExecuteManeuver : BaseController
@@ -23,12 +25,14 @@ namespace K2D2.Controller
         BurnManeuvre burn;
 
         ManeuvreController current_pilot = null;
+        KSPVessel current_vessel;
 
         public AutoExecuteManeuver(ManualLogSource logger)
         {
             this.logger = logger;
             logger.LogMessage("AutoExecuteManeuver !");
             Instance = this;
+            current_vessel = K2D2_Plugin.Instance.current_vessel;
 
             GeneralTools.Game.Messages.Subscribe<VesselChangedMessage>(OnActiveVesselChanged);
 
@@ -171,7 +175,7 @@ namespace K2D2.Controller
 
         public override void Update()
         {
-            current_maneuvre_node = GeneralTools.getNextManeuveurNode();
+            current_maneuvre_node = current_vessel.getNextManeuveurNode();
             if (current_maneuvre_node == null)
             {
                 Stop();

@@ -22,6 +22,8 @@ using K2D2.Controller;
 using K2D2;
 using K2D2.Models;
 using K2D2.sources.Models;
+using K2D2.KSPService;
+
 
 namespace K2D2
 {
@@ -56,7 +58,7 @@ namespace K2D2
         private Rect windowRect;
         private int windowWidth = 500;
         private int windowHeight = 700;
-        
+
         private PopUp popUp = new PopUp();
 
         private static GameState[] validScenes = new[] { GameState.FlightView, GameState.Map3DView };
@@ -74,6 +76,8 @@ namespace K2D2
         public bool settings_visible = false;
 
         ControllerManager controllerManager = new ControllerManager();
+
+        public KSPVessel current_vessel = new KSPVessel();
 
         public static string mod_id;
         
@@ -129,7 +133,7 @@ namespace K2D2
                 if (Input.GetKey(KeyCode.LeftAlt) && Input.GetKeyDown(KeyCode.O) )
                     ToggleButton(!drawUI);
 
-
+                current_vessel.Update();
                 controllerManager.UpdateControllers();
             }
         }

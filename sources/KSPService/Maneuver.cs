@@ -28,7 +28,7 @@ namespace K2D2.KSPService
 
         public Maneuver(ManualLogSource logger = null)
         {
-            kspVessel = new KSPVessel(Game);
+            kspVessel = K2D2_Plugin.Instance.current_vessel;
             _vesselComponent = kspVessel.GetActiveSimVessel();
             this.logger = logger;
         }

@@ -19,31 +19,31 @@ namespace K2D2.KSPService
 {
     public class KSPVessel
     {
-        public GameInstance Game { get; set; }
-
+        public GameInstance Game => GameManager.Instance == null ? null : GameManager.Instance.Game;
 
         private TelemetryDataProvider telemetryDataProvider;
 
         public VesselComponent VesselComponent;
+
+        public VesselVehicle VesselVehicle;
+
         private FlightCtrlState flightCtrlState;
         private VesselDataProvider VesselDataProvider;
 
-
-
-
-        public KSPVessel(GameInstance Game)
+        public KSPVessel()
         {
-            this.Game = Game;
-            VesselComponent = GetActiveSimVessel();
-            VesselDataProvider = this.Game.ViewController.DataProvider.VesselDataProvider;
-            telemetryDataProvider = this.Game.ViewController.DataProvider.TelemetryDataProvider;
+            // VesselComponent = GetActiveSimVessel();
+            // VesselVehicle = GetActiveSimVehicle();
+            // VesselDataProvider = this.Game.ViewController.DataProvider.VesselDataProvider;
+            // telemetryDataProvider = this.Game.ViewController.DataProvider.TelemetryDataProvider;
         }
-        
+
         public void Update()
         {
             VesselComponent = GetActiveSimVessel();
+            VesselVehicle = GetActiveSimVehicle();
+            if (Game.ViewController == null) return;
             VesselDataProvider = this.Game.ViewController.DataProvider.VesselDataProvider;
-
             telemetryDataProvider = this.Game.ViewController.DataProvider.TelemetryDataProvider;
         }
 
@@ -55,18 +55,74 @@ namespace K2D2.KSPService
         /// <returns> VesselComponent</returns>
         public VesselComponent GetActiveSimVessel()
         {
+            if (Game == null) return null;
+            if (Game.ViewController == null) return null;
             return Game.ViewController.GetActiveSimVessel();
         }
 
+        public VesselVehicle GetActiveSimVehicle()
+        {
+            if (Game == null) return null;
+            if (Game.ViewController == null) return null;
+            if (!Game.ViewController.TryGetActiveVehicle(out var vehicle)) return null;
+            return vehicle as VesselVehicle;
+        }
+
+
+        ///////////////////////// from former Vessel Infos /////////////
+
+        public CelestialBodyComponent currentBody()
+        {
+            if (VesselComponent == null) return null;
+            return VesselComponent.mainBody;
+        }
+
+        public void SetThrottle(float throttle)
+        {
+            if (VesselVehicle == null) return;
+
+            var update = new FlightCtrlStateIncremental
+            {
+                mainThrottle = throttle
+            };
+
+            VesselVehicle.AtomicSet(update);
+        }
+
+        public Vector GetAngularSpeed()
+        {
+            if (VesselVehicle == null) return new Vector();
+
+            return VesselVehicle.AngularVelocity.relativeAngularVelocity;
+        }
+
+        public Rotation GetRotation()
+        {
+            if (VesselVehicle == null) return new Rotation();
+            return VesselVehicle.VehicleTelemetry.Rotation;
+        }
+
+        public ManeuverNodeData getNextManeuveurNode()
+        {
+            var maneuvers = Game.SpaceSimulation?.Maneuvers;
+            if (maneuvers == null) return null;
+
+            var current_vehicle = VesselVehicle;
+            if (current_vehicle == null) return null;
+
+            var activeNodes = maneuvers.GetNodesForVessel(current_vehicle.Guid);
+            ManeuverNodeData next_node = (activeNodes.Count() > 0) ? activeNodes[0] : null;
+            return next_node;
+        }
 
         // Available Instructions===========================================================================================
 
 
         // Values
-        public void SetThrottle(float throttle)
-        {
-            flightCtrlState.mainThrottle = throttle;
-        }
+        // public void SetThrottle(float throttle)
+        // {
+        //     flightCtrlState.mainThrottle = throttle;
+        // }
 
         public void SetPitch(float pitch)
         {
@@ -178,6 +234,9 @@ namespace K2D2.KSPService
 
         // AutoPilot========================================================================================================
         // Note: No Instruction set needed can be called as is
+
+
+        public VesselAutopilot Autopilot => VesselComponent == null ? null : VesselComponent.Autopilot;
 
         /// <summary>
         /// Enables or disables the SAS
