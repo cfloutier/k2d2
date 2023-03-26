@@ -93,6 +93,8 @@
   <ItemGroup>
     <Compile Include="sources\K2D2_Plugin.cs" />
     <Compile Include="sources\MainUI.cs" />
+    <Compile Include="sources\Models\BaseClasses\DetailsObject.cs" />
+    <Compile Include="sources\Models\BaseClasses\GuidTuple.cs" />
     <Compile Include="sources\Settings.cs" />
 
 
@@ -131,6 +133,7 @@
 
     <Compile Include="sources\Properties\AssemblyInfo.cs" />
     <Compile Include="Views\PopUp.cs" />
+    <Compile Include="Views\PopUpContent.cs" />
 
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

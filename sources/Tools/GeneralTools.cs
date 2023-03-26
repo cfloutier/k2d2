@@ -83,5 +83,10 @@ namespace K2D2
             return dt;
         }
 
+        public static Guid createGuid()
+        {
+            return Guid.NewGuid();
+        }
+
     }
 }
