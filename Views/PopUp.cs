@@ -16,9 +16,16 @@ namespace K2D2
 
         public Delegate currentDisplayContent { get; set; }
 
-        private static Dictionary<string, Delegate> _popUpContent = new Dictionary<string, Delegate>();
+        //private static Dictionary<string, Delegate> _popUpContent = new Dictionary<string, Delegate>();
+        private Dictionary<string, FunctionObject> _popUpContent = new Dictionary<string, FunctionObject>();
 
-        public void AddPopUpContents(string name, Delegate content)
+        
+        public void AddPopUpContents(string TabDescription, FunctionObject content)
+        {
+            
+        }
+        
+        private void AddPopUpContents(string name, FunctionObject content)
         {
             _popUpContent.Add(name, content);
         }
