@@ -36,10 +36,7 @@ namespace K2D2.KSPService
             this.Game = Game;
             VesselComponent = GetActiveSimVessel();
             VesselDataProvider = this.Game.ViewController.DataProvider.VesselDataProvider;
-
             telemetryDataProvider = this.Game.ViewController.DataProvider.TelemetryDataProvider;
-
-
         }
         
         public void Update()
@@ -382,53 +379,5 @@ namespace K2D2.KSPService
             return VesselComponent.SimulationObject.GlobalId;
         }
         
-        
-        // Maneuver Node===================================================================================================
-        public void AddManeuverNode(ManeuverNodeData maneuverNodeData)
-        {
-            Game.SpaceSimulation.Maneuvers.AddNodeToVessel(maneuverNodeData);
-            MapCore mapCore = null;
-            Game.Map.TryGetMapCore(out mapCore);
-            
-            mapCore.map3D.ManeuverManager.CreateGizmoForLocation(maneuverNodeData);
-            //Game.SpaceSimulation.
-            //VesselComponent.OnManeuverNodePositionChanged();
-            //Game.SpaceSimulation.Maneuvers.
-            //AddComponent()
-        }
-        
-        public void CreateManeuverNode(Vector3d burnVector, double TrueAnomaly)
-        {
-            double TrueAnomalyRad = TrueAnomaly * Math.PI / 180;
-            double UT = VesselComponent.Orbit.GetUTforTrueAnomaly(TrueAnomalyRad,0);
-            
-            ManeuverNodeData maneuverNodeData = new ManeuverNodeData(GetGlobalIDActiveVessel(),true, UT );
-            IPatchedOrbit orbit = VesselComponent.Orbit;
-            
-            orbit.PatchStartTransition = PatchTransitionType.Maneuver;
-            
-            maneuverNodeData.SetManeuverState((PatchedConicsOrbit)orbit);
-          
-            maneuverNodeData.BurnVector = burnVector;
-            AddManeuverNode(maneuverNodeData);
-        }
-        
-        
-        
-        public void CircularizeOrbit(ManualLogSource logger)
-        {
-            double gravitation = VesselComponent.Orbit.ReferenceBodyConstants.StandardGravitationParameter;
-            double circularizedVelocity= VisVivaEquation.CalculateVelocity(VesselComponent.Orbit.Apoapsis, VesselComponent.Orbit.Apoapsis,
-                VesselComponent.Orbit.Apoapsis, gravitation);
-            
-            double apoapsisVelocity = VisVivaEquation.CalculateVelocity(VesselComponent.Orbit.Apoapsis, VesselComponent.Orbit.Apoapsis,
-                VesselComponent.Orbit.Periapsis, gravitation);
-            double UT = VesselComponent.Orbit.GetUTforTrueAnomaly(180,0);
-            double deltaV = circularizedVelocity - apoapsisVelocity;
-            logger.LogMessage(deltaV);
-
-            Vector3d burnVector = new Vector3d(0,0,deltaV);
-            CreateManeuverNode(burnVector, 180);
-        }
     }
 }
