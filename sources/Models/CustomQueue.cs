@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using K2D2.sources.Models;
+using K2D2.sources.Models.BaseClasses;
 using KSP.UI.Binding.Widget;
 
 namespace K2D2
@@ -11,6 +12,7 @@ namespace K2D2
         private object[] parameters;
         Delegate _innerFunction;
         public string description { get; set; }
+        public DetailsObject detailsObject { get; set; }
 
         public FunctionObject(Delegate innerFunction, params object[] parameters)//Action<Delegate, object[]>
         {
@@ -34,6 +36,16 @@ namespace K2D2
         {
             this.description = description;
         }
+        
+        public void SetDetailsObject(DetailsObject detailsObject)
+        {
+            this.detailsObject = detailsObject;
+        }
+        
+        public DetailsObject GetDetailsObject()
+        {
+            return detailsObject;
+        }
     }
     
     public class Element<T>
@@ -43,10 +55,12 @@ namespace K2D2
         public Delegate innerfunc;*/
         public T content { set; get; }
         public Element<T> next;
+        public Guid guid { get; }
         
         public Element(T Content)//Action<Delegate, object[]> func, Delegate innerfunc, params object[] parameters
         {
             this.content = Content;
+            this.guid = Guid.NewGuid();
         }
     }
 
@@ -105,12 +119,27 @@ namespace K2D2
             Add(functionObject);
         }
         
-        public void Add(string Description, Delegate innerFunction, params object[] parameters)
+        public void Add(string description, Delegate innerFunction, params object[] parameters)
         {
             FunctionObject functionObject = new FunctionObject(innerFunction, parameters);
-            functionObject.SetDescription(Description);
+            functionObject.SetDescription(description);
             Add(functionObject);
         }
+        
+        public void Add(string description,DetailsObject detailsObject, Delegate innerFunction, params object[] parameters)
+        {
+            FunctionObject functionObject = new FunctionObject(innerFunction, parameters);
+            functionObject.SetDescription(description);
+            functionObject.SetDetailsObject(detailsObject);
+            Add(functionObject);
+        }
+
+        /*public void Add(DetailsObject detailsObject, Delegate innerFunction, params object[] parameters)
+        {
+            FunctionObject functionObject = new FunctionObject(innerFunction, parameters);
+            functionObject.SetDetailsObject(detailsObject);
+            Add(functionObject);
+        }*/
         
         private void Add(FunctionObject functionObject)
         {
@@ -156,6 +185,75 @@ namespace K2D2
             return descriptions;
         }
         
+        public List<FunctionObject> ToList()
+        {
+            Element<FunctionObject> cache = _head;
+            List<FunctionObject> maneuvers = new List<FunctionObject>();
+            while (cache != null)
+            {
+                maneuvers.Add(cache.content);
+                cache = cache.next;
+            }
+            return maneuvers;
+        }
+
+        public List<GuidTuple<FunctionObject>> ToGuidList()
+        {
+            Element<FunctionObject> cache = _head;
+            List<GuidTuple<FunctionObject>> maneuvers = new List<GuidTuple<FunctionObject>>();
+            while (cache != null)
+            {
+                maneuvers.Add(new GuidTuple<FunctionObject>( cache.content,cache.guid));
+                cache = cache.next;
+            }
+            return maneuvers;
+        }
+
+        
+
+        public void Clear()
+        {
+            _head = null;
+        }
+        
+        public void RemoveElement(Guid guid)
+        {
+            Element<FunctionObject> cache = _head;
+            if (cache.guid == guid)
+            {
+                _head = _head.next;
+                return;
+            }
+            while (cache.next != null)
+            {
+                if (cache.next.guid == guid)
+                {
+                    cache.next = cache.next.next;
+                    return;
+                }
+                cache = cache.next;
+            }
+        }
+        
+        public void RemoveElementAndAllAfter(Guid guid)
+        {
+            Element<FunctionObject> cache = _head;
+            if (cache.guid == guid)
+            {
+                _head = null;
+                return;
+            }
+            while (cache.next != null)
+            {
+                if (cache.next.guid == guid)
+                {
+                    cache.next = null;
+                    return;
+                }
+                cache = cache.next;
+            }
+        }
+
     }
 
     class Wrapper

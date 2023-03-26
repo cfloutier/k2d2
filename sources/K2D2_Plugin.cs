@@ -18,11 +18,13 @@ using SpaceWarp.API.Assets;
 using SpaceWarp.API.UI;
 using SpaceWarp.API.UI.Appbar;
 using BepInEx.Logging;
+using JetBrains.Annotations;
 using K2D2.Controller;
 using K2D2;
 using K2D2.Models;
 using K2D2.sources.Models;
 using K2D2.KSPService;
+using Action = System.Action;
 
 
 namespace K2D2
@@ -59,7 +61,9 @@ namespace K2D2
         private int windowWidth = 500;
         private int windowHeight = 700;
 
-        private PopUp popUp = new PopUp();
+        private PopUp _popUp = new PopUp();
+        private PopUpContent _popUpContent;
+        
 
         private static GameState[] validScenes = new[] { GameState.FlightView, GameState.Map3DView };
 
@@ -110,6 +114,10 @@ namespace K2D2
             // Add Controllers that inherit from BaseController here:
             controllerManager.AddController(new SimpleManeuverController(logger,ref maneuverManager));
             controllerManager.AddController(new AutoExecuteManeuver(logger));
+            
+            // Add PopUp Tabs here:
+            _popUpContent = new PopUpContent(ref _popUp);
+            _popUp.AddPopUpContents("Active Maneuvers",new Action (()=>_popUpContent.DisplayManeuverList(ref maneuverManager)));
 
             main_ui = new MainUI(logger);
 
@@ -174,9 +182,9 @@ namespace K2D2
                     GUILayout.Height(0),
                     GUILayout.Width(350));
             }
-            if (popUp.isPopupVisible)
+            if (_popUp.isPopupVisible)
             {
-                popUp.OnGUI();
+                _popUp.OnGUI();
             }
             
         }
@@ -196,7 +204,7 @@ namespace K2D2
                 settings_visible = !settings_visible;
             
             if(GUI.Button(new Rect(windowRect.width - 81, 4, 25, 25), "P", Styles.small_button))
-                popUp.isPopupVisible = !popUp.isPopupVisible;
+                _popUp.isPopupVisible = !_popUp.isPopupVisible;
             
             
 
