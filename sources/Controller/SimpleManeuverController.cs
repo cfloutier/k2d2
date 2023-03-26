@@ -12,6 +12,7 @@ using K2D2.sources.Models;
 using KSP.Map;
 using KSP2FlightAssistant.MathLibrary;
 using KSP.Sim.Maneuver;
+using ManeuverProvider = K2D2.sources.KSPService.ManeuverProvider;
 
 
 namespace K2D2.Controller
@@ -23,8 +24,6 @@ namespace K2D2.Controller
         public Rect windowRect { get; set; }
         
         public static SimpleManeuverController Instance { get; set; }
-        // public GameInstance Game { get; set; }
-
 
         //private bool _circularizeApoapsis = false, _circularizePeriapsis = false, _hohmannTransfer = false;
         private string distanceHohmannS ="0", timeHohmannS="0";
@@ -33,21 +32,16 @@ namespace K2D2.Controller
         
         
 
-        public ManeuverManager ManeuverManager { get; set; }
-        private Maneuver _maneuver;
+
+        private ManeuverProvider _maneuverProvider;
         
-        public SimpleManeuverController(ref ManeuverManager maneuverManager)
+        public SimpleManeuverController(ref ManeuverProvider maneuverProvider)
         {
+            _maneuverProvider = maneuverProvider;
             Instance = this;
-            ManeuverManager = maneuverManager;
-
-            applicableStates.Add(GameState.FlightView);
-            applicableStates.Add(GameState.Map3DView);
-            
-
         }
         
-        public SimpleManeuverController(ManualLogSource logger, ref ManeuverManager maneuverManager):this(ref maneuverManager)
+        public SimpleManeuverController(ManualLogSource logger, ref ManeuverProvider maneuverProvider):this(ref maneuverProvider)
         {
             this.logger = logger;
             logger.LogMessage("SimpleManeuverController !");
@@ -56,31 +50,50 @@ namespace K2D2.Controller
 
         public override void Update()
         {
-            _maneuver = new Maneuver(Game, logger);
         }
 
         public override void onGUI()
         {
-            if (_maneuver == null)
+            if (_maneuverProvider == null)
             {
                 return;
             }
-/*
-            if (Settings.debug_mode)
-            {
-                DebugInformation();
-            }
-
-*/
 
             if (GUILayout.Button("Circularize Node in Apoapsis"))
             {
+                _maneuverProvider.CircularizeApoapsis();
+            }
+            
+
+            if (GUILayout.Button("Circularize Node in Periapsis"))
+            {
+                _maneuverProvider.CircularizePeriapsis();
+            }
+
+            if (GUILayout.Button("Circularize Hyperbolic Orbit"))
+            {
+                _maneuverProvider.CircularizeHyperbolicOrbit();
+                
+            }
+            
+            /*
+            GUILayout.Label("Periapsis (km):");
+            periapsisS = GUILayout.TextField(periapsisS);
+            GUILayout.Label("Apoapsis (km):");
+            apoapsisS = GUILayout.TextField(apoapsisS);
+
+            if (GUILayout.Button("Change Orbit"))
+            {
                 try
                 {
-                    
-                    ManeuverManager.AddManeuver("Circularize Apoapsis",new Action(() => _maneuver.CircularizeOrbitApoapsis()));
-
-                    
+                    double apoapsis = GeneralTools.GetNumberString(apoapsisS);
+                    if (apoapsis < 0)
+                    {
+                        GUILayout.Label("Invalid input");
+                        logger.LogError("Invalid input: Change Apoapsis");
+                        return;
+                    }
+                    ManeuverManager.AddManeuver("Change Apoapsis",new Action(() => _maneuver.ChangeApoapsis(apoapsis)));
                 }
                 catch (Exception e)
                 {
@@ -90,43 +103,11 @@ namespace K2D2.Controller
                 return;
             }
             
-
-            if (GUILayout.Button("Circularize Node in Periapsis"))
-            {
-                try
-                {
-                    
-                    ManeuverManager.AddManeuver("Circularize Periapsis",new Action(() => _maneuver.CircularizeOrbitPeriapsis()));
-
-                }
-                catch (Exception e)
-                {
-                    logger.LogError("Periapsis Error: "+e);
-                    logger.LogError(e.Message);
-                }
-                return;
-            }
-
-            if (GUILayout.Button("Circularize Hperbolic Orbit"))
-            {
-                try
-                {
-                    ManeuverManager.AddManeuver("Circularize Hyperbolic Orbit",new Action(() => _maneuver.CircularizeHyperbolicOrbit()));
-                }
-                catch (Exception e)
-                {
-                    logger.LogError("Hyperbolic Error: "+e);
-                    logger.LogError(e.Message);
-                }
-                return;
-                
-            }
-            
             if(GUILayout.Button("Start Maneuver"))
             {
                 ManeuverManager.StartManeuver();
             }
-
+*/
             /*
             GUILayout.Label("Hohmann Transfer Distance (km):");
             distanceHohmannS = GUILayout.TextField(distanceHohmannS);
@@ -205,32 +186,7 @@ namespace K2D2.Controller
                 
             }
             */
-                Run();
-        }
-
-
-        public void DebugInformation()
-        {
-                GUILayout.Label(
-                    $"Debug Mode: {Settings.debug_mode}");
-                GUILayout.Label(
-                    $"Altitude {_maneuver.kspVessel.GetDisplayAltitude()}");
-
-                GUILayout.Label($"Periapsis: {_maneuver.kspVessel.getPeriapsis().ToString()}");
-                GUILayout.Label($"Apoapsis: {_maneuver.kspVessel.getApoapsis().ToString()}");
-                GUILayout.Label($"Current Orbit Height: {_maneuver.kspVessel.getCurrenOrbitHeight().ToString()}");
-                GUILayout.Label($"Current Orbit Speed: {_maneuver.kspVessel.getCurrentOrbitSpeed().ToString()}");
-                GUILayout.Label(
-                    $"Planetary Mass: {VisVivaEquation.CalculateGravitation(_maneuver.kspVessel.getCurrenOrbitHeight(), _maneuver.kspVessel.getApoapsis(), _maneuver.kspVessel.getPeriapsis(), _maneuver.kspVessel.getCurrentOrbitSpeed()).ToString()}");
-                GUILayout.Label(
-                    $"ZUP Vector: {_maneuver.kspVessel.VesselComponent.Orbit.GetFrameVelAtUTZup(_maneuver.kspVessel.VesselComponent.Orbit.GetUTforTrueAnomaly(180, 0)).x}");
-                GUILayout.Label(
-                    $"ZUP Vector: {_maneuver.kspVessel.VesselComponent.Orbit.GetFrameVelAtUTZup(_maneuver.kspVessel.VesselComponent.Orbit.GetUTforTrueAnomaly(180, 0)).y}");
-                GUILayout.Label(
-                    $"ZUP Vector: {_maneuver.kspVessel.VesselComponent.Orbit.GetFrameVelAtUTZup(_maneuver.kspVessel.VesselComponent.Orbit.GetUTforTrueAnomaly(180, 0)).z}");
-                GUILayout.Label(
-                    $"Longitude of Ascending Node: {_maneuver.kspVessel.VesselComponent.Orbit.longitudeOfAscendingNode}");
-                GUILayout.Label($"Inclination: {_maneuver.kspVessel.VesselComponent.Orbit.inclination}");
+            //Run();
         }
     }
 }

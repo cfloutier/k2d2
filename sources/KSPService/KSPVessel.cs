@@ -19,8 +19,7 @@ namespace K2D2.KSPService
 {
     public class KSPVessel
     {
-        public GameInstance Game { get; set; }
-
+        public GameInstance Game => GameManager.Instance == null ? null : GameManager.Instance.Game;
 
         private TelemetryDataProvider telemetryDataProvider;
 
@@ -28,17 +27,13 @@ namespace K2D2.KSPService
         private FlightCtrlState flightCtrlState;
         private VesselDataProvider VesselDataProvider;
 
-
-
-
-        public KSPVessel(GameInstance Game)
+        public KSPVessel()
         {
-            this.Game = Game;
             VesselComponent = GetActiveSimVessel();
             VesselDataProvider = this.Game.ViewController.DataProvider.VesselDataProvider;
             telemetryDataProvider = this.Game.ViewController.DataProvider.TelemetryDataProvider;
         }
-        
+
         public void Update()
         {
             VesselComponent = GetActiveSimVessel();
