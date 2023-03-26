@@ -1,4 +1,5 @@
 ﻿using System;
+using KSP.Sim.impl;
 
 namespace KSP2FlightAssistant.MathLibrary
 {
@@ -16,12 +17,12 @@ namespace KSP2FlightAssistant.MathLibrary
         /// <param name="PlanetaryMass"></param>
         /// <returns></returns>
         public static double CalculateVelocity(double CurrentDistance, double Apoapsis, double Periapsis,
-            double gravitation, double eccentricity)
+            double gravitation)
         {
-            if (eccentricity >= 1 || Double.IsInfinity(Apoapsis))
-                return Math.Sqrt(gravitation*(2/Periapsis-1/(Periapsis/(eccentricity-1))));
+            if (Double.IsInfinity(Apoapsis))
+                throw new ArgumentException("Eccentricity must be less than 1 and Apoapsis must be finite");
 
-            if(Apoapsis-Periapsis<100)
+            if(Math.Abs(Apoapsis-Periapsis)<100)
                 return Math.Sqrt(gravitation / CurrentDistance);
 
             double semiMajorAxis = (Apoapsis + Periapsis) / 2;
@@ -45,7 +46,7 @@ namespace KSP2FlightAssistant.MathLibrary
         }
         
 
-
-
+        
+        
     }
 }
