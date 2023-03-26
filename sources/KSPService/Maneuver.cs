@@ -20,16 +20,15 @@ namespace K2D2.KSPService
         #region fields
         
         private VesselComponent _vesselComponent;
-        private GameInstance Game { get; set; }
+        public GameInstance Game => GameManager.Instance == null ? null : GameManager.Instance.Game;
 
         public KSPVessel kspVessel { get; set; }
 
         public ManualLogSource logger { get; set; }
 
-        public Maneuver(GameInstance game, ManualLogSource logger = null)
+        public Maneuver(ManualLogSource logger = null)
         {
-            Game = game;
-            kspVessel = new KSPVessel(game);
+            kspVessel = K2D2_Plugin.Instance.current_vessel;
             _vesselComponent = kspVessel.GetActiveSimVessel();
             this.logger = logger;
         }

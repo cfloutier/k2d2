@@ -7,6 +7,8 @@ using KSP.Sim.Maneuver;
 using KSP.Messages;
 using BepInEx.Logging;
 
+using K2D2.KSPService;
+
 namespace K2D2.Controller
 {
     public class AutoExecuteManeuver : BaseController
@@ -23,14 +25,16 @@ namespace K2D2.Controller
         BurnManeuvre burn;
 
         ManeuvreController current_pilot = null;
+        KSPVessel current_vessel;
 
         public AutoExecuteManeuver(ManualLogSource logger)
         {
             this.logger = logger;
             logger.LogMessage("AutoExecuteManeuver !");
             Instance = this;
+            current_vessel = K2D2_Plugin.Instance.current_vessel;
 
-            Tools.Game().Messages.Subscribe<VesselChangedMessage>(OnActiveVesselChanged);
+            GeneralTools.Game.Messages.Subscribe<VesselChangedMessage>(OnActiveVesselChanged);
 
             turn = new TurnToManeuvre();
             warp = new WarpToManeuvre();
@@ -94,7 +98,7 @@ namespace K2D2.Controller
             if (current_maneuvre_node == null)
                 return false;
 
-            var dt = Tools.remainingStartTime(current_maneuvre_node);
+            var dt = GeneralTools.remainingStartTime(current_maneuvre_node);
             if (dt < 0)
             {
                 return false;
@@ -171,7 +175,7 @@ namespace K2D2.Controller
 
         public override void Update()
         {
-            current_maneuvre_node = Tools.getNextManeuveurNode();
+            current_maneuvre_node = current_vessel.getNextManeuveurNode();
             if (current_maneuvre_node == null)
             {
                 Stop();
@@ -209,17 +213,17 @@ namespace K2D2.Controller
         {
             if (Settings.debug_mode)
             {
-                var dt = Tools.remainingStartTime(current_maneuvre_node);
-                GUILayout.Label($"Node in {Tools.printDuration(dt)}");
+                var dt = GeneralTools.remainingStartTime(current_maneuvre_node);
+                GUILayout.Label($"Node in {GeneralTools.DurationToString(dt)}");
                 GUILayout.Label($"BurnDuration {current_maneuvre_node.BurnDuration}");
                 GUILayout.Label($"BurnRequiredDV {current_maneuvre_node.BurnRequiredDV}");
-                GUILayout.Label($"BurnVector {Tools.printVector(current_maneuvre_node.BurnVector)}");
+                GUILayout.Label($"BurnVector {GeneralTools.VectorToString(current_maneuvre_node.BurnVector)}");
 
                 var telemetry = SASInfos.getTelemetry();
 
                 Vector3 maneuvre_dir = telemetry.ManeuverDirection.vector;
 
-                GUILayout.Label($"maneuvre_dir {Tools.printVector(maneuvre_dir)}");
+                GUILayout.Label($"maneuvre_dir {GeneralTools.VectorToString(maneuvre_dir)}");
 
                 if (dt < 0)
                 {

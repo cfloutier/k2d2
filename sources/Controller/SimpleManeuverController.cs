@@ -20,7 +20,6 @@ namespace K2D2.Controller
 
         ManualLogSource logger;
         public static SimpleManeuverController Instance { get; set; }
-        // public GameInstance Game { get; set; }
 
 
         //private bool _circularizeApoapsis = false, _circularizePeriapsis = false, _hohmannTransfer = false;
@@ -54,7 +53,7 @@ namespace K2D2.Controller
             //logger.LogMessage("CircularizeController Reinitialize !");
             //Game = Tools.Game();
 
-            _maneuver = new Maneuver(Game, logger);
+            _maneuver = new Maneuver(logger);
         }
 
         public override void onGUI()

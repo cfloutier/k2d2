@@ -34,25 +34,6 @@ namespace K2D2
 
         public void onGui()
         {
-            if (VesselInfos.currentVessel() == null)
-            {
-                GUILayout.FlexibleSpace();
-                GUILayout.Label("No active vessel.", Styles.error);
-                GUILayout.FlexibleSpace();
-                return;
-            }
-
-            if (VesselInfos.currentBody() == null)
-            {
-                GUILayout.FlexibleSpace();
-                GUILayout.Label("No active body.", Styles.error);
-                GUILayout.FlexibleSpace();
-
-                return;
-            }
-
-            // ############# Uncomment this to get tabs in UI ###################
-
             if (Settings.debug_mode)
                 // Mode selection debug
                 Settings.current_interface_mode = (InterfaceMode)GUILayout.SelectionGrid((int)Settings.current_interface_mode,
@@ -83,7 +64,9 @@ namespace K2D2
 
         public static void SASInfos()
         {
-            var sas = VesselInfos.currentVessel().Autopilot.SAS;
+            var current_vessel = K2D2_Plugin.Instance.current_vessel.VesselComponent;
+
+            var sas = current_vessel.Autopilot.SAS;
             if (sas == null)
             {
                 GUILayout.Label("NO SAS");
@@ -94,9 +77,9 @@ namespace K2D2
             GUILayout.Label($"sas.ReferenceFrame {sas.ReferenceFrame}");
             GUILayout.Label($"sas.AutoTune {sas.AutoTune}");
             GUILayout.Label($"sas.lockedMode {sas.lockedMode}");
-            GUILayout.Label($"sas.LockedRotation {Tools.printVector(sas.LockedRotation.eulerAngles)}");
+            GUILayout.Label($"sas.LockedRotation {GeneralTools.VectorToString(sas.LockedRotation.eulerAngles)}");
 
-            GUILayout.Label($"sas.TargetOrientation {Tools.printVector(sas.TargetOrientation)}");
+            GUILayout.Label($"sas.TargetOrientation {GeneralTools.VectorToString(sas.TargetOrientation)}");
             GUILayout.Label($"sas.PidLockedPitch {sas.PidLockedPitch}");
             GUILayout.Label($"sas.PidLockedRoll {sas.PidLockedRoll}");
             GUILayout.Label($"sas.PidLockedYaw {sas.PidLockedYaw}");
@@ -104,7 +87,7 @@ namespace K2D2
 
         void VesselInfo()
         {
-            var vehicle = VesselInfos.currentVehicle();
+            var vehicle = K2D2_Plugin.Instance.current_vessel.VesselVehicle;
 
             if (vehicle == null)
             {
@@ -122,12 +105,12 @@ namespace K2D2
             GUILayout.Label($"IsInAtmosphere {vehicle.IsInAtmosphere}");
             GUILayout.Label($"LandedOrSplashed {vehicle.LandedOrSplashed}");
 
-            var body = VesselInfos.currentBody();
+            var body = K2D2_Plugin.Instance.current_vessel.currentBody();
             var coord = body.coordinateSystem;
             var body_location = Rotation.Reframed(vehicle.Rotation, coord);
 
             GUILayout.Label($"coordinate_system {vehicle.Rotation.coordinateSystem}");
-            GUILayout.Label($"body_location {Tools.printVector(body_location.localRotation.eulerAngles)}");
+            GUILayout.Label($"body_location {GeneralTools.VectorToString(body_location.localRotation.eulerAngles)}");
         }
     }
 }

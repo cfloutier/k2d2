@@ -19,8 +19,8 @@ using SpaceWarp.API.UI;
 using SpaceWarp.API.UI.Appbar;
 using BepInEx.Logging;
 using K2D2.Controller;
-using K2D2;
 using K2D2.Models;
+using K2D2.KSPService;
 
 namespace K2D2
 {
@@ -60,8 +60,8 @@ namespace K2D2
 
         private static bool ValidScene()
         {
-            if (Tools.Game() == null) return false;
-            var state = Tools.Game().GlobalGameState.GetState();
+            if (GeneralTools.Game == null) return false;
+            var state = GeneralTools.Game.GlobalGameState.GetState();
             return validScenes.Contains(state);
         }
 
@@ -71,6 +71,8 @@ namespace K2D2
         public bool settings_visible = false;
 
         ControllerManager controllerManager = new ControllerManager();
+
+        public KSPVessel current_vessel = new KSPVessel();
 
         public static string mod_id;
 
@@ -124,7 +126,7 @@ namespace K2D2
                 if (Input.GetKey(KeyCode.LeftAlt) && Input.GetKeyDown(KeyCode.O) )
                     ToggleButton(!drawUI);
 
-
+                current_vessel.Update();
                 controllerManager.UpdateControllers();
             }
         }

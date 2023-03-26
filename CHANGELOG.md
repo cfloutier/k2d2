@@ -6,7 +6,6 @@
 * [AutoManeuver] Use dV rather than time to compute burning durtion a thrust ratio.
 
 # v0.3.0
-
 * [internal] added new classes to load and save settings easily.
 * Added Settings
 * Turn phase : started the sas to maneuvre mode in a proper way
