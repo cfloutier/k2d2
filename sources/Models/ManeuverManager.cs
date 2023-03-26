@@ -26,20 +26,17 @@ namespace K2D2.sources.Models
         
         public string StartManeuver()
         {
-            if (_customQueue.HasNext())
-            {
-                return _customQueue.PopAndRun();
-
-            }
-            else
-            {
-                return "No more Maneuvers";
-            }
+            return _customQueue.HasNext() ? _customQueue.PopAndRun() : "No more Maneuvers";
         }
         
         public List<string> GetDescriptionOfAllManeuvers()
         {
             return _customQueue.ViewQueue();
+        }
+        
+        public bool HasNext()
+        {
+            return _customQueue.HasNext();
         }
         
     }

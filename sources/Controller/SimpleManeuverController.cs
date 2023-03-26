@@ -212,12 +212,11 @@ namespace K2D2.Controller
                     
                 }
                 */
-            //PopUp();
-            Run();
+                Run();
         }
 
 
-        /*public void DebugInformation()
+        public void DebugInformation()
         {
                 GUILayout.Label(
                     $"Debug Mode: {Settings.debug_mode}");
@@ -240,26 +239,5 @@ namespace K2D2.Controller
                     $"Longitude of Ascending Node: {_maneuver.kspVessel.VesselComponent.Orbit.longitudeOfAscendingNode}");
                 GUILayout.Label($"Inclination: {_maneuver.kspVessel.VesselComponent.Orbit.inclination}");
         }
-
-        public void PopUpAwake()
-        {
-            windowRect = new Rect(0, 0, 200, 400);
-        }
-        
-        public void PopUp()
-        {
-            windowRect = GUILayout.Window(GUIUtility.GetControlID(FocusType.Passive), (Rect)windowRect, PopOpContent, "<color=#00D346>K2-D2</color>", Styles.window, GUILayout.Height(200), GUILayout.Width(400));
-        }
-
-        
-
-        public void PopOpContent(int windowID)
-        {
-            GUILayout.BeginHorizontal();
-            GUILayout.BeginVertical();
-            GUILayout.Label("A pop up window");
-            GUILayout.EndVertical();
-            GUILayout.EndHorizontal();
-        }*/
     }
 }
