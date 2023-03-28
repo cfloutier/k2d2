@@ -8,6 +8,7 @@ using KSP.Sim.DeltaV;
 using System.Collections.Generic;
 
 using K2D2.Controller;
+using K2D2.InfosPages;
 
 namespace K2D2
 {
@@ -57,6 +58,13 @@ namespace K2D2
                 case InterfaceMode.Landing:
                     LandingController.Instance.onGUI();
                     break;
+
+                case InterfaceMode.Orbit:
+                    K2D2.InfosPages.OrbitInfos.onGUI();
+                    break;
+                case InterfaceMode.SAS: K2D2.InfosPages.SASInfos.onGUI(); break;
+                case InterfaceMode.Vessel: K2D2.InfosPages.VesselInfos.onGUI(); break;
+
                 default:
                     break;
             }

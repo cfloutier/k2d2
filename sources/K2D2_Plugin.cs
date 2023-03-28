@@ -102,7 +102,7 @@ namespace K2D2
 
             // Add Controllers that inherit from BaseController here:
             controllerManager.AddController(new SimpleManeuverController(logger));
-            controllerManager.AddController(new AutoExecuteManeuver(logger));
+            controllerManager.AddController(new AutoExecuteManeuver());
             controllerManager.AddController(new LandingController());
 
             main_ui = new MainUI(logger);
