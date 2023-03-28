@@ -29,7 +29,7 @@ namespace K2D2.KSPService
 
         public Maneuver()
         {
-            _vesselComponent = kspVessel.GetActiveSimVessel();
+           
         }
 
         public Maneuver(ManualLogSource logger = null):this()

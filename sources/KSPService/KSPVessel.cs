@@ -29,16 +29,13 @@ namespace K2D2.KSPService
 
         public KSPVessel()
         {
-            VesselComponent = GetActiveSimVessel();
-            VesselDataProvider = this.Game.ViewController.DataProvider.VesselDataProvider;
-            telemetryDataProvider = this.Game.ViewController.DataProvider.TelemetryDataProvider;
+            
         }
 
         public void Update()
         {
             VesselComponent = GetActiveSimVessel();
             VesselDataProvider = this.Game.ViewController.DataProvider.VesselDataProvider;
-
             telemetryDataProvider = this.Game.ViewController.DataProvider.TelemetryDataProvider;
         }
 
@@ -50,6 +47,7 @@ namespace K2D2.KSPService
         /// <returns> VesselComponent</returns>
         public VesselComponent GetActiveSimVessel()
         {
+            if (Game.ViewController == null) return null;
             return Game.ViewController.GetActiveSimVessel();
         }
 

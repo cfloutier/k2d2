@@ -112,10 +112,12 @@ namespace K2D2
             DontDestroyOnLoad(gameObject);
 
             logger.LogMessage("building AutoExecuteManeuver");
-            
+
             // Setups
-            _maneuverProvider = new ManeuverProvider(ref maneuverManager, logger);
+            // set up current vessel first
             current_vessel = new KSPVessel();
+            _maneuverProvider = new ManeuverProvider(ref maneuverManager, logger);
+            
             
             // Add Controllers that inherit from BaseController here:
             controllerManager.AddController(new SimpleManeuverController(logger,ref _maneuverProvider));
