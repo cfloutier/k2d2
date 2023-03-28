@@ -103,7 +103,7 @@ namespace K2D2
             Settings.burn_adjust = UI_Tools.FloatSlider("burn_adjust", Settings.burn_adjust, 0, 2);
             GUILayout.Label("adjusting rate", Styles.small_dark_text);
 
-            Settings.max_dv_error = UI_Tools.FloatSlider("max_dv_error", Settings.max_dv_error, 0.001f, 2);
+            Settings.max_dv_error = UI_Tools.FloatSlider("max_dv_error", Settings.max_dv_error, 0.001f, 2, " m/s");
             GUILayout.Label("accepted dV difference (m/s)", Styles.small_dark_text);
 
             // VERSION

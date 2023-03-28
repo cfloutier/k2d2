@@ -55,9 +55,7 @@ namespace K2D2.Controller
         {
             if (maneuver == null) return;
 
-            var time_warp = TimeWarpTools.time_warp();
-            if (time_warp.CurrentRateIndex != 0)
-                time_warp.SetRateIndex(0, false);
+            TimeWarpTools.SetRateIndex(0, false);
 
             if (mode == Mode.Waiting)
             {

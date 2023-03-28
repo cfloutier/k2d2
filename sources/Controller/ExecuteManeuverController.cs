@@ -67,7 +67,8 @@ namespace K2D2.Controller
 
             if (mode == Mode.Off)
             {
-                TimeWarpTools.time_warp()?.SetRateIndex(0, false);
+
+                TimeWarpTools.SetRateIndex(0, false);
                 current_pilot = null;
                 return;
             }

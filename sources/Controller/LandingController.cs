@@ -7,8 +7,6 @@ using BepInEx.Logging;
 using K2D2.KSPService;
 using KSP.Sim;
 
-using K2D2.KSPService;
-
 namespace K2D2.Controller
 {
     public class LandingController : ComplexControler
@@ -37,11 +35,18 @@ namespace K2D2.Controller
                 if (value == _land_controler_active)
                     return;
                 _land_controler_active = value;
-               
+
                 if (!value)
                 {
+                    // stop
                     if (current_vessel != null)
                         current_vessel.SetThrottle(0);
+                }
+                else
+                {
+                    // Start
+                    burn_dV.reset();
+
                 }
             }
         }
@@ -56,6 +61,9 @@ namespace K2D2.Controller
             altitude = (float)current_vessel.GetDisplayAltitude();
             current_speed = (float)current_vessel.VesselVehicle.SurfaceSpeed;
             delta_speed = current_speed - limit_speed;
+
+            if (delta_speed > 0) // reset timewarp if it is time to burn
+                TimeWarpTools.SetRateIndex(0, false);
 
             if (gravity_compensation)
                 computeInclination();
@@ -78,7 +86,6 @@ namespace K2D2.Controller
                 return;
             }
 
-
             compute_Throttle();
             status_line = "Burning";
             status_line = $"current speed : {current_speed} m/s\ndelta speed : {delta_speed} m/s";
@@ -97,8 +104,6 @@ namespace K2D2.Controller
                 // stop
                 land_controler_active =  false;
             }
-
-
 
             // status_line = "ok";
             // current_vessel.SetThrottle(0);
@@ -162,7 +167,6 @@ namespace K2D2.Controller
             }
 
             float remaining_full_burn_time = (float)(delta_speed / burn_dV.full_dv);
- 
             wanted_throttle = Mathf.Clamp(remaining_full_burn_time + min_throttle, 0, 1);
         }
 
@@ -231,16 +235,20 @@ namespace K2D2.Controller
 
         public override void onGUI()
         {
-            GUILayout.Label("// Landing ", Styles.title);
+            // GUILayout.Label("// Landing ", Styles.title);
 
             auto_speed = GUILayout.Toggle(auto_speed, "Auto Speed");
             if (auto_speed)
             {
-                auto_speed_ratio = UI_Tools.FloatSlider("auto_speed_ratio", auto_speed_ratio, 0, 1);
-                safe_speed = UI_Tools.FloatSlider("safe_speed", safe_speed, 0.1f, 10);
-                GUILayout.Label($"altitude : {altitude:n2}");
+                float div = 10; //Mathf.Pow(10, multiplier_index);
 
-                limit_speed = altitude * auto_speed_ratio / 100 + safe_speed;
+                auto_speed_ratio = UI_Tools.FloatSlider("Altitude/speed ratio", auto_speed_ratio, 0.5f, 3);
+                UI_Tools.RightLeftText("Slow", "Quick");
+
+                safe_speed = UI_Tools.FloatSlider("Landing speed", safe_speed, 0.1f, 10);
+                GUILayout.Label($"altitude : {altitude:n2} m");
+
+                limit_speed = altitude * auto_speed_ratio / div + safe_speed;
             }
             else
             {
@@ -254,26 +262,34 @@ namespace K2D2.Controller
                 limit_speed = Mathf.Pow(10, multiplier_index+1) * speed_ratio;
             }
 
-            if (delta_speed>0)
+            if (delta_speed > 0)
                 GUI.color = Color.red;
 
             GUILayout.Label($"limit speed : {limit_speed:n2}");
             GUI.color = Color.white;
             gravity_compensation = GUILayout.Toggle(gravity_compensation, "Gravity Compensation");
 
-            if (gravity_compensation)
+            if (gravity_compensation && Settings.debug_mode)
             {
                 GUILayout.Label($"inclination : {inclination:n2}°");
                 GUILayout.Label($"gravity : {gravity:n2}");
                 GUILayout.Label($"gravity_direction_factor : {gravity_direction_factor:n2}");
             }
 
-            GUILayout.Label($"current speed : {current_speed:n2}");
-            
-            GUILayout.Label($"wanted_throttle : {wanted_throttle:n2}");
+            if (Settings.debug_mode)
+            {
+                GUILayout.Label($"wanted_throttle : {wanted_throttle:n2}");
+                GUILayout.Label($"current speed : {current_speed:n2} m/s");
+
+                if (burn_dV.burned_dV > 0)
+                    GUILayout.Label($"dV consumed : {burn_dV.burned_dV:n2} m/s");
+            }
 
             land_controler_active = UI_Tools.ToggleButton(land_controler_active, "Start", "Stop");
             GUILayout.Label(status_line, Styles.small_dark_text);
         }
+
+
+
     }
 }

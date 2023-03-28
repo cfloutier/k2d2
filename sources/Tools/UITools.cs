@@ -36,7 +36,15 @@ namespace K2D2
             return GUILayout.Button(txt, GUILayout.Height(width_bt), GUILayout.Height(height_bt));
         }
 
+        public static void Title(string txt)
+        {
+            GUILayout.Label(txt, Styles.title);
+        }
 
+        public static void Console(string txt)
+        {
+            GUILayout.Label(txt, Styles.small_dark_text);
+        }
 
         public static int IntSlider(string txt, int value, int min, int max )
         {
@@ -45,12 +53,26 @@ namespace K2D2
             return value;
         }
 
-        public static float FloatSlider(string txt, float value, float min, float max )
+        public static float FloatSlider(string txt, float value, float min, float max, string unity_txt = "")
         {
-            GUILayout.Label(txt + $" : {value:n2}");
+            // simple float slider with a lavel value
+
+            GUILayout.Label(txt + $" : {value:n2}"+unity_txt);
             value = GUILayout.HorizontalSlider( value, min, max);
             return value;
         }
+
+        public static void RightLeftText(string right_txt, string left_txt)
+        {
+            // text aligned to right and left with a space in between 
+            GUILayout.BeginHorizontal();
+            UI_Tools.Console(right_txt);
+            GUILayout.FlexibleSpace();
+            UI_Tools.Console(left_txt);
+            GUILayout.EndHorizontal();
+        }
+
+
 
         public static Dictionary<string, string> temp_dict = new Dictionary<string, string>();
 

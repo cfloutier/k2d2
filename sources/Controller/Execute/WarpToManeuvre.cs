@@ -14,13 +14,9 @@ namespace K2D2.Controller
     {
         int wanted_warp_index = 0;
 
-        TimeWarp time_warp = null;
-
         public override void Update()
         {
             finished = false;
-            time_warp = TimeWarpTools.time_warp();
-            if (time_warp == null) return;
             if (maneuver == null) return;
 
             var dt = GeneralTools.remainingStartTime(maneuver);
@@ -36,8 +32,7 @@ namespace K2D2.Controller
             }
 
             status_line = $"{GeneralTools.DurationToString(dt)} | x{wanted_rate}";
-            if (time_warp.CurrentRateIndex != wanted_warp_index)
-                time_warp.SetRateIndex(wanted_warp_index, false);
+            TimeWarpTools.SetRateIndex(wanted_warp_index, false);
         }
 
         int compute_wanted_warp_index(double dt)

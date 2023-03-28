@@ -22,8 +22,7 @@ namespace K2D2.Controller
         {
             current_vessel = K2D2_Plugin.Instance.current_vessel;
             // reset time warp
-            var time_warp = TimeWarpTools.time_warp();
-            time_warp.SetRateIndex(0, false);
+            TimeWarpTools.SetRateIndex(0, false);
             current_vessel = K2D2_Plugin.Instance.current_vessel;
 
         }
