@@ -112,7 +112,7 @@ namespace K2D2.Controller
         {
             if (mode == Mode.Off)
             {
-                Run();
+                Start();
                 return;
             }
             if (mode == Mode.Burn)
@@ -127,6 +127,13 @@ namespace K2D2.Controller
 
         public override void onGUI()
         {
+            if (K2D2_Plugin.Instance.settings_visible)
+            {
+                SettingsUI.onGUI();
+                settingsUI();
+                return;
+            }
+            
             if (current_maneuvre_node == null)
             {
                 GUILayout.Label("no Maneuvre node");
@@ -143,7 +150,7 @@ namespace K2D2.Controller
                 }
 
                 if (UI_Tools.BigButton("Run"))
-                    Run();
+                    Start();
             }
             else
             {
@@ -172,6 +179,11 @@ namespace K2D2.Controller
                     }
                 }
             }
+        }
+
+        public override void onReset()
+        {
+            Stop();
         }
 
         public override void Update()
@@ -212,6 +224,35 @@ namespace K2D2.Controller
             }
         }
 
+        void settingsUI()
+        {
+            if (Settings.debug_mode)
+            {
+                GUILayout.Label("Auto_Execute Next phase.", Styles.small_dark_text);
+                Settings.auto_next = GUILayout.Toggle(Settings.auto_next, "Auto Next Phase");
+            }
+            else
+                Settings.auto_next = true;
+
+            GUILayout.Label("Warp", Styles.title);
+
+            Settings.warp_speed = UI_Tools.IntSlider("Warp Speed", Settings.warp_speed, 1, 10);
+            GUILayout.Label("(1 : quick, 10 slow) ", Styles.small_dark_text);
+
+            GUILayout.Label("Safe time", Styles.small_dark_text);
+
+            Settings.warp_safe_duration = UI_Tools.IntField("warp_safe_duration", Settings.warp_safe_duration, 5, int.MaxValue);
+            GUILayout.Label("nb seconds in x1 before launch (min:5)", Styles.small_dark_text);
+
+            GUILayout.Label("Burn", Styles.title);
+
+            Settings.burn_adjust = UI_Tools.FloatSlider("burn_adjust", Settings.burn_adjust, 0, 2);
+            GUILayout.Label("adjusting rate", Styles.small_dark_text);
+
+            Settings.max_dv_error = UI_Tools.FloatSlider("max_dv_error", Settings.max_dv_error, 0.001f, 2, " m/s");
+            GUILayout.Label("accepted dV difference (m/s)", Styles.small_dark_text);
+        }
+
         void node_infos()
         {
             if (Settings.debug_mode)
@@ -236,8 +277,9 @@ namespace K2D2.Controller
             }
         }
 
-        public void Run()
+        public void Start()
         {
+            K2D2_Plugin.ResetControllers();
             setMode(Mode.Turn);
         }
 

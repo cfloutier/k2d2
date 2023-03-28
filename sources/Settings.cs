@@ -73,45 +73,20 @@ namespace K2D2
 
     public class SettingsUI
     {
-        public static void onGui()
-        {
-            GUILayout.Label("Settings", Styles.title);
+        public static void onGUI()
+        { 
+            GUILayout.BeginHorizontal();
+            UI_Tools.Title("Settings");
 
-            GUILayout.Label("Debug mode open work in progress features and verbose information.", Styles.small_dark_text);
-            Settings.debug_mode = GUILayout.Toggle(Settings.debug_mode, "debug mode");
-
-            if (Settings.debug_mode)
-            {
-                GUILayout.Label("Auto_Execute Next phase.", Styles.small_dark_text);
-                Settings.auto_next = GUILayout.Toggle(Settings.auto_next, "Auto Next Phase");
-            }
-            else
-                Settings.auto_next = true;
-
-            GUILayout.Label("Warp", Styles.title);
-
-            Settings.warp_speed = UI_Tools.IntSlider("Warp Speed" , Settings.warp_speed, 1, 10);
-            GUILayout.Label("(1 : quick, 10 slow) ", Styles.small_dark_text);
-
-            GUILayout.Label("Safe time", Styles.small_dark_text);
-
-            Settings.warp_safe_duration = UI_Tools.IntField("warp_safe_duration", Settings.warp_safe_duration, 5, int.MaxValue);
-            GUILayout.Label("nb seconds in x1 before launch (min:5)", Styles.small_dark_text);
-
-            GUILayout.Label("Burn", Styles.title);
-
-            Settings.burn_adjust = UI_Tools.FloatSlider("burn_adjust", Settings.burn_adjust, 0, 2);
-            GUILayout.Label("adjusting rate", Styles.small_dark_text);
-
-            Settings.max_dv_error = UI_Tools.FloatSlider("max_dv_error", Settings.max_dv_error, 0.001f, 2, " m/s");
-            GUILayout.Label("accepted dV difference (m/s)", Styles.small_dark_text);
+            GUILayout.FlexibleSpace();
 
             // VERSION
-            GUILayout.BeginHorizontal();
-            GUILayout.FlexibleSpace();
             GUILayout.Label($"v{K2D2_Plugin.ModVer}", Styles.small_dark_text);
 
             GUILayout.EndHorizontal();
+
+            GUILayout.Label("Debug mode open work in progress features and verbose information.", Styles.small_dark_text);
+            Settings.debug_mode = GUILayout.Toggle(Settings.debug_mode, "debug mode");
         }
     }
 

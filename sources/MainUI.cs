@@ -16,15 +16,11 @@ namespace K2D2
     {
         public ManualLogSource logger;
 
-        #region interfaces modes
-
-
         public enum InterfaceMode { ExeNode, Circularize, Landing, Orbit, SAS, Vessel  }
-
-        private static string[] interfaceModes = { "Execute Node", "Circularization" };
+        
+        private static string[] interfaceModes = { "Execute", "Circle", "landing" };
         private static string[] interfaceModes_debug = { "Execute", "Circle", "Landing", "Orbit", "SAS", "Vessel" };
 
-        #endregion
 
         public MainUI(ManualLogSource src_logger)
         {
@@ -32,7 +28,7 @@ namespace K2D2
             logger.LogMessage("MainGUI");
         }
 
-        public void onGui()
+        public void onGUI()
         {
             if (Settings.debug_mode)
                 // Mode selection debug

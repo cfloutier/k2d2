@@ -13,6 +13,14 @@ namespace K2D2.Models
             controllers.Add(controller);
         }
 
+        public void onReset()
+        {
+            foreach (var controller in controllers)
+            {
+                controller.onReset();
+            }
+        }
+
 
         /// <summary>
         /// Calls the Update() method of all controllers

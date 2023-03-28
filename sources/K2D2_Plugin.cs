@@ -48,7 +48,7 @@ namespace K2D2
         private static string SettingsPath =>
             _settingsPath ?? (_settingsPath = Path.Combine(AssemblyFolder, "settings.json"));
 
-        public ManualLogSource logger;
+        public static ManualLogSource logger = BepInEx.Logging.Logger.CreateLogSource("K2D2");
         // GUI.
 
         private bool drawUI = false;
@@ -58,11 +58,27 @@ namespace K2D2
 
         private static GameState[] validScenes = new[] { GameState.FlightView, GameState.Map3DView };
 
+        private static GameState last_game_state ;
+
         private static bool ValidScene()
         {
             if (GeneralTools.Game == null) return false;
+
+
             var state = GeneralTools.Game.GlobalGameState.GetState();
-            return validScenes.Contains(state);
+            bool is_valid = validScenes.Contains(state);
+            if (!is_valid)
+            {
+                ResetControllers();
+            }
+            return is_valid;
+        }
+
+        // call on reset on controller, each on can reset it's status
+        public static void ResetControllers()
+        {
+            if (!loaded) return;
+            Instance.controllerManager.onReset();
         }
 
         // Controllers
@@ -87,9 +103,6 @@ namespace K2D2
             Instance = this;
 
             Settings.Init(SettingsPath);
-
-            logger = BepInEx.Logging.Logger.CreateLogSource("K2D2");
-
             mod_id = SpaceWarpMetadata.ModID;
 
             loaded = true;
@@ -152,7 +165,6 @@ namespace K2D2
         {
             if (drawUI && ValidScene())
             {
-
                 GUI.skin = Skins.ConsoleSkin;
                 Styles.Init();
 
@@ -178,21 +190,12 @@ namespace K2D2
                 ToggleButton(false);
 
             // settings button
-            if (GUI.Button(new Rect(windowRect.width - 56, 4, 25, 25), Styles.gear, Styles.small_button))
-                settings_visible = !settings_visible;
-
+            settings_visible = GUI.Toggle(new Rect(windowRect.width - 56, 4, 25, 25), settings_visible, Styles.gear, Styles.small_button);
             GUI.Label(new Rect(15, 2, 29, 29), Styles.big_icon, Styles.icons_label);
 
             GUILayout.BeginVertical();
 
-            if (settings_visible)
-            {
-                SettingsUI.onGui();
-            }
-            else
-            {
-                main_ui.onGui();
-            }
+            main_ui.onGUI();
 
             GUILayout.EndVertical();
             GUI.DragWindow(new Rect(0, 0, 10000, 500));

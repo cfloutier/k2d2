@@ -14,6 +14,11 @@ namespace K2D2.Controller
 
         public GameInstance Game => GameManager.Instance == null ? null : GameManager.Instance.Game;
 
+        public virtual void onReset()
+        {
+            // onReset is called each time scene become Invalid, or when a controller need exclusivity
+        }
+
         public virtual void onGUI()
         {
             // On GUI is used to draw UI in needed, using GUILayout

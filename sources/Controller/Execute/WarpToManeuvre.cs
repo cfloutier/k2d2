@@ -48,13 +48,11 @@ namespace K2D2.Controller
             GUILayout.Label("Time Warp", Styles.phase_ok);
             GUILayout.Label(status_line, Styles.small_dark_text);
 
-            if (time_warp == null) return;
-
             if (Settings.debug_mode)
             {
-                GUILayout.Label($"CurrentRateIndex {time_warp.CurrentRateIndex}");
-                GUILayout.Label($"CurrentRate x{time_warp.CurrentRate}");
-                GUILayout.Label($"index_rate x{TimeWarpTools.indexToRatio(time_warp.CurrentRateIndex)}");
+                GUILayout.Label($"CurrentRateIndex {TimeWarpTools.CurrentRateIndex}");
+                GUILayout.Label($"CurrentRate x{TimeWarpTools.CurrentRate}");
+                GUILayout.Label($"index_rate x{TimeWarpTools.indexToRatio(TimeWarpTools.CurrentRateIndex)}");
             }
         }
     }

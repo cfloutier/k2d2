@@ -13,8 +13,6 @@ namespace K2D2
     {
         static TimeWarp time_warp =>  GameManager.Instance?.Game?.ViewController?.TimeWarp;
 
-
-
         static public int CurrentRateIndex
         {
             get
@@ -53,9 +51,6 @@ namespace K2D2
 
             return levels.Length -1;
         }
-
-
-
 
         public static void SetRateIndex(int rate_index, bool instant)
         {
