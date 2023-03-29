@@ -272,7 +272,7 @@ namespace K2D2.KSPService
             IPatchedOrbit orbit = referencedOrbit;
 
             orbit.PatchStartTransition = PatchTransitionType.Maneuver;
-            orbit.PatchEndTransition = PatchTransitionType.Final;
+            //orbit.PatchEndTransition = PatchTransitionType.Final;
 
             maneuverNodeData.SetManeuverState((PatchedConicsOrbit)orbit);
 
@@ -287,7 +287,6 @@ namespace K2D2.KSPService
 
             MapCore mapCore = null;
             Game.Map.TryGetMapCore(out mapCore);
-
             mapCore.map3D.ManeuverManager.GetNodeDataForVessels();
             mapCore.map3D.ManeuverManager.UpdatePositionForGizmo(maneuverNodeData.NodeID);
             mapCore.map3D.ManeuverManager.UpdateAll();
@@ -385,7 +384,6 @@ namespace K2D2.KSPService
         public Vector3d RadialInBurnVector(double magnitude)
         {
             return new Vector3d(-magnitude, 0, 0);
-            ;
         }
 
         #endregion

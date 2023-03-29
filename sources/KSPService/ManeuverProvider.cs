@@ -99,10 +99,6 @@ namespace K2D2.sources.KSPService
                 ManeuverManager.AddManeuver("Change Periapsis",new Action(() => _maneuver.ChangeApoapsis(periapsis)));
             else
                 ManeuverManager.AddManeuver("Change Apoapsis",new Action(() => _maneuver.ChangePeriapsis(periapsis)));
-            
-            
-            
-
         }
         
         
