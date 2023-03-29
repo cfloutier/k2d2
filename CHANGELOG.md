@@ -1,3 +1,6 @@
+# v0.5.1
+* fix the version issue
+
 # v0.5.0
 * Added Circularize !!! thanks to Mole
 

@@ -37,7 +37,6 @@
   
   <PropertyGroup>
     <KSP2Path>G:\SteamLibrary\steamapps\common\Kerbal Space Program 2\</KSP2Path>
-
     <ModName>KSP2FlightAssistant</ModName>
     <ModPath>$(KSP2Path)BepInEx\plugins\$(ModName)</ModPath>
     <FinalModFolder>$(ProjectDir)$(ModName)</FinalModFolder>
@@ -129,6 +128,10 @@
 
 
   </ItemGroup>
+  <ItemGroup>
+        <!-- <PackageReference Include="UnityEngine.Modules" Version="2020.3.33" /> -->
+        <PackageReference Include="BepInEx.AssemblyPublicizer.MSBuild" Version="0.4.0" PrivateAssets="all" />
+    </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>
