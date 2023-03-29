@@ -58,7 +58,7 @@ namespace K2D2
 
         private static GameState[] validScenes = new[] { GameState.FlightView, GameState.Map3DView };
 
-        private static GameState last_game_state ;
+        //private static GameState last_game_state ;
 
         private static bool ValidScene()
         {

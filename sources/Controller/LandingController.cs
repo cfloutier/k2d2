@@ -15,12 +15,12 @@ namespace K2D2.Controller
     /// Detect landing
     /// Crash Time out
     /// print distance and speed
-    /// print time dependign on level
+    /// print time depending on level
+    /// Stop when speed is up !!
     /// </summary>
     public class LandingSettings
     {
 
-          //////////// Settings ////////////////
         public int multiplier_index
         {
             get => Settings.s_settings_file.GetInt("land.multiplier_index", 0);
@@ -75,10 +75,9 @@ namespace K2D2.Controller
             auto_speed = GUILayout.Toggle(auto_speed, "Auto Speed");
             if (auto_speed)
             {
-                UI_Tools.Console("speed is based on altitude");
-                auto_speed_ratio = UI_Tools.FloatSlider("Altitude/speed ratio", auto_speed_ratio, 0.5f, 2);
+                // UI_Tools.Console("speed is based on altitude");
+                auto_speed_ratio = UI_Tools.FloatSlider("Altitude/speed ratio", auto_speed_ratio, 0.5f, 3);
                 UI_Tools.RightLeftText("Safe", "Danger");
-
                 safe_speed = UI_Tools.FloatSlider("Landing speed", safe_speed, 0.1f, 10);
             }
             else
@@ -97,12 +96,9 @@ namespace K2D2.Controller
         }
     }
 
-
-
     public class LandingController : ComplexControler
     {
         public ManualLogSource logger = BepInEx.Logging.Logger.CreateLogSource("K2D2.LandingController");
-
 
         LandingSettings settings = new LandingSettings(); 
 
@@ -121,7 +117,7 @@ namespace K2D2.Controller
         }
 
         bool _land_controler_active = false;
-        bool controler_active
+        bool ControlerActive
         {
             get { return _land_controler_active; }
             set {
@@ -149,7 +145,7 @@ namespace K2D2.Controller
 
         public override void onReset()
         {
-            controler_active = false;
+            ControlerActive = false;
         }
 
         string status_line = "";
@@ -158,6 +154,12 @@ namespace K2D2.Controller
         {
             if (current_vessel == null || current_vessel.VesselVehicle == null)
                 return;
+
+            if (current_vessel.VesselVehicle.LandedOrSplashed)
+            {
+                status_line = "Landed";
+                ControlerActive = false;
+            }
 
             if (settings.auto_speed)
             {
@@ -179,7 +181,7 @@ namespace K2D2.Controller
             if (settings.gravity_compensation)
                 computeInclination();
 
-            if (!controler_active)
+            if (!ControlerActive)
                 return;
 
             current_vessel.SetSpeedMode(KSP.Sim.SpeedDisplayMode.Surface);
@@ -213,12 +215,12 @@ namespace K2D2.Controller
             else
             {
                 // stop
-                controler_active =  false;
+                status_line = "Landed";
+                //current_vessel.SetThrottle(0);
+                ControlerActive = false;
             }
 
-            // status_line = "ok";
-            // current_vessel.SetThrottle(0);
-            // land_controler_active = false;
+           
         }
 
         public float limit_speed;
@@ -299,14 +301,15 @@ namespace K2D2.Controller
             if (K2D2_Plugin.Instance.settings_visible)
             {
                 SettingsUI.onGUI();
-                settings.onGUI();
-                return;
+                //return;
             }
+
+            settings.onGUI();
 
             // GUILayout.Label("// Landing ", Styles.title);
             if (settings.auto_speed)
             {
-                GUILayout.Label($"Altitude : {altitude:n2} m");
+                GUILayout.Label($"Altitude : {GeneralTools.DistanceToString(altitude)}");
             }
 
             UI_Tools.Console($"current speed : {current_speed:n2} m/s");
@@ -321,10 +324,10 @@ namespace K2D2.Controller
             }
             else
             {
-                GUILayout.Label($"Max speed : {limit_speed:n2}");
+                GUILayout.Label($"Max speed : {limit_speed:n2}  m/s");
             }
 
-            UI_Tools.Console($"current speed : {current_speed:n2} m/s");
+            UI_Tools.Console($"Current Speed : {current_speed:n2} m/s");
 
             if (Settings.debug_mode)
             {
@@ -336,17 +339,14 @@ namespace K2D2.Controller
                 }
 
                 GUILayout.Label($"wanted_throttle : {wanted_throttle:n2}");
-               
-
-
             }
 
-            if (!controler_active && delta_speed > 0)
+            if (!ControlerActive && delta_speed > 0)
             {
                 GUI.color = Color.red;
             }
 
-            controler_active = UI_Tools.ToggleButton(controler_active, "Start", "Stop");
+            ControlerActive = UI_Tools.ToggleButton(ControlerActive, "Start", "Stop");
             GUI.color = Color.white;
             GUILayout.Label(status_line, Styles.small_dark_text);
         }

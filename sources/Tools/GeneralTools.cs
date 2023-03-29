@@ -27,30 +27,70 @@ namespace K2D2
             return $"{vec.x:n2} {vec.y:n2} {vec.z:n2}";
         }
 
+        static public string DistanceToString(double distance_m)
+        {
+            if (distance_m < 1000)
+            {
+                return string.Format("{0:n2 }m", distance_m);
+            }
+            else
+            {
+                return string.Format("{0:n2} km", distance_m/1000);
+            }
+
+        }
+
         static public string DurationToString(double secs)
         {
+            string result = "";
+
             if (secs < 0)
             {
                 secs = -secs;
+                result = "- ";
+            }
+            if (secs < 60) //secs
+            {
+                
                 TimeSpan t = TimeSpan.FromSeconds(secs);
-
-                return string.Format("- {0:D2}h:{1:D2}m:{2:D2}s:{3:D3}ms",
-                    t.Hours,
+                result += string.Format("{0:D2}.{1:D3}",
+                    t.Seconds,
+                    t.Milliseconds);
+            }
+            else if (secs < 3600) // Hours:secs.ms
+            {
+                TimeSpan t = TimeSpan.FromSeconds(secs);
+                result += string.Format("{0:D2}:{1:D2}.{2:D3}",
                     t.Minutes,
                     t.Seconds,
                     t.Milliseconds);
-                }
+            }
+            else if (secs < 21600 ) // = 3600*6 Kerbal days = 6 hours
+            {
+
+                TimeSpan t = TimeSpan.FromSeconds(secs);
+                result += string.Format("{0:D2}:{1:D2}:{2:D2}.{3:D3}",
+                    t.Minutes,
+                    t.Seconds,
+                    t.Milliseconds);
+            }
             else
             {
+                int days = (int)secs / 21600;
+                secs -= days * 21600;
                 TimeSpan t = TimeSpan.FromSeconds(secs);
-
-                return string.Format("{0:D2}h:{1:D2}m:{2:D2}s:{3:D3}ms",
+                result += string.Format("{0}d {1:D2}:{2:D2}:{3:D2}.{4:D3}",
+                    days,
                     t.Hours,
                     t.Minutes,
                     t.Seconds,
                     t.Milliseconds);
             }
+
+            return result;
         }
+
+        
 
         public static Vector3d correctEuler(Vector3d euler)
         {
