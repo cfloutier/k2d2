@@ -87,6 +87,10 @@
   <ItemGroup>
     <Compile Include="sources\**\*.cs" />
   </ItemGroup>
+  <ItemGroup>
+        <!-- <PackageReference Include="UnityEngine.Modules" Version="2020.3.33" /> -->
+        <PackageReference Include="BepInEx.AssemblyPublicizer.MSBuild" Version="0.4.0" PrivateAssets="all" />
+    </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>

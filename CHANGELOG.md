@@ -1,3 +1,6 @@
+# v0.5.1
+* Rebuild with SpaceWarp 1.0.1 + fix the version number and KSP2 version check
+
 # v0.5.0
 * Added Circularize !!! thanks to Mole
 
