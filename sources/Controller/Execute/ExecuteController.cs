@@ -23,7 +23,7 @@ namespace K2D2.Controller
     /// * Start is called to init the pilot
     /// * Must implement some of the Update,LateUpdate...
     /// must set the finished when task is accomplished
-    public class ExecuteController : BaseController
+    public class ExecuteController : ComplexControler
     {
         public bool finished = false;
         public string status_line = "";

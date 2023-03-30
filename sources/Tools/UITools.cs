@@ -1,5 +1,5 @@
 using UnityEngine;
-using System.Text.RegularExpressions; 
+using System.Text.RegularExpressions;
 using System.Collections.Generic;
 
 namespace K2D2
@@ -64,7 +64,7 @@ namespace K2D2
 
         public static void RightLeftText(string right_txt, string left_txt)
         {
-            // text aligned to right and left with a space in between 
+            // text aligned to right and left with a space in between
             GUILayout.BeginHorizontal();
             UI_Tools.Console(right_txt);
             GUILayout.FlexibleSpace();
@@ -131,6 +131,6 @@ namespace K2D2
 
     }
 
-   
+
 
 }

@@ -27,70 +27,30 @@ namespace K2D2
             return $"{vec.x:n2} {vec.y:n2} {vec.z:n2}";
         }
 
-        static public string DistanceToString(double distance_m)
-        {
-            if (distance_m < 1000)
-            {
-                return string.Format("{0:n2 }m", distance_m);
-            }
-            else
-            {
-                return string.Format("{0:n2} km", distance_m/1000);
-            }
-
-        }
-
         static public string DurationToString(double secs)
         {
-            string result = "";
-
             if (secs < 0)
             {
                 secs = -secs;
-                result = "- ";
-            }
-            if (secs < 60) //secs
-            {
-                
                 TimeSpan t = TimeSpan.FromSeconds(secs);
-                result += string.Format("{0:D2}.{1:D3}",
-                    t.Seconds,
-                    t.Milliseconds);
-            }
-            else if (secs < 3600) // Hours:secs.ms
-            {
-                TimeSpan t = TimeSpan.FromSeconds(secs);
-                result += string.Format("{0:D2}:{1:D2}.{2:D3}",
-                    t.Minutes,
-                    t.Seconds,
-                    t.Milliseconds);
-            }
-            else if (secs < 21600 ) // = 3600*6 Kerbal days = 6 hours
-            {
 
-                TimeSpan t = TimeSpan.FromSeconds(secs);
-                result += string.Format("{0:D2}:{1:D2}:{2:D2}.{3:D3}",
+                return string.Format("- {0:D2}h:{1:D2}m:{2:D2}s:{3:D3}ms",
+                    t.Hours,
                     t.Minutes,
                     t.Seconds,
                     t.Milliseconds);
-            }
+                }
             else
             {
-                int days = (int)secs / 21600;
-                secs -= days * 21600;
                 TimeSpan t = TimeSpan.FromSeconds(secs);
-                result += string.Format("{0}d {1:D2}:{2:D2}:{3:D2}.{4:D3}",
-                    days,
+
+                return string.Format("{0:D2}h:{1:D2}m:{2:D2}s:{3:D3}ms",
                     t.Hours,
                     t.Minutes,
                     t.Seconds,
                     t.Milliseconds);
             }
-
-            return result;
         }
-
-        
 
         public static Vector3d correctEuler(Vector3d euler)
         {
@@ -111,6 +71,37 @@ namespace K2D2
             return result;
         }
 
+        public const double AstronomicalUnit = 149597870700;
+        // https://en.wikipedia.org/wiki/Parsec
+        public static double Parsec { get; } = (648000 / Math.PI) * AstronomicalUnit;
+        public static string ToReadableDistanceFavorParsec(double meters)
+        {
+            var sign = "";
+            if (meters < 0)
+            {
+                sign = "-";
+                meters = - meters;
+            }
+            if (meters > (Parsec / 10))
+            {
+                return $"{sign}{(meters / Parsec):n2} pc";
+            }
+            if (meters > (AstronomicalUnit / 10))
+            {
+                return $"{sign}{(meters / AstronomicalUnit):n2} AU";
+            }
+            if (meters > (997))
+            {
+                return $"{sign}{(meters / 1000):n2} km";
+            }
+            if (meters < 1)
+            {
+                return $"{sign}{meters * 100:0} cm";
+            }
+
+            return sign + meters.ToString("0") + " m";
+        }
+
         public static double remainingStartTime(ManeuverNodeData node)
         {
             var dt = node.Time - Game.UniverseModel.UniversalTime;
@@ -121,6 +112,11 @@ namespace K2D2
         {
             var dt = node.Time + node.BurnDuration - Game.UniverseModel.UniversalTime;
             return dt;
+        }
+
+        public static Guid createGuid()
+        {
+            return Guid.NewGuid();
         }
 
     }

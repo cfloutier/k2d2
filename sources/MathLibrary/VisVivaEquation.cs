@@ -1,4 +1,5 @@
 ﻿using System;
+using KSP.Sim.impl;
 
 namespace KSP2FlightAssistant.MathLibrary
 {
@@ -18,21 +19,23 @@ namespace KSP2FlightAssistant.MathLibrary
         public static double CalculateVelocity(double CurrentDistance, double Apoapsis, double Periapsis,
             double gravitation)
         {
-
-            
             if (Double.IsInfinity(Apoapsis))
-            {
-                // Parabolic orbit (apoapsis is infinity)
-                return Math.Sqrt(gravitation * (2 / CurrentDistance));
-            }
-            
-            if(Apoapsis-Periapsis<100)
+                throw new ArgumentException("Eccentricity must be less than 1 and Apoapsis must be finite");
+
+            if(Math.Abs(Apoapsis-Periapsis)<100)
                 return Math.Sqrt(gravitation / CurrentDistance);
 
             double semiMajorAxis = (Apoapsis + Periapsis) / 2;
             return Math.Sqrt(gravitation * ((2 / CurrentDistance) - (1 / semiMajorAxis)));
         }
-        
+
+        public static double CalculateHyperbolicVelocity(double distance, double gravitation, double orbitalEnergy)
+        {
+
+            double a = -gravitation / (2 * orbitalEnergy);
+            return Math.Sqrt(gravitation * (2 / distance - 1 / a));
+
+        }
         
 
         public static double CalculateGravitation(double CurrentDistance, double Apoapsis, double Periapsis,
@@ -43,7 +46,7 @@ namespace KSP2FlightAssistant.MathLibrary
         }
         
 
-
-
+        
+        
     }
 }

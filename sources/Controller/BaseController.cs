@@ -8,9 +8,9 @@ namespace K2D2.Controller
 {
     public class BaseController
     {
-        public List<KSP.Game.GameState> applicableStates = new List<KSP.Game.GameState>();
+        //public List<KSP.Game.GameState> applicableStates = new List<KSP.Game.GameState>();
 
-        private bool _controllerCurrentlyActive = false;
+        //private bool _controllerCurrentlyActive = false;
 
         public GameInstance Game => GameManager.Instance == null ? null : GameManager.Instance.Game;
 
@@ -38,7 +38,8 @@ namespace K2D2.Controller
         {
             // Fixed Update is called on physic update
         }
-
+        
+        /*
         /// <summary>
         /// Implement this method to add custom reinitialization code e.g. to reinitialize the vessel after a scene change
         /// </summary>
@@ -71,7 +72,7 @@ namespace K2D2.Controller
 
             _controllerCurrentlyActive = false;
             return false;
-        }
+        }*/
 
     }
 

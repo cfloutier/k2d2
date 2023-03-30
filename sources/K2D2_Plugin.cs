@@ -18,9 +18,13 @@ using SpaceWarp.API.Assets;
 using SpaceWarp.API.UI;
 using SpaceWarp.API.UI.Appbar;
 using BepInEx.Logging;
+using JetBrains.Annotations;
 using K2D2.Controller;
 using K2D2.Models;
+using K2D2.sources.Models;
 using K2D2.KSPService;
+using K2D2.sources.KSPService;
+using Action = System.Action;
 
 namespace K2D2
 {
@@ -55,6 +59,10 @@ namespace K2D2
         private Rect windowRect;
         private int windowWidth = 500;
         private int windowHeight = 700;
+
+        private PopUp _popUp = new PopUp();
+        private PopUpContent _popUpContent;
+
 
         private static GameState[] validScenes = new[] { GameState.FlightView, GameState.Map3DView };
 
@@ -92,6 +100,10 @@ namespace K2D2
 
         public static string mod_id;
 
+        public ManeuverManager maneuverManager = new ManeuverManager();
+
+        private ManeuverProvider _maneuverProvider;
+
         #endregion
 
         public override void OnInitialized()
@@ -113,10 +125,17 @@ namespace K2D2
 
             logger.LogMessage("building AutoExecuteManeuver");
 
+            // Setups
+            _maneuverProvider = new ManeuverProvider(ref maneuverManager,logger);
+
             // Add Controllers that inherit from BaseController here:
-            controllerManager.AddController(new SimpleManeuverController(logger));
+            controllerManager.AddController(new SimpleManeuverController(logger,ref _maneuverProvider));
             controllerManager.AddController(new AutoExecuteManeuver());
             controllerManager.AddController(new LandingController());
+
+            // Add PopUp Tabs here:
+            _popUpContent = new PopUpContent(ref _popUp);
+            _popUp.AddPopUpContents("Active Maneuvers",new Action (()=>_popUpContent.DisplayManeuverList(ref maneuverManager)));
 
             main_ui = new MainUI(logger);
 
@@ -140,8 +159,13 @@ namespace K2D2
                 if (Input.GetKey(KeyCode.LeftAlt) && Input.GetKeyDown(KeyCode.O) )
                     ToggleButton(!drawUI);
 
+                // Update Models
                 current_vessel.Update();
+                _maneuverProvider.Update();
+
+                // Update Controllers
                 controllerManager.UpdateControllers();
+
             }
         }
 
@@ -163,7 +187,10 @@ namespace K2D2
 
         void OnGUI()
         {
-            if (drawUI && ValidScene())
+            if(!ValidScene())
+                return;
+
+            if (drawUI)
             {
                 GUI.skin = Skins.ConsoleSkin;
                 Styles.Init();
@@ -177,6 +204,11 @@ namespace K2D2
                     GUILayout.Height(0),
                     GUILayout.Width(350));
             }
+            if (_popUp.isPopupVisible)
+            {
+                _popUp.OnGUI();
+            }
+
         }
 
         public void ToggleButton(bool toggle)
@@ -191,6 +223,9 @@ namespace K2D2
 
             // settings button
             settings_visible = GUI.Toggle(new Rect(windowRect.width - 56, 4, 25, 25), settings_visible, Styles.gear, Styles.small_button);
+            if(GUI.Button(new Rect(windowRect.width - 81, 4, 25, 25), "P", Styles.small_button))
+                _popUp.isPopupVisible = !_popUp.isPopupVisible;
+
             GUI.Label(new Rect(15, 2, 29, 29), Styles.big_icon, Styles.icons_label);
 
             GUILayout.BeginVertical();

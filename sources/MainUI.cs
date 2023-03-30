@@ -17,10 +17,9 @@ namespace K2D2
         public ManualLogSource logger;
 
         public enum InterfaceMode { ExeNode, Circularize, Landing, Orbit, SAS, Vessel  }
-        
+
         private static string[] interfaceModes = { "Execute", "Circle", "landing" };
         private static string[] interfaceModes_debug = { "Execute", "Circle", "Landing", "Orbit", "SAS", "Vessel" };
-
 
         public MainUI(ManualLogSource src_logger)
         {
@@ -43,10 +42,7 @@ namespace K2D2
             switch (Settings.current_interface_mode)
             {
                 case InterfaceMode.ExeNode:
-                    if (AutoExecuteManeuver.Instance != null)
-                        AutoExecuteManeuver.Instance.onGUI();
-                    else
-                        logger.LogError("Missing AutoExecuteManeuver");
+                    AutoExecuteManeuver.Instance.onGUI();
                     break;
                 case InterfaceMode.Circularize:
                     SimpleManeuverController.Instance.onGUI();
@@ -59,11 +55,11 @@ namespace K2D2
                     K2D2.InfosPages.OrbitInfos.onGUI();
                     break;
                 case InterfaceMode.SAS: K2D2.InfosPages.SASInfos.onGUI(); break;
-                case InterfaceMode.Vessel: K2D2.InfosPages.VesselInfos.onGUI(); break;
-
+                case InterfaceMode.Vessel: VesselInfos.onGUI(); break;
                 default:
                     break;
             }
         }
+
     }
 }
