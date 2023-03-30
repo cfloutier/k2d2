@@ -155,12 +155,6 @@ namespace K2D2.Controller
             if (current_vessel == null || current_vessel.VesselVehicle == null)
                 return;
 
-            if (current_vessel.VesselVehicle.LandedOrSplashed)
-            {
-                status_line = "Landed";
-                ControlerActive = false;
-            }
-
             if (settings.auto_speed)
             {
                 float div = 10;
