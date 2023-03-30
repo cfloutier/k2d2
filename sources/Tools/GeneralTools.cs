@@ -74,7 +74,7 @@ namespace K2D2
         public const double AstronomicalUnit = 149597870700;
         // https://en.wikipedia.org/wiki/Parsec
         public static double Parsec { get; } = (648000 / Math.PI) * AstronomicalUnit;
-        public static string ToReadableDistanceFavorParsec(double meters)
+        public static string DistanceToString(double meters)
         {
             var sign = "";
             if (meters < 0)
