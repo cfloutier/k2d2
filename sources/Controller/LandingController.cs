@@ -6,6 +6,7 @@ using UnityEngine;
 using BepInEx.Logging;
 using K2D2.KSPService;
 using KSP.Sim;
+using SpaceGraphicsToolkit;
 
 namespace K2D2.Controller
 {
@@ -70,8 +71,18 @@ namespace K2D2.Controller
                 }
         }
 
-        public void onGUI()
+        // 
+        public void settings_UI()
         {
+           UI_Tools.Console("Try to compensate gravity by adding dv to needed burn");
+           gravity_compensation = GUILayout.Toggle(gravity_compensation, "Gravity Compensation");
+        }
+
+
+        // always visible
+        public void control_UI()
+        {
+            UI_Tools.Title("// Controls");
             auto_speed = GUILayout.Toggle(auto_speed, "Auto Speed");
             if (auto_speed)
             {
@@ -92,7 +103,7 @@ namespace K2D2.Controller
                 speed_ratio = GUILayout.HorizontalSlider(speed_ratio, 0, 1);
             }
 
-            gravity_compensation = GUILayout.Toggle(gravity_compensation, "Gravity Compensation");
+            
         }
     }
 
@@ -100,7 +111,7 @@ namespace K2D2.Controller
     {
         public ManualLogSource logger = BepInEx.Logging.Logger.CreateLogSource("K2D2.LandingController");
 
-        LandingSettings settings = new LandingSettings(); 
+        LandingSettings land_settings = new LandingSettings(); 
 
         public static LandingController Instance { get; set; }
 
@@ -155,14 +166,14 @@ namespace K2D2.Controller
             if (current_vessel == null || current_vessel.VesselVehicle == null)
                 return;
 
-            if (settings.auto_speed)
+            if (land_settings.auto_speed)
             {
                 float div = 10;
-                limit_speed = altitude * settings.auto_speed_ratio / div + settings.safe_speed;
+                limit_speed = altitude * land_settings.auto_speed_ratio / div + land_settings.safe_speed;
             }
             else
             {
-                limit_speed = Mathf.Pow(10, settings.multiplier_index+1) * settings.speed_ratio;
+                limit_speed = Mathf.Pow(10, land_settings.multiplier_index+1) * land_settings.speed_ratio;
             }
 
             altitude = (float)current_vessel.GetDisplayAltitude();
@@ -176,13 +187,12 @@ namespace K2D2.Controller
                 ControlerActive = false;
             }
 
-
             delta_speed = current_speed - limit_speed;
 
             if (delta_speed > 0) // reset timewarp if it is time to burn
                 TimeWarpTools.SetRateIndex(0, false);
 
-            if (settings.gravity_compensation)
+            if (land_settings.gravity_compensation)
                 computeInclination();
 
             if (!ControlerActive)
@@ -205,9 +215,9 @@ namespace K2D2.Controller
 
             compute_Throttle();
             status_line = "Burning";
-            status_line = $"current speed : {current_speed} m/s\ndelta speed : {delta_speed} m/s";
+            //status_line = $"current speed : {current_speed} m/s\ndelta speed : {delta_speed} m/s";
 
-            if (settings.gravity_compensation)
+            if (land_settings.gravity_compensation)
             {
                 // no stop for gravity compensation
                 current_vessel.SetThrottle(wanted_throttle);
@@ -277,7 +287,7 @@ namespace K2D2.Controller
         {
             float min_throttle = 0;
 
-            if (settings.gravity_compensation)
+            if (land_settings.gravity_compensation)
             {
                 float minimum_dv = gravity_direction_factor * gravity;
                 min_throttle = minimum_dv / burn_dV.full_dv;
@@ -300,42 +310,46 @@ namespace K2D2.Controller
             return false;
         }
 
+
+        public void context_infos()
+        {
+            UI_Tools.Console($"Altitude : {GeneralTools.DistanceToString(altitude)}");
+            UI_Tools.Console($"Current Speed : {current_speed:n2} m/s");
+        }
+
         public override void onGUI()
         {
             if (K2D2_Plugin.Instance.settings_visible)
             {
                 SettingsUI.onGUI();
-                //return;
+                land_settings.settings_UI();
+                return;
             }
 
-            settings.onGUI();
+            land_settings.control_UI();
 
-            // GUILayout.Label("// Landing ", Styles.title);
-            if (settings.auto_speed)
-            {
-                GUILayout.Label($"Altitude : {GeneralTools.DistanceToString(altitude)}");
-            }
+            context_infos();
 
-            UI_Tools.Console($"current speed : {current_speed:n2} m/s");
-
+            // need to burn !
             if (delta_speed > 0)
             {
                 GUI.color = Color.red;
-                GUILayout.Label($"Max speed : {limit_speed:n2} !!");
+                UI_Tools.Console($"Max speed : {limit_speed:n2} !!");
+                UI_Tools.Console($"delta speed  : {delta_speed:n2}  m/s");
                 GUI.color = Color.white;
-                if (burn_dV.burned_dV > 0)
-                    GUILayout.Label($"dV consumed : {burn_dV.burned_dV:n2} m/s");
             }
             else
             {
-                GUILayout.Label($"Max speed : {limit_speed:n2}  m/s");
+                UI_Tools.Console($"Max speed : {limit_speed:n2}  m/s");
+                UI_Tools.Console($"delta speed  : {-delta_speed:n2}  m/s");
             }
 
-            UI_Tools.Console($"Current Speed : {current_speed:n2} m/s");
+            if (burn_dV.burned_dV > 0)
+                UI_Tools.Console($"dV consumed : {burn_dV.burned_dV:n2} m/s");
 
             if (Settings.debug_mode)
             {
-                if (settings.gravity_compensation)
+                if (land_settings.gravity_compensation)
                 {
                     GUILayout.Label($"inclination : {inclination:n2}°");
                     GUILayout.Label($"gravity : {gravity:n2}");
@@ -352,7 +366,9 @@ namespace K2D2.Controller
 
             ControlerActive = UI_Tools.ToggleButton(ControlerActive, "Start", "Stop");
             GUI.color = Color.white;
-            GUILayout.Label(status_line, Styles.small_dark_text);
+
+            if (!string.IsNullOrEmpty(status_line))
+                UI_Tools.Console(status_line);
         }
     }
 }

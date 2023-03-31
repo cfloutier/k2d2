@@ -228,7 +228,7 @@ namespace K2D2.Controller
         {
             if (Settings.debug_mode)
             {
-                GUILayout.Label("Auto_Execute Next phase.", Styles.small_dark_text);
+                GUILayout.Label("Auto_Execute Next phase.", Styles.console_text);
                 Settings.auto_next = GUILayout.Toggle(Settings.auto_next, "Auto Next Phase");
             }
             else
@@ -237,20 +237,20 @@ namespace K2D2.Controller
             GUILayout.Label("Warp", Styles.title);
 
             Settings.warp_speed = UI_Tools.IntSlider("Warp Speed", Settings.warp_speed, 1, 10);
-            GUILayout.Label("(1 : quick, 10 slow) ", Styles.small_dark_text);
+            GUILayout.Label("(1 : quick, 10 slow) ", Styles.console_text);
 
-            GUILayout.Label("Safe time", Styles.small_dark_text);
+            GUILayout.Label("Safe time", Styles.console_text);
 
             Settings.warp_safe_duration = UI_Tools.IntField("warp_safe_duration", Settings.warp_safe_duration, 5, int.MaxValue);
-            GUILayout.Label("nb seconds in x1 before launch (min:5)", Styles.small_dark_text);
+            GUILayout.Label("nb seconds in x1 before launch (min:5)", Styles.console_text);
 
             GUILayout.Label("Burn", Styles.title);
 
             Settings.burn_adjust = UI_Tools.FloatSlider("burn_adjust", Settings.burn_adjust, 0, 2);
-            GUILayout.Label("adjusting rate", Styles.small_dark_text);
+            GUILayout.Label("adjusting rate", Styles.console_text);
 
             Settings.max_dv_error = UI_Tools.FloatSlider("max_dv_error", Settings.max_dv_error, 0.001f, 2, " m/s");
-            GUILayout.Label("accepted dV difference (m/s)", Styles.small_dark_text);
+            GUILayout.Label("accepted dV difference (m/s)", Styles.console_text);
         }
 
         void node_infos()

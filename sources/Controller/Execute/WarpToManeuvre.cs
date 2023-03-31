@@ -46,7 +46,7 @@ namespace K2D2.Controller
         public override void onGUI()
         {
             GUILayout.Label("Time Warp", Styles.phase_ok);
-            GUILayout.Label(status_line, Styles.small_dark_text);
+            GUILayout.Label(status_line, Styles.console_text);
 
             if (Settings.debug_mode)
             {

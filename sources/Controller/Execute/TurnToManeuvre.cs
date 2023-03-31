@@ -91,7 +91,7 @@ namespace K2D2.Controller
         public override void onGUI()
         {
             GUILayout.Label("Check Attitude", Styles.phase_ok);
-            GUILayout.Label(status_line, Styles.small_dark_text);
+            GUILayout.Label(status_line, Styles.console_text);
 
             // GUILayout.Label($"sas.sas_response v {Tools.print_vector(sas_response)}");
 

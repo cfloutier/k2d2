@@ -56,7 +56,7 @@ namespace K2D2
         // GUI.
 
         private bool drawUI = false;
-        private Rect windowRect;
+        private Rect windowRect = Rect.zero;
         private int windowWidth = 500;
         private int windowHeight = 700;
 
@@ -148,7 +148,49 @@ namespace K2D2
 
         void Awake()
         {
-            windowRect = new Rect((Screen.width * 0.2f) - (windowWidth / 2), (Screen.height / 2) - (windowHeight / 2), 0, 0);
+         
+        }
+
+        void check_rect_pos()
+        {
+            if (windowRect == Rect.zero)
+            {
+                int x_pos = Settings.window_x_pos;
+                int y_pos = Settings.window_y_pos;
+
+                if (x_pos == -1)
+                {
+                    x_pos = 100;
+                    y_pos = 50;
+                }
+
+                windowRect = new Rect(x_pos, y_pos, 500, 100);
+            }
+
+            if (windowRect.xMax > Screen.width)
+            {
+                var dx = Screen.width - windowRect.xMax;
+                windowRect.x += dx;
+            }
+            if (windowRect.yMax > Screen.height)
+            {
+                var dy = Screen.height - windowRect.yMax;
+                windowRect.y += dy;
+            }
+            if (windowRect.xMin < 0)
+            {
+                windowRect.x = 0;
+            }
+            if (windowRect.yMin < 0)
+            {
+                windowRect.y = 0;
+            }
+        }
+
+        void save_rect_pos()
+        {
+            Settings.window_x_pos = (int)windowRect.xMin;
+            Settings.window_y_pos = (int)windowRect.yMin;
         }
 
         void Update()
@@ -191,32 +233,13 @@ namespace K2D2
                 return;
 
 
-
-
             if (drawUI)
             {
                 GUI.skin = Skins.ConsoleSkin;
+
+                check_rect_pos();
                 Styles.Init();
 
-
-                if (windowRect.xMax > Screen.width)
-                {
-                    var dx = Screen.width - windowRect.xMax;
-                    windowRect.x += dx;
-                }
-                if (windowRect.yMax > Screen.height)
-                {
-                    var dy = Screen.height - windowRect.yMax;
-                    windowRect.y += dy;
-                }
-                if (windowRect.xMin < 0 )
-                {
-                    windowRect.x = 0;
-                }
-                if (windowRect.yMin < 0)
-                {
-                    windowRect.y = 0;
-                }
 
                 windowRect = GUILayout.Window(
                     GUIUtility.GetControlID(FocusType.Passive),
@@ -226,6 +249,8 @@ namespace K2D2
                     Styles.window,
                     GUILayout.Height(0),
                     GUILayout.Width(350));
+
+                save_rect_pos();
             }
             if (_popUp.isPopupVisible)
             {

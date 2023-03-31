@@ -34,6 +34,18 @@ namespace K2D2
             set {  s_settings_file.SetBool("auto_next", value); }
         }
 
+        public static int window_x_pos
+        {
+            get => s_settings_file.GetInt("window_x_pos", 70);
+            set { s_settings_file.SetInt("window_x_pos", value); }
+        }
+
+        public static int window_y_pos
+        {
+            get => s_settings_file.GetInt("window_y_pos", 50);
+            set { s_settings_file.SetInt("window_y_pos", value); }
+        }
+
         public static MainUI.InterfaceMode current_interface_mode
         {
             get { return s_settings_file.GetEnum< MainUI.InterfaceMode> ("interface_setting", MainUI.InterfaceMode.ExeNode); }
@@ -81,11 +93,11 @@ namespace K2D2
             GUILayout.FlexibleSpace();
 
             // VERSION
-            GUILayout.Label($"v{K2D2_Plugin.ModVer}", Styles.small_dark_text);
+            GUILayout.Label($"v{K2D2_Plugin.ModVer}", Styles.console_text);
 
             GUILayout.EndHorizontal();
 
-            GUILayout.Label("Debug mode open work in progress features and verbose information.", Styles.small_dark_text);
+            GUILayout.Label("Debug mode open work in progress features and verbose information.", Styles.console_text);
             Settings.debug_mode = GUILayout.Toggle(Settings.debug_mode, "debug mode");
         }
     }

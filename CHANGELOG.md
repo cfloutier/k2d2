@@ -1,3 +1,8 @@
+# v0.6.0
+* position of window is saved
+
+
+
 # v0.5.1
 * Rebuild with SpaceWarp 1.0.1 + fix the version number and KSP2 version check
 

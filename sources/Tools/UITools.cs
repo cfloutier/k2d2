@@ -43,7 +43,7 @@ namespace K2D2
 
         public static void Console(string txt)
         {
-            GUILayout.Label(txt, Styles.small_dark_text);
+            GUILayout.Label(txt, Styles.console_text);
         }
 
         public static int IntSlider(string txt, int value, int min, int max )
