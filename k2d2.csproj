@@ -108,8 +108,6 @@ echo "ConfigurationName:" $(ConfigurationName)
 call make_zip.bat $(ConfigurationName)
 call copy_to_ksp.bat
 
-
-
 echo "ConfigurationName:" $(ConfigurationName)
 call make_zip.bat $(ConfigurationName)
 

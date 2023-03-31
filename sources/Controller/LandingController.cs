@@ -167,6 +167,16 @@ namespace K2D2.Controller
 
             altitude = (float)current_vessel.GetDisplayAltitude();
             current_speed = (float)current_vessel.VesselVehicle.SurfaceSpeed;
+
+            if (altitude < 5 && current_speed < 1)
+            {
+                // stop
+                status_line = "Landed";
+                //current_vessel.SetThrottle(0);
+                ControlerActive = false;
+            }
+
+
             delta_speed = current_speed - limit_speed;
 
             if (delta_speed > 0) // reset timewarp if it is time to burn

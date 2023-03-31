@@ -190,10 +190,33 @@ namespace K2D2
             if(!ValidScene())
                 return;
 
+
+
+
             if (drawUI)
             {
                 GUI.skin = Skins.ConsoleSkin;
                 Styles.Init();
+
+
+                if (windowRect.xMax > Screen.width)
+                {
+                    var dx = Screen.width - windowRect.xMax;
+                    windowRect.x += dx;
+                }
+                if (windowRect.yMax > Screen.height)
+                {
+                    var dy = Screen.height - windowRect.yMax;
+                    windowRect.y += dy;
+                }
+                if (windowRect.xMin < 0 )
+                {
+                    windowRect.x = 0;
+                }
+                if (windowRect.yMin < 0)
+                {
+                    windowRect.y = 0;
+                }
 
                 windowRect = GUILayout.Window(
                     GUIUtility.GetControlID(FocusType.Passive),
