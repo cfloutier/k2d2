@@ -245,7 +245,7 @@ namespace K2D2
                     GUIUtility.GetControlID(FocusType.Passive),
                     windowRect,
                     FillWindow,
-                    "<color=#00D346>K2-D2</color>",
+                    "<color=#71DBDB>K2-D2</color>",
                     Styles.window,
                     GUILayout.Height(0),
                     GUILayout.Width(350));
@@ -274,7 +274,7 @@ namespace K2D2
             if(GUI.Button(new Rect(windowRect.width - 81, 4, 25, 25), "P", Styles.small_button))
                 _popUp.isPopupVisible = !_popUp.isPopupVisible;
 
-            GUI.Label(new Rect(15, 2, 29, 29), Styles.big_icon, Styles.icons_label);
+            GUI.Label(new Rect(9, 2, 29, 29), Styles.big_icon, Styles.icons_label);
 
             GUILayout.BeginVertical();
 

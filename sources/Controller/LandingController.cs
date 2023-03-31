@@ -103,7 +103,6 @@ namespace K2D2.Controller
                 speed_ratio = GUILayout.HorizontalSlider(speed_ratio, 0, 1);
             }
 
-            
         }
     }
 

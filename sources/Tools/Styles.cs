@@ -159,13 +159,13 @@ namespace K2D2
             phase_error.fontSize = 20;
 
             console_text = new GUIStyle(GUI.skin.GetStyle("Label"));
-            console_text.normal.textColor = ColorTools.parseColor("#56D4D4");
+            console_text.normal.textColor = ColorTools.parseColor("#6ADFDF");
             console_text.fontSize = 15;
             console_text.padding = new RectOffset(0, 0, 0, 0);
             console_text.margin = new RectOffset(0, 0, 0, 0);
 
             title = new GUIStyle(GUI.skin.GetStyle("Label"));
-            title.normal.textColor = ColorTools.parseColor("#B7D8D8");
+            title.normal.textColor = ColorTools.parseColor("#8AECEC");
             title.fontSize = 19;
 
             guiLoaded = true;
