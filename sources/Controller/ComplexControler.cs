@@ -6,6 +6,17 @@ using KSP.Messages;
 
 namespace K2D2.Controller
 {
+    public class SingleSubControler : BaseController
+    {
+        public BaseController sub_controler;
+
+        public override void onGUI() { if (sub_controler != null) sub_controler.onGUI(); }
+        public override void Update() { if (sub_controler != null) sub_controler.Update(); }
+        public override void LateUpdate() { if (sub_controler != null) sub_controler.LateUpdate(); }
+        public override void FixedUpdate() { if (sub_controler != null) sub_controler.FixedUpdate(); }
+
+    }
+
     // a controller that have some sub controler
     // contains also an active flag,
     public class ComplexControler : BaseController

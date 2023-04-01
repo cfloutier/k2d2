@@ -7,10 +7,11 @@ using UnityEngine;
 using System;
 using KSP.Sim;
 using K2D2.KSPService;
+using KSP.Sim.Maneuver;
 
 namespace K2D2.Controller
 {
-    public class BurnManeuvre  : ManeuvreController
+    public class BurnManeuvre  : ExecuteController
     {
         public ManualLogSource logger = BepInEx.Logging.Logger.CreateLogSource("K2D2.BurnManeuvre");
 
@@ -36,6 +37,14 @@ namespace K2D2.Controller
         public float needed_throttle = 0;
         public float remaining_full_burn_time = 0;
 
+        ManeuverNodeData maneuver;
+
+        public void StartManeuver(ManeuverNodeData node)
+        {
+            maneuver = node;
+            Start();
+        }
+
         public override void Start()
         {
             finished = false;
@@ -50,6 +59,8 @@ namespace K2D2.Controller
             autopilot.Enabled = true;
             autopilot.SetMode(AutopilotMode.StabilityAssist);
         }
+
+        
 
         public override void Update()
         {

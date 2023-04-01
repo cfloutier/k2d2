@@ -49,7 +49,7 @@ namespace K2D2
         public static int IntSlider(string txt, int value, int min, int max )
         {
             GUILayout.Label(txt + $" : {value}");
-            value = (int) GUILayout.HorizontalSlider((int) value, min, max);
+            value = (int) GUILayout.HorizontalSlider((int) value, min, max, Styles.slider_line, Styles.slider_node);
             return value;
         }
 
@@ -58,11 +58,11 @@ namespace K2D2
             // simple float slider with a lavel value
 
             GUILayout.Label(txt + $" : {value:n2}"+unity_txt);
-            value = GUILayout.HorizontalSlider( value, min, max);
+            value = GUILayout.HorizontalSlider( value, min, max, Styles.slider_line, Styles.slider_node);
             return value;
         }
 
-        public static void RightLeftText(string right_txt, string left_txt)
+        public static void Right_Left_Text(string right_txt, string left_txt)
         {
             // text aligned to right and left with a space in between
             GUILayout.BeginHorizontal();

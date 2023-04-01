@@ -103,18 +103,12 @@ namespace K2D2
 
             return sign + meters.ToString("0") + " m";
         }
-
         public static double remainingStartTime(ManeuverNodeData node)
         {
-            var dt = node.Time - Game.UniverseModel.UniversalTime;
+            var dt = node.Time - GeneralTools.Game.UniverseModel.UniversalTime;
             return dt;
         }
 
-        public static double remainingEndTime(ManeuverNodeData node)
-        {
-            var dt = node.Time + node.BurnDuration - Game.UniverseModel.UniversalTime;
-            return dt;
-        }
 
         public static Guid createGuid()
         {

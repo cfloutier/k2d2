@@ -117,8 +117,6 @@ namespace K2D2.Controller
             if (gravity_compensation)
                 computeGravityRatio();
 
-            if (finished)
-                return;
 
             current_vessel.SetSpeedMode(KSP.Sim.SpeedDisplayMode.Surface);
             var autopilot = current_vessel.Autopilot;

@@ -14,6 +14,8 @@ namespace K2D2
 
         public static GUIStyle console_text, phase_ok, phase_warning, phase_error;
 
+        public static GUIStyle slider_line, slider_node;
+
         public static GUIStyle icons_label, title;
 
         public static Texture2D gear, icon, big_icon;
@@ -106,6 +108,23 @@ namespace K2D2
             window.fontSize = 20;
             window.contentOffset = new Vector2(31, -40);
 
+            slider_line = new GUIStyle(GUI.skin.horizontalSlider);
+            slider_line.normal.background = loadIcon("Slider");
+            resetToNormal(slider_line);
+            slider_line.border = new RectOffset(5, 5, 0, 0);
+
+            slider_line.border = new RectOffset(12, 12, 0, 0);
+            slider_line.fixedWidth = 0;
+            slider_line.fixedHeight = 21;
+            slider_line.margin = new RectOffset(0, 0, 10, 10);
+
+            slider_node = new GUIStyle(GUI.skin.horizontalSliderThumb);
+            slider_node.normal.background = loadIcon("SliderNode");
+            resetToNormal(slider_node);
+            slider_node.border = new RectOffset(0, 0, 0, 0);
+            slider_node.fixedWidth = 21;
+            slider_node.fixedHeight = 21;
+
             // Set the background color of the window
             window.normal.background = loadIcon("window");
             window.normal.textColor = Color.black;
@@ -115,7 +134,6 @@ namespace K2D2
 
 
             // Small Button
-
             small_button = new GUIStyle(GUI.skin.GetStyle("Button"));
             small_button.normal.background = loadIcon("Button-normal");
             resetToNormal(small_button);

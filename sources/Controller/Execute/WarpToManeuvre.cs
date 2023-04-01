@@ -10,17 +10,51 @@ using KSP.Sim.Maneuver;
 
 namespace K2D2.Controller
 {
-    public class WarpToManeuvre : ManeuvreController
+    public class WarpToManeuvre : ExecuteController
     {
         int wanted_warp_index = 0;
+        ManeuverNodeData maneuver = null;
+        double UT;
+
+        public void StartManeuver(ManeuverNodeData node)
+        {
+            maneuver = node;
+            Start();
+        }
+
+        public void Start_UT(double UT)
+        {
+            this.UT = UT;
+            Start();
+        }
+
+        /*public double remainingStartTime(ManeuverNodeData node)
+        {
+            var dt = node.Time - GeneralTools.Game.UniverseModel.UniversalTime;
+            return dt;
+        }
+
+        public double remainingEndTime(ManeuverNodeData node)
+        {
+            var dt = node.Time + node.BurnDuration - GeneralTools.Game.UniverseModel.UniversalTime;
+            return dt;
+        }*/
+
+
+        double dt;
+
 
         public override void Update()
         {
             finished = false;
-            if (maneuver == null) return;
+            if (maneuver != null)
+            {
+                UT = maneuver.Time;
+            }
+            
 
-            var dt = GeneralTools.remainingStartTime(maneuver);
-            dt = dt  - Settings.warp_safe_duration;
+            dt = UT - GeneralTools.Game.UniverseModel.UniversalTime;
+            dt = dt - Settings.warp_safe_duration;
 
             wanted_warp_index = compute_wanted_warp_index(dt);
             float wanted_rate = TimeWarpTools.indexToRatio(wanted_warp_index);

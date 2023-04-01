@@ -21,11 +21,11 @@ namespace K2D2.Controller
         public ManeuverNodeData current_maneuvre_node = null;
 
         // Sub Pilots
-        TurnToManeuvre turn;
+        TurnTo turn;
         WarpToManeuvre warp;
         BurnManeuvre burn;
 
-        ManeuvreController current_pilot = null;
+        BaseController current_pilot = null;
         KSPVessel current_vessel;
 
         public AutoExecuteManeuver()
@@ -36,7 +36,7 @@ namespace K2D2.Controller
 
             GeneralTools.Game.Messages.Subscribe<VesselChangedMessage>(OnActiveVesselChanged);
 
-            turn = new TurnToManeuvre();
+            turn = new TurnTo();
             warp = new WarpToManeuvre();
             burn = new BurnManeuvre();
         }
@@ -80,18 +80,19 @@ namespace K2D2.Controller
                     break;
                 case Mode.Turn:
                     current_pilot = turn;
+                    turn.StartManeuver(current_maneuvre_node);
                     break;
                 case Mode.Warp:
                     current_pilot = warp;
+                    warp.StartManeuver(current_maneuvre_node);
                     break;
                 case Mode.Burn:
                     current_pilot = burn;
+                    burn.StartManeuver(current_maneuvre_node);
                     break;
             }
 
             logger.LogInfo("current_pilot " + current_pilot);
-
-            current_pilot.Start();
         }
 
         public bool canStart()

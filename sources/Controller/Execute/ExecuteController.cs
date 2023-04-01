@@ -35,13 +35,4 @@ namespace K2D2.Controller
         }
     }
 
-    public class ManeuvreController : ExecuteController
-    {
-        protected ManeuverNodeData maneuver = null;
-
-        public void setManeuver(ManeuverNodeData maneuver)
-        {
-            this.maneuver = maneuver;
-        }
-    }
 }

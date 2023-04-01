@@ -7,16 +7,31 @@ using UnityEngine;
 
 using KSP.Sim;
 using K2D2.KSPService;
+using KSP.Sim.Maneuver;
+
 
 namespace K2D2.Controller
 {
 
-    public class TurnToManeuvre : ManeuvreController
+    public class TurnTo : ExecuteController
     {
-
-        Vector3 maneuvre_dir = Vector3.zero;
+        ManeuverNodeData maneuver = null;
+        Vector3 wanted_dir = Vector3.zero;
 
         KSPVessel current_vessel;
+
+        public void StartManeuver(ManeuverNodeData node)
+        {
+            maneuver = node;
+            Start();
+        }
+
+
+        public void StartSurfaceRetroGrade(ManeuverNodeData node)
+        {
+            maneuver = null;
+            Start();
+        }
 
         public override void Start()
         {
@@ -24,29 +39,67 @@ namespace K2D2.Controller
             // reset time warp
             TimeWarpTools.SetRateIndex(0, false);
             current_vessel = K2D2_Plugin.Instance.current_vessel;
-
         }
 
         public override void Update()
         {
-            if (maneuver == null) return;
+            if (maneuver != null)
+            {
+                finished = false;
+                var autopilot = current_vessel.Autopilot;
 
-            finished = false;
-            var autopilot = current_vessel.Autopilot;
+                // force autopilot
+                autopilot.Enabled = true;
+                if (autopilot.AutopilotMode != AutopilotMode.Maneuver)
+                    autopilot.SetMode(AutopilotMode.Maneuver);
 
-            // force autopilot
-            autopilot.Enabled = true;
-            if (autopilot.AutopilotMode != AutopilotMode.Maneuver)
-                autopilot.SetMode(AutopilotMode.Maneuver);
+                if (!checkManeuvreDirection())
+                    return;
 
-            if (!checkManeuvreDirection())
-                return;
+                if (!checkAngularRotation())
+                    return;
 
-            if (!checkAngularRotation())
-                return;
+                status_line = "Ready !";
+                finished = true;
+            }
+            else
+            {
+                // SURFACE RETROGRADE MODE
+                current_vessel.SetSpeedMode(KSP.Sim.SpeedDisplayMode.Surface);
+                var autopilot = current_vessel.Autopilot;
 
-            status_line = "Ready !";
-            finished = true;
+                // force autopilot
+                autopilot.Enabled = true;
+                if (autopilot.AutopilotMode != AutopilotMode.Retrograde)
+                    autopilot.SetMode(AutopilotMode.Retrograde);
+
+                if (!checkRetroGradeDirection())
+                    return;
+
+                if (!checkAngularRotation())
+                    return;
+
+                status_line = "Ready !";
+                finished = true;
+            }
+        }
+
+        public bool checkRetroGradeDirection()
+        {
+            double max_angle = 5;
+
+            var telemetry = SASInfos.getTelemetry();
+            Vector retro_dir = telemetry.SurfaceMovementRetrograde;
+            Rotation vessel_rotation = current_vessel.GetRotation();
+
+            // convert rotation to maneuvre coordinates
+            vessel_rotation = Rotation.Reframed(vessel_rotation, retro_dir.coordinateSystem);
+            Vector3d forward_direction = (vessel_rotation.localRotation * Vector3.up).normalized;
+
+            double angle = (float)Vector3d.Angle(retro_dir.vector, forward_direction);
+            status_line = $"Waiting for good sas direction\nAngle = {angle:n2}°";
+
+            return angle < max_angle;
         }
 
         public bool checkManeuvreDirection()

@@ -87,7 +87,7 @@ namespace K2D2.Controller
             {
                 UI_Tools.Console("speed is based on altitude");
                 auto_speed_ratio = UI_Tools.FloatSlider("Altitude/speed ratio", auto_speed_ratio, 0.5f, 3);
-                UI_Tools.RightLeftText("Safe", "Danger");
+                UI_Tools.Right_Left_Text("Safe", "Danger");
                 safe_speed = UI_Tools.FloatSlider("Landing speed", safe_speed, 0.1f, 10);
             }
             else
@@ -116,24 +116,31 @@ namespace K2D2.Controller
 
         public BurndV burn_dV = new BurndV();
 
+
+
         public BrakeController brake = new BrakeController();
 
-        public enum Phase { Off, Turn, Warp, Burn, Land }
-        public Phase current_phase = Phase.Off;
+
+        public SingleSubControler sub = new SingleSubControler();
+
 
         public LandingController()
         {
             Instance = this;
             sub_contollers.Add(burn_dV);
+            sub_contollers.Add(sub);
+
             // logger.LogMessage("LandingController !");
             current_vessel = K2D2_Plugin.Instance.current_vessel;
         }
 
+
+        bool _active = false;
         bool ControlerActive
         {
-            get { return current_phase == Phase.Off; }
+            get { return _active; }
             set {
-                if (value == ControlerActive)
+                if (value == _active)
                     return;
 
                 if (!value)
@@ -142,16 +149,17 @@ namespace K2D2.Controller
                     if (current_vessel != null)
                         current_vessel.SetThrottle(0);
 
-                    current_phase = Phase.Off;
+                    _active = false;
                 }
                 else
                 {
-                    // Start
+                    // Start total burn counter
                     burn_dV.reset();
-                    current_phase = Phase.Turn;
-
+                    
                     // reset controller to desactivate other controllers.
                     K2D2_Plugin.ResetControllers();
+                    _active = true;
+                    //sub.sub_controler = 
                 }
             }
         }
