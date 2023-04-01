@@ -34,7 +34,7 @@ namespace K2D2
                 secs = -secs;
                 TimeSpan t = TimeSpan.FromSeconds(secs);
 
-                return string.Format("- {0:D2}h:{1:D2}m:{2:D2}s:{3:D3}ms",
+                return string.Format("- {0:D2}:{1:D2}:{2:D2}:{3:D3}",
                     t.Hours,
                     t.Minutes,
                     t.Seconds,
@@ -44,12 +44,14 @@ namespace K2D2
             {
                 TimeSpan t = TimeSpan.FromSeconds(secs);
 
-                return string.Format("{0:D2}h:{1:D2}m:{2:D2}s:{3:D3}ms",
+                return string.Format("{0:D2}:{1:D2}:{2:D2}:{3:D3}",
                     t.Hours,
                     t.Minutes,
                     t.Seconds,
                     t.Milliseconds);
             }
+
+            
         }
 
         public static Vector3d correctEuler(Vector3d euler)

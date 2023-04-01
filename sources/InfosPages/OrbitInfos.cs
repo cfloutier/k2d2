@@ -9,9 +9,6 @@ namespace K2D2.InfosPages
 {
     class OrbitInfos
     {
-
-
-
         public static void onGUI()
         {
 

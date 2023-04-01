@@ -6,6 +6,7 @@ using UnityEngine;
 using BepInEx.Logging;
 using K2D2.KSPService;
 using KSP.Sim;
+using KSP.Sim.impl;
 using SpaceGraphicsToolkit;
 
 namespace K2D2.Controller
@@ -71,13 +72,11 @@ namespace K2D2.Controller
                 }
         }
 
-        // 
         public void settings_UI()
         {
            UI_Tools.Console("Try to compensate gravity by adding dv to needed burn");
            gravity_compensation = GUILayout.Toggle(gravity_compensation, "Gravity Compensation");
         }
-
 
         // always visible
         public void control_UI()
@@ -86,7 +85,7 @@ namespace K2D2.Controller
             auto_speed = GUILayout.Toggle(auto_speed, "Auto Speed");
             if (auto_speed)
             {
-                // UI_Tools.Console("speed is based on altitude");
+                UI_Tools.Console("speed is based on altitude");
                 auto_speed_ratio = UI_Tools.FloatSlider("Altitude/speed ratio", auto_speed_ratio, 0.5f, 3);
                 UI_Tools.RightLeftText("Safe", "Danger");
                 safe_speed = UI_Tools.FloatSlider("Landing speed", safe_speed, 0.1f, 10);
@@ -102,7 +101,6 @@ namespace K2D2.Controller
 
                 speed_ratio = GUILayout.HorizontalSlider(speed_ratio, 0, 1);
             }
-
         }
     }
 
@@ -110,7 +108,7 @@ namespace K2D2.Controller
     {
         public ManualLogSource logger = BepInEx.Logging.Logger.CreateLogSource("K2D2.LandingController");
 
-        LandingSettings land_settings = new LandingSettings(); 
+        LandingSettings land_settings = new LandingSettings();
 
         public static LandingController Instance { get; set; }
 
@@ -118,20 +116,24 @@ namespace K2D2.Controller
 
         public BurndV burn_dV = new BurndV();
 
+        public BrakeController brake = new BrakeController();
+
+        public enum Phase { Off, Turn, Warp, Burn, Land }
+        public Phase current_phase = Phase.Off;
+
         public LandingController()
         {
             Instance = this;
             sub_contollers.Add(burn_dV);
-            logger.LogMessage("LandingController !");
+            // logger.LogMessage("LandingController !");
             current_vessel = K2D2_Plugin.Instance.current_vessel;
         }
 
-        bool _land_controler_active = false;
         bool ControlerActive
         {
-            get { return _land_controler_active; }
+            get { return current_phase == Phase.Off; }
             set {
-                if (value == _land_controler_active)
+                if (value == ControlerActive)
                     return;
 
                 if (!value)
@@ -139,19 +141,20 @@ namespace K2D2.Controller
                     // stop
                     if (current_vessel != null)
                         current_vessel.SetThrottle(0);
+
+                    current_phase = Phase.Off;
                 }
                 else
                 {
                     // Start
                     burn_dV.reset();
+                    current_phase = Phase.Turn;
+
                     // reset controller to desactivate other controllers.
                     K2D2_Plugin.ResetControllers();
                 }
-
-                _land_controler_active = value;
             }
         }
-
 
         public override void onReset()
         {
@@ -160,10 +163,14 @@ namespace K2D2.Controller
 
         string status_line = "";
 
+        float current_speed = 0;
+
         public override void Update()
         {
             if (current_vessel == null || current_vessel.VesselVehicle == null)
                 return;
+
+            altitude = (float)current_vessel.GetDisplayAltitude();
 
             if (land_settings.auto_speed)
             {
@@ -175,8 +182,10 @@ namespace K2D2.Controller
                 limit_speed = Mathf.Pow(10, land_settings.multiplier_index+1) * land_settings.speed_ratio;
             }
 
-            altitude = (float)current_vessel.GetDisplayAltitude();
             current_speed = (float)current_vessel.VesselVehicle.SurfaceSpeed;
+
+            if (!ControlerActive)
+                return;
 
             if (altitude < 5 && current_speed < 1)
             {
@@ -184,136 +193,43 @@ namespace K2D2.Controller
                 status_line = "Landed";
                 //current_vessel.SetThrottle(0);
                 ControlerActive = false;
-            }
-
-            delta_speed = current_speed - limit_speed;
-
-            if (delta_speed > 0) // reset timewarp if it is time to burn
-                TimeWarpTools.SetRateIndex(0, false);
-
-            if (land_settings.gravity_compensation)
-                computeInclination();
-
-            if (!ControlerActive)
-                return;
-
-            current_vessel.SetSpeedMode(KSP.Sim.SpeedDisplayMode.Surface);
-            var autopilot = current_vessel.Autopilot;
-
-            // force autopilot
-            autopilot.Enabled = true;
-            if (autopilot.AutopilotMode != AutopilotMode.Retrograde)
-                autopilot.SetMode(AutopilotMode.Retrograde);
-
-            if (!checkManeuvreDirection())
-            {
-                current_vessel.SetThrottle(0);
-                status_line = $"Turning : {retrograde_angle:n2} °";
                 return;
             }
 
-            compute_Throttle();
-            status_line = "Burning";
-            //status_line = $"current speed : {current_speed} m/s\ndelta speed : {delta_speed} m/s";
-
-            if (land_settings.gravity_compensation)
-            {
-                // no stop for gravity compensation
-                current_vessel.SetThrottle(wanted_throttle);
-            }
-            else if (!checkSpeed())
-            {
-                current_vessel.SetThrottle(wanted_throttle);
-            }
-            else
-            {
-                // stop
-                status_line = "Landed";
-                //current_vessel.SetThrottle(0);
-                ControlerActive = false;
-            }
-
-           
+            brake.wanted_speed = limit_speed;
+            brake.gravity_compensation = land_settings.gravity_compensation;
+            // call the brake
+            base.Update();
         }
 
         public float limit_speed;
         public float altitude;
 
-        public float retrograde_angle;
-        public float inclination;
-        public float gravity;
-        public float gravity_direction_factor;
-
-        public void computeInclination()
-        {
-            // current_vessel.getInclination();
-            Vector up_dir = current_vessel.VesselComponent.gravityForPos;
-            Rotation vessel_rotation = current_vessel.GetRotation();
-
-            // convert rotation to maneuvre coordinates
-
-            vessel_rotation = Rotation.Reframed(vessel_rotation, up_dir.coordinateSystem);
-            Vector3d forward_direction = (vessel_rotation.localRotation * Vector3.down).normalized;
-
-            inclination = (float) Vector3d.Angle(up_dir.vector, forward_direction);
-            // status_line = $"Waiting for good sas direction\nAngle = {angle:n2}°";
-
-            gravity = (float) current_vessel.VesselComponent.graviticAcceleration.magnitude;
-            gravity_direction_factor = Mathf.Cos(inclination*Mathf.Deg2Rad);
-        }
-
-        public bool checkManeuvreDirection()
-        {
-            double max_angle = 5;
-
-            var telemetry = SASInfos.getTelemetry();
-            Vector retro_dir = telemetry.SurfaceMovementRetrograde;
-            Rotation vessel_rotation = current_vessel.GetRotation();
-
-            // convert rotation to maneuvre coordinates
-            vessel_rotation = Rotation.Reframed(vessel_rotation, retro_dir.coordinateSystem);
-            Vector3d forward_direction = (vessel_rotation.localRotation * Vector3.up).normalized;
-
-            retrograde_angle = (float) Vector3d.Angle(retro_dir.vector, forward_direction);
-            // status_line = $"Waiting for good sas direction\nAngle = {angle:n2}°";
-
-            return retrograde_angle < max_angle;
-        }
-
-        float wanted_throttle = 0;
-
-        void compute_Throttle()
-        {
-            float min_throttle = 0;
-
-            if (land_settings.gravity_compensation)
-            {
-                float minimum_dv = gravity_direction_factor * gravity;
-                min_throttle = minimum_dv / burn_dV.full_dv;
-            }
-
-            float remaining_full_burn_time = (float)(delta_speed / burn_dV.full_dv);
-            wanted_throttle = Mathf.Clamp(remaining_full_burn_time + min_throttle, 0, 1);
-        }
-
-        float current_speed;
-        float delta_speed;
-
-        public bool checkSpeed()
-        {
-            if (delta_speed < 0)
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-
         public void context_infos()
         {
+            var current_vessel = K2D2_Plugin.Instance.current_vessel;
+            if (current_vessel == null)
+            {
+                UI_Tools.Console("no vessel");
+                return;
+            }
+
+            PatchedConicsOrbit orbit = current_vessel.VesselComponent.Orbit;
+
             UI_Tools.Console($"Altitude : {GeneralTools.DistanceToString(altitude)}");
             UI_Tools.Console($"Current Speed : {current_speed:n2} m/s");
+
+            if (orbit.PatchEndTransition == PatchTransitionType.Collision)
+            {
+                var dt = GeneralTools.Game.UniverseModel.UniversalTime - orbit.collisionPointUT;
+                UI_Tools.Console($"collision in  {GeneralTools.DurationToString( orbit.collisionPointUT)}");
+
+                var speed_collision = orbit.GetOrbitalVelocityAtUTZup(orbit.collisionPointUT).magnitude;
+                UI_Tools.Console($"speed collision  { speed_collision:n2} m/s");
+
+                var burn_duration = (speed_collision / burn_dV.full_dv);
+                UI_Tools.Console($"burn_duration { burn_duration:n2} s");
+            }
         }
 
         public override void onGUI()
@@ -329,36 +245,9 @@ namespace K2D2.Controller
 
             context_infos();
 
-            // need to burn !
-            if (delta_speed > 0)
-            {
-                GUI.color = Color.red;
-                UI_Tools.Console($"Max speed : {limit_speed:n2} !!");
-                UI_Tools.Console($"delta speed  : {delta_speed:n2}  m/s");
-                GUI.color = Color.white;
-            }
-            else
-            {
-                UI_Tools.Console($"Max speed : {limit_speed:n2}  m/s");
-                UI_Tools.Console($"delta speed  : {-delta_speed:n2}  m/s");
-            }
+            brake.onGUI();
 
-            if (burn_dV.burned_dV > 0)
-                UI_Tools.Console($"dV consumed : {burn_dV.burned_dV:n2} m/s");
-
-            if (Settings.debug_mode)
-            {
-                if (land_settings.gravity_compensation)
-                {
-                    GUILayout.Label($"inclination : {inclination:n2}°");
-                    GUILayout.Label($"gravity : {gravity:n2}");
-                    GUILayout.Label($"gravity_direction_factor : {gravity_direction_factor:n2}");
-                }
-
-                GUILayout.Label($"wanted_throttle : {wanted_throttle:n2}");
-            }
-
-            if (!ControlerActive && delta_speed > 0)
+            if (!ControlerActive && brake.NeedBurn)
             {
                 GUI.color = Color.red;
             }
