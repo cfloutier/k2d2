@@ -18,6 +18,42 @@ using KSP.ScriptInterop.impl.moonsharp;
 namespace K2D2.Controller
 {
 
+    public class SingleExecuteController : BaseController
+    {
+        public ExecuteController sub_controler;
+
+
+        public bool finished
+        {
+            get
+            {
+                if (sub_controler == null)
+                    return true;
+
+                return sub_controler.finished;
+            }
+        }
+
+        public string status_line
+        {
+            get
+            {
+                if (sub_controler == null)
+                    return "";
+
+                return sub_controler.status_line;
+            }
+        }
+
+        public override void onGUI() { if (sub_controler != null) sub_controler.onGUI(); }
+        public override void Update() { if (sub_controler != null) sub_controler.Update(); }
+        public override void LateUpdate() { if (sub_controler != null) sub_controler.LateUpdate(); }
+        public override void FixedUpdate() { if (sub_controler != null) sub_controler.FixedUpdate(); }
+
+    }
+
+
+
     /// base class for all Execute controller
     /// each Execute controller have a specific task like Auto warp or Auto Burn to achieve.
     /// * Start is called to init the pilot

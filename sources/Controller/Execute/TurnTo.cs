@@ -27,7 +27,7 @@ namespace K2D2.Controller
         }
 
 
-        public void StartSurfaceRetroGrade(ManeuverNodeData node)
+        public void StartSurfaceRetroGrade()
         {
             maneuver = null;
             Start();
@@ -38,7 +38,7 @@ namespace K2D2.Controller
             current_vessel = K2D2_Plugin.Instance.current_vessel;
             // reset time warp
             TimeWarpTools.SetRateIndex(0, false);
-            current_vessel = K2D2_Plugin.Instance.current_vessel;
+           
         }
 
         public override void Update()

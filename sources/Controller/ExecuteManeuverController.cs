@@ -22,10 +22,10 @@ namespace K2D2.Controller
 
         // Sub Pilots
         TurnTo turn;
-        WarpToManeuvre warp;
+        WarpTo warp;
         BurnManeuvre burn;
 
-        BaseController current_pilot = null;
+        ExecuteController current_pilot = null;
         KSPVessel current_vessel;
 
         public AutoExecuteManeuver()
@@ -37,7 +37,7 @@ namespace K2D2.Controller
             GeneralTools.Game.Messages.Subscribe<VesselChangedMessage>(OnActiveVesselChanged);
 
             turn = new TurnTo();
-            warp = new WarpToManeuvre();
+            warp = new WarpTo();
             burn = new BurnManeuvre();
         }
 
@@ -199,7 +199,6 @@ namespace K2D2.Controller
 
             if (current_pilot != null)
             {
-                current_pilot.setManeuver(current_maneuvre_node);
                 current_pilot.Update();
                 if (current_pilot.finished && Settings.auto_next)
                 {
@@ -235,23 +234,8 @@ namespace K2D2.Controller
             else
                 Settings.auto_next = true;
 
-            GUILayout.Label("Warp", Styles.title);
-
-            Settings.warp_speed = UI_Tools.IntSlider("Warp Speed", Settings.warp_speed, 1, 10);
-            GUILayout.Label("(1 : quick, 10 slow) ", Styles.console_text);
-
-            GUILayout.Label("Safe time", Styles.console_text);
-
-            Settings.warp_safe_duration = UI_Tools.IntField("warp_safe_duration", Settings.warp_safe_duration, 5, int.MaxValue);
-            GUILayout.Label("nb seconds in x1 before launch (min:5)", Styles.console_text);
-
-            GUILayout.Label("Burn", Styles.title);
-
-            Settings.burn_adjust = UI_Tools.FloatSlider("burn_adjust", Settings.burn_adjust, 0, 2);
-            GUILayout.Label("adjusting rate", Styles.console_text);
-
-            Settings.max_dv_error = UI_Tools.FloatSlider("max_dv_error", Settings.max_dv_error, 0.001f, 2, " m/s");
-            GUILayout.Label("accepted dV difference (m/s)", Styles.console_text);
+            warp.setting_UI();
+            burn.settings_UI();
         }
 
         void node_infos()

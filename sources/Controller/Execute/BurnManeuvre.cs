@@ -60,8 +60,6 @@ namespace K2D2.Controller
             autopilot.SetMode(AutopilotMode.StabilityAssist);
         }
 
-        
-
         public override void Update()
         {
             if (maneuver == null) return;
@@ -175,6 +173,16 @@ namespace K2D2.Controller
 
                 burn_dV.onGUI();
             }
+        }
+        public void settings_UI()
+        {
+            GUILayout.Label("Burn", Styles.title);
+
+            Settings.burn_adjust = UI_Tools.FloatSlider("burn_adjust", Settings.burn_adjust, 0, 2);
+            GUILayout.Label("adjusting rate", Styles.console_text);
+
+            Settings.max_dv_error = UI_Tools.FloatSlider("max_dv_error", Settings.max_dv_error, 0.001f, 2, " m/s");
+            GUILayout.Label("accepted dV difference (m/s)", Styles.console_text);
         }
     }
 }

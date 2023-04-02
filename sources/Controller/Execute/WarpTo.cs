@@ -10,11 +10,11 @@ using KSP.Sim.Maneuver;
 
 namespace K2D2.Controller
 {
-    public class WarpToManeuvre : ExecuteController
+    public class WarpTo : ExecuteController
     {
         int wanted_warp_index = 0;
         ManeuverNodeData maneuver = null;
-        double UT;
+        public double UT;
 
         public void StartManeuver(ManeuverNodeData node)
         {
@@ -24,6 +24,7 @@ namespace K2D2.Controller
 
         public void Start_UT(double UT)
         {
+            maneuver = null;
             this.UT = UT;
             Start();
         }
@@ -51,7 +52,6 @@ namespace K2D2.Controller
             {
                 UT = maneuver.Time;
             }
-            
 
             dt = UT - GeneralTools.Game.UniverseModel.UniversalTime;
             dt = dt - Settings.warp_safe_duration;
@@ -65,7 +65,7 @@ namespace K2D2.Controller
                 finished = true;
             }
 
-            status_line = $"{GeneralTools.DurationToString(dt)} | x{wanted_rate}";
+            status_line = $"End warp : {GeneralTools.DurationToString(dt)} | x{wanted_rate}";
             TimeWarpTools.SetRateIndex(wanted_warp_index, false);
         }
 
@@ -88,6 +88,19 @@ namespace K2D2.Controller
                 GUILayout.Label($"CurrentRate x{TimeWarpTools.CurrentRate}");
                 GUILayout.Label($"index_rate x{TimeWarpTools.indexToRatio(TimeWarpTools.CurrentRateIndex)}");
             }
+        }
+
+        public void setting_UI()
+        {
+            UI_Tools.Title("// Warp");
+
+            Settings.warp_speed = UI_Tools.IntSlider("Warp Speed", Settings.warp_speed, 4, 10);
+            UI_Tools.Right_Left_Text("quick", "slow");
+
+            GUILayout.Label("Safe time", Styles.console_text);
+
+            Settings.warp_safe_duration = UI_Tools.IntField("warp_safe_duration", Settings.warp_safe_duration, 5, int.MaxValue);
+            UI_Tools.Console("nb seconds in x1 before launch (min:5)");
         }
     }
 }
