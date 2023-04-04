@@ -1,6 +1,9 @@
 ﻿using System;
 using KSP.Sim.impl;
 
+// disable wrning : unused value
+#pragma warning disable CS0414
+
 namespace KSP2FlightAssistant.MathLibrary
 {
     public static class VisVivaEquation

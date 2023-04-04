@@ -141,7 +141,7 @@ namespace K2D2
             Add(functionObject);
         }*/
         
-        private void Add(FunctionObject functionObject)
+        private new void Add(FunctionObject functionObject)
         {
             if (_head == null)
             {
@@ -211,7 +211,7 @@ namespace K2D2
 
         
 
-        public void Clear()
+        public new void Clear()
         {
             _head = null;
         }

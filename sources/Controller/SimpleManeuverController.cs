@@ -14,6 +14,7 @@ using KSP2FlightAssistant.MathLibrary;
 using KSP.Sim.Maneuver;
 using ManeuverProvider = K2D2.sources.KSPService.ManeuverProvider;
 
+#pragma warning disable CS0414
 
 namespace K2D2.Controller
 {

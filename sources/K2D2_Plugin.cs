@@ -57,8 +57,6 @@ namespace K2D2
 
         private bool drawUI = false;
         private Rect windowRect = Rect.zero;
-        private int windowWidth = 500;
-        private int windowHeight = 700;
 
         private PopUp _popUp = new PopUp();
         private PopUpContent _popUpContent;
