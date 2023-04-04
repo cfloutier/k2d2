@@ -15,7 +15,7 @@ namespace K2D2
         /// <param name="widthWindow"></param>
         static public void Init(float widthWindow)
         {
-            position = new Rect(widthWindow - 5, 4, 26, 26);
+            position = new Rect(widthWindow - 5, 4, 23, 23);
         }
 
         static public bool Button(string txt)

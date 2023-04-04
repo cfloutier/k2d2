@@ -20,7 +20,9 @@ namespace K2D2
 
         public static GUIStyle icons_label, title;
 
-        public static Texture2D gear, icon, big_icon;
+        public static Texture2D gear, icon, big_icon, cross;
+
+
 
         public static void Init()
         {
@@ -48,8 +50,6 @@ namespace K2D2
             style.onActive = style.onNormal;
             style.onFocused = style.onNormal;
         }
-
-
 
         public static void GetStyles()
         {
@@ -103,31 +103,34 @@ namespace K2D2
 
             // Small Button
             small_button = new GUIStyle(GUI.skin.GetStyle("Button"));
-            small_button.normal.background = AssetsLoader.loadIcon("Button-normal");
+            small_button.normal.background = AssetsLoader.loadIcon("Small_Button");
+            small_button.hover.background = AssetsLoader.loadIcon("Small_Button_hover");
             setAllFromNormal(small_button);
-            small_button.active.background = AssetsLoader.loadIcon("Button-over");
+
+            small_button.active.background = AssetsLoader.loadIcon("Small_Button_active");
+            small_button.onNormal = small_button.active;
             setFromOn(small_button);
-         
-            small_button.border = new RectOffset(8, 10, 8, 10);
-            small_button.padding = new RectOffset(4, 4, 4, 6);
-            small_button.overflow = new RectOffset(0, 0, 0, 2);
-            small_button.fontSize = 14;
+
+            small_button.border = new RectOffset(5, 5, 5, 5);
+            small_button.padding = new RectOffset(4, 4, 4, 4);
+            small_button.overflow = new RectOffset(0, 0, 0, 0);
+           // small_button.fontSize = 14;
             small_button.alignment = TextAnchor.MiddleCenter;
 
             big_button = new GUIStyle(GUI.skin.GetStyle("Button"));
             big_button.normal.background = AssetsLoader.loadIcon("BigButton_Normal");
-            big_button.hover.background = AssetsLoader.loadIcon("BigButton_hover");
-            
-            //setAllFromNormal(big_button);
-            big_button.hover.background = AssetsLoader.loadIcon("BigButton_hover");
-            big_button.onNormal.background = AssetsLoader.loadIcon("BigButton_on");
-            setFromOn(big_button);
-            big_button.onHover.background = AssetsLoader.loadIcon("BigButton_on_hover");
+            big_button.normal.textColor = ColorTools.parseColor("#FFFFFF");
+            setAllFromNormal(big_button);
 
-            small_button.border = new RectOffset(12, 12, 5, 5);
-            small_button.padding = new RectOffset(10, 10, 10, 10);
+            big_button.hover.background = AssetsLoader.loadIcon("BigButton_hover");
+            big_button.active.background = AssetsLoader.loadIcon("BigButton_on");
+            big_button.onNormal = big_button.active;
+            setFromOn(big_button);
+            
+            small_button.border = new RectOffset(5, 5, 5, 5);
+            small_button.padding = new RectOffset(4, 3, 4, 3);
             small_button.overflow = new RectOffset(0, 0, 0, 0);
-            small_button.fontSize = 40;
+            small_button.fontSize = 20;
             small_button.alignment = TextAnchor.MiddleCenter;
 
             // Toggle Button
@@ -147,10 +150,11 @@ namespace K2D2
             toggle.padding = new RectOffset(34, 16, 0, 0);
             toggle.overflow = new RectOffset(0, 0, 0, 2);
 
-            // GEAR icon
+            // icons
             gear = AssetsLoader.loadIcon("gear");
             icon = AssetsLoader.loadIcon("icon");
             big_icon = AssetsLoader.loadIcon("big_icon");
+            cross = AssetsLoader.loadIcon("Cross");
 
             icons_label = new GUIStyle(GUI.skin.GetStyle("Label"));
             icons_label.border = new RectOffset(0, 0, 0, 0);

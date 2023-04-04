@@ -1,5 +1,8 @@
 # v0.6.0
+* Landing v1.0 !
 * position of window is saved
+* UI new Skin
+* 
 
 
 
