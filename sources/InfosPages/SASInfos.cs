@@ -22,9 +22,9 @@ namespace K2D2.InfosPages
             GUILayout.Label($"sas.ReferenceFrame {sas.ReferenceFrame}");
             GUILayout.Label($"sas.AutoTune {sas.AutoTune}");
             GUILayout.Label($"sas.lockedMode {sas.lockedMode}");
-            GUILayout.Label($"sas.LockedRotation {GeneralTools.VectorToString(sas.LockedRotation.eulerAngles)}");
+            GUILayout.Label($"sas.LockedRotation {StrTool.VectorToString(sas.LockedRotation.eulerAngles)}");
 
-            GUILayout.Label($"sas.TargetOrientation {GeneralTools.VectorToString(sas.TargetOrientation)}");
+            GUILayout.Label($"sas.TargetOrientation {StrTool.VectorToString(sas.TargetOrientation)}");
             GUILayout.Label($"sas.PidLockedPitch {sas.PidLockedPitch}");
             GUILayout.Label($"sas.PidLockedRoll {sas.PidLockedRoll}");
             GUILayout.Label($"sas.PidLockedYaw {sas.PidLockedYaw}");

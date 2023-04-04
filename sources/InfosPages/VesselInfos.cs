@@ -32,7 +32,7 @@ namespace K2D2.InfosPages
             var body_location = Rotation.Reframed(vehicle.Rotation, coord);
 
             GUILayout.Label($"coordinate_system {vehicle.Rotation.coordinateSystem}");
-            GUILayout.Label($"body_location {GeneralTools.VectorToString(body_location.localRotation.eulerAngles)}");
+            GUILayout.Label($"body_location {StrTool.VectorToString(body_location.localRotation.eulerAngles)}");
         }
     }
 }

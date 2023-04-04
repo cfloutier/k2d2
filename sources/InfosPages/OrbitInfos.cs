@@ -31,13 +31,13 @@ namespace K2D2.InfosPages
             UI_Tools.Console($"argumentOfPeriapsis {orbit.argumentOfPeriapsis:n3}");
             UI_Tools.Console($"meanAnomalyAtEpoch {orbit.meanAnomalyAtEpoch:n3}");
             UI_Tools.Console($"epoch {orbit.epoch:n3}");
-            UI_Tools.Console($"period {GeneralTools.DurationToString(orbit.period)}");
+            UI_Tools.Console($"period {StrTool.DurationToString(orbit.period)}");
 
 
             if (orbit.PatchEndTransition == PatchTransitionType.Collision)
             {
                 var dt = GeneralTools.Game.UniverseModel.UniversalTime - orbit.collisionPointUT;
-                UI_Tools.Console($"collision in  {GeneralTools.DurationToString(dt)}");
+                UI_Tools.Console($"collision in  {StrTool.DurationToString(dt)}");
             }
 
             GUILayout.Label("todo");

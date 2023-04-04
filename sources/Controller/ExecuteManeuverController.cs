@@ -243,16 +243,16 @@ namespace K2D2.Controller
             if (Settings.debug_mode)
             {
                 var dt = GeneralTools.remainingStartTime(current_maneuvre_node);
-                GUILayout.Label($"Node in {GeneralTools.DurationToString(dt)}");
+                GUILayout.Label($"Node in {StrTool.DurationToString(dt)}");
                 GUILayout.Label($"BurnDuration {current_maneuvre_node.BurnDuration}");
                 GUILayout.Label($"BurnRequiredDV {current_maneuvre_node.BurnRequiredDV}");
-                GUILayout.Label($"BurnVector {GeneralTools.VectorToString(current_maneuvre_node.BurnVector)}");
+                GUILayout.Label($"BurnVector {StrTool.VectorToString(current_maneuvre_node.BurnVector)}");
 
                 var telemetry = SASInfos.getTelemetry();
 
                 Vector3 maneuvre_dir = telemetry.ManeuverDirection.vector;
 
-                GUILayout.Label($"maneuvre_dir {GeneralTools.VectorToString(maneuvre_dir)}");
+                GUILayout.Label($"maneuvre_dir {StrTool.VectorToString(maneuvre_dir)}");
 
                 if (dt < 0)
                 {

@@ -71,7 +71,7 @@ namespace K2D2.Controller
                 start_dt = GeneralTools.remainingStartTime(maneuver);
                 if (start_dt > 0)
                 {
-                    status_line = $"start in {GeneralTools.DurationToString(start_dt)}";
+                    status_line = $"start in {StrTool.DurationToString(start_dt)}";
                     set_throttle(0);
                     return;
                 }

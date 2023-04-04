@@ -65,7 +65,7 @@ namespace K2D2.Controller
                 finished = true;
             }
 
-            status_line = $"End warp : {GeneralTools.DurationToString(dt)} | x{wanted_rate}";
+            status_line = $"End warp : {StrTool.DurationToString(dt)} | x{wanted_rate}";
             TimeWarpTools.SetRateIndex(wanted_warp_index, false);
         }
 
@@ -74,7 +74,8 @@ namespace K2D2.Controller
             double factor = Settings.warp_speed;
             double ratio = dt / factor;
 
-            return TimeWarpTools.ratioToIndex((float)ratio);
+            // adding 1 because x1 during the warp mode is a lame
+            return TimeWarpTools.ratioToIndex((float)ratio) + 1;
         }
 
         public override void onGUI()
@@ -100,7 +101,7 @@ namespace K2D2.Controller
             GUILayout.Label("Safe time", Styles.console_text);
 
             Settings.warp_safe_duration = UI_Tools.IntField("warp_safe_duration", Settings.warp_safe_duration, 5, int.MaxValue);
-            UI_Tools.Console("nb seconds in x1 before launch (min:5)");
+            UI_Tools.Console("Nb seconds in x1 before next phase (min:5), useful to avoid strange ksp2 behaviors when going back to x1");
         }
     }
 }

@@ -20,7 +20,12 @@ namespace K2D2.Controller
 
     public class SingleExecuteController : BaseController
     {
-        public ExecuteController sub_controler;
+        public void setController(ExecuteController controler)
+        {
+            sub_controler = controler;
+        }
+
+        ExecuteController sub_controler;
 
 
         public bool finished
@@ -28,7 +33,7 @@ namespace K2D2.Controller
             get
             {
                 if (sub_controler == null)
-                    return true;
+                    return false;
 
                 return sub_controler.finished;
             }

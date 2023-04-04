@@ -162,9 +162,9 @@ namespace K2D2.Controller
                 // GUILayout.Label($"angulor_vel_coord {angulor_vel_coord}");
                 Vector maneuvre_dir = telemetry.ManeuverDirection;
                 GUILayout.Label($"maneuvre_dir ref {maneuvre_dir.coordinateSystem}");
-                GUILayout.Label($"maneuvre_dir {GeneralTools.VectorToString(maneuvre_dir.vector)}");
-                GUILayout.Label($"angularVelocity {GeneralTools.VectorToString(angularVelocity)}");
-                GUILayout.Label($"angularVelocity {GeneralTools.VectorToString(angularVelocity)}");
+                GUILayout.Label($"maneuvre_dir {StrTool.VectorToString(maneuvre_dir.vector)}");
+                GUILayout.Label($"angularVelocity {StrTool.VectorToString(angularVelocity)}");
+                GUILayout.Label($"angularVelocity {StrTool.VectorToString(angularVelocity)}");
                 GUILayout.Label($"autopilot {autopilot.AutopilotMode}");
             }
         }

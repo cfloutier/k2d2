@@ -27,54 +27,87 @@ namespace K2D2.Controller
     public class LandingSettings
     {
 
-        public int multiplier_index
+        // public int multiplier_index
+        // {
+        //     get => Settings.s_settings_file.GetInt("land.multiplier_index", 0);
+        //     set {             // value = Mathf.Clamp(0.1,)
+        //         Settings.s_settings_file.SetInt("land.multiplier_index", value); }
+        // }
+
+
+        // public float speed_ratio
+        // {
+        //     get => Settings.s_settings_file.GetFloat("land.speed_ratio", 0);
+        //     set {             // value = Mathf.Clamp(0.1,)
+        //         Settings.s_settings_file.SetFloat("land.speed_ratio", value); }
+        // }
+
+
+        // public bool gravity_compensation
+        //  {
+        //     get => Settings.s_settings_file.GetBool("land.gravity_compensation", false);
+        //     set {             // value = Mathf.Clamp(0.1,)
+        //         Settings.s_settings_file.SetBool("land.gravity_compensation", value); }
+        // }
+
+        // public bool auto_speed
+        // {
+        //     get => Settings.s_settings_file.GetBool("land.auto_speed", false);
+        //     set {
+        //         Settings.s_settings_file.SetBool("land.auto_speed", value); }
+        // }
+
+        public bool auto_warp
         {
-            get => Settings.s_settings_file.GetInt("land.multiplier_index", 0);
-            set {             // value = Mathf.Clamp(0.1,)
-                Settings.s_settings_file.SetInt("land.multiplier_index", value); }
-        }
-
-
-        public float speed_ratio
-        {
-            get => Settings.s_settings_file.GetFloat("land.speed_ratio", 0);
-            set {             // value = Mathf.Clamp(0.1,)
-                Settings.s_settings_file.SetFloat("land.speed_ratio", value); }
-        }
-
-
-        public bool gravity_compensation
-         {
-            get => Settings.s_settings_file.GetBool("land.gravity_compensation", false);
-            set {             // value = Mathf.Clamp(0.1,)
-                Settings.s_settings_file.SetBool("land.gravity_compensation", value); }
-        }
-
-        public bool auto_speed
-        {
-            get => Settings.s_settings_file.GetBool("land.auto_speed", false);
-            set {
-                Settings.s_settings_file.SetBool("land.auto_speed", value); }
-        }
-
-
-        public float auto_speed_ratio
-        {
-            get => Settings.s_settings_file.GetFloat("land.auto_speed_ratio", 0.5f);
+            get => Settings.s_settings_file.GetBool("land.auto_warp", true);
             set {
                 // value = Mathf.Clamp(value, 0 , 1);
-                Settings.s_settings_file.SetFloat("land.auto_speed_ratio", value);
+                Settings.s_settings_file.SetBool("land.auto_warp", value);
                 }
         }
 
-        public float safe_speed
+
+        public float burn_before
         {
-            get => Settings.s_settings_file.GetFloat("land.safe_speed", 4);
+            get => Settings.s_settings_file.GetFloat("land.burnBefore", 1f);
+            set
+            {
+                // value = Mathf.Clamp(value, 0 , 1);
+                Settings.s_settings_file.SetFloat("land.burnBefore", value);
+            }
+        }
+
+
+        public float touch_down_ratio
+        {
+            get => Settings.s_settings_file.GetFloat("land.touch_down_ratio", 0.5f);
             set {
-                value = Mathf.Clamp(value, 0 , 100);
-                Settings.s_settings_file.SetFloat("land.safe_speed", value);
+                // value = Mathf.Clamp(value, 0 , 1);
+                Settings.s_settings_file.SetFloat("land.touch_down_ratio", value);
                 }
         }
+
+        public float touch_down_speed
+        {
+            get => Settings.s_settings_file.GetFloat("land.touch_down_speed", 4);
+            set {
+                value = Mathf.Clamp(value, 0 , 100);
+                Settings.s_settings_file.SetFloat("land.touch_down_speed", value);
+                }
+        }
+
+
+
+        public bool suicide_burn
+        {
+            get => Settings.s_settings_file.GetBool("land.suicide_burn", false);
+            set {
+                Settings.s_settings_file.SetBool("land.suicide_burn", value);
+            }
+        }
+
+
+
 
         public void settings_UI()
         {
@@ -83,14 +116,21 @@ namespace K2D2.Controller
 
             UI_Tools.Title("// Landing Settings");
             //auto_speed = GUILayout.Toggle(auto_speed, "Auto Speed");
+            auto_warp = UI_Tools.Toggle("Auto Time-Warp", auto_warp);
+            suicide_burn = UI_Tools.Toggle("Suicide burn mode", suicide_burn);
 
             UI_Tools.Console("speed is based on altitude");
-            auto_speed_ratio = UI_Tools.FloatSlider("Altitude/speed ratio", auto_speed_ratio, 0.5f, 3);
+            touch_down_ratio = UI_Tools.FloatSlider("Altitude/speed ratio", touch_down_ratio, 0.5f, 3);
             UI_Tools.Right_Left_Text("Safe", "Danger");
-            safe_speed = UI_Tools.FloatSlider("Landing speed", safe_speed, 0.1f, 10);
+            // float limit_speed = compute_limit_speed(100);
+            // UI_Tools.Console($"ex : speed is limit at {limit_speed:n2} m/s for 100 meters altitude");
 
-            float limit_speed = compute_limit_speed(100);
-            UI_Tools.Console($"ex : speed is limit at {limit_speed:n2} m/s for 100 meters altitude");
+            touch_down_speed = UI_Tools.FloatSlider("Landing speed", touch_down_speed, 0.1f, 10);
+
+            burn_before = UI_Tools.FloatSlider("Burn Before", burn_before, 0, 10);
+            UI_Tools.Console($"(Safe time before burn)");
+
+
 
         /*    else
             {
@@ -105,11 +145,11 @@ namespace K2D2.Controller
             }*/
         }
 
-          public float compute_limit_speed(float altitude)
+        public float compute_limit_speed(float altitude)
         {
             // just to have understandable settings (not 0.1)
             float div = 10;
-            return altitude * auto_speed_ratio / div + safe_speed;
+            return altitude * touch_down_ratio / div + touch_down_speed;
         }
 
     }
@@ -148,12 +188,13 @@ namespace K2D2.Controller
         {
             Off,
             Turn,
-            Warp,
-            Burn
+            TimeWarp,
+            Waiting,
+            Burn,
+            Land
         }
 
         public Mode mode = Mode.Off;
-
 
         public void setMode(Mode mode)
         {
@@ -166,30 +207,36 @@ namespace K2D2.Controller
 
             if (mode == Mode.Off)
             {
-
                 TimeWarpTools.SetRateIndex(0, false);
-                current_executor.sub_controler = null;
+                current_executor.setController(null);
                 return;
             }
-
             switch (mode)
             {
                 case Mode.Off:
-                    current_executor.sub_controler = null;
+                    current_executor.setController(null);
                     break;
                 case Mode.Turn:
-                    current_executor.sub_controler = turn;
+                    current_executor.setController(turn);
                     turn.StartSurfaceRetroGrade();
                     break;
-                case Mode.Warp:
-                    current_executor.sub_controler = warp_to;
-                    warp_to.Start_UT(startBurn_UT);
+                case Mode.TimeWarp:
+                    if (!land_settings.auto_warp)
+                        setMode(Mode.Waiting);
+                    else
+                    {
+                        current_executor.setController(warp_to);
+                        warp_to.Start_UT(startBurn_UT);
+                    }
+                    break;
+                case Mode.Waiting:
+                    compute_startBurn();
+                    current_executor.setController(null);
                     break;
                 case Mode.Burn:
-                    current_executor.sub_controler = brake;
-                    brake.finished = false;
+                case Mode.Land:
+                    current_executor.setController(brake);
                     break;
-
             }
 
             logger.LogInfo("current_pilot " + mode);
@@ -197,14 +244,10 @@ namespace K2D2.Controller
 
         public void nextMode()
         {
+            // start
             if (mode == Mode.Off)
             {
                 ControlerActive = true;
-                return;
-            }
-            if (mode == Mode.Burn)
-            {
-                ControlerActive = false;
                 return;
             }
 
@@ -278,28 +321,43 @@ namespace K2D2.Controller
                 //var dt = GeneralTools.Game.UniverseModel.UniversalTime - orbit.collisionPointUT;
                 speed_collision = orbit.GetOrbitalVelocityAtUTZup(adjusted_collision_UT).magnitude;
                 burn_duration = (speed_collision / burn_dV.full_dv);
-                if (mode != Mode.Warp) // do not change time when warping
-                    startBurn_UT = adjusted_collision_UT - burn_duration - 2;    
-            }         
+                if (!ControlerActive)
+                {
+                    compute_startBurn();
+                }
+            }
         }
+
+        public void compute_startBurn()
+        {
+            if (land_settings.suicide_burn)
+            {
+                // compute distance corrected by accelation
+                var delta_move = speed_collision * burn_duration - 0.5f * burn_dV.full_dv * burn_duration * burn_duration;
+                // correct time
+                var delta_time = delta_move / speed_collision;
+
+                startBurn_UT = adjusted_collision_UT - burn_duration - land_settings.burn_before + delta_time;
+            }
+            else
+            {
+                 startBurn_UT = adjusted_collision_UT - burn_duration - land_settings.burn_before;
+            }
+        }
+
 
         public double compute_real_collision()
         {
             PatchedConicsOrbit orbit = current_vessel.VesselComponent.Orbit;
-
-
             var body = orbit.referenceBody;
-
             double current_time_ut = GeneralTools.Game.UniverseModel.UniversalTime;
-            double deltaTime = -1; // seconds in the past
+            double deltaTime = -10; // seconds in the past
             int max_occurrences = 100;
-
             double time = orbit.collisionPointUT;
-
             double terrainAltitude;
 
             for (int i = 0; i < max_occurrences; i++)
-            {            
+            {
                 Vector3d pos;
                 Vector ve;
 
@@ -314,12 +372,9 @@ namespace K2D2.Controller
 
                 if (terrainAltitude < 0)
                 {
-                    // under terrain
-                    // try before 
-
                     if (deltaTime > 0)
                     {
-                        // dychotomie
+                        // dychotomy
                         deltaTime = -deltaTime / 2;
                     }
                     time += deltaTime;
@@ -328,7 +383,7 @@ namespace K2D2.Controller
                 {
                     if (deltaTime < 0)
                     {
-                        // dychotomie
+                        // dychotomy
                         deltaTime = -deltaTime / 2;
                     }
                     time += deltaTime;
@@ -358,10 +413,10 @@ namespace K2D2.Controller
                 ControlerActive = false;
                 return;
             }
-
             if (!ControlerActive)
                 return;
 
+            // landing detection....
             if (altitude < 5 && current_speed < 1)
             {
                 //current_vessel.SetThrottle(0);
@@ -369,18 +424,32 @@ namespace K2D2.Controller
                 return;
             }
 
-            if (!is_falling)
-            {
-                ControlerActive = false;
-                return;
-            }
-
-            if (mode == Mode.Warp)
+            if (mode == Mode.TimeWarp)
             {
                 warp_to.UT = startBurn_UT;
 
             }
+            else if (mode == Mode.Waiting)
+            {
+                compute_startBurn();
+                var dt = startBurn_UT - GeneralTools.Game.UniverseModel.UniversalTime; 
+                if (dt <= 0 && Settings.auto_next)
+                {
+                    nextMode();
+                    return;
+                }
+            }
             else if (mode == Mode.Burn )
+            {
+                brake.wanted_speed = 0;
+                brake.gravity_compensation = true;
+                if (current_speed < 30 && Settings.auto_next)
+                {
+                    nextMode();
+                    return;
+                }
+            }
+            else if (mode == Mode.Land )
             {
                 brake.wanted_speed = land_settings.compute_limit_speed(altitude);;
                 brake.gravity_compensation = true;
@@ -400,19 +469,23 @@ namespace K2D2.Controller
 
         public void context_infos()
         {
-            UI_Tools.Console($"Altitude : {GeneralTools.DistanceToString(altitude)}");
+            UI_Tools.Console($"Altitude : {StrTool.DistanceToString(altitude)}");
             UI_Tools.Console($"Current Speed : {current_speed:n2} m/s");
 
             if (is_falling)
             {
                 UI_Tools.Title("Collision detected by KSP 2 Orbit");
 
-                UI_Tools.Console($"collision in  {GeneralTools.DurationToString(collision_UT - GeneralTools.Game.UniverseModel.UniversalTime)}");
-                UI_Tools.Console($"adjusted_collision in {GeneralTools.DurationToString(adjusted_collision_UT - GeneralTools.Game.UniverseModel.UniversalTime)}");
+                UI_Tools.Console($"collision in  {StrTool.DurationToString(collision_UT - GeneralTools.Game.UniverseModel.UniversalTime)}");
+                UI_Tools.Console($"adjusted_collision in {StrTool.DurationToString(adjusted_collision_UT - GeneralTools.Game.UniverseModel.UniversalTime)}");
                 
-                UI_Tools.Console($"start_burn in  {GeneralTools.DurationToString(startBurn_UT - GeneralTools.Game.UniverseModel.UniversalTime)}");
+                UI_Tools.Console($"start_burn in  {StrTool.DurationToString(startBurn_UT - GeneralTools.Game.UniverseModel.UniversalTime)}");
                 UI_Tools.Console($"speed collision  {speed_collision:n2} m/s");
                 UI_Tools.Console($"burn_duration {burn_duration:n2} s");
+            }
+            else
+            {
+                UI_Tools.Title("No Collision detected by KSP 2 Orbit");
             }
         }
 
