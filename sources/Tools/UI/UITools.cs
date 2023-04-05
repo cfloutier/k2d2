@@ -102,7 +102,7 @@ namespace K2D2
     /// </summary>
     public class UI_Tools
     {
-        public static bool Toggle(string txt, bool is_on, string tooltip = null)
+        public static bool Toggle(bool is_on, string txt, string tooltip = null)
         {
             if (tooltip != null)
                 return GUILayout.Toggle(is_on, new GUIContent(txt, tooltip), Styles.toggle);

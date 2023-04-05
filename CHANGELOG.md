@@ -2,7 +2,7 @@
 * Landing v1.0 !
 * position of window is saved
 * UI new Skin
-* 
+* added tooltip.
 
 
 

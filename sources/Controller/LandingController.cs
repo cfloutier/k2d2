@@ -112,12 +112,11 @@ namespace K2D2.Controller
         public void settings_UI()
         {
         //    UI_Tools.Console("Try to compensate gravity by adding dv to needed burn ");
-        //    gravity_compensation = GUILayout.Toggle(gravity_compensation, "Gravity Compensation");
+        //    gravity_compensation = UI_Tools.Toggle(gravity_compensation, "Gravity Compensation");
 
             UI_Tools.Title("// Landing Settings");
-            //auto_speed = GUILayout.Toggle(auto_speed, "Auto Speed");
-            auto_warp = UI_Tools.Toggle("Auto Time-Warp", auto_warp);
-            suicide_burn = UI_Tools.Toggle("Suicide burn mode", suicide_burn);
+            auto_warp = UI_Tools.Toggle(auto_warp, "Auto Time-Warp");
+            suicide_burn = UI_Tools.Toggle(suicide_burn, "Suicide burn mode", "Warning ! Work In Progress" );
 
             UI_Tools.Console("speed is based on altitude");
             touch_down_ratio = UI_Tools.FloatSlider("Altitude/speed ratio", touch_down_ratio, 0.5f, 3);

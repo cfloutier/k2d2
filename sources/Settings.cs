@@ -88,7 +88,7 @@ namespace K2D2
         public static void onGUI()
         { 
             GUILayout.BeginHorizontal();
-            UI_Tools.Title("Settings");
+            UI_Tools.Title("// Settings");
 
             GUILayout.FlexibleSpace();
 
@@ -96,9 +96,7 @@ namespace K2D2
             GUILayout.Label($"v{K2D2_Plugin.ModVer}", Styles.console_text);
 
             GUILayout.EndHorizontal();
-
-            GUILayout.Label("Debug mode open work in progress features and verbose information.", Styles.console_text);
-            Settings.debug_mode = GUILayout.Toggle(Settings.debug_mode, "debug mode");
+            Settings.debug_mode = UI_Tools.Toggle(Settings.debug_mode, "debug mode", "Debug mode open work in progress features and verbose informations.");
         }
     }
 

@@ -141,7 +141,7 @@ namespace K2D2
                 "K2-D2",
                 "BTN-K2D2Button",
                 AssetManager.GetAsset<Texture2D>($"{SpaceWarpMetadata.ModID}/images/icon.png"),
-                ToggleButton);
+                ToggleAppBarButton);
         }
 
         void Awake()
@@ -197,7 +197,7 @@ namespace K2D2
             {
                 // Debug.developerConsoleVisible = false;
                 if (Input.GetKey(KeyCode.LeftAlt) && Input.GetKeyDown(KeyCode.O) )
-                    ToggleButton(!drawUI);
+                    ToggleAppBarButton(!drawUI);
 
                 // Update Models
                 current_vessel.Update();
@@ -249,6 +249,7 @@ namespace K2D2
                     GUILayout.Width(350));
 
                 save_rect_pos();
+                ToolTipsManager.DrawToolTips();
             }
             if (_popUp.isPopupVisible)
             {
@@ -257,20 +258,25 @@ namespace K2D2
 
         }
 
-        public void ToggleButton(bool toggle)
+        public void ToggleAppBarButton(bool toggle)
         {
             drawUI = toggle;
             GameObject.Find("BTN-K2D2Button")?.GetComponent<UIValue_WriteBool_Toggle>()?.SetValue(toggle);
         }
         private void FillWindow(int windowID)
         {
-            if (GUI.Button(new Rect(windowRect.width - 30, 4, 25, 25), "X", Styles.small_button))
-                ToggleButton(false);
+
+            TopButtons.Init(windowRect.width);
+            if ( TopButtons.Button(Styles.cross))
+                ToggleAppBarButton(false);
+
 
             // settings button
-            settings_visible = GUI.Toggle(new Rect(windowRect.width - 56, 4, 25, 25), settings_visible, Styles.gear, Styles.small_button);
-            if(GUI.Button(new Rect(windowRect.width - 81, 4, 25, 25), "P", Styles.small_button))
-                _popUp.isPopupVisible = !_popUp.isPopupVisible;
+            settings_visible = TopButtons.Toggle(settings_visible, Styles.gear);
+
+            // hidden for the release
+            // if(GUI.Button(new Rect(windowRect.width - 81, 4, 25, 25), "P", Styles.small_button))
+            //     _popUp.isPopupVisible = !_popUp.isPopupVisible;
 
             GUI.Label(new Rect(9, 2, 29, 29), Styles.big_icon, Styles.icons_label);
 

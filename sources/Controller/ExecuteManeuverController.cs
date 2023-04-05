@@ -228,8 +228,7 @@ namespace K2D2.Controller
         {
             if (Settings.debug_mode)
             {
-                GUILayout.Label("Auto_Execute Next phase.", Styles.console_text);
-                Settings.auto_next = GUILayout.Toggle(Settings.auto_next, "Auto Next Phase");
+                Settings.auto_next = UI_Tools.Toggle(Settings.auto_next, "Auto Next Phase");
             }
             else
                 Settings.auto_next = true;
