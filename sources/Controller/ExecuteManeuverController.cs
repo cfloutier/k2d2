@@ -130,7 +130,9 @@ namespace K2D2.Controller
         {
             if (K2D2_Plugin.Instance.settings_visible)
             {
+                // default Settings UI
                 SettingsUI.onGUI();
+                // 
                 settingsUI();
                 return;
             }
@@ -228,7 +230,7 @@ namespace K2D2.Controller
         {
             if (Settings.debug_mode)
             {
-                Settings.auto_next = UI_Tools.Toggle(Settings.auto_next, "Auto Next Phase");
+                Settings.auto_next = UI_Tools.Toggle(Settings.auto_next, "Auto Next Phase", "Debug Mode : Need to press next");
             }
             else
                 Settings.auto_next = true;

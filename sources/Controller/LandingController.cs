@@ -96,8 +96,6 @@ namespace K2D2.Controller
                 }
         }
 
-
-
         public bool suicide_burn
         {
             get => Settings.s_settings_file.GetBool("land.suicide_burn", false);
@@ -106,9 +104,6 @@ namespace K2D2.Controller
             }
         }
 
-
-
-
         public void settings_UI()
         {
         //    UI_Tools.Console("Try to compensate gravity by adding dv to needed burn ");
@@ -116,19 +111,19 @@ namespace K2D2.Controller
 
             UI_Tools.Title("// Landing Settings");
             auto_warp = UI_Tools.Toggle(auto_warp, "Auto Time-Warp");
+
+            burn_before = UI_Tools.FloatSlider("Burn Before", burn_before, 0, 10);
+            UI_Tools.Console($"(Safe time before burn)");
+
             suicide_burn = UI_Tools.Toggle(suicide_burn, "Suicide burn mode", "Warning ! Work In Progress" );
 
             UI_Tools.Console("speed is based on altitude");
             touch_down_ratio = UI_Tools.FloatSlider("Altitude/speed ratio", touch_down_ratio, 0.5f, 3);
             UI_Tools.Right_Left_Text("Safe", "Danger");
-            // float limit_speed = compute_limit_speed(100);
-            // UI_Tools.Console($"ex : speed is limit at {limit_speed:n2} m/s for 100 meters altitude");
+            float limit_speed = compute_limit_speed(100);
+            UI_Tools.Console($"ex : speed is limit at {limit_speed:n2} m/s for 100 meters altitude");
 
-            touch_down_speed = UI_Tools.FloatSlider("Landing speed", touch_down_speed, 0.1f, 10);
-
-            burn_before = UI_Tools.FloatSlider("Burn Before", burn_before, 0, 10);
-            UI_Tools.Console($"(Safe time before burn)");
-
+            touch_down_speed = UI_Tools.FloatSlider("Touch-Down speed", touch_down_speed, 0.1f, 10);
 
 
         /*    else

@@ -178,11 +178,13 @@ namespace K2D2.Controller
         {
             GUILayout.Label("Burn", Styles.title);
 
-            Settings.burn_adjust = UI_Tools.FloatSlider("burn_adjust", Settings.burn_adjust, 0, 2);
-            GUILayout.Label("adjusting rate", Styles.console_text);
+            Settings.burn_adjust = UI_Tools.FloatSlider("Adjusting rate", Settings.burn_adjust, 0, 2);
+            UI_Tools.Right_Left_Text("Precise", "Quick");
+           // GUILayout.Label("", Styles.console_text);
 
-            Settings.max_dv_error = UI_Tools.FloatSlider("max_dv_error", Settings.max_dv_error, 0.001f, 2, " m/s");
-            GUILayout.Label("accepted dV difference (m/s)", Styles.console_text);
+            Settings.max_dv_error = UI_Tools.FloatSlider("Precision", 
+                        Settings.max_dv_error, 0.001f, 2, " m/s");
+
         }
     }
 }

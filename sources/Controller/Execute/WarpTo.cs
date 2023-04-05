@@ -98,10 +98,10 @@ namespace K2D2.Controller
             Settings.warp_speed = UI_Tools.IntSlider("Warp Speed", Settings.warp_speed, 4, 10);
             UI_Tools.Right_Left_Text("quick", "slow");
 
-            GUILayout.Label("Safe time", Styles.console_text);
+            GUILayout.Label("", Styles.console_text);
 
-            Settings.warp_safe_duration = UI_Tools.IntField("warp_safe_duration", Settings.warp_safe_duration, 5, int.MaxValue);
-            UI_Tools.Console("Nb seconds in x1 before next phase (min:5), useful to avoid strange ksp2 behaviors when going back to x1");
+            Settings.warp_safe_duration = UI_Tools.IntField("Safe time (s)", Settings.warp_safe_duration, 5, int.MaxValue,
+                "Nb seconds in x1 before next phase (min:5)");
         }
     }
 }

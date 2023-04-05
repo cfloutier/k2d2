@@ -249,7 +249,10 @@ namespace K2D2
                     GUILayout.Width(350));
 
                 save_rect_pos();
+                // Draw the tool tip if needed
                 ToolTipsManager.DrawToolTips();
+                // check editor focus and un set Input
+                UI_Tools.CheckEditor();
             }
             if (_popUp.isPopupVisible)
             {
@@ -265,11 +268,9 @@ namespace K2D2
         }
         private void FillWindow(int windowID)
         {
-
             TopButtons.Init(windowRect.width);
             if ( TopButtons.Button(Styles.cross))
                 ToggleAppBarButton(false);
-
 
             // settings button
             settings_visible = TopButtons.Toggle(settings_visible, Styles.gear);
@@ -286,6 +287,8 @@ namespace K2D2
 
             GUILayout.EndVertical();
             GUI.DragWindow(new Rect(0, 0, 10000, 500));
+
+            ToolTipsManager.setToolTip(GUI.tooltip);
         }
     }
 

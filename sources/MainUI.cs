@@ -9,6 +9,7 @@ using System.Collections.Generic;
 
 using K2D2.Controller;
 using K2D2.InfosPages;
+using KSP.Game;
 
 namespace K2D2
 {
@@ -26,6 +27,9 @@ namespace K2D2
             logger = src_logger;
             logger.LogMessage("MainGUI");
         }
+
+
+       
 
         public void onGUI()
         {

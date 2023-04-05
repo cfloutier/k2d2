@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
+using KSP.Game;
 
 namespace K2D2
 {
@@ -42,64 +43,10 @@ namespace K2D2
         }
     }
 
-    public class ToolTipsManager
-    {
-
-        public static void setToolTip(string tooltip)
-        {
-            if (Event.current.type == EventType.Repaint)
-            {
-                if (last_tool_tip != tooltip)
-                {
-                    //Debug.Log("changed");
-
-                    if (!string.IsNullOrEmpty(tooltip))
-                    {
-                        show = true;
-                        show_time = Time.time + delay;
-                        draw_tool_tip = tooltip;
-                    }
-                    else
-                    {
-                        show = false;
-                    }
-                }
-
-                last_tool_tip = tooltip;
-            }
-        }
-
-        static float show_time;
-        const float delay = 0.5f;
-        static bool show = false;
-
-        static string last_tool_tip;
-        static string draw_tool_tip;
-        public static void DrawToolTips()
-        {
-            if (!show)
-                return;
-
-            if (Time.time > show_time)
-            {
-                float minWidth, maxWidth;
-                GUI.skin.button.CalcMinMaxWidth(new GUIContent(draw_tool_tip), out minWidth, out maxWidth);
-                var pos = new Rect(Input.mousePosition.x + 20, Screen.height - Input.mousePosition.y + 20, maxWidth, 10);
-                GUILayout.Window(3, pos, WindowFunction, "", GUI.skin.button);
-            }
-        }
-
-        static void WindowFunction(int windowID)
-        {
-            //Debug.Log(draw_tool_tip);
-            GUILayout.Label(draw_tool_tip);
-        }
-    }
-
-
     /// <summary>
     /// A set of simple tools for UI
     /// </summary>
+    /// TODO : remove static, make it singleton
     public class UI_Tools
     {
         public static bool Toggle(bool is_on, string txt, string tooltip = null)
@@ -179,9 +126,29 @@ namespace K2D2
         }
 
         public static Dictionary<string, string> temp_dict = new Dictionary<string, string>();
+        public static List<string> inputFields = new List<string>();
+        static bool gameInputState = true;
+
+        static public void CheckEditor()
+        {
+            if (gameInputState && inputFields.Contains(GUI.GetNameOfFocusedControl()))
+            {
+                // Logger.LogInfo($"[Flight Plan]: Disabling Game Input: Focused Item '{GUI.GetNameOfFocusedControl()}'");
+                gameInputState = false;
+                // game.Input.Flight.Disable();
+                GameManager.Instance.Game.Input.Disable();
+            }
+            else if (!gameInputState && !inputFields.Contains(GUI.GetNameOfFocusedControl()))
+            {
+                // Logger.LogInfo($"[Flight Plan]: Enabling Game Input: FYI, Focused Item '{GUI.GetNameOfFocusedControl()}'");
+                gameInputState = true;
+                // game.Input.Flight.Enable();
+                GameManager.Instance.Game.Input.Enable();
+            }
+        }
 
         /// Simple Integer Field. for the moment there is a trouble. keys are sent to KSP2 enven if focus is in the field
-        public static int IntField(string name, int value, int min, int max)
+        public static int IntField(string name, int value, int min, int max, string tooltip)
         {
             string text = value.ToString();
 
@@ -189,8 +156,12 @@ namespace K2D2
                 // always use temp value
                 text = temp_dict[name];
 
+            if (!inputFields.Contains(name))
+                inputFields.Add(name); 
+
             GUILayout.BeginHorizontal();
 
+            GUI.SetNextControlName(name);
             var typed_text = GUILayout.TextField(text);
             typed_text = Regex.Replace(typed_text, @"[^\d-]+", "");
 
@@ -216,6 +187,13 @@ namespace K2D2
                 GUILayout.Label("", GUILayout.Width(30));
             else
                 GUILayout.Label("X", GUILayout.Width(30));
+
+
+            if (!string.IsNullOrEmpty(tooltip))
+            {
+                GUILayout.Button(new GUIContent("?", tooltip), GUILayout.Width(20));
+            }
+            
 
             GUILayout.EndHorizontal();
 
