@@ -11,6 +11,43 @@ using KSP.Sim.Maneuver;
 
 namespace K2D2.Controller
 {
+    class BurnManeuvreSettings
+    {
+
+        public static float burn_adjust
+        {
+            get => Settings.s_settings_file.GetFloat("warp.burn_adjust", 1.5f);
+            set
+            {             // value = Mathf.Clamp(0.1,)
+                Settings.s_settings_file.SetFloat("warp.burn_adjust", value);
+            }
+        }
+
+        public static float max_dv_error
+        {
+            get => Settings.s_settings_file.GetFloat("warp.max_dv_error", 0.1f);
+            set
+            {             // value = Mathf.Clamp(0.1,)
+                Settings.s_settings_file.SetFloat("warp.max_dv_error", value);
+            }
+        }
+
+        static public void ui()
+        {
+            GUILayout.Label("Burn", Styles.title);
+
+            burn_adjust = UI_Tools.FloatSlider("Adjusting rate", burn_adjust, 0, 2);
+            UI_Tools.Right_Left_Text("Precise", "Quick");
+            // GUILayout.Label("", Styles.console_text);
+
+            max_dv_error = UI_Tools.FloatSlider("Precision",
+                        max_dv_error, 0.001f, 0.5f, "m/s");
+        }
+
+
+    }
+
+
     public class BurnManeuvre  : ExecuteController
     {
         public ManualLogSource logger = BepInEx.Logging.Logger.CreateLogSource("K2D2.BurnManeuvre");
@@ -87,7 +124,7 @@ namespace K2D2.Controller
 
                 var required_dv = maneuver.BurnRequiredDV;
                 remaining_dv = required_dv - burn_dV.burned_dV;
-                if (remaining_dv <= Settings.max_dv_error )
+                if (remaining_dv <= BurnManeuvreSettings.max_dv_error )
                 {
                     set_throttle(0);
                     status_line = $"ended, error is {remaining_dv} m/S";
@@ -140,7 +177,7 @@ namespace K2D2.Controller
                 return;
             }
 
-            needed_throttle = remaining_full_burn_time * Settings.burn_adjust;
+            needed_throttle = remaining_full_burn_time * BurnManeuvreSettings.burn_adjust;
         }
 
         public override void onGUI()
@@ -174,17 +211,6 @@ namespace K2D2.Controller
                 burn_dV.onGUI();
             }
         }
-        public void settings_UI()
-        {
-            GUILayout.Label("Burn", Styles.title);
-
-            Settings.burn_adjust = UI_Tools.FloatSlider("Adjusting rate", Settings.burn_adjust, 0, 2);
-            UI_Tools.Right_Left_Text("Precise", "Quick");
-           // GUILayout.Label("", Styles.console_text);
-
-            Settings.max_dv_error = UI_Tools.FloatSlider("Precision", 
-                        Settings.max_dv_error, 0.001f, 2, " m/s");
-
-        }
+      
     }
 }

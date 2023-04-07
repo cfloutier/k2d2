@@ -252,19 +252,22 @@ namespace K2D2
                 // Draw the tool tip if needed
                 ToolTipsManager.DrawToolTips();
                 // check editor focus and un set Input
-                UI_Tools.CheckEditor();
+                UI_Fields.CheckEditor();
             }
             if (_popUp.isPopupVisible)
             {
                 _popUp.OnGUI();
             }
-
         }
 
         public void ToggleAppBarButton(bool toggle)
         {
             drawUI = toggle;
             GameObject.Find("BTN-K2D2Button")?.GetComponent<UIValue_WriteBool_Toggle>()?.SetValue(toggle);
+            if (!drawUI)
+            {
+                GameManager.Instance.Game.Input.Enable();
+            }
         }
         private void FillWindow(int windowID)
         {

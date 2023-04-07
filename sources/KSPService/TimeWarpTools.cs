@@ -30,6 +30,10 @@ namespace K2D2
             }
         }
 
+        public static void KspWarpTo(Double ut)
+        {
+            time_warp.WarpTo(ut);
+        }
 
         public static float indexToRatio(int index)
         {

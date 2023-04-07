@@ -367,6 +367,27 @@ namespace K2D2.KSPService
             return Game.ViewController.DataProvider.TelemetryDataProvider.AltimeterDisplayMode.GetValue();
         }
 
+
+        public bool Landed()
+        {
+            return VesselComponent.Landed;
+        }
+
+        public double GetApproxAltitude()
+        {  
+            var altitude_from_ground = GetGroundAltitude();
+           // VesselComponent.SimulationObject.objVesselBehavior.ShowCenterOfMass;
+           // var center = VesselComponent.SimulationObject.objVesselBehavior.BoundingBox.center.y - VesselComponent.SimulationObject.objVesselBehavior.BoundingBox.extents.z;
+            //var bounding_sphere = VesselComponent.SimulationObject.objVesselBehavior.BoundingSphere;
+            var result = altitude_from_ground - VesselComponent.SimulationObject.objVesselBehavior.BoundingSphere.radius;
+            return result;  
+        }    
+
+        public double GetGroundAltitude()
+        {
+            return telemetryDataProvider.GetAltitudeDisplayValue(AltimeterDisplayMode.GroundLevel);
+        }
+
         public double GetDisplayAltitude()
         {
             AltimeterDisplayMode altimeterDisplayMode = GetAltimeterDisplayMode();

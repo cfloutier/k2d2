@@ -235,8 +235,8 @@ namespace K2D2.Controller
             else
                 Settings.auto_next = true;
 
-            warp.setting_UI();
-            burn.settings_UI();
+            WarpToSettings.ui();
+            BurnManeuvreSettings.ui();
         }
 
         void node_infos()

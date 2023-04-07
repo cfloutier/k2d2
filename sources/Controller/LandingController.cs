@@ -112,10 +112,11 @@ namespace K2D2.Controller
             UI_Tools.Title("// Landing Settings");
             auto_warp = UI_Tools.Toggle(auto_warp, "Auto Time-Warp");
 
-            burn_before = UI_Tools.FloatSlider("Burn Before", burn_before, 0, 10);
+            burn_before = UI_Tools.FloatSlider("Burn Before", burn_before, 0, 10, "s");
             UI_Tools.Console($"(Safe time before burn)");
 
-            suicide_burn = UI_Tools.Toggle(suicide_burn, "Suicide burn mode", "Warning ! Work In Progress" );
+            if (Settings.debug_mode)
+                suicide_burn = UI_Tools.Toggle(suicide_burn, "Suicide burn mode", "Warning ! Work In Progress" );
 
             UI_Tools.Console("speed is based on altitude");
             touch_down_ratio = UI_Tools.FloatSlider("Altitude/speed ratio", touch_down_ratio, 0.5f, 3);
@@ -211,8 +212,7 @@ namespace K2D2.Controller
                     current_executor.setController(null);
                     break;
                 case Mode.Turn:
-                    current_executor.setController(turn);
-                    turn.StartSurfaceRetroGrade();
+                    setMode(Mode.TimeWarp);
                     break;
                 case Mode.TimeWarp:
                     if (!land_settings.auto_warp)
@@ -350,6 +350,8 @@ namespace K2D2.Controller
             double time = orbit.collisionPointUT;
             double terrainAltitude;
 
+            float radius = current_vessel.VesselComponent.SimulationObject.objVesselBehavior.BoundingSphere.radius;
+
             for (int i = 0; i < max_occurrences; i++)
             {
                 Vector3d pos;
@@ -363,6 +365,7 @@ namespace K2D2.Controller
                double sceneryOffset;
 
                 body.GetAltitudeFromTerrain(ps, out terrainAltitude, out sceneryOffset);
+                terrainAltitude -= radius;
 
                 if (terrainAltitude < 0)
                 {
@@ -397,7 +400,10 @@ namespace K2D2.Controller
             if (current_vessel == null || current_vessel.VesselVehicle == null)
                 return;
 
-            altitude = (float)current_vessel.GetDisplayAltitude();
+            altitude = (float)current_vessel.GetApproxAltitude();
+
+
+
             current_speed = (float)current_vessel.VesselVehicle.SurfaceSpeed;
 
             computeValues();
@@ -489,7 +495,7 @@ namespace K2D2.Controller
             {
                 SettingsUI.onGUI();
                 land_settings.settings_UI();
-                warp_to.setting_UI();
+                WarpToSettings.ui();
                 return;
             }
 

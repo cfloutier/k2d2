@@ -52,34 +52,10 @@ namespace K2D2
             set{  s_settings_file.SetEnum< MainUI.InterfaceMode>("interface_setting", value); }
         }
 
-        public static int warp_speed
-        {
-            get => s_settings_file.GetInt("warp.speed", 5);
-            set {  s_settings_file.SetInt("warp.speed", value); }
-        }
+     
 
-        public static int warp_safe_duration
-        {
-            get => s_settings_file.GetInt("warp.safe_duration", 10);
-            set {
-                if (value < 5) value = 5;
-                s_settings_file.SetInt("warp.safe_duration", value);
-            }
-        }
 
-        public static float burn_adjust
-        {
-            get => s_settings_file.GetFloat("warp.burn_adjust", 1.5f);
-            set {             // value = Mathf.Clamp(0.1,)
-                s_settings_file.SetFloat("warp.burn_adjust", value); }
-        }
 
-        public static float max_dv_error
-        {
-            get => s_settings_file.GetFloat("warp.max_dv_error", 0.1f);
-            set {             // value = Mathf.Clamp(0.1,)
-                s_settings_file.SetFloat("warp.max_dv_error", value); }
-        }
     }
 
 

@@ -6,12 +6,62 @@ using UnityEngine;
 using KSP.Sim.impl;
 using KSP.Sim.Maneuver;
 
-
+using BepInEx.Logging;
+using System;
 
 namespace K2D2.Controller
-{
+{ 
+
+    class WarpToSettings
+    {
+
+        public static bool ksp_warp
+        {
+            get => Settings.s_settings_file.GetBool("warp.ksp_warp", true);
+            set { Settings.s_settings_file.SetBool("warp.ksp_warp", value); }
+        }
+
+
+        public static int warp_speed
+        {
+            get => Settings.s_settings_file.GetInt("warp.speed", 2);
+            set { Settings.s_settings_file.GetInt("warp.speed", value); }
+        }
+
+        public static int warp_safe_duration
+        {
+            get => Settings.s_settings_file.GetInt("warp.safe_duration", 10);
+            set
+            {
+                if (value < 5) value = 5;
+                Settings.s_settings_file.SetInt("warp.safe_duration", value);
+            }
+        }
+
+        public static void ui()
+        {
+            UI_Tools.Title("// Warp");
+
+            ksp_warp = UI_Tools.Toggle(ksp_warp, "Use Ksp Warp");
+
+            if (!ksp_warp)
+            {
+                warp_speed = UI_Tools.IntSlider("Warp Speed", warp_speed, 0, 5);
+                UI_Tools.Right_Left_Text("slow", "quick");
+            }
+
+            GUILayout.Label("Safe time (s)", Styles.console_text);
+            warp_safe_duration = UI_Fields.IntField("warp_safe_duration", warp_safe_duration, 5, int.MaxValue,
+                "Nb seconds in x1 before next phase (min:5)");
+        }
+
+    }
+
     public class WarpTo : ExecuteController
     {
+
+        public ManualLogSource logger = BepInEx.Logging.Logger.CreateLogSource("K2D2.Controller.WarpTo");
+
         int wanted_warp_index = 0;
         ManeuverNodeData maneuver = null;
         public double UT;
@@ -29,21 +79,14 @@ namespace K2D2.Controller
             Start();
         }
 
-        /*public double remainingStartTime(ManeuverNodeData node)
+        public override void Start()
         {
-            var dt = node.Time - GeneralTools.Game.UniverseModel.UniversalTime;
-            return dt;
-        }
+            finished = false;
 
-        public double remainingEndTime(ManeuverNodeData node)
-        {
-            var dt = node.Time + node.BurnDuration - GeneralTools.Game.UniverseModel.UniversalTime;
-            return dt;
-        }*/
+        }
 
 
         double dt;
-
 
         public override void Update()
         {
@@ -53,29 +96,46 @@ namespace K2D2.Controller
                 UT = maneuver.Time;
             }
 
-            dt = UT - GeneralTools.Game.UniverseModel.UniversalTime;
-            dt = dt - Settings.warp_safe_duration;
+            var ut_modified = UT - WarpToSettings.warp_safe_duration;
 
-            wanted_warp_index = compute_wanted_warp_index(dt);
-            float wanted_rate = TimeWarpTools.indexToRatio(wanted_warp_index);
+            dt = ut_modified - GeneralTools.Game.UniverseModel.UniversalTime;
+ 
 
             if (dt < 0)
             {
-                wanted_warp_index = 0;
+                TimeWarpTools.SetRateIndex(0, false);
                 finished = true;
+                return;
             }
 
-            status_line = $"End warp : {StrTool.DurationToString(dt)} | x{wanted_rate}";
-            TimeWarpTools.SetRateIndex(wanted_warp_index, false);
+            if (WarpToSettings.ksp_warp)
+            {
+                if (TimeWarpTools.CurrentRateIndex == 0)
+                {
+                    logger.LogInfo("set KspWarpTo");
+                    TimeWarpTools.KspWarpTo(ut_modified);
+                }
+
+                status_line = $"End warp : {StrTool.DurationToString(dt)} | use ksp warp";
+            }
+            else
+            {
+                wanted_warp_index = compute_wanted_warp_index(dt);
+                float wanted_rate = TimeWarpTools.indexToRatio(wanted_warp_index);
+                TimeWarpTools.SetRateIndex(wanted_warp_index, false);
+                status_line = $"End warp : {StrTool.DurationToString(dt)} | x{wanted_rate}";
+            }
         }
 
         int compute_wanted_warp_index(double dt)
         {
-            double factor = Settings.warp_speed;
-            double ratio = dt / factor;
+            if (dt < 0)
+                return 0;
+
+            double time_ratio = 1 + dt / ( 10 + WarpToSettings.warp_speed );
 
             // adding 1 because x1 during the warp mode is a lame
-            return TimeWarpTools.ratioToIndex((float)ratio) + 1;
+            return TimeWarpTools.ratioToIndex((float)time_ratio);
         }
 
         public override void onGUI()
@@ -91,17 +151,6 @@ namespace K2D2.Controller
             }
         }
 
-        public void setting_UI()
-        {
-            UI_Tools.Title("// Warp");
-
-            Settings.warp_speed = UI_Tools.IntSlider("Warp Speed", Settings.warp_speed, 4, 10);
-            UI_Tools.Right_Left_Text("quick", "slow");
-
-            GUILayout.Label("", Styles.console_text);
-
-            Settings.warp_safe_duration = UI_Tools.IntField("Safe time (s)", Settings.warp_safe_duration, 5, int.MaxValue,
-                "Nb seconds in x1 before next phase (min:5)");
-        }
+     
     }
 }

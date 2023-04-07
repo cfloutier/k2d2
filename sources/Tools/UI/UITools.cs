@@ -104,11 +104,11 @@ namespace K2D2
             return value;
         }
 
-        public static float FloatSlider(string txt, float value, float min, float max, string unity_txt = "")
+        public static float FloatSlider(string txt, float value, float min, float max, string postfix = "")
         {
             // simple float slider with a lavel value
 
-            string content = txt + $" : {value:n2}" + unity_txt;
+            string content = txt + $" : {value:n2} " + postfix;
 
             GUILayout.Label(content, Styles.slider_text);
             value = GUILayout.HorizontalSlider( value, min, max, Styles.slider_line, Styles.slider_node);
@@ -124,6 +124,13 @@ namespace K2D2
             UI_Tools.Console(left_txt);
             GUILayout.EndHorizontal();
         }
+
+      
+    }
+
+
+    public class UI_Fields
+    {
 
         public static Dictionary<string, string> temp_dict = new Dictionary<string, string>();
         public static List<string> inputFields = new List<string>();
@@ -157,7 +164,7 @@ namespace K2D2
                 text = temp_dict[name];
 
             if (!inputFields.Contains(name))
-                inputFields.Add(name); 
+                inputFields.Add(name);
 
             GUILayout.BeginHorizontal();
 
@@ -193,14 +200,10 @@ namespace K2D2
             {
                 GUILayout.Button(new GUIContent("?", tooltip), GUILayout.Width(20));
             }
-            
 
             GUILayout.EndHorizontal();
-
             return result;
         }
-
-
     }
 
 
