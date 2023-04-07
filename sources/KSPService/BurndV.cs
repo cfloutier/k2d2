@@ -9,7 +9,7 @@ using K2D2.Controller;
 
 namespace K2D2.KSPService
 {
-    /// Simple class used to compute Burn DV
+    /// Simple class used to compute Burned DV
     public class BurndV: BaseController
     {
         public ManualLogSource logger = BepInEx.Logging.Logger.CreateLogSource("K2D2.SettingsFile");
@@ -37,7 +37,6 @@ namespace K2D2.KSPService
 
         public override void FixedUpdate()
         {
-
             burned_dV += actual_dv * Time.fixedDeltaTime;
         }
 
@@ -102,7 +101,7 @@ namespace K2D2.KSPService
             VesselDeltaVComponent delta_v = current_vessel.VesselComponent.VesselDeltaV;
             if (delta_v == null)
             {
-                GUILayout.Label("NO VesselDeltaVComponent");
+                UI_Tools.Error("NO VesselDeltaVComponent");
                 return;
             }
             List<DeltaVEngineInfo> engineInfos = delta_v.EngineInfo;
@@ -111,22 +110,17 @@ namespace K2D2.KSPService
             if (vehicle == null) return;
             var mainThrottle = vehicle.mainThrottle;
 
-            GUILayout.Label($"nb_engines {engineInfos.Count}  ");
+            //GUILayout.Label($"nb_engines {engineInfos.Count}  ");
 
-            GUILayout.Space(20);
-            GUILayout.Label($"mainThrottle {mainThrottle}");
+
+            UI_Tools.Console($"mainThrottle {mainThrottle}");
             // GUILayout.Label($"actual_thrust  {Tools.printVector(actual_thrust)}  ");
-            GUILayout.Label($"actual_dv  {actual_dv:n5}  ");
-            GUILayout.Space(20);
+            UI_Tools.Console($"actual_dv  {actual_dv:n5}  ");
 
-            // GUILayout.Label($"full_thrust  {Tools.printVector(full_thrust)}  ");
-            GUILayout.Label($"full_dv  {full_dv:n5}  ");
 
-            GUILayout.Space(20);
-
-            GUILayout.Label($"burned_dV  {burned_dV:n5}  ");
-             GUILayout.Space(5);
-
+            // UI_Tools.Console($"full_thrust  {Tools.printVector(full_thrust)}  ");
+            UI_Tools.Console($"full_dv  {full_dv:n5}  ");
+            UI_Tools.Console($"burned_dV <b> {burned_dV:n5} </b>");
             if (GUILayout.Button("Reset"))
                 burned_dV = 0;
         }

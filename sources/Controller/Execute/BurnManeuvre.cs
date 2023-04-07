@@ -34,19 +34,15 @@ namespace K2D2.Controller
 
         static public void ui()
         {
-            GUILayout.Label("Burn", Styles.title);
+            UI_Tools.Title("// Burn");
 
             burn_adjust = UI_Tools.FloatSlider("Adjusting rate", burn_adjust, 0, 2);
             UI_Tools.Right_Left_Text("Precise", "Quick");
-            // GUILayout.Label("", Styles.console_text);
 
             max_dv_error = UI_Tools.FloatSlider("Precision",
                         max_dv_error, 0.001f, 0.5f, "m/s");
         }
-
-
     }
-
 
     public class BurnManeuvre  : ExecuteController
     {
@@ -94,7 +90,7 @@ namespace K2D2.Controller
 
             // force autopilot
             autopilot.Enabled = true;
-            autopilot.SetMode(AutopilotMode.StabilityAssist);
+            autopilot.SetMode(AutopilotMode.Maneuver);
         }
 
         public override void Update()
@@ -113,17 +109,43 @@ namespace K2D2.Controller
                     return;
                 }
                 else
+                {
                     mode = Mode.Burning;
+                    var autopilot = current_vessel.Autopilot;
+
+                    // force autopilot
+                    autopilot.Enabled = true;
+                    autopilot.SetMode(AutopilotMode.StabilityAssist);
+                }
             }
 
             if (mode == Mode.Burning)
             {
-                burn_dV.Update();
                 burn_dV.LateUpdate();
+
                 if (maneuver == null) return;
 
-                var required_dv = maneuver.BurnRequiredDV;
-                remaining_dv = required_dv - burn_dV.burned_dV;
+                // ActiveVessel = GameManager.Instance?.Game?.ViewController?.GetActiveVehicle(true)?.GetSimVessel(true);
+                double ut = 0;
+
+                var telemetry = SASInfos.getTelemetry();
+                if (!telemetry.HasManeuver)
+                    return;
+
+                Vector maneuvre_dir = telemetry.ManeuverDirection;
+                Vector velocity_after_maneuver = current_vessel.VesselComponent.Orbiter.ManeuverPlanSolver.GetVelocityAfterFirstManeuver(out ut);
+                maneuvre_dir.Reframe(velocity_after_maneuver.coordinateSystem);
+
+                var current_vel = current_vessel.VesselComponent.Orbit.GetOrbitalVelocityAtUTZup(ut);
+                var delta_speed_vector = velocity_after_maneuver.vector - current_vel;
+
+                var sign = Math.Sign( Vector3d.Dot(maneuvre_dir.vector, delta_speed_vector));
+
+
+                remaining_dv = sign * (delta_speed_vector).magnitude;
+
+                // var required_dv = maneuver.BurnRequiredDV;
+                // remaining_dv = required_dv - burn_dV.burned_dV;
                 if (remaining_dv <= BurnManeuvreSettings.max_dv_error )
                 {
                     set_throttle(0);
@@ -144,7 +166,7 @@ namespace K2D2.Controller
         {
             if (mode == Mode.Burning)
             {
-                burn_dV.FixedUpdate();
+                // burn_dV.FixedUpdate();
             }
         }
 
@@ -160,6 +182,28 @@ namespace K2D2.Controller
             throttle = Mathf.Clamp01(throttle);
             current_vessel.SetThrottle(throttle);
             last_throttle = throttle;
+        }
+
+
+        public bool checkManeuvreDirection()
+        {
+            double max_angle = 1;
+
+            var telemetry = SASInfos.getTelemetry();
+            if (!telemetry.HasManeuver)
+                return false;
+
+            Vector maneuvre_dir = telemetry.ManeuverDirection;
+            Rotation vessel_rotation = current_vessel.GetRotation();
+
+            // convert rotation to maneuvre coordinates
+            vessel_rotation = Rotation.Reframed(vessel_rotation, maneuvre_dir.coordinateSystem);
+            Vector3d forward_direction = (vessel_rotation.localRotation * Vector3.up).normalized;
+
+            double angle = Vector3d.Angle(maneuvre_dir.vector, forward_direction);
+            status_line = $"Waiting for good sas direction\nAngle = {angle:n2}°";
+
+            return angle < max_angle;
         }
 
         public void compute_throttle()
@@ -185,32 +229,31 @@ namespace K2D2.Controller
             switch(mode)
             {
                 case Mode.Waiting:
-                    GUILayout.Label("Waiting !", Styles.phase_ok);
+                    UI_Tools.OK("Waiting !");
                     break;
                 case Mode.Burning:
-                    GUILayout.Label("Burning !", Styles.warning);
+                    UI_Tools.Warning("Burning !");
                     break;
             }
 
-            GUILayout.Label(status_line, Styles.console_text);
+            UI_Tools.Console(status_line);
 
             if (Settings.debug_mode)
             {
                 if (maneuver == null) return;
 
-                //GUILayout.Label($"start_dt {Tools.remainingStartTime(maneuver)}");
-                //GUILayout.Label($"end_dt {Tools.remainingEndTime(maneuver)}");
+                //UI_Tools.Console($"start_dt {Tools.remainingStartTime(maneuver)}");
+                //UI_Tools.Console($"end_dt {Tools.remainingEndTime(maneuver)}");
 
-                GUILayout.Label($"BurnRequiredDV {maneuver.BurnRequiredDV}");
+                UI_Tools.Console($"BurnRequiredDV {maneuver.BurnRequiredDV}");
 
-                GUILayout.Label($"remaining_dv {remaining_dv}");
-                GUILayout.Label($"remaining_full_burn_time {remaining_full_burn_time}");
+                UI_Tools.Console($"remaining_dv {remaining_dv}");
+                UI_Tools.Console($"remaining_full_burn_time {remaining_full_burn_time}");
 
-                GUILayout.Label($"needed_throttle {needed_throttle}");
+                UI_Tools.Console($"needed_throttle {needed_throttle}");
 
                 burn_dV.onGUI();
             }
         }
-      
     }
 }

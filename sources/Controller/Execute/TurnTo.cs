@@ -104,7 +104,7 @@ namespace K2D2.Controller
 
         public bool checkManeuvreDirection()
         {
-            double max_angle = 1;
+            double max_angle = 0.2;
 
             var telemetry = SASInfos.getTelemetry();
             if (!telemetry.HasManeuver)
@@ -143,8 +143,8 @@ namespace K2D2.Controller
 
         public override void onGUI()
         {
-            GUILayout.Label("Check Attitude", Styles.phase_ok);
-            GUILayout.Label(status_line, Styles.console_text);
+            UI_Tools.Warning("Check Attitude");
+            UI_Tools.Console(status_line);
 
             // GUILayout.Label($"sas.sas_response v {Tools.print_vector(sas_response)}");
 

@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.IO;
 using BepInEx.Logging;
 
+using System.Threading;
+
 
 namespace K2D2
 {
@@ -24,6 +26,9 @@ namespace K2D2
 
         protected void Load()
         {
+
+            var previous_culture = Thread.CurrentThread.CurrentCulture;
+            Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
             try
             {
                 this.data = JsonConvert.DeserializeObject<Dictionary<string, string>>(File.ReadAllText(file_path));
@@ -32,10 +37,17 @@ namespace K2D2
             {
                 logger.LogWarning($"error loading {file_path}");
             }
+
+            Thread.CurrentThread.CurrentCulture = previous_culture;
         }
+
+
+
 
         protected void Save()
         {
+            var previous_culture = Thread.CurrentThread.CurrentCulture;
+            Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
             try
             {
                 File.WriteAllText(file_path, JsonConvert.SerializeObject(data));
@@ -44,6 +56,8 @@ namespace K2D2
             {
                 logger.LogError($"error saving {this.file_path}");
             }
+
+            Thread.CurrentThread.CurrentCulture = previous_culture;
         }
 
         public string GetString(string name, string defaultValue)

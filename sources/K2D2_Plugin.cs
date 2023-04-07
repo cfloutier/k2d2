@@ -149,42 +149,7 @@ namespace K2D2
          
         }
 
-        void check_rect_pos()
-        {
-            if (windowRect == Rect.zero)
-            {
-                int x_pos = Settings.window_x_pos;
-                int y_pos = Settings.window_y_pos;
-
-                if (x_pos == -1)
-                {
-                    x_pos = 100;
-                    y_pos = 50;
-                }
-
-                windowRect = new Rect(x_pos, y_pos, 500, 100);
-            }
-
-            if (windowRect.xMax > Screen.width)
-            {
-                var dx = Screen.width - windowRect.xMax;
-                windowRect.x += dx;
-            }
-            if (windowRect.yMax > Screen.height)
-            {
-                var dy = Screen.height - windowRect.yMax;
-                windowRect.y += dy;
-            }
-            if (windowRect.xMin < 0)
-            {
-                windowRect.x = 0;
-            }
-            if (windowRect.yMin < 0)
-            {
-                windowRect.y = 0;
-            }
-        }
-
+       
         void save_rect_pos()
         {
             Settings.window_x_pos = (int)windowRect.xMin;
@@ -235,7 +200,7 @@ namespace K2D2
             {
                 GUI.skin = Skins.ConsoleSkin;
 
-                check_rect_pos();
+                UI_Tools.check_rect_pos(windowRect);
                 Styles.Init();
 
 

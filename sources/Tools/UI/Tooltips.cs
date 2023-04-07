@@ -47,8 +47,12 @@ namespace K2D2
             {
                 float minWidth, maxWidth;
                 GUI.skin.button.CalcMinMaxWidth(new GUIContent(draw_tool_tip), out minWidth, out maxWidth);
-                var pos = new Rect(Input.mousePosition.x + offset.x, Screen.height - Input.mousePosition.y + offset.y, maxWidth, 10);
-                GUILayout.Window(3, pos, WindowFunction, "", GUI.skin.button);
+                var tooltip_pos = new Rect(Input.mousePosition.x + offset.x, Screen.height - Input.mousePosition.y + offset.y, maxWidth, 10);
+
+
+                UI_Tools.check_rect_pos(tooltip_pos);
+
+                GUILayout.Window(3, tooltip_pos, WindowFunction, "", GUI.skin.button);
             }
         }
 

@@ -49,6 +49,46 @@ namespace K2D2
     /// TODO : remove static, make it singleton
     public class UI_Tools
     {
+        public static void check_rect_pos(Rect window_frame)
+        {
+            if (window_frame == Rect.zero)
+            {
+                int x_pos = Settings.window_x_pos;
+                int y_pos = Settings.window_y_pos;
+
+                if (x_pos == -1)
+                {
+                    x_pos = 100;
+                    y_pos = 50;
+                }
+
+                window_frame = new Rect(x_pos, y_pos, 500, 100);
+            }
+
+            if (window_frame.xMax > Screen.width)
+            {
+                var dx = Screen.width - window_frame.xMax;
+                window_frame.x += dx;
+            }
+            if (window_frame.yMax > Screen.height)
+            {
+                var dy = Screen.height - window_frame.yMax;
+                window_frame.y += dy;
+            }
+            if (window_frame.xMin < 0)
+            {
+                window_frame.x = 0;
+            }
+            if (window_frame.yMin < 0)
+            {
+                window_frame.y = 0;
+            }
+        }
+
+
+
+
+
         public static bool Toggle(bool is_on, string txt, string tooltip = null)
         {
             if (tooltip != null)
@@ -92,14 +132,34 @@ namespace K2D2
             GUILayout.Label(txt, Styles.label);
         }
 
+        public static void OK(string txt)
+        {
+            GUILayout.Label(txt, Styles.phase_ok);
+        }
+
+        public static void Warning(string txt)
+        {
+            GUILayout.Label(txt, Styles.phase_warning);
+        }
+
+        public static void Error(string txt)
+        {
+            GUILayout.Label(txt, Styles.phase_error);
+        }
+
+
+
         public static void Console(string txt)
         {
             GUILayout.Label(txt, Styles.console_text);
         }
 
-        public static int IntSlider(string txt, int value, int min, int max )
+        public static int IntSlider(string txt, int value, int min, int max, string postfix = "")
         {
-            GUILayout.Label(txt + $" : {value}");
+
+            string content = txt + $" : {value} " + postfix;
+
+            GUILayout.Label(content, Styles.title);
             value = (int) GUILayout.HorizontalSlider((int) value, min, max, Styles.slider_line, Styles.slider_node);
             return value;
         }

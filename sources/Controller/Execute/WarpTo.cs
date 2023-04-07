@@ -10,7 +10,7 @@ using BepInEx.Logging;
 using System;
 
 namespace K2D2.Controller
-{ 
+{
 
     class WarpToSettings
     {
@@ -22,10 +22,13 @@ namespace K2D2.Controller
         }
 
 
-        public static int warp_speed
+        public static float warp_speed
         {
-            get => Settings.s_settings_file.GetInt("warp.speed", 2);
-            set { Settings.s_settings_file.GetInt("warp.speed", value); }
+            get => Settings.s_settings_file.GetFloat("warp.speed", 2);
+            set {
+                    value = Mathf.Clamp(value, 0, 5);
+                    Settings.s_settings_file.SetFloat("warp.speed", value); 
+                }
         }
 
         public static int warp_safe_duration
@@ -46,11 +49,11 @@ namespace K2D2.Controller
 
             if (!ksp_warp)
             {
-                warp_speed = UI_Tools.IntSlider("Warp Speed", warp_speed, 0, 5);
-                UI_Tools.Right_Left_Text("slow", "quick");
+                warp_speed = UI_Tools.FloatSlider("Warp Speed", warp_speed, 0, 5);
+                UI_Tools.Right_Left_Text("safe", "quick");
             }
 
-            GUILayout.Label("Safe time (s)", Styles.console_text);
+            UI_Tools.Console("Safe time (s)");
             warp_safe_duration = UI_Fields.IntField("warp_safe_duration", warp_safe_duration, 5, int.MaxValue,
                 "Nb seconds in x1 before next phase (min:5)");
         }
@@ -85,7 +88,6 @@ namespace K2D2.Controller
 
         }
 
-
         double dt;
 
         public override void Update()
@@ -99,7 +101,6 @@ namespace K2D2.Controller
             var ut_modified = UT - WarpToSettings.warp_safe_duration;
 
             dt = ut_modified - GeneralTools.Game.UniverseModel.UniversalTime;
- 
 
             if (dt < 0)
             {
@@ -140,8 +141,8 @@ namespace K2D2.Controller
 
         public override void onGUI()
         {
-            GUILayout.Label("Time Warp", Styles.phase_ok);
-            GUILayout.Label(status_line, Styles.console_text);
+            UI_Tools.OK("Time Warp");
+            UI_Tools.Console(status_line);
 
             if (Settings.debug_mode)
             {
@@ -150,7 +151,5 @@ namespace K2D2.Controller
                 GUILayout.Label($"index_rate x{TimeWarpTools.indexToRatio(TimeWarpTools.CurrentRateIndex)}");
             }
         }
-
-     
     }
 }

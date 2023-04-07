@@ -1,5 +1,8 @@
 # v0.6.0
 * Landing v1.0 !
+
+* corrected the underBurn in the Execute Node. thanks to @Falki from the Modder society. That rocks !!!
+
 * Position of window is saved and cannot be sent outside of Screen space. 
 * UI new Skin. I'm not really sure of this look. I tried to be closer to main KSP2 UI (purple and black)
 * ToolTips to avoid long messages in settings

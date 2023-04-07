@@ -51,11 +51,6 @@ namespace K2D2
             get { return s_settings_file.GetEnum< MainUI.InterfaceMode> ("interface_setting", MainUI.InterfaceMode.ExeNode); }
             set{  s_settings_file.SetEnum< MainUI.InterfaceMode>("interface_setting", value); }
         }
-
-     
-
-
-
     }
 
 
@@ -69,10 +64,10 @@ namespace K2D2
             GUILayout.FlexibleSpace();
 
             // VERSION
-            GUILayout.Label($"v{K2D2_Plugin.ModVer}", Styles.console_text);
+            UI_Tools.Console($"v{K2D2_Plugin.ModVer}");
 
             GUILayout.EndHorizontal();
-            Settings.debug_mode = UI_Tools.Toggle(Settings.debug_mode, 
+            Settings.debug_mode = UI_Tools.Toggle(Settings.debug_mode,
                 "debug mode", "Debug mode open\nWIP features and verbose informations.");
         }
     }
