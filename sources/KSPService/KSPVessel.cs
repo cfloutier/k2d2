@@ -114,6 +114,14 @@ namespace K2D2.KSPService
             return next_node;
         }
 
+        public ManeuverPlanSolver GetPlanSolver()
+        {
+            ManeuverPlanSolver solver = null;
+            solver = VesselComponent?.Orbiter?.ManeuverPlanSolver;
+            return solver;
+        }
+
+
         public void SetSpeedMode(SpeedDisplayMode mode)
         {
             if (VesselVehicle == null) return;

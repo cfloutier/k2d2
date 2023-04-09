@@ -200,7 +200,7 @@ namespace K2D2
             {
                 GUI.skin = Skins.ConsoleSkin;
 
-                UI_Tools.check_rect_pos(windowRect);
+                UI_Tools.check_main_window_pos(ref windowRect);
                 Styles.Init();
 
 

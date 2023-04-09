@@ -9,10 +9,11 @@ using BepInEx.Logging;
 
 
 using K2D2.KSPService;
+using KSP.Sim;
 
 namespace K2D2.Controller
 {
-    public class AutoExecuteManeuver : BaseController
+    public class AutoExecuteManeuver : ComplexControler
     {
         public ManualLogSource logger = BepInEx.Logging.Logger.CreateLogSource("K2D2.LandingController");
 
@@ -25,13 +26,16 @@ namespace K2D2.Controller
         WarpTo warp;
         BurnManeuvre burn;
 
-        ExecuteController current_pilot = null;
+     //  ExecuteController current_pilot = null;
         KSPVessel current_vessel;
+
+        public SingleExecuteController current_executor = new SingleExecuteController();
 
         public AutoExecuteManeuver()
         {
-            logger.LogMessage("AutoExecuteManeuver !");
+
             Instance = this;
+            sub_contollers.Add(current_executor);
             current_vessel = K2D2_Plugin.Instance.current_vessel;
 
             GeneralTools.Game.Messages.Subscribe<VesselChangedMessage>(OnActiveVesselChanged);
@@ -69,30 +73,30 @@ namespace K2D2.Controller
             {
 
                 TimeWarpTools.SetRateIndex(0, false);
-                current_pilot = null;
+                current_executor.setController( null );
                 return;
             }
 
             switch (mode)
             {
                 case Mode.Off:
-                    current_pilot = null;
+                    current_executor.setController( null );
                     break;
                 case Mode.Turn:
-                    current_pilot = turn;
+                    current_executor.setController( turn );
                     turn.StartManeuver(current_maneuvre_node);
                     break;
                 case Mode.Warp:
-                    current_pilot = warp;
+                    current_executor.setController( warp );
                     warp.StartManeuver(current_maneuvre_node);
                     break;
                 case Mode.Burn:
-                    current_pilot = burn;
+                    current_executor.setController( burn );
                     burn.StartManeuver(current_maneuvre_node);
                     break;
             }
 
-            logger.LogInfo("current_pilot " + current_pilot);
+            logger.LogInfo("setMode " + mode);
         }
 
         public bool canStart()
@@ -139,7 +143,14 @@ namespace K2D2.Controller
             
             if (current_maneuvre_node == null)
             {
-                GUILayout.Label("no Maneuvre node");
+                UI_Tools.Label("no Maneuvre node");
+                return;
+            }
+
+            if (! valid_maneuver)
+            {
+                UI_Tools.Label("invalid Maneuvre node.");
+                UI_Tools.Console("Actually a KSP2 big when loading scenaries. Please open map and adjust node");
                 return;
             }
 
@@ -147,8 +158,7 @@ namespace K2D2.Controller
             {
                 if (!canStart())
                 {
-                    // UI_Tools.BigButton("Run");
-                    GUILayout.Label("no Maneuver none in the future");
+                    UI_Tools.Label("no Maneuver node in the future");
                     return;
                 }
 
@@ -163,23 +173,19 @@ namespace K2D2.Controller
 
             node_infos();
 
-            if (current_pilot != null)
+            current_executor.onGUI();
+            if (!Settings.auto_next)
             {
-                current_pilot.onGUI();
-
-                if (!Settings.auto_next)
+                UI_Tools.Label($"finished {current_executor.finished}");
+                if (!current_executor.finished)
                 {
-                    GUILayout.Label($"finished {current_pilot.finished}");
-                    if (!current_pilot.finished)
-                    {
-                        if (GUILayout.Button("Next /!\\"))
-                            nextMode();
-                    }
-                    else
-                    {
-                        if (GUILayout.Button("Next"))
-                            nextMode();
-                    }
+                    if (UI_Tools.Button("Next /!\\"))
+                        nextMode();
+                }
+                else
+                {
+                    if (UI_Tools.Button("Next"))
+                        nextMode();
                 }
             }
         }
@@ -189,40 +195,51 @@ namespace K2D2.Controller
             Stop();
         }
 
-        public override void Update()
-        {
-            base.Update();
+        bool valid_maneuver = false;
 
+        public bool checkManeuver()
+        {
             current_maneuvre_node = current_vessel.GetNextManeuveurNode();
+            valid_maneuver = false;
             if (current_maneuvre_node == null)
             {
                 Stop();
+                return false;
             }
 
-            if (current_pilot != null)
+            double ut;
+
+            var plan_solver = current_vessel.GetPlanSolver();
+            if (plan_solver == null)
             {
-                current_pilot.Update();
-                if (current_pilot.finished && Settings.auto_next)
-                {
-                    // auto next
-                    nextMode();
-                }
+                Stop();
+                return false;
             }
+
+            // check that the maneuver is well declared.
+            Vector velocity_after_maneuver = plan_solver.GetVelocityAfterFirstManeuver(out ut);
+            if (ut == 0)
+            {
+                // error
+                Stop();
+                return false;
+            }
+
+            valid_maneuver = true;
+            return true;
         }
 
-        public override void FixedUpdate()
+        public override void Update()
         {
-            if (current_pilot != null)
-            {
-                current_pilot.FixedUpdate();
-            }
-        }
 
-        public override void LateUpdate()
-        {
-            if (current_pilot != null)
+            checkManeuver();
+
+            base.Update();
+
+            if (current_executor.finished && Settings.auto_next)
             {
-                current_pilot.LateUpdate();
+                // auto next
+                nextMode();
             }
         }
 
@@ -244,20 +261,20 @@ namespace K2D2.Controller
             if (Settings.debug_mode)
             {
                 var dt = GeneralTools.remainingStartTime(current_maneuvre_node);
-                GUILayout.Label($"Node in {StrTool.DurationToString(dt)}");
-                GUILayout.Label($"BurnDuration {current_maneuvre_node.BurnDuration}");
-                GUILayout.Label($"BurnRequiredDV {current_maneuvre_node.BurnRequiredDV}");
-                GUILayout.Label($"BurnVector {StrTool.VectorToString(current_maneuvre_node.BurnVector)}");
+                UI_Tools.Label($"Node in {StrTool.DurationToString(dt)}");
+                UI_Tools.Label($"BurnDuration {current_maneuvre_node.BurnDuration}");
+                // UI_Tools.Label($"BurnRequiredDV {current_maneuvre_node.BurnRequiredDV}");
+                // UI_Tools.Label($"BurnVector {StrTool.VectorToString(current_maneuvre_node.BurnVector)}");
 
                 var telemetry = SASInfos.getTelemetry();
 
                 Vector3 maneuvre_dir = telemetry.ManeuverDirection.vector;
 
-                GUILayout.Label($"maneuvre_dir {StrTool.VectorToString(maneuvre_dir)}");
+                UI_Tools.Label($"maneuvre_dir {StrTool.VectorToString(maneuvre_dir)}");
 
                 if (dt < 0)
                 {
-                    GUILayout.Label("In The Past");
+                    UI_Tools.Label("In The Past");
                     return;
                 }
             }

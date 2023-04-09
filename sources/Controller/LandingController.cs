@@ -26,37 +26,6 @@ namespace K2D2.Controller
     /// </summary>
     public class LandingSettings
     {
-
-        // public int multiplier_index
-        // {
-        //     get => Settings.s_settings_file.GetInt("land.multiplier_index", 0);
-        //     set {             // value = Mathf.Clamp(0.1,)
-        //         Settings.s_settings_file.SetInt("land.multiplier_index", value); }
-        // }
-
-
-        // public float speed_ratio
-        // {
-        //     get => Settings.s_settings_file.GetFloat("land.speed_ratio", 0);
-        //     set {             // value = Mathf.Clamp(0.1,)
-        //         Settings.s_settings_file.SetFloat("land.speed_ratio", value); }
-        // }
-
-
-        // public bool gravity_compensation
-        //  {
-        //     get => Settings.s_settings_file.GetBool("land.gravity_compensation", false);
-        //     set {             // value = Mathf.Clamp(0.1,)
-        //         Settings.s_settings_file.SetBool("land.gravity_compensation", value); }
-        // }
-
-        // public bool auto_speed
-        // {
-        //     get => Settings.s_settings_file.GetBool("land.auto_speed", false);
-        //     set {
-        //         Settings.s_settings_file.SetBool("land.auto_speed", value); }
-        // }
-
         public bool auto_warp
         {
             get => Settings.s_settings_file.GetBool("land.auto_warp", true);
@@ -125,19 +94,6 @@ namespace K2D2.Controller
             UI_Tools.Console($"ex : speed is limit at {limit_speed:n2} m/s for 100 meters altitude");
 
             touch_down_speed = UI_Tools.FloatSlider("Touch-Down speed", touch_down_speed, 0.1f, 10);
-
-
-        /*    else
-            {
-                UI_Tools.Console("speed is directly assigned");
-                string[] multiplier_txt = {"x10", "x100", "x1000"};
-                GUILayout.BeginHorizontal();
-                multiplier_index = GUILayout.SelectionGrid(multiplier_index, multiplier_txt, 3);
-                GUILayout.FlexibleSpace();
-                GUILayout.EndHorizontal();
-
-                speed_ratio = GUILayout.HorizontalSlider(speed_ratio, 0, 1);
-            }*/
         }
 
         public float compute_limit_speed(float altitude)
@@ -146,7 +102,6 @@ namespace K2D2.Controller
             float div = 10;
             return altitude * touch_down_ratio / div + touch_down_speed;
         }
-
     }
 
     public class LandingController : ComplexControler
@@ -164,7 +119,6 @@ namespace K2D2.Controller
         public WarpTo warp_to = new WarpTo();
 
         public BrakeController brake = new BrakeController();
-
 
         public SingleExecuteController current_executor = new SingleExecuteController();
 
@@ -510,7 +464,7 @@ namespace K2D2.Controller
 
             ControlerActive = UI_Tools.ToggleButton(ControlerActive, "Start", "Stop");
             GUI.color = Color.white;
-          
+
             if (!Settings.auto_next)
             {
                 UI_Tools.Title($"finished {current_executor.finished}");

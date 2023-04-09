@@ -27,6 +27,16 @@ namespace K2D2
             object value = field.GetValue(instance);
             return value;
         }
+
+        public static void callFunction(Type type, object instance, string methodName, object[] args)
+        {
+            MethodInfo dynMethod = type.GetMethod(methodName,
+                        BindingFlags.NonPublic | BindingFlags.Instance);
+
+            dynMethod.Invoke(instance, args);
+
+
+        }
     }
 }
 

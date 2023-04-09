@@ -1,9 +1,9 @@
 # v0.6.0
 * Landing v1.0 !
 
-* corrected the underBurn in the Execute Node. thanks to @Falki from the Modder society. That rocks !!!
+* [Execute_NODE] Corrected the underBurn in the Execute Node. thanks to @Falki from the Modder society. That rocks !!!
 
-* Position of window is saved and cannot be sent outside of Screen space. 
+* Position of window is saved and cannot be sent outside of Screen space.
 * UI new Skin. I'm not really sure of this look. I tried to be closer to main KSP2 UI (purple and black)
 * ToolTips to avoid long messages in settings
 * Editor Fields in timeWarp Settings avoid sending keys to KSP2 (ex : the 1 Numpad that mute sound)
@@ -14,6 +14,7 @@
 * Land : new messages
 * correction circularize UI
 * main tabs : shows if a pilot is running
+* fix window pos not actually saved
 
 [Known_Issues]
 * dv computed during burn is over estimated. It is mainly visible for huge dv values. 

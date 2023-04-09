@@ -49,22 +49,12 @@ namespace K2D2
     /// TODO : remove static, make it singleton
     public class UI_Tools
     {
-        public static void check_rect_pos(Rect window_frame)
+        /// <summary>
+        ///  checks if the window is in screen
+        /// </summary>
+        /// <param name="window_frame"></param>
+        public static void check_window_pos(Rect window_frame)
         {
-            if (window_frame == Rect.zero)
-            {
-                int x_pos = Settings.window_x_pos;
-                int y_pos = Settings.window_y_pos;
-
-                if (x_pos == -1)
-                {
-                    x_pos = 100;
-                    y_pos = 50;
-                }
-
-                window_frame = new Rect(x_pos, y_pos, 500, 100);
-            }
-
             if (window_frame.xMax > Screen.width)
             {
                 var dx = Screen.width - window_frame.xMax;
@@ -83,6 +73,29 @@ namespace K2D2
             {
                 window_frame.y = 0;
             }
+        }
+
+        /// <summary>
+        /// check the window pos and load settings if not set
+        /// </summary>
+        /// <param name="window_frame"></param>
+        public static void check_main_window_pos(ref Rect window_frame)
+        {
+            if (window_frame == Rect.zero)
+            {
+                int x_pos = Settings.window_x_pos;
+                int y_pos = Settings.window_y_pos;
+
+                if (x_pos == -1)
+                {
+                    x_pos = 100;
+                    y_pos = 50;
+                }
+
+                window_frame = new Rect(x_pos, y_pos, 500, 100);
+            }
+
+        
         }
 
 
@@ -152,6 +165,11 @@ namespace K2D2
         public static void Console(string txt)
         {
             GUILayout.Label(txt, Styles.console_text);
+        }
+
+        public static bool Button(string txt)
+        {
+            return GUILayout.Button(txt);
         }
 
         public static int IntSlider(string txt, int value, int min, int max, string postfix = "")

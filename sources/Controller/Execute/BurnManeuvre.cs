@@ -130,7 +130,7 @@ namespace K2D2.Controller
 
                 var telemetry = SASInfos.getTelemetry();
                 if (!telemetry.HasManeuver)
-                    return;
+                    return; 
 
                 Vector maneuvre_dir = telemetry.ManeuverDirection;
                 Vector velocity_after_maneuver = current_vessel.VesselComponent.Orbiter.ManeuverPlanSolver.GetVelocityAfterFirstManeuver(out ut);

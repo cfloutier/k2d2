@@ -9,8 +9,8 @@ namespace K2D2
 
         public static GUIStyle box, window, error, warning;
 
-        public static GUIStyle small_button;
-        public static GUIStyle big_button;
+
+        public static GUIStyle small_button, big_button, button;
 
         public static GUIStyle label, console_text, phase_ok, phase_warning, phase_error;
 
@@ -101,6 +101,24 @@ namespace K2D2
             window.alignment = TextAnchor.UpperLeft;
             window.stretchWidth = true;
 
+            // button std
+            button = new GUIStyle(GUI.skin.GetStyle("Button"));
+            button.normal.background = AssetsLoader.loadIcon("BigButton_Normal");
+            button.normal.textColor = ColorTools.parseColor("#FFFFFF");
+            setAllFromNormal(button);
+
+            button.hover.background = AssetsLoader.loadIcon("BigButton_hover");
+            button.active.background = AssetsLoader.loadIcon("BigButton_hover");
+            // button.active.background = AssetsLoader.loadIcon("BigButton_on");
+            // button.onNormal = button.active;
+            // setFromOn(button);
+
+            button.border = new RectOffset(5, 5, 5, 5);
+            button.padding = new RectOffset(4, 3, 4, 3);
+            button.overflow = new RectOffset(0, 0, 0, 0);
+            button.fontSize = 20;
+            button.alignment = TextAnchor.MiddleCenter;
+
             // Small Button
             small_button = new GUIStyle(GUI.skin.GetStyle("Button"));
             small_button.normal.background = AssetsLoader.loadIcon("Small_Button");
@@ -127,11 +145,11 @@ namespace K2D2
             big_button.onNormal = big_button.active;
             setFromOn(big_button);
             
-            small_button.border = new RectOffset(5, 5, 5, 5);
-            small_button.padding = new RectOffset(4, 3, 4, 3);
-            small_button.overflow = new RectOffset(0, 0, 0, 0);
-            small_button.fontSize = 20;
-            small_button.alignment = TextAnchor.MiddleCenter;
+            big_button.border = new RectOffset(5, 5, 5, 5);
+            big_button.padding = new RectOffset(4, 3, 4, 3);
+            big_button.overflow = new RectOffset(0, 0, 0, 0);
+            big_button.fontSize = 20;
+            big_button.alignment = TextAnchor.MiddleCenter;
 
             // Toggle Button
             toggle = new GUIStyle(GUI.skin.GetStyle("Button"));
