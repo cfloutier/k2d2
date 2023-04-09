@@ -50,7 +50,7 @@ namespace K2D2
                 var tooltip_pos = new Rect(Input.mousePosition.x + offset.x, Screen.height - Input.mousePosition.y + offset.y, maxWidth, 10);
 
 
-                UI_Tools.check_window_pos(tooltip_pos);
+                UI_Tools.check_window_pos(ref tooltip_pos);
 
                 GUILayout.Window(3, tooltip_pos, WindowFunction, "", GUI.skin.button);
             }

@@ -12,7 +12,7 @@ namespace K2D2
 
         public static GUIStyle small_button, big_button, button;
 
-        public static GUIStyle label, console_text, phase_ok, phase_warning, phase_error;
+        public static GUIStyle label, mid_text, console_text, phase_ok, phase_warning, phase_error;
 
         public static GUIStyle toggle;
 
@@ -200,12 +200,16 @@ namespace K2D2
             phase_error.fontSize = 20;
 
             console_text = new GUIStyle(GUI.skin.GetStyle("Label"));
-            console_text.normal.textColor = ColorTools.parseColor("#9395D4");
+            console_text.normal.textColor = ColorTools.parseColor("#B6B8FA");
             console_text.fontSize = 15;
             console_text.padding = new RectOffset(0, 0, 0, 0);
             console_text.margin = new RectOffset(0, 0, 0, 0);
 
             slider_text = new GUIStyle(console_text);
+            slider_text.normal.textColor = ColorTools.parseColor("#C0C1E2");
+
+            mid_text = new GUIStyle(slider_text);
+
             slider_text.margin = new RectOffset(10, 0, 0, 0);
             slider_text.contentOffset = new Vector2(8, 5);
 

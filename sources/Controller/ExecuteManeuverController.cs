@@ -140,17 +140,17 @@ namespace K2D2.Controller
                 settingsUI();
                 return;
             }
-            
+
             if (current_maneuvre_node == null)
             {
                 UI_Tools.Label("no Maneuvre node");
                 return;
             }
 
-            if (! valid_maneuver)
+            if (!valid_maneuver)
             {
                 UI_Tools.Label("invalid Maneuvre node.");
-                UI_Tools.Console("Actually a KSP2 big when loading scenaries. Please open map and adjust node");
+                UI_Tools.Console("Actually a KSP2 bug when loading scenaries. Please open map to fix it");
                 return;
             }
 
@@ -158,7 +158,7 @@ namespace K2D2.Controller
             {
                 if (!canStart())
                 {
-                    UI_Tools.Label("no Maneuver node in the future");
+                    UI_Tools.Label("No Maneuver node in the future");
                     return;
                 }
 

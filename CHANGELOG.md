@@ -1,8 +1,7 @@
 # v0.6.0
 * Landing v1.0 !
 
-* [Execute_NODE] Corrected the underBurn in the Execute Node. thanks to @Falki from the Modder society. That rocks !!!
-
+* [Execute_NODE] Corrected the underBurn in the Execute Node. thanks to @Falki from the KSP2 Modders Society. 
 * Position of window is saved and cannot be sent outside of Screen space.
 * UI new Skin. I'm not really sure of this look. I tried to be closer to main KSP2 UI (purple and black)
 * ToolTips to avoid long messages in settings
@@ -10,11 +9,12 @@
 * Time warp correction : no more overload (I hope). We also can use the Standard KSP2 timewarp (in settings) but there are trouble at the end of phase...
 
 [TODO] before release
-* correct tooltip timing
+* sign of burn (check attitude direction and angle)
+* cleanup maneuvre debug info
 * Land : new messages
 * correction circularize UI
 * main tabs : shows if a pilot is running
-* fix window pos not actually saved
+* correct tooltip timing
 
 [Known_Issues]
 * dv computed during burn is over estimated. It is mainly visible for huge dv values. 

@@ -203,7 +203,6 @@ namespace K2D2
                 UI_Tools.check_main_window_pos(ref windowRect);
                 Styles.Init();
 
-
                 windowRect = GUILayout.Window(
                     GUIUtility.GetControlID(FocusType.Passive),
                     windowRect,

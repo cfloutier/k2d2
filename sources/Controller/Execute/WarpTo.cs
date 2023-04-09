@@ -26,7 +26,7 @@ namespace K2D2.Controller
         {
             get => Settings.s_settings_file.GetFloat("warp.speed", 2);
             set {
-                    value = Mathf.Clamp(value, 0, 5);
+                    value = Mathf.Clamp(value, 0, 7);
                     Settings.s_settings_file.SetFloat("warp.speed", value); 
                 }
         }
@@ -49,7 +49,7 @@ namespace K2D2.Controller
 
             if (!ksp_warp)
             {
-                warp_speed = UI_Tools.FloatSlider("Warp Speed", warp_speed, 0, 5);
+                warp_speed = UI_Tools.FloatSlider("Warp Speed", warp_speed, 0, 7);
                 UI_Tools.Right_Left_Text("safe", "quick");
             }
 

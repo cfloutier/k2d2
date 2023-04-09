@@ -35,7 +35,6 @@ namespace K2D2.Controller
                 }
         }
 
-
         public float burn_before
         {
             get => Settings.s_settings_file.GetFloat("land.burnBefore", 1f);
@@ -136,7 +135,6 @@ namespace K2D2.Controller
         public enum Mode
         {
             Off,
-            Turn,
             TimeWarp,
             Waiting,
             Burn,
@@ -164,9 +162,6 @@ namespace K2D2.Controller
             {
                 case Mode.Off:
                     current_executor.setController(null);
-                    break;
-                case Mode.Turn:
-                    setMode(Mode.TimeWarp);
                     break;
                 case Mode.TimeWarp:
                     if (!land_settings.auto_warp)
@@ -229,7 +224,7 @@ namespace K2D2.Controller
                     // reset controller to desactivate other controllers.
                     K2D2_Plugin.ResetControllers();
                     _active = true;
-                    setMode(Mode.Turn);
+                    setMode(Mode.TimeWarp);
                 }
             }
         }

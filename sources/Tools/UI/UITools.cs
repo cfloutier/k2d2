@@ -53,7 +53,7 @@ namespace K2D2
         ///  checks if the window is in screen
         /// </summary>
         /// <param name="window_frame"></param>
-        public static void check_window_pos(Rect window_frame)
+        public static void check_window_pos(ref Rect window_frame)
         {
             if (window_frame.xMax > Screen.width)
             {
@@ -74,7 +74,7 @@ namespace K2D2
                 window_frame.y = 0;
             }
         }
-
+         
         /// <summary>
         /// check the window pos and load settings if not set
         /// </summary>
@@ -95,7 +95,7 @@ namespace K2D2
                 window_frame = new Rect(x_pos, y_pos, 500, 100);
             }
 
-        
+            check_window_pos(ref window_frame);
         }
 
 
@@ -167,6 +167,11 @@ namespace K2D2
             GUILayout.Label(txt, Styles.console_text);
         }
 
+        public static void Mid(string txt)
+        {
+            GUILayout.Label(txt, Styles.mid_text);
+        }
+
         public static bool Button(string txt)
         {
             return GUILayout.Button(txt);
@@ -197,10 +202,12 @@ namespace K2D2
         {
             // text aligned to right and left with a space in between
             GUILayout.BeginHorizontal();
-            UI_Tools.Console(right_txt);
+            UI_Tools.Mid(right_txt);
             GUILayout.FlexibleSpace();
-            UI_Tools.Console(left_txt);
+            UI_Tools.Mid(left_txt);
             GUILayout.EndHorizontal();
+
+            GUILayout.Space(10);
         }
 
       
