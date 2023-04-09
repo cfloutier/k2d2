@@ -9,8 +9,12 @@
 * Time warp correction : no more overload (I hope). We also can use the Standard KSP2 timewarp (in settings) but there are trouble at the end of phase...
 
 [TODO] before release
-* sign of burn (check attitude direction and angle)
+
 * cleanup maneuvre debug info
+
+* Land : no roation if speed is up during safe warp
+* bad transition between safe warp and quick warp
+
 * Land : new messages
 * correction circularize UI
 * main tabs : shows if a pilot is running

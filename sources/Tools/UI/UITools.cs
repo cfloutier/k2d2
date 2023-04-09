@@ -179,10 +179,9 @@ namespace K2D2
 
         public static int IntSlider(string txt, int value, int min, int max, string postfix = "")
         {
-
             string content = txt + $" : {value} " + postfix;
 
-            GUILayout.Label(content, Styles.title);
+            GUILayout.Label(content, Styles.slider_text);
             value = (int) GUILayout.HorizontalSlider((int) value, min, max, Styles.slider_line, Styles.slider_node);
             return value;
         }
@@ -209,14 +208,10 @@ namespace K2D2
 
             GUILayout.Space(10);
         }
-
-      
     }
-
 
     public class UI_Fields
     {
-
         public static Dictionary<string, string> temp_dict = new Dictionary<string, string>();
         public static List<string> inputFields = new List<string>();
         static bool gameInputState = true;

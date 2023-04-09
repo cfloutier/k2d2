@@ -114,7 +114,7 @@ namespace K2D2.Controller
         public KSPVessel current_vessel;
 
         public BurndV burn_dV = new BurndV();
-        public TurnTo turn = new TurnTo();
+
         public WarpTo warp_to = new WarpTo();
 
         public BrakeController brake = new BrakeController();
@@ -135,10 +135,11 @@ namespace K2D2.Controller
         public enum Mode
         {
             Off,
-            TimeWarp,
+            QuickWarp,
+            SafeWarp,
             Waiting,
             Burn,
-            Land
+            TouchDown
         }
 
         public Mode mode = Mode.Off;
@@ -163,21 +164,32 @@ namespace K2D2.Controller
                 case Mode.Off:
                     current_executor.setController(null);
                     break;
-                case Mode.TimeWarp:
+                case Mode.QuickWarp:
+                    current_vessel.SetThrottle(0);
                     if (!land_settings.auto_warp)
                         setMode(Mode.Waiting);
                     else
                     {
                         current_executor.setController(warp_to);
-                        warp_to.Start_UT(startBurn_UT);
+                        warp_to.Start_UT(startRotate_UT);
+                    }
+                    break;
+                case Mode.SafeWarp:
+                    current_vessel.SetThrottle(0);
+                    if (!land_settings.auto_warp)
+                        setMode(Mode.Waiting);
+                    else
+                    {
+                        current_executor.setController(warp_to);
+                        warp_to.Start_UT(startBurn_UT, true);
                     }
                     break;
                 case Mode.Waiting:
-                    compute_startBurn();
+                    current_vessel.SetThrottle(0);
                     current_executor.setController(null);
                     break;
                 case Mode.Burn:
-                case Mode.Land:
+                case Mode.TouchDown:
                     current_executor.setController(brake);
                     break;
             }
@@ -224,7 +236,9 @@ namespace K2D2.Controller
                     // reset controller to desactivate other controllers.
                     K2D2_Plugin.ResetControllers();
                     _active = true;
-                    setMode(Mode.TimeWarp);
+                    
+                    setMode(Mode.QuickWarp);
+
                 }
             }
         }
@@ -241,6 +255,7 @@ namespace K2D2.Controller
         double collision_UT = 0;
         double adjusted_collision_UT = 0;
         double startBurn_UT = 0;
+        double startRotate_UT = 0;
         double speed_collision;
         double burn_duration;
 
@@ -264,10 +279,6 @@ namespace K2D2.Controller
                 //var dt = GeneralTools.Game.UniverseModel.UniversalTime - orbit.collisionPointUT;
                 speed_collision = orbit.GetOrbitalVelocityAtUTZup(adjusted_collision_UT).magnitude;
                 burn_duration = (speed_collision / burn_dV.full_dv);
-                if (!ControlerActive)
-                {
-                    compute_startBurn();
-                }
             }
         }
 
@@ -284,7 +295,8 @@ namespace K2D2.Controller
             }
             else
             {
-                 startBurn_UT = adjusted_collision_UT - burn_duration - land_settings.burn_before;
+                startBurn_UT = adjusted_collision_UT - burn_duration - land_settings.burn_before;
+                startRotate_UT = startBurn_UT - 10 * 60;
             }
         }
 
@@ -314,7 +326,7 @@ namespace K2D2.Controller
                double sceneryOffset;
 
                 body.GetAltitudeFromTerrain(ps, out terrainAltitude, out sceneryOffset);
-                terrainAltitude -= radius;
+                // terrainAltitude -= radius;
 
                 if (terrainAltitude < 0)
                 {
@@ -350,9 +362,6 @@ namespace K2D2.Controller
                 return;
 
             altitude = (float)current_vessel.GetApproxAltitude();
-
-
-
             current_speed = (float)current_vessel.VesselVehicle.SurfaceSpeed;
 
             computeValues();
@@ -373,14 +382,19 @@ namespace K2D2.Controller
                 return;
             }
 
-            if (mode == Mode.TimeWarp)
+            compute_startBurn();
+
+            if (mode == Mode.QuickWarp)
+            {
+                warp_to.UT = startRotate_UT;
+            }
+            else if (mode == Mode.SafeWarp)
             {
                 warp_to.UT = startBurn_UT;
-
             }
             else if (mode == Mode.Waiting)
             {
-                compute_startBurn();
+                
                 var dt = startBurn_UT - GeneralTools.Game.UniverseModel.UniversalTime; 
                 if (dt <= 0 && Settings.auto_next)
                 {
@@ -394,11 +408,19 @@ namespace K2D2.Controller
                 brake.gravity_compensation = true;
                 if (current_speed < 30 && Settings.auto_next)
                 {
-                    nextMode();
+                    if (altitude < 500)
+                    {
+                        setMode(Mode.TouchDown );
+                    }
+                    else
+                    {
+                        // high altitude retry 
+                        setMode(Mode.QuickWarp);
+                    }
                     return;
                 }
             }
-            else if (mode == Mode.Land )
+            else if (mode == Mode.TouchDown )
             {
                 brake.wanted_speed = land_settings.compute_limit_speed(altitude);;
                 brake.gravity_compensation = true;

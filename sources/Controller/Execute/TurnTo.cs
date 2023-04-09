@@ -19,6 +19,8 @@ namespace K2D2.Controller
         Vector3 wanted_dir = Vector3.zero;
 
         KSPVessel current_vessel;
+        
+        public double angle;
 
         public void StartManeuver(ManeuverNodeData node)
         {
@@ -38,7 +40,6 @@ namespace K2D2.Controller
             current_vessel = K2D2_Plugin.Instance.current_vessel;
             // reset time warp
             TimeWarpTools.SetRateIndex(0, false);
-           
         }
 
         public override void Update()
@@ -96,7 +97,7 @@ namespace K2D2.Controller
             vessel_rotation = Rotation.Reframed(vessel_rotation, retro_dir.coordinateSystem);
             Vector3d forward_direction = (vessel_rotation.localRotation * Vector3.up).normalized;
 
-            double angle = (float)Vector3d.Angle(retro_dir.vector, forward_direction);
+            angle = (float)Vector3d.Angle(retro_dir.vector, forward_direction);
             status_line = $"Waiting for good sas direction\nAngle = {angle:n2}°";
 
             return angle < max_angle;
@@ -117,7 +118,7 @@ namespace K2D2.Controller
             vessel_rotation = Rotation.Reframed(vessel_rotation, maneuvre_dir.coordinateSystem);
             Vector3d forward_direction = (vessel_rotation.localRotation * Vector3.up).normalized;
 
-            double angle = Vector3d.Angle(maneuvre_dir.vector, forward_direction);
+            angle = Vector3d.Angle(maneuvre_dir.vector, forward_direction);
             status_line = $"Waiting for good sas direction\nAngle = {angle:n2}°";
 
             return angle < max_angle;

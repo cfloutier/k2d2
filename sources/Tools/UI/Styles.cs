@@ -60,7 +60,7 @@ namespace K2D2
             // Set the background color of the Box
             box.normal.background = Texture2D.whiteTexture;
             // Set the font size of the Box
-            box.fontSize = 20;
+            // box.fontSize = 20;
             // Set the alignment of the Box
             box.alignment = TextAnchor.MiddleCenter;
 
@@ -74,7 +74,7 @@ namespace K2D2
             window.padding = new RectOffset(20, 13, 44, 17);
             window.overflow = new RectOffset(0, 0, 0, 0);
 
-            window.fontSize = 20;
+            // window.fontSize = 20;
             window.contentOffset = new Vector2(31, -40);
 
             slider_line = new GUIStyle(GUI.skin.horizontalSlider);
@@ -116,7 +116,7 @@ namespace K2D2
             button.border = new RectOffset(5, 5, 5, 5);
             button.padding = new RectOffset(4, 3, 4, 3);
             button.overflow = new RectOffset(0, 0, 0, 0);
-            button.fontSize = 20;
+            // button.fontSize = 20;
             button.alignment = TextAnchor.MiddleCenter;
 
             // Small Button
@@ -144,11 +144,11 @@ namespace K2D2
             big_button.active.background = AssetsLoader.loadIcon("BigButton_on");
             big_button.onNormal = big_button.active;
             setFromOn(big_button);
-            
+
             big_button.border = new RectOffset(5, 5, 5, 5);
             big_button.padding = new RectOffset(4, 3, 4, 3);
             big_button.overflow = new RectOffset(0, 0, 0, 0);
-            big_button.fontSize = 20;
+            // big_button.fontSize = 20;
             big_button.alignment = TextAnchor.MiddleCenter;
 
             // Toggle Button
@@ -189,19 +189,19 @@ namespace K2D2
 
             phase_ok = new GUIStyle(GUI.skin.GetStyle("Label"));
             phase_ok.normal.textColor = ColorTools.parseColor("#00BC16");
-            phase_ok.fontSize = 20;
+            // phase_ok.fontSize = 20;
 
             phase_warning = new GUIStyle(GUI.skin.GetStyle("Label"));
             phase_warning.normal.textColor = ColorTools.parseColor("#BC9200");
-            phase_warning.fontSize = 20;
+            // phase_warning.fontSize = 20;
 
             phase_error = new GUIStyle(GUI.skin.GetStyle("Label"));
             phase_error.normal.textColor = ColorTools.parseColor("#B30F0F");
-            phase_error.fontSize = 20;
+            // phase_error.fontSize = 20;
 
             console_text = new GUIStyle(GUI.skin.GetStyle("Label"));
             console_text.normal.textColor = ColorTools.parseColor("#B6B8FA");
-            console_text.fontSize = 15;
+            // console_text.fontSize = 15;
             console_text.padding = new RectOffset(0, 0, 0, 0);
             console_text.margin = new RectOffset(0, 0, 0, 0);
 
@@ -210,17 +210,17 @@ namespace K2D2
 
             mid_text = new GUIStyle(slider_text);
 
-            slider_text.margin = new RectOffset(10, 0, 0, 0);
+            slider_text.margin = new RectOffset(5, 0, 0, 0);
             slider_text.contentOffset = new Vector2(8, 5);
 
             label = new GUIStyle(GUI.skin.GetStyle("Label"));
-            label.fontSize = 17;
+            // label.fontSize = 17;
             label.margin = new RectOffset(0, 0, 0, 0);
             label.padding = new RectOffset(0, 0, 0, 0);
 
             title = new GUIStyle();
             title.normal.textColor = ColorTools.parseColor("#C0C1E2");
-            title.fontSize = 19;
+            // title.fontSize = 19;
 
             guiLoaded = true;
         }

@@ -15,13 +15,6 @@ namespace K2D2.Controller
     class WarpToSettings
     {
 
-        public static bool ksp_warp
-        {
-            get => Settings.s_settings_file.GetBool("warp.ksp_warp", true);
-            set { Settings.s_settings_file.SetBool("warp.ksp_warp", value); }
-        }
-
-
         public static float warp_speed
         {
             get => Settings.s_settings_file.GetFloat("warp.speed", 2);
@@ -45,19 +38,10 @@ namespace K2D2.Controller
         {
             UI_Tools.Title("// Warp");
 
-            ksp_warp = UI_Tools.Toggle(ksp_warp, "Use Ksp Warp");
-
-            if (!ksp_warp)
-            {
-                warp_speed = UI_Tools.FloatSlider("Warp Speed", warp_speed, 0, 7);
-                UI_Tools.Right_Left_Text("safe", "quick");
-            }
-
             UI_Tools.Console("Safe time (s)");
             warp_safe_duration = UI_Fields.IntField("warp_safe_duration", warp_safe_duration, 5, int.MaxValue,
                 "Nb seconds in x1 before next phase (min:5)");
         }
-
     }
 
     public class WarpTo : ExecuteController
@@ -69,17 +53,38 @@ namespace K2D2.Controller
         ManeuverNodeData maneuver = null;
         public double UT;
 
-        public void StartManeuver(ManeuverNodeData node)
+        TurnTo turn_to = null;
+
+        public bool check_direction = false;
+
+
+        public void StartManeuver(ManeuverNodeData node, bool check_direction = false)
         {
             maneuver = node;
+            this.check_direction = check_direction;
+
             Start();
+
+            if (check_direction)
+            {
+                turn_to = new TurnTo();
+                turn_to.StartManeuver(node);
+            }
         }
 
-        public void Start_UT(double UT)
+        public void Start_UT(double UT, bool check_direction = false)
         {
             maneuver = null;
             this.UT = UT;
+            this.check_direction = check_direction;
+
             Start();
+
+            if (check_direction)
+            {
+                turn_to = new TurnTo();
+                turn_to.StartSurfaceRetroGrade();
+            }
         }
 
         public override void Start()
@@ -98,8 +103,30 @@ namespace K2D2.Controller
                 UT = maneuver.Time;
             }
 
-            var ut_modified = UT - WarpToSettings.warp_safe_duration;
+            if (check_direction)
+            {
+                turn_to.Update();
+                if (TimeWarpTools.CurrentRateIndex > 0)
+                {
+                    if (turn_to.angle > 20)
+                    {
+                        TimeWarpTools.SetRateIndex(0, false);
+                        status_line = $"Correct Attitude = {turn_to.angle} °";
+                        return;
+                    }
+                }
+                else
+                {
+                    if (turn_to.angle > 1)
+                    {
+                        status_line = $"Correct Attitude = {turn_to.angle} °";
+                        return;
+                    }
+                }
 
+            }
+
+            var ut_modified = UT - WarpToSettings.warp_safe_duration;
             dt = ut_modified - GeneralTools.Game.UniverseModel.UniversalTime;
 
             if (dt < 0)
@@ -109,24 +136,12 @@ namespace K2D2.Controller
                 return;
             }
 
-            if (WarpToSettings.ksp_warp)
-            {
-                if (TimeWarpTools.CurrentRateIndex == 0)
-                {
-                    logger.LogInfo("set KspWarpTo");
-                    TimeWarpTools.KspWarpTo(ut_modified);
-                }
-
-                status_line = $"End warp : {StrTool.DurationToString(dt)} | use ksp warp";
-            }
-            else
-            {
-                wanted_warp_index = compute_wanted_warp_index(dt);
-                float wanted_rate = TimeWarpTools.indexToRatio(wanted_warp_index);
-                TimeWarpTools.SetRateIndex(wanted_warp_index, false);
-                status_line = $"End warp : {StrTool.DurationToString(dt)} | x{wanted_rate}";
-            }
+            wanted_warp_index = compute_wanted_warp_index(dt);
+            float wanted_rate = TimeWarpTools.indexToRatio(wanted_warp_index);
+            TimeWarpTools.SetRateIndex(wanted_warp_index, false);
+            status_line = $"End warp : {StrTool.DurationToString(dt)} | x{wanted_rate}";
         }
+
 
         int compute_wanted_warp_index(double dt)
         {
