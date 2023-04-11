@@ -382,8 +382,6 @@ namespace K2D2.Controller
                 return;
             }
 
-            compute_startBurn();
-
             if (mode == Mode.QuickWarp)
             {
                 warp_to.UT = startRotate_UT;
