@@ -36,7 +36,7 @@ namespace K2D2.Controller
         {
             UI_Tools.Title("// Burn");
 
-            burn_adjust = UI_Tools.FloatSlider("Adjusting rate", burn_adjust, 0, 2);
+            burn_adjust = UI_Tools.FloatSlider("Adjusting rate", burn_adjust, 0, 2, "Used during final adjust phase");
             UI_Tools.Right_Left_Text("Precise", "Quick");
 
             max_dv_error = UI_Tools.FloatSlider("Precision",

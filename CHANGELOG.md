@@ -1,6 +1,7 @@
 
 # v0.7.0
-* Landing v2 (2 phases landing )
+* Landing v2  : multi phases landing : Quick Warp, Safe Warp, Waiting, Brake and Touch-Down
+* Tabs shows if an pilot is currentlu running
 
 # v0.6.0 (not released)
 * Landing v1
@@ -19,21 +20,19 @@
 
 [TODO] before release
 setting back
-cleanup maneuvre debug info
 
-* main tabs : shows if a pilot is running
-* 
+* Land : settings: touch down speed !
 * Land : new messages
 * Land : no rotation if speed is up during safe warp
-* bad transition between safe warp and quick warp. 
+* bad transition between safe warp and quick warp.
 
-* correction circularize UI
+* Hide Circle
 
 * correct tooltip timing
 
 [TODO] after
 * set the node to sub controller on clicking run.
-
+* correction circularize UI
 
 
 # v0.5.1

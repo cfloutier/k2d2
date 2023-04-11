@@ -98,10 +98,6 @@ namespace K2D2
             check_window_pos(ref window_frame);
         }
 
-
-
-
-
         public static bool Toggle(bool is_on, string txt, string tooltip = null)
         {
             if (tooltip != null)
@@ -110,19 +106,18 @@ namespace K2D2
                 return GUILayout.Toggle(is_on, txt, Styles.toggle);
         }
 
-        public static bool ToggleButton(bool is_on, string txt_off, string txt_on)
+        public static bool ToggleButton(bool is_on, string txt_run, string txt_stop)
         {
-            int width_bt = 200;
             int height_bt = 40;
 
-            GUILayout.BeginHorizontal();
-            GUILayout.FlexibleSpace();
-            var txt = is_on ? txt_on : txt_off;
+            //GUILayout.BeginHorizontal();
+            // GUILayout.FlexibleSpace();
+            var txt = is_on ? txt_stop : txt_run;
 
-            is_on = GUILayout.Toggle(is_on, txt, Styles.big_button, GUILayout.Width(width_bt), GUILayout.Height(height_bt));
+            is_on = GUILayout.Toggle(is_on, txt, Styles.big_button, GUILayout.Height(height_bt));
 
-            GUILayout.FlexibleSpace();
-            GUILayout.EndHorizontal();
+            // GUILayout.FlexibleSpace();
+            //GUILayout.EndHorizontal();
 
             return is_on;
         }
@@ -133,6 +128,16 @@ namespace K2D2
             int height_bt = 40;
 
             return GUILayout.Button(txt, GUILayout.Height(width_bt), GUILayout.Height(height_bt));
+        }
+
+        public static bool Button(string txt)
+        {
+            return GUILayout.Button(txt, Styles.small_button);
+        }
+
+        public static bool ToolTipButton(string tooltip)
+        {
+            return GUILayout.Button(new GUIContent("?", tooltip), Styles.small_button, GUILayout.Width(16), GUILayout.Height(20));
         }
 
         public static void Title(string txt)
@@ -172,10 +177,7 @@ namespace K2D2
             GUILayout.Label(txt, Styles.mid_text);
         }
 
-        public static bool Button(string txt)
-        {
-            return GUILayout.Button(txt);
-        }
+
 
         public static int IntSlider(string txt, int value, int min, int max, string postfix = "")
         {
@@ -186,14 +188,21 @@ namespace K2D2
             return value;
         }
 
-        public static float FloatSlider(string txt, float value, float min, float max, string postfix = "")
+        public static float FloatSlider(string txt, float value, float min, float max, string postfix = "", string tooltip = "")
         {
             // simple float slider with a lavel value
 
             string content = txt + $" : {value:n2} " + postfix;
 
             GUILayout.Label(content, Styles.slider_text);
+            GUILayout.BeginHorizontal();
             value = GUILayout.HorizontalSlider( value, min, max, Styles.slider_line, Styles.slider_node);
+
+            if (!string.IsNullOrEmpty(tooltip))
+            {
+                UI_Tools.ToolTipButton(tooltip);
+            }
+            GUILayout.EndHorizontal();
             return value;
         }
 
@@ -234,14 +243,14 @@ namespace K2D2
             }
         }
 
-        /// Simple Integer Field. for the moment there is a trouble. keys are sent to KSP2 enven if focus is in the field
-        public static int IntField(string name, int value, int min, int max, string tooltip)
+        /// Simple Integer Field. for the moment there is a trouble. keys are sent to KSP2 events if focus is in the field
+        public static int IntField(string name, string label, int value, int min, int max, string tooltip)
         {
-            string text = value.ToString();
+            string text_value = value.ToString();
 
             if (temp_dict.ContainsKey(name))
                 // always use temp value
-                text = temp_dict[name];
+                text_value = temp_dict[name];
 
             if (!inputFields.Contains(name))
                 inputFields.Add(name);
@@ -249,7 +258,8 @@ namespace K2D2
             GUILayout.BeginHorizontal();
 
             GUI.SetNextControlName(name);
-            var typed_text = GUILayout.TextField(text);
+            GUILayout.Label(label);
+            var typed_text = GUILayout.TextField(text_value);
             typed_text = Regex.Replace(typed_text, @"[^\d-]+", "");
 
             // save filtered temp value
@@ -270,15 +280,12 @@ namespace K2D2
                 result = value;
             }
 
-            if (ok)
-                GUILayout.Label("", GUILayout.Width(30));
-            else
-                GUILayout.Label("X", GUILayout.Width(30));
-
+            if (!ok)
+                GUILayout.Label("!!!");
 
             if (!string.IsNullOrEmpty(tooltip))
             {
-                GUILayout.Button(new GUIContent("?", tooltip), GUILayout.Width(20));
+                UI_Tools.ToolTipButton(tooltip);
             }
 
             GUILayout.EndHorizontal();

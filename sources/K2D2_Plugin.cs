@@ -36,7 +36,7 @@ namespace K2D2
 
         public const string ModGuid = "K2D2";
         public const string ModName = "K2D2";
-        public const string ModVer = "0.5.1";
+        public const string ModVer = "0.7.0";
 
         #region Fields
 
@@ -242,9 +242,9 @@ namespace K2D2
             // settings button
             settings_visible = TopButtons.Toggle(settings_visible, Styles.gear);
 
-            // hidden for the release
-            // if(GUI.Button(new Rect(windowRect.width - 81, 4, 25, 25), "P", Styles.small_button))
-            //     _popUp.isPopupVisible = !_popUp.isPopupVisible;
+            if (Settings.debug_mode)
+                if(GUI.Button(new Rect(windowRect.width - 81, 4, 25, 25), "P", Styles.small_button))
+                    _popUp.isPopupVisible = !_popUp.isPopupVisible;
 
             GUI.Label(new Rect(9, 2, 29, 29), Styles.big_icon, Styles.icons_label);
 

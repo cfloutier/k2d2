@@ -21,25 +21,36 @@ namespace K2D2
             return GUILayout.Toggle(is_current, txt, style);
         }
 
-        public static int DrawTabs(int current, string [] interfaceModes, bool[] is_actives)
+        public static int DrawTabs(int current, string [] interfaceModes, bool[] is_actives, int max_line = 3)
         {
             current = GeneralTools.ClampInt(current, 0, interfaceModes.Length -1);
             GUILayout.BeginHorizontal();
 
             int result = current;
 
+
+            int index_in_line = 0;
+
             for (int index = 0 ; index < interfaceModes.Length; index++)
             {
+                if (index_in_line >= max_line)
+                {
+                    GUILayout.EndHorizontal();
+                    GUILayout.BeginHorizontal();
+                    index_in_line = 0;
+                }
+
                 bool is_current = current == index;
                 if (TabButton(is_current, is_actives[index], interfaceModes[index]))
                 {
                     if (!is_current)
                         result = index;
-                } 
+                }
+
+                index_in_line++;
             }
 
             GUILayout.EndHorizontal();
-
             return result;
         }
     }
@@ -48,7 +59,7 @@ namespace K2D2
     {
         public ManualLogSource logger;
 
-        private static string[] interfaceModes = { "Execute", "Landing", "Circle", };
+        private static string[] interfaceModes = { "Execute", "Landing" };
         private static string[] interfaceModes_debug = { "Execute", "Landing", "Circle", "Orbit", "SAS", "Vessel" };
 
         bool init_done = false;

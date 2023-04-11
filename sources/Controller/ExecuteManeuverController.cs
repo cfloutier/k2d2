@@ -183,24 +183,14 @@ namespace K2D2.Controller
                 node_infos();
             }
 
-            if (mode == Mode.Off)
-            {
-                if (!canStart())
-                {
-                    UI_Tools.Label("No Maneuver node in the future");
-                    return;
-                }
 
-                if (UI_Tools.BigButton("Run"))
-                    Start();
-            }
-            else
+            if (!canStart())
             {
-                if (UI_Tools.BigButton("Stop !!", true))
-                    Stop();
+                UI_Tools.Label("No Maneuver node in the future");
+                return;
             }
 
-            
+            isActive = UI_Tools.ToggleButton(isActive, "Run", "Stop");
 
             current_executor.onGUI();
             if (!Settings.auto_next)
@@ -219,7 +209,6 @@ namespace K2D2.Controller
             }
         }
 
-     
         bool valid_maneuver = false;
 
         public bool checkManeuver()
@@ -279,7 +268,7 @@ namespace K2D2.Controller
 
             execute_settings.settings_UI();
 
-            WarpToSettings.ui();
+            WarpToSettings.onGUI();
             BurnManeuvreSettings.ui();
         }
 
@@ -302,20 +291,43 @@ namespace K2D2.Controller
         }
 
 
+
+
+        bool _active = false;
         public override bool isActive
         {
-            get { return mode != Mode.Off; }
+            get { return _active; }
+            set {
+                if (value == _active)
+                    return;
+
+                if (!value)
+                {
+                    // stop
+                    if (current_vessel != null)
+                        current_vessel.SetThrottle(0);
+
+                    setMode(Mode.Off);
+                    _active = false;
+                }
+                else
+                {
+                    // reset controller to desactivate other controllers.
+                    K2D2_Plugin.ResetControllers();
+                    _active = true;
+                    setMode(Mode.Turn);
+                }
+            }
         }
 
         public void Start()
         {
-            K2D2_Plugin.ResetControllers();
-            setMode(Mode.Turn);
+            isActive = true;
         }
 
         public void Stop()
         {
-            setMode(Mode.Off);
+            isActive = false;
         }
 
         public override void onReset()

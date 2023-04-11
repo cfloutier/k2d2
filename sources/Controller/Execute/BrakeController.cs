@@ -117,7 +117,6 @@ namespace K2D2.Controller
             if (gravity_compensation)
                 computeGravityRatio();
 
-
             current_vessel.SetSpeedMode(KSP.Sim.SpeedDisplayMode.Surface);
             var autopilot = current_vessel.Autopilot;
 
@@ -134,7 +133,7 @@ namespace K2D2.Controller
             }
 
             compute_Throttle();
-            status_line = "Burning";
+            status_line = $"Wanted Speed : {wanted_speed:n2} m/s";
 
             // no stop for gravity compensation
             current_vessel.SetThrottle(wanted_throttle);

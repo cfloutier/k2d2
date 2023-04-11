@@ -34,12 +34,14 @@ namespace K2D2.Controller
             }
         }
 
-        public static void ui()
+        public static void onGUI()
         {
             UI_Tools.Title("// Warp");
 
-            UI_Tools.Console("Safe time (s)");
-            warp_safe_duration = UI_Fields.IntField("warp_safe_duration", warp_safe_duration, 5, int.MaxValue,
+            warp_speed = UI_Tools.FloatSlider("Warp Speed", warp_speed, 0, 7, "", "Warp adjust rate");
+            UI_Tools.Right_Left_Text("Safe", "Quick");
+
+            warp_safe_duration = UI_Fields.IntField("warp_safe_duration", "Before Burn Time", warp_safe_duration, 5, int.MaxValue,
                 "Nb seconds in x1 before next phase (min:5)");
         }
     }
@@ -56,6 +58,7 @@ namespace K2D2.Controller
         TurnTo turn_to = null;
 
         public bool check_direction = false;
+        public float max_angle;
 
 
         public void StartManeuver(ManeuverNodeData node, bool check_direction = false)
@@ -72,11 +75,12 @@ namespace K2D2.Controller
             }
         }
 
-        public void Start_UT(double UT, bool check_direction = false)
+        public void Start_UT(double UT, bool check_direction = false, float max_angle = 30)
         {
             maneuver = null;
             this.UT = UT;
             this.check_direction = check_direction;
+            this.max_angle = max_angle;
 
             Start();
 
@@ -90,7 +94,6 @@ namespace K2D2.Controller
         public override void Start()
         {
             finished = false;
-
         }
 
         double dt;
@@ -103,27 +106,25 @@ namespace K2D2.Controller
                 UT = maneuver.Time;
             }
 
+            status_line = "";
+
             if (check_direction)
             {
                 turn_to.Update();
+                status_line = $"Attitude Correction = {turn_to.angle:n2} ° < {max_angle}";
                 if (TimeWarpTools.CurrentRateIndex > 0)
                 {
-                    if (turn_to.angle > 20)
+                    if (turn_to.angle > max_angle)
                     {
                         TimeWarpTools.SetRateIndex(0, false);
-                        status_line = $"Correct Attitude = {turn_to.angle} °";
                         return;
                     }
                 }
                 else
                 {
                     if (turn_to.angle > 1)
-                    {
-                        status_line = $"Correct Attitude = {turn_to.angle} °";
                         return;
-                    }
                 }
-
             }
 
             var ut_modified = UT - WarpToSettings.warp_safe_duration;
@@ -140,6 +141,10 @@ namespace K2D2.Controller
             float wanted_rate = TimeWarpTools.indexToRatio(wanted_warp_index);
             TimeWarpTools.SetRateIndex(wanted_warp_index, false);
             status_line = $"End warp : {StrTool.DurationToString(dt)} | x{wanted_rate}";
+            if (check_direction)
+            {
+                status_line += $"\nAttitude Correction = {turn_to.angle:n2} ° < {max_angle}";
+            }
         }
 
 

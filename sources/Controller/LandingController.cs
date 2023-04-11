@@ -26,7 +26,6 @@ namespace K2D2.Controller
     /// </summary>
     public class LandingSettings
     {
-     
         public bool auto_warp
         {
             get => Settings.s_settings_file.GetBool("land.auto_warp", true);
@@ -46,6 +45,32 @@ namespace K2D2.Controller
             }
         }
 
+        // Warp with check of rotation
+        public int rotation_warp_duration
+        {
+            get => Settings.s_settings_file.GetInt("land.rotation_warp_duration", 60);
+            set {
+                Settings.s_settings_file.SetInt("land.rotation_warp_duration", value);
+                }
+        }
+
+        public float max_rotation
+        {
+            get => Settings.s_settings_file.GetFloat("land.max_rotation", 30);
+            set {
+                Settings.s_settings_file.SetFloat("land.max_rotation", value);
+                }
+        }
+
+
+        public float start_touchdown_altitude
+        {
+            get => Settings.s_settings_file.GetFloat("land.touch_down_altitude", 500);
+            set {
+                value = Mathf.Clamp(value, 0 , 30000);
+                Settings.s_settings_file.SetFloat("land.touch_down_altitude", value);
+                }
+        }
 
         public float touch_down_ratio
         {
@@ -79,21 +104,31 @@ namespace K2D2.Controller
         //    gravity_compensation = UI_Tools.Toggle(gravity_compensation, "Gravity Compensation");
 
             UI_Tools.Title("// Landing Settings");
-            auto_warp = UI_Tools.Toggle(auto_warp, "Auto Time-Warp");
-
             burn_before = UI_Tools.FloatSlider("Burn Before", burn_before, 0, 10, "s");
-            UI_Tools.Console($"(Safe time before burn)");
+            // UI_Tools.Console($"(Safe time before burn)");
 
             if (Settings.debug_mode)
                 suicide_burn = UI_Tools.Toggle(suicide_burn, "Suicide burn mode", "Warning ! Work In Progress" );
 
-            UI_Tools.Console("speed is based on altitude");
-            touch_down_ratio = UI_Tools.FloatSlider("Altitude/speed ratio", touch_down_ratio, 0.5f, 3);
-            UI_Tools.Right_Left_Text("Safe", "Danger");
-            float limit_speed = compute_limit_speed(100);
-            UI_Tools.Console($"ex : speed is limit at {limit_speed:n2} m/s for 100 meters altitude");
+            auto_warp = UI_Tools.Toggle(auto_warp, "Auto Time-Warp");
 
-            touch_down_speed = UI_Tools.FloatSlider("Touch-Down speed", touch_down_speed, 0.1f, 10);
+            if (auto_warp)
+            {
+                WarpToSettings.onGUI();
+
+                UI_Tools.Title("// Rotation Warp");
+                rotation_warp_duration = UI_Fields.IntField("rotation_warp_duration", "Rot. Warp Duration", rotation_warp_duration, 0, int.MaxValue,
+                "During Rotation Warp, Attitude is checked");
+                max_rotation = UI_Tools.FloatSlider("Safe Warp Rotation", max_rotation, 0, 90, "°", "Max angle (stop warp when reached)");
+            }
+
+            UI_Tools.Title("// Touch Down");
+            start_touchdown_altitude = UI_Tools.FloatSlider("Start TouchDown Altitude", start_touchdown_altitude, 100, 5000, "m", "Altitude for starting Touch-Down Phase");
+
+            touch_down_ratio = UI_Tools.FloatSlider("Altitude/speed ratio", touch_down_ratio, 0.5f, 3, "", "Speed is based on altitude");
+            UI_Tools.Right_Left_Text("Safe", "Danger");
+   
+            touch_down_speed = UI_Tools.FloatSlider("Touch-Down speed", touch_down_speed, 0.1f, 10, "Speed when touching ground");
         }
 
         public float compute_limit_speed(float altitude)
@@ -172,7 +207,7 @@ namespace K2D2.Controller
                     else
                     {
                         current_executor.setController(warp_to);
-                        warp_to.Start_UT(startRotate_UT);
+                        warp_to.Start_UT(startSafeWarp_UT);
                     }
                     break;
                 case Mode.SafeWarp:
@@ -210,9 +245,6 @@ namespace K2D2.Controller
             var next = this.mode + 1;
             setMode(next);
         }
-
-
-
 
         bool _active = false;
         public override bool isActive
@@ -256,7 +288,7 @@ namespace K2D2.Controller
         double collision_UT = 0;
         double adjusted_collision_UT = 0;
         double startBurn_UT = 0;
-        double startRotate_UT = 0;
+        double startSafeWarp_UT = 0;
         double speed_collision;
         double burn_duration;
 
@@ -280,6 +312,7 @@ namespace K2D2.Controller
                 //var dt = GeneralTools.Game.UniverseModel.UniversalTime - orbit.collisionPointUT;
                 speed_collision = orbit.GetOrbitalVelocityAtUTZup(adjusted_collision_UT).magnitude;
                 burn_duration = (speed_collision / burn_dV.full_dv);
+                compute_startBurn();
             }
         }
 
@@ -297,10 +330,9 @@ namespace K2D2.Controller
             else
             {
                 startBurn_UT = adjusted_collision_UT - burn_duration - land_settings.burn_before;
-                startRotate_UT = startBurn_UT - 10 * 60;
+                startSafeWarp_UT = startBurn_UT - land_settings.rotation_warp_duration;
             }
         }
-
 
         public double compute_real_collision()
         {
@@ -382,10 +414,9 @@ namespace K2D2.Controller
                 isActive = false;
                 return;
             }
-
             if (mode == Mode.QuickWarp)
             {
-                warp_to.UT = startRotate_UT;
+                warp_to.UT = startSafeWarp_UT;
             }
             else if (mode == Mode.SafeWarp)
             {
@@ -393,9 +424,8 @@ namespace K2D2.Controller
             }
             else if (mode == Mode.Waiting)
             {
-                
                 var dt = startBurn_UT - GeneralTools.Game.UniverseModel.UniversalTime; 
-                if (dt <= 0 && Settings.auto_next)
+                if (dt <= 0)
                 {
                     nextMode();
                     return;
@@ -405,15 +435,15 @@ namespace K2D2.Controller
             {
                 brake.wanted_speed = 0;
                 brake.gravity_compensation = true;
-                if (current_speed < 30 && Settings.auto_next)
+                if (current_speed < 30)
                 {
-                    if (altitude < 500)
+                    if (altitude < land_settings.start_touchdown_altitude)
                     {
-                        setMode(Mode.TouchDown );
+                        setMode(Mode.TouchDown);
                     }
                     else
                     {
-                        // high altitude retry 
+                        // high altitude retry
                         setMode(Mode.QuickWarp);
                     }
                     return;
@@ -421,14 +451,14 @@ namespace K2D2.Controller
             }
             else if (mode == Mode.TouchDown )
             {
-                brake.wanted_speed = land_settings.compute_limit_speed(altitude);;
+                brake.wanted_speed = land_settings.compute_limit_speed(altitude);
                 brake.gravity_compensation = true;
             }
 
             // call the sub controllers
             base.Update();
 
-            if (current_executor.finished && Settings.auto_next)
+            if (current_executor.finished)
             {
                 // auto next
                 nextMode();
@@ -439,23 +469,22 @@ namespace K2D2.Controller
 
         public void context_infos()
         {
-            UI_Tools.Console($"Altitude : {StrTool.DistanceToString(altitude)}");
-            UI_Tools.Console($"Current Speed : {current_speed:n2} m/s");
+            // UI_Tools.Console($"Altitude : {StrTool.DistanceToString(altitude)}");
+            // UI_Tools.Console($"Current Speed : {current_speed:n2} m/s");
 
             if (is_falling)
             {
-                UI_Tools.Title("Collision detected by KSP 2 Orbit");
+                UI_Tools.Title("Collision detected !");
 
-                UI_Tools.Console($"collision in  {StrTool.DurationToString(collision_UT - GeneralTools.Game.UniverseModel.UniversalTime)}");
-                UI_Tools.Console($"adjusted_collision in {StrTool.DurationToString(adjusted_collision_UT - GeneralTools.Game.UniverseModel.UniversalTime)}");
-                
-                UI_Tools.Console($"start_burn in  {StrTool.DurationToString(startBurn_UT - GeneralTools.Game.UniverseModel.UniversalTime)}");
-                UI_Tools.Console($"speed collision  {speed_collision:n2} m/s");
-                UI_Tools.Console($"burn_duration {burn_duration:n2} s");
+                //UI_Tools.Console($"collision in  {StrTool.DurationToString(collision_UT - GeneralTools.Game.UniverseModel.UniversalTime)}");
+                UI_Tools.Label($"Collision in {StrTool.DurationToString(adjusted_collision_UT - GeneralTools.Game.UniverseModel.UniversalTime)}");
+                UI_Tools.Label($"speed collision {speed_collision:n2} m/s");
+                UI_Tools.Label($"start_burn in <b>{StrTool.DurationToString(startBurn_UT - GeneralTools.Game.UniverseModel.UniversalTime)}</b>");
+                UI_Tools.Label($"burn_duration {burn_duration:n2} s");
             }
             else
             {
-                UI_Tools.Title("No Collision detected by KSP 2 Orbit");
+                UI_Tools.Title("No Collision detected");
             }
         }
 
@@ -465,41 +494,41 @@ namespace K2D2.Controller
             {
                 Settings.onGUI();
                 land_settings.settings_UI();
-                WarpToSettings.ui();
                 return;
             }
 
-            UI_Tools.Title(mode.ToString());
-
             context_infos();
-
-            if (!isActive && brake.NeedBurn)
+            if (is_falling)
             {
-                GUI.color = Color.red;
-            }
-
-            isActive = UI_Tools.ToggleButton(isActive, "Start", "Stop");
-            GUI.color = Color.white;
-
-            if (!Settings.auto_next)
-            {
-                UI_Tools.Title($"finished {current_executor.finished}");
-                if (!current_executor.finished)
+                isActive = UI_Tools.ToggleButton(isActive, "Start", "Stop");
+                if (isActive)
                 {
-                    if (GUILayout.Button("Next /!\\"))
-                        nextMode();
-                }
-                else
-                {
-                    if (GUILayout.Button("Next"))
-                        nextMode();
+                    UI_Tools.Title(mode.ToString());
+
+                    if (! string.IsNullOrEmpty(current_executor.status_line))
+                        UI_Tools.Console(current_executor.status_line);
                 }
             }
 
-            if (! string.IsNullOrEmpty(current_executor.status_line))
-                UI_Tools.Console(current_executor.status_line);
+            if (burn_dV.burned_dV > 0)
+                UI_Tools.Console($"burned : {burn_dV.burned_dV} m/s");
 
-            UI_Tools.Console($"burned : {burn_dV.burned_dV} m/s");
+            // if (!Settings.auto_next)
+            // {
+            //     UI_Tools.Title($"finished {current_executor.finished}");
+            //     if (!current_executor.finished)
+            //     {
+            //         if (GUILayout.Button("Next /!\\"))
+            //             nextMode();
+            //     }
+            //     else
+            //     {
+            //         if (GUILayout.Button("Next"))
+            //             nextMode();
+            //     }
+            // }
+
+            
         }
     }
 }
