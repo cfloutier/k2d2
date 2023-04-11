@@ -46,31 +46,31 @@ namespace K2D2
             set { s_settings_file.SetInt("window_y_pos", value); }
         }
 
-        public static MainUI.InterfaceMode current_interface_mode
+        public static int current_interface_mode
         {
-            get { return s_settings_file.GetEnum< MainUI.InterfaceMode> ("interface_setting", MainUI.InterfaceMode.ExeNode); }
-            set{  s_settings_file.SetEnum< MainUI.InterfaceMode>("interface_setting", value); }
+            get { return s_settings_file.GetInt("interface_setting", 0); }
+            set{  s_settings_file.SetInt("interface_setting", value); }
         }
-    }
 
-
-    public class SettingsUI
-    {
         public static void onGUI()
-        { 
+        {
             GUILayout.BeginHorizontal();
             UI_Tools.Title("// Settings");
 
             GUILayout.FlexibleSpace();
-
             // VERSION
             UI_Tools.Console($"v{K2D2_Plugin.ModVer}");
+
+            if (UI_Tools.Button("back"))
+                K2D2_Plugin.Instance.settings_visible = false;
 
             GUILayout.EndHorizontal();
             Settings.debug_mode = UI_Tools.Toggle(Settings.debug_mode,
                 "debug mode", "Debug mode open\nWIP features and verbose informations.");
         }
     }
+
+
 
 }
 

@@ -10,7 +10,7 @@ using K2D2.Controller;
 namespace K2D2.KSPService
 {
     /// Simple class used to compute Burned DV
-    public class BurndV: BaseController
+    public class BurndV : BaseController
     {
         public ManualLogSource logger = BepInEx.Logging.Logger.CreateLogSource("K2D2.SettingsFile");
 
@@ -67,7 +67,7 @@ namespace K2D2.KSPService
             {
                 return engineInfo.Engine.MaxThrustOutputVac();
             }
-         }
+        }
 
         public void Compute_Thrust()
         {
@@ -87,12 +87,12 @@ namespace K2D2.KSPService
 
                 Vector3 vector = ((engineInfo.Engine != null) ? engineInfo.Engine.ThrustDirRelativePartWorldSpace : (1f * Vector3.back));
 
-                actual_thrust += vector*engineInfo.Engine.FinalThrustValue;
+                actual_thrust += vector * engineInfo.Engine.FinalThrustValue;
                 full_thrust += vector * compute_full_thrust(engineInfo);
             }
 
-            actual_dv = (float) ( actual_thrust.magnitude / totalMass );
-            full_dv = (float) ( full_thrust.magnitude / totalMass );
+            actual_dv = (float)(actual_thrust.magnitude / totalMass);
+            full_dv = (float)(full_thrust.magnitude / totalMass);
         }
 
         public override void onGUI()

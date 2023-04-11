@@ -382,14 +382,14 @@ namespace K2D2.KSPService
         }
 
         public double GetApproxAltitude()
-        {  
+        {
             var altitude_from_ground = GetGroundAltitude();
-           // VesselComponent.SimulationObject.objVesselBehavior.ShowCenterOfMass;
-           // var center = VesselComponent.SimulationObject.objVesselBehavior.BoundingBox.center.y - VesselComponent.SimulationObject.objVesselBehavior.BoundingBox.extents.z;
+            // VesselComponent.SimulationObject.objVesselBehavior.ShowCenterOfMass;
+            // var center = VesselComponent.SimulationObject.objVesselBehavior.BoundingBox.center.y - VesselComponent.SimulationObject.objVesselBehavior.BoundingBox.extents.z;
             //var bounding_sphere = VesselComponent.SimulationObject.objVesselBehavior.BoundingSphere;
             var result = altitude_from_ground - VesselComponent.SimulationObject.objVesselBehavior.BoundingSphere.radius;
-            return result;  
-        }    
+            return result;
+        }
 
         public double GetGroundAltitude()
         {
@@ -420,52 +420,52 @@ namespace K2D2.KSPService
         {
             return Game.ViewController.DataProvider.TelemetryDataProvider.SpeedDisplayMode.GetValue();
         }
-        
+
         public double getApoapsis()
         {
             return VesselComponent.Orbit.Apoapsis;
         }
-        
+
         public double getPeriapsis()
         {
             return VesselComponent.Orbit.Periapsis;
         }
-        
+
         public double getCurrenOrbitHeight()
         {
             return VesselComponent.Orbit.radius;
 
         }
-        
+
         public double getCurrentOrbitSpeed()
         {
             return VesselComponent.Orbit.orbitalSpeed;
         }
-        
+
         public double getEccentricity()
         {
             return VesselComponent.Orbit.eccentricity;
         }
-        
+
         public double getInclination()
         {
             return VesselComponent.Orbit.inclination;
         }
-        
+
         public Vector getOrbitalVelocity()
         {
             return VesselComponent.OrbitalVelocity;
         }
-        
-        
-        
+
+
+
 
         // =================================================================================================================
-        
+
         public IGGuid GetGlobalIDActiveVessel()
         {
             return VesselComponent.SimulationObject.GlobalId;
         }
-        
+
     }
 }

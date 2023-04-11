@@ -1,5 +1,6 @@
 
 using BepInEx.Logging;
+using K2D2.Controller;
 using K2D2.KSPService;
 using KSP.Sim;
 using KSP.Sim.impl;
@@ -7,14 +8,12 @@ using UnityEngine;
 
 namespace K2D2.InfosPages
 {
-    class OrbitInfos
+    class OrbitInfos : BaseController
     {
-        public static void onGUI()
+        public override void onGUI()
         {
-
             var current_vessel = K2D2_Plugin.Instance.current_vessel;
             PatchedConicsOrbit orbit = current_vessel.VesselComponent.Orbit;
-
 
             UI_Tools.Title("// Orbit Infos");
 

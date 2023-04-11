@@ -11,7 +11,7 @@ namespace K2D2
 {
     public class TimeWarpTools
     {
-        static TimeWarp time_warp =>  GameManager.Instance?.Game?.ViewController?.TimeWarp;
+        static TimeWarp time_warp => GameManager.Instance?.Game?.ViewController?.TimeWarp;
 
         static public int CurrentRateIndex
         {
@@ -46,14 +46,14 @@ namespace K2D2
         public static int ratioToIndex(float ratio)
         {
             var levels = time_warp.GetWarpRates();
-            for (int index = 0; index < levels.Length; index++ )
+            for (int index = 0; index < levels.Length; index++)
             {
                 float factor = levels[index].TimeScaleFactor;
                 if (ratio < factor)
                     return index;
             }
 
-            return levels.Length -1;
+            return levels.Length - 1;
         }
 
         public static void SetRateIndex(int rate_index, bool instant)

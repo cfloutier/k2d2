@@ -14,6 +14,21 @@ namespace K2D2.Controller
 
         public GameInstance Game => GameManager.Instance == null ? null : GameManager.Instance.Game;
 
+        // set my the main UI, update can be ignore if not active and not visible
+        public bool ui_visible = false;
+
+        public bool need_update
+        {
+            get { return ui_visible || isActive; }
+        }
+
+                // true if the controller is running
+        public virtual bool isActive
+        {
+            get { return false;}
+            set { }
+        }
+
         public virtual void onReset()
         {
             // onReset is called each time scene become Invalid, or when a controller need exclusivity
@@ -38,7 +53,8 @@ namespace K2D2.Controller
         {
             // Fixed Update is called on physic update
         }
-        
+
+
         /*
         /// <summary>
         /// Implement this method to add custom reinitialization code e.g. to reinitialize the vessel after a scene change

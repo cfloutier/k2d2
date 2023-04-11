@@ -1,5 +1,9 @@
-# v0.6.0
-* Landing v1.0 !
+
+# v0.7.0
+* Landing v2 (2 phases landing )
+
+# v0.6.0 (not released)
+* Landing v1
 
 * [Execute_NODE] Corrected the underBurn in the Execute Node. thanks to @Falki from the KSP2 Modders Society. 
 * Position of window is saved and cannot be sent outside of Screen space.
@@ -8,21 +12,29 @@
 * Editor Fields in timeWarp Settings avoid sending keys to KSP2 (ex : the 1 Numpad that mute sound)
 * Time warp correction : no more overload (I hope). We also can use the Standard KSP2 timewarp (in settings) but there are trouble at the end of phase...
 
+[Known_Issues]
+* Circularize can create invalid nodes. (cause KSP2 to have Null Pointer Exceptions)
+* During Execute node, if the direction is clearly align at the begining, warp is skipped and burn stats 
+
+
 [TODO] before release
+setting back
+cleanup maneuvre debug info
 
-* cleanup maneuvre debug info
-
-* Land : no roation if speed is up during safe warp
-* bad transition between safe warp and quick warp
-
-* Land : new messages
-* correction circularize UI
 * main tabs : shows if a pilot is running
+* 
+* Land : new messages
+* Land : no rotation if speed is up during safe warp
+* bad transition between safe warp and quick warp. 
+
+* correction circularize UI
+
 * correct tooltip timing
 
-[Known_Issues]
-* dv computed during burn is over estimated. It is mainly visible for huge dv values. 
-* Circularize can create invalid nodes. (cause KSP2 to have Null Pointer Exceptions)
+[TODO] after
+* set the node to sub controller on clicking run.
+
+
 
 # v0.5.1
 * Rebuild with SpaceWarp 1.0.1 + fix the version number and KSP2 version check

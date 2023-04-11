@@ -28,7 +28,7 @@ namespace K2D2
 
 
             var my_obj = ReflexionTool.GetInstanceField(typeof(VesselSAS), currentSas(), "sasResponse");
-            return  ((Vector3d) my_obj).magnitude * 100;
+            return ((Vector3d)my_obj).magnitude * 100;
         }
 
         public static Vector3d geSASAngularDelta()
@@ -37,7 +37,7 @@ namespace K2D2
                 return Vector3d.zero;
 
             var my_obj = ReflexionTool.GetInstanceField(typeof(VesselSAS), currentSas(), "angularDelta");
-            return GeneralTools.correctEuler(((Vector3d)  my_obj));
+            return GeneralTools.correctEuler(((Vector3d)my_obj));
         }
 
         public static TelemetryComponent getTelemetry()

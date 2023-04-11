@@ -2,12 +2,13 @@
 
 using UnityEngine;
 using KSP.Sim;
+using K2D2.Controller;
 
 namespace K2D2.InfosPages
 {
-    class VesselInfos
+    class VesselInfos : BaseController
     {
-        public static void onGUI()
+        public override void onGUI()
         {
             var vehicle = K2D2_Plugin.Instance.current_vessel.VesselVehicle;
             var vessel_component = K2D2_Plugin.Instance.current_vessel.VesselComponent;

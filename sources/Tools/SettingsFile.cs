@@ -41,9 +41,6 @@ namespace K2D2
             Thread.CurrentThread.CurrentCulture = previous_culture;
         }
 
-
-
-
         protected void Save()
         {
             var previous_culture = Thread.CurrentThread.CurrentCulture;

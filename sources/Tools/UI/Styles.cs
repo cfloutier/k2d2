@@ -7,10 +7,14 @@ namespace K2D2
     {
         private static bool guiLoaded = false;
 
-        public static GUIStyle box, window, error, warning;
+        public static GUIStyle window, error, warning;
 
 
         public static GUIStyle small_button, big_button, button;
+
+        public static GUIStyle tab_normal, tab_active;
+
+
 
         public static GUIStyle label, mid_text, console_text, phase_ok, phase_warning, phase_error;
 
@@ -21,8 +25,6 @@ namespace K2D2
         public static GUIStyle icons_label, title;
 
         public static Texture2D gear, icon, big_icon, cross;
-
-
 
         public static void Init()
         {
@@ -53,18 +55,9 @@ namespace K2D2
 
         public static void GetStyles()
         {
-            if (box != null)
+            if (window != null)
                 return;
 
-            box = GUI.skin.GetStyle("Box");
-            // Set the background color of the Box
-            box.normal.background = Texture2D.whiteTexture;
-            // Set the font size of the Box
-            // box.fontSize = 20;
-            // Set the alignment of the Box
-            box.alignment = TextAnchor.MiddleCenter;
-
-            // WINDOW
 
             // Define the GUIStyle for the window
             window = new GUIStyle(GUI.skin.window);
@@ -101,6 +94,7 @@ namespace K2D2
             window.alignment = TextAnchor.UpperLeft;
             window.stretchWidth = true;
 
+
             // button std
             button = new GUIStyle(GUI.skin.GetStyle("Button"));
             button.normal.background = AssetsLoader.loadIcon("BigButton_Normal");
@@ -119,11 +113,36 @@ namespace K2D2
             // button.fontSize = 20;
             button.alignment = TextAnchor.MiddleCenter;
 
+            tab_normal = new GUIStyle(button);
+            tab_normal.border = new RectOffset(5, 5, 5, 5);
+            tab_normal.padding = new RectOffset(4, 3, 4, 3);
+            tab_normal.overflow = new RectOffset(0, 0, 0, 0);
+            // big_button.fontSize = 20;
+            tab_normal.alignment = TextAnchor.MiddleCenter;
+
+            tab_normal.normal.background = AssetsLoader.loadIcon("Tab_Normal");
+            setAllFromNormal(tab_normal);
+
+            tab_normal.hover.background = AssetsLoader.loadIcon("Tab_Hover");
+            tab_normal.active.background = AssetsLoader.loadIcon("Tab_Active");
+            tab_normal.onNormal = tab_normal.active;
+            setFromOn(tab_normal);
+
+            tab_active = new GUIStyle(tab_normal);
+            tab_active.normal.background = AssetsLoader.loadIcon("Tab_On_normal");
+            setAllFromNormal(tab_active);
+
+            tab_active.hover.background = AssetsLoader.loadIcon("Tab_On_hover");
+            tab_active.active.background = AssetsLoader.loadIcon("Tab_On_Active");
+            tab_active.onNormal = tab_active.active;
+            setFromOn(tab_active);
+
+
             // Small Button
             small_button = new GUIStyle(GUI.skin.GetStyle("Button"));
             small_button.normal.background = AssetsLoader.loadIcon("Small_Button");
-            small_button.hover.background = AssetsLoader.loadIcon("Small_Button_hover");
             setAllFromNormal(small_button);
+            small_button.hover.background = AssetsLoader.loadIcon("Small_Button_hover");
 
             small_button.active.background = AssetsLoader.loadIcon("Small_Button_active");
             small_button.onNormal = small_button.active;
@@ -140,8 +159,8 @@ namespace K2D2
             big_button.normal.textColor = ColorTools.parseColor("#FFFFFF");
             setAllFromNormal(big_button);
 
-            big_button.hover.background = AssetsLoader.loadIcon("BigButton_hover");
-            big_button.active.background = AssetsLoader.loadIcon("BigButton_on");
+            big_button.hover.background = AssetsLoader.loadIcon("BigButton_Hover");
+            big_button.active.background = AssetsLoader.loadIcon("BigButton_Active");
             big_button.onNormal = big_button.active;
             setFromOn(big_button);
 

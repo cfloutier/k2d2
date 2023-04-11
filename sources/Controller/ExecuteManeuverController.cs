@@ -13,6 +13,26 @@ using KSP.Sim;
 
 namespace K2D2.Controller
 {
+    public class ExecuteSettings
+    {
+
+       public bool show_node_infos
+        {
+            get => Settings.s_settings_file.GetBool("land.show_node_infos", true);
+            set {
+                // value = Mathf.Clamp(value, 0 , 1);
+                Settings.s_settings_file.SetBool("land.show_node_infos", value);
+                }
+        }
+
+        public void settings_UI()
+        {
+            UI_Tools.Title("// Execute");
+            show_node_infos = UI_Tools.Toggle(show_node_infos, "Show Nodes Infos");
+        }
+    }
+
+
     public class AutoExecuteManeuver : ComplexControler
     {
         public ManualLogSource logger = BepInEx.Logging.Logger.CreateLogSource("K2D2.LandingController");
@@ -20,6 +40,9 @@ namespace K2D2.Controller
         public static AutoExecuteManeuver Instance { get; set; }
 
         public ManeuverNodeData current_maneuvre_node = null;
+
+
+        ExecuteSettings execute_settings = new ExecuteSettings();
 
         // Sub Pilots
         TurnTo turn;
@@ -135,7 +158,7 @@ namespace K2D2.Controller
             if (K2D2_Plugin.Instance.settings_visible)
             {
                 // default Settings UI
-                SettingsUI.onGUI();
+                Settings.onGUI();
                 // 
                 settingsUI();
                 return;
@@ -149,9 +172,15 @@ namespace K2D2.Controller
 
             if (!valid_maneuver)
             {
-                UI_Tools.Label("invalid Maneuvre node.");
+                UI_Tools.Label("Invalid Maneuvre node.");
                 UI_Tools.Console("Actually a KSP2 bug when loading scenaries. Please open map to fix it");
                 return;
+            }
+
+
+            if (execute_settings.show_node_infos)
+            {
+                node_infos();
             }
 
             if (mode == Mode.Off)
@@ -171,7 +200,7 @@ namespace K2D2.Controller
                     Stop();
             }
 
-            node_infos();
+            
 
             current_executor.onGUI();
             if (!Settings.auto_next)
@@ -190,11 +219,7 @@ namespace K2D2.Controller
             }
         }
 
-        public override void onReset()
-        {
-            Stop();
-        }
-
+     
         bool valid_maneuver = false;
 
         public bool checkManeuver()
@@ -252,32 +277,34 @@ namespace K2D2.Controller
             else
                 Settings.auto_next = true;
 
+            execute_settings.settings_UI();
+
             WarpToSettings.ui();
             BurnManeuvreSettings.ui();
         }
 
         void node_infos()
         {
+            UI_Tools.Title("// Node Infos");
+            var dt = GeneralTools.remainingStartTime(current_maneuvre_node);
+            UI_Tools.Label($"Node in <b>{StrTool.DurationToString(dt)}</b>");
+            UI_Tools.Label($"dV {current_maneuvre_node.BurnRequiredDV:n2} m/s");
+            UI_Tools.Label($"Duration {StrTool.DurationToString(current_maneuvre_node.BurnDuration)}");
+
             if (Settings.debug_mode)
             {
-                var dt = GeneralTools.remainingStartTime(current_maneuvre_node);
-                UI_Tools.Label($"Node in {StrTool.DurationToString(dt)}");
-                UI_Tools.Label($"BurnDuration {current_maneuvre_node.BurnDuration}");
-                // UI_Tools.Label($"BurnRequiredDV {current_maneuvre_node.BurnRequiredDV}");
-                // UI_Tools.Label($"BurnVector {StrTool.VectorToString(current_maneuvre_node.BurnVector)}");
-
-                var telemetry = SASInfos.getTelemetry();
-
-                Vector3 maneuvre_dir = telemetry.ManeuverDirection.vector;
-
-                UI_Tools.Label($"maneuvre_dir {StrTool.VectorToString(maneuvre_dir)}");
-
                 if (dt < 0)
                 {
                     UI_Tools.Label("In The Past");
                     return;
                 }
             }
+        }
+
+
+        public override bool isActive
+        {
+            get { return mode != Mode.Off; }
         }
 
         public void Start()
@@ -290,5 +317,11 @@ namespace K2D2.Controller
         {
             setMode(Mode.Off);
         }
+
+        public override void onReset()
+        {
+            Stop();
+        }
+
     }
 }

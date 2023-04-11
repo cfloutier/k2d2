@@ -21,7 +21,10 @@ namespace K2D2
             return number.Length > 0 ? double.Parse(number) : -1;
         }
 
-
+        public static int ClampInt(int value, int min, int max)
+        {
+            return (value < min) ? min : (value > max) ? max : value;
+        }
 
         public static Vector3d correctEuler(Vector3d euler)
         {

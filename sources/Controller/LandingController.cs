@@ -26,6 +26,7 @@ namespace K2D2.Controller
     /// </summary>
     public class LandingSettings
     {
+     
         public bool auto_warp
         {
             get => Settings.s_settings_file.GetBool("land.auto_warp", true);
@@ -202,7 +203,7 @@ namespace K2D2.Controller
             // start
             if (mode == Mode.Off)
             {
-                ControlerActive = true;
+                isActive = true;
                 return;
             }
 
@@ -211,8 +212,10 @@ namespace K2D2.Controller
         }
 
 
+
+
         bool _active = false;
-        bool ControlerActive
+        public override bool isActive
         {
             get { return _active; }
             set {
@@ -236,16 +239,14 @@ namespace K2D2.Controller
                     // reset controller to desactivate other controllers.
                     K2D2_Plugin.ResetControllers();
                     _active = true;
-                    
                     setMode(Mode.QuickWarp);
-
                 }
             }
         }
 
         public override void onReset()
         {
-            ControlerActive = false;
+            isActive = false;
         }
 
         float current_speed = 0;
@@ -368,17 +369,17 @@ namespace K2D2.Controller
 
             if (!is_falling)
             {
-                ControlerActive = false;
+                isActive = false;
                 return;
             }
-            if (!ControlerActive)
+            if (!isActive)
                 return;
 
             // landing detection....
             if (altitude < 5 && current_speed < 1)
             {
                 //current_vessel.SetThrottle(0);
-                ControlerActive = false;
+                isActive = false;
                 return;
             }
 
@@ -462,7 +463,7 @@ namespace K2D2.Controller
         {
             if (K2D2_Plugin.Instance.settings_visible)
             {
-                SettingsUI.onGUI();
+                Settings.onGUI();
                 land_settings.settings_UI();
                 WarpToSettings.ui();
                 return;
@@ -472,12 +473,12 @@ namespace K2D2.Controller
 
             context_infos();
 
-            if (!ControlerActive && brake.NeedBurn)
+            if (!isActive && brake.NeedBurn)
             {
                 GUI.color = Color.red;
             }
 
-            ControlerActive = UI_Tools.ToggleButton(ControlerActive, "Start", "Stop");
+            isActive = UI_Tools.ToggleButton(isActive, "Start", "Stop");
             GUI.color = Color.white;
 
             if (!Settings.auto_next)
