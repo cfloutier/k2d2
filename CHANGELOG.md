@@ -1,39 +1,35 @@
 
 # v0.7.0
-* Landing v2  : multi phases landing : Quick Warp, Safe Warp, Waiting, Brake and Touch-Down
-* Tabs shows if an pilot is currentlu running
+* Landing v2  : multi phases landing : Quick Warp, Waiting, Brake and Touch-Down
+  after the Brake if the altitude is still too high, another cycle will start.
+* Tabs shows if an pilot is currently running
+* added Hyperbolic circularize.
 
 # v0.6.0 (not released)
 * Landing v1
 
-* [Execute_NODE] Corrected the underBurn in the Execute Node. thanks to @Falki from the KSP2 Modders Society. 
+* Corrected the underBurn in the Execute Node. thanks to @Falki from the KSP2 Modders Society.
 * Position of window is saved and cannot be sent outside of Screen space.
 * UI new Skin. I'm not really sure of this look. I tried to be closer to main KSP2 UI (purple and black)
 * ToolTips to avoid long messages in settings
 * Editor Fields in timeWarp Settings avoid sending keys to KSP2 (ex : the 1 Numpad that mute sound)
-* Time warp correction : no more overload (I hope). We also can use the Standard KSP2 timewarp (in settings) but there are trouble at the end of phase...
+* Time warp correction : no more burn after time (I hope).
 
 [Known_Issues]
-* Circularize can create invalid nodes. (cause KSP2 to have Null Pointer Exceptions)
-* During Execute node, if the direction is clearly align at the begining, warp is skipped and burn stats 
-
+* Circularize can create invalid nodes sometimes, still need to check when and why. (cause KSP2 to have Null Pointer Exceptions)
+* During Execute node, if the direction is clearly align at the begining, warp is skipped and burn stats. quite difficult to reproduce 100%.
 
 [TODO] before release
-setting back
 
 * Land : settings: touch down speed !
-* Land : new messages
+
+[TODO] after and perhaps
 * Land : no rotation if speed is up during safe warp
-* bad transition between safe warp and quick warp.
-
-* Hide Circle
-
-* correct tooltip timing
-
-[TODO] after
-* set the node to sub controller on clicking run.
+* Land : bad transition between safe warp and quick warp.
+* Optimisation : use a cache for settings values
+* use ui_shown to Update only needed controllers
+* set the node to sub controller on clicking run. (perhaps a bad idea)
 * correction circularize UI
-
 
 # v0.5.1
 * Rebuild with SpaceWarp 1.0.1 + fix the version number and KSP2 version check

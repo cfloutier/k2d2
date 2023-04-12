@@ -23,19 +23,16 @@ namespace K2D2.Controller
 
         ManualLogSource logger;
         public Rect windowRect { get; set; }
-        
+
         public static SimpleManeuverController Instance { get; set; }
 
         //private bool _circularizeApoapsis = false, _circularizePeriapsis = false, _hohmannTransfer = false;
         private string distanceHohmannS ="0", timeHohmannS="0";
         double distanceHohmann = 0, timeHohmann = 0;
         string periapsisS = "0", apoapsisS = "0";
-        
-        
-
 
         private ManeuverProvider _maneuverProvider;
-        
+
         public SimpleManeuverController(ref ManeuverProvider maneuverProvider)
         {
             _maneuverProvider = maneuverProvider;
@@ -63,21 +60,26 @@ namespace K2D2.Controller
             if (GUILayout.Button("Circularize Node in Apoapsis"))
             {
                 _maneuverProvider.CircularizeApoapsis();
+                if (!Settings.debug_mode)
+                    _maneuverProvider.ManeuverManager.StartManeuver();
             }
             
 
             if (GUILayout.Button("Circularize Node in Periapsis"))
             {
                 _maneuverProvider.CircularizePeriapsis();
+                if (!Settings.debug_mode)
+                    _maneuverProvider.ManeuverManager.StartManeuver();
             }
 
             if (GUILayout.Button("Circularize Hyperbolic Orbit"))
             {
                 _maneuverProvider.CircularizeHyperbolicOrbit();
-                
+                if (!Settings.debug_mode)
+                    _maneuverProvider.ManeuverManager.StartManeuver();
             }
-            
-            
+
+            /*
             GUILayout.Label("Periapsis (km):");
             periapsisS = GUILayout.TextField(periapsisS);
             GUILayout.Label("Apoapsis (km):");
@@ -88,12 +90,11 @@ namespace K2D2.Controller
                 logger.LogMessage(GeneralTools.GetNumberString(periapsisS));
                 logger.LogMessage(GeneralTools.GetNumberString(apoapsisS));
                 _maneuverProvider.ChangeOrbit(GeneralTools.GetNumberString(periapsisS), GeneralTools.GetNumberString(apoapsisS));
+                if (!Settings.debug_mode)
+                    _maneuverProvider.ManeuverManager.StartManeuver();
                 return;
             }
-            
 
-
-            /*
             GUILayout.Label("Hohmann Transfer Distance (km):");
             distanceHohmannS = GUILayout.TextField(distanceHohmannS);
             GUILayout.Label("Hohmann Transfer Time (s):");

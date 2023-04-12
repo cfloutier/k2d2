@@ -138,6 +138,9 @@ namespace K2D2.Controller
             }
 
             wanted_warp_index = compute_wanted_warp_index(dt);
+            if (wanted_warp_index < 2)
+                wanted_warp_index = 2;
+                
             float wanted_rate = TimeWarpTools.indexToRatio(wanted_warp_index);
             TimeWarpTools.SetRateIndex(wanted_warp_index, false);
             status_line = $"End warp : {StrTool.DurationToString(dt)} | x{wanted_rate}";

@@ -12,7 +12,7 @@ namespace K2D2.Controller
     {
 
         public bool gravity_compensation;
-        public float wanted_speed = 0;
+        public float max_speed = 0;
 
         KSPVessel current_vessel;
         BurndV burn_dV = new BurndV();
@@ -59,7 +59,7 @@ namespace K2D2.Controller
             }
 
 
-            delta_speed = current_speed - wanted_speed;
+            delta_speed = current_speed - max_speed;
 
             float remaining_full_burn_time = (float)(delta_speed / burn_dV.full_dv);
             wanted_throttle = Mathf.Clamp(remaining_full_burn_time + min_throttle, 0, 1);
@@ -109,7 +109,7 @@ namespace K2D2.Controller
 
             current_speed = (float)current_vessel.VesselVehicle.SurfaceSpeed;
 
-            delta_speed = current_speed - wanted_speed;
+            delta_speed = current_speed - max_speed;
 
             if (delta_speed > 0) // reset timewarp if it is time to burn
                 TimeWarpTools.SetRateIndex(0, false);
@@ -133,12 +133,11 @@ namespace K2D2.Controller
             }
 
             compute_Throttle();
-            status_line = $"Wanted Speed : {wanted_speed:n2} m/s";
+            status_line = $"Max Speed : {max_speed:n2} m/s";
 
             // no stop for gravity compensation
             current_vessel.SetThrottle(wanted_throttle);
         }
-
 
         public override void onGUI()
         {
@@ -146,13 +145,13 @@ namespace K2D2.Controller
             if (delta_speed > 0)
             {
                 GUI.color = Color.red;
-                UI_Tools.Console($"Max speed : {wanted_speed:n2} !!");
+                UI_Tools.Console($"Max speed : {max_speed:n2} !!");
                 UI_Tools.Console($"delta speed  : {delta_speed:n2}  m/s");
                 GUI.color = Color.white;
             }
             else
             {
-                UI_Tools.Console($"Max speed : {wanted_speed:n2}  m/s");
+                UI_Tools.Console($"Max speed : {max_speed:n2}  m/s");
                 UI_Tools.Console($"delta speed  : {-delta_speed:n2}  m/s");
             }
 

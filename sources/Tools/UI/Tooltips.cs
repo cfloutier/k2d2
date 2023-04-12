@@ -31,7 +31,7 @@ namespace K2D2
         }
 
         static float show_time;
-        const float delay = 0;
+        const float delay = 0.5f;
         static bool show = false;
 
         static Vector2 offset = new Vector2(20, 10);

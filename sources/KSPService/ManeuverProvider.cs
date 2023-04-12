@@ -7,7 +7,7 @@ namespace K2D2.sources.KSPService
 {
     public class ManeuverProvider
     {
-        private ManeuverManager ManeuverManager { get; set; }
+        public ManeuverManager ManeuverManager { get; set; }
         private Maneuver _maneuver { get; set; }
 
         private ManualLogSource logger;
@@ -31,20 +31,22 @@ namespace K2D2.sources.KSPService
             _maneuver.Update();
         }
 
-        public void CircularizeApoapsis()
+        public void CircularizePeriapsis()
         {
             ManeuverManager.AddManeuver("Circularize Periapsis", new Action(() => _maneuver.CircularizeOrbitPeriapsis()));
 
         }
 
-        public void CircularizePeriapsis()
+        public void CircularizeApoapsis()
         {
             ManeuverManager.AddManeuver("Circularize Apoapsis", new Action(() => _maneuver.CircularizeOrbitApoapsis()));
+            
         }
 
         public void CircularizeHyperbolicOrbit()
         {
             ManeuverManager.AddManeuver("Circularize Hyperbolic Orbit", new Action(() => _maneuver.CircularizeHyperbolicOrbit()));
+            
         }
 
         public void ChangeOrbit(double periapsis, double apoapsis)

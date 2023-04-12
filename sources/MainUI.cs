@@ -59,7 +59,7 @@ namespace K2D2
     {
         public ManualLogSource logger;
 
-        private static string[] interfaceModes = { "Execute", "Landing" };
+        private static string[] interfaceModes = { "Execute", "Landing", "Circle" };
         private static string[] interfaceModes_debug = { "Execute", "Landing", "Circle", "Orbit", "SAS", "Vessel" };
 
         bool init_done = false;

@@ -24,16 +24,20 @@ namespace K2D2
             }
 
 
-
-
-            TimeSpan t = TimeSpan.FromSeconds(secs);
-
-            return prefix + string.Format("{0:D2}:{1:D2}:{2:D2}:{3:D3}",
+            try
+            {
+                TimeSpan t = TimeSpan.FromSeconds(secs);
+                var result = prefix + string.Format("{0:D2}:{1:D2}:{2:D2}:{3:D3}",
                 t.Hours,
                 t.Minutes,
                 t.Seconds,
                 t.Milliseconds);
-            
+                return result;
+            }
+            catch (System.Exception)
+            {
+                return prefix + $"{secs:n2} s";
+            }
         }
 
         public const double AstronomicalUnit = 149597870700;
