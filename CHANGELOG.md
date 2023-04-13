@@ -1,4 +1,10 @@
 
+# v0.7.1 : important corrections
+* Rebuild with KSP v0.1.2.0 Assemblies
+* Landing : Correction for KSP v0.1.2.0, Landing Touchdown was no more detected.
+* Warp : Correction of WarpSpeed ratio.
+* Execute : Correction of the OverBurn.
+
 # v0.7.0
 * Landing v2  : multi phases landing : Quick Warp, Waiting, Brake and Touch-Down
   after the Brake if the altitude is still too high, another cycle will start.

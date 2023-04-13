@@ -15,15 +15,6 @@ using System;
 
 namespace K2D2.Controller
 {
-
-    /// <summary>
-    /// TODO : - better UI
-    /// Detect landing
-    /// Crash Time out
-    /// print distance and speed
-    /// print time depending on level
-    /// Stop when speed is up !!
-    /// </summary>
     public class LandingSettings
     {
         public bool auto_warp
@@ -292,7 +283,7 @@ namespace K2D2.Controller
 
         float current_speed = 0;
 
-        bool is_falling = false;
+        bool collision_detected = false;
 
         double collision_UT = 0;
         double adjusted_collision_UT = 0;
@@ -302,8 +293,8 @@ namespace K2D2.Controller
         double burn_duration;
 
         public void computeValues()
-        {
-            is_falling = false;
+        { 
+            collision_detected = false;
             var current_vessel = K2D2_Plugin.Instance.current_vessel;
             if (current_vessel == null)
             {
@@ -314,7 +305,7 @@ namespace K2D2.Controller
             PatchedConicsOrbit orbit = current_vessel.VesselComponent.Orbit;
             if (orbit.PatchEndTransition == PatchTransitionType.Collision)
             {
-                is_falling = true;
+                collision_detected = true;
                 collision_UT = orbit.collisionPointUT;
                 adjusted_collision_UT = compute_real_collision();
 
@@ -400,18 +391,27 @@ namespace K2D2.Controller
 
         public override void Update()
         {
+            if (!ui_visible && !isActive) return;
             if (current_vessel == null || current_vessel.VesselVehicle == null)
                 return;
 
             altitude = (float)current_vessel.GetApproxAltitude();
             current_speed = (float)current_vessel.VesselVehicle.SurfaceSpeed;
-
+            // detect collision
             computeValues();
 
-            if (!is_falling)
+            if (!collision_detected)
             {
-                isActive = false;
-                return;
+                // after patch ksp detect with altitude and remove the collision point
+                if (isActive)
+                {
+                    setMode(Mode.TouchDown);
+                }
+                else
+                {
+                    // no more collision
+                    isActive = false;
+                }
             }
             if (!isActive)
                 return;
@@ -460,6 +460,7 @@ namespace K2D2.Controller
             }
             else if (mode == Mode.TouchDown )
             {
+                TimeWarpTools.SetRateIndex(0, false);
                 brake.max_speed = land_settings.compute_limit_speed(altitude);
                 brake.gravity_compensation = true;
             }
@@ -481,7 +482,7 @@ namespace K2D2.Controller
             // UI_Tools.Console($"Altitude : {StrTool.DistanceToString(altitude)}");
             // UI_Tools.Console($"Current Speed : {current_speed:n2} m/s");
 
-            if (is_falling)
+            if (collision_detected)
             {
                 UI_Tools.Title("Collision detected !");
 
@@ -507,38 +508,35 @@ namespace K2D2.Controller
             }
 
             context_infos();
-            if (is_falling)
+
+            isActive = UI_Tools.ToggleButton(isActive, "Start", "Stop");
+            if (isActive)
             {
-                isActive = UI_Tools.ToggleButton(isActive, "Start", "Stop");
-                if (isActive)
+                switch (mode)
                 {
-
-                    switch (mode)
-                    {
-                        default:
-                        case Mode.Off:  break;
-                        case Mode.QuickWarp:
-                            UI_Tools.OK("Quick Warp"); 
-                            break;
-                        case Mode.RotWarp:
-                            UI_Tools.Warning("Rotating Warp");
-                            break;
-                        case Mode.Waiting:
-                            UI_Tools.OK($"Waiting : {StrTool.DurationToString(startBurn_UT - GeneralTools.Game.UniverseModel.UniversalTime)}");
-                            break;
-                        case Mode.Brake:
-                            UI_Tools.Warning($"Brake !");
-                            break;
-                        case Mode.TouchDown:
-                            UI_Tools.Warning($"Touch Down...");
-                            break;
-                    }
-
-
-                    if (current_executor != null && !string.IsNullOrEmpty(current_executor.status_line))
-                        UI_Tools.Console(current_executor.status_line);
+                    default:
+                    case Mode.Off:  break;
+                    case Mode.QuickWarp:
+                        UI_Tools.OK("Quick Warp"); 
+                        break;
+                    case Mode.RotWarp:
+                        UI_Tools.Warning("Rotating Warp");
+                        break;
+                    case Mode.Waiting:
+                        UI_Tools.OK($"Waiting : {StrTool.DurationToString(startBurn_UT - GeneralTools.Game.UniverseModel.UniversalTime)}");
+                        break;
+                    case Mode.Brake:
+                        UI_Tools.Warning($"Brake !");
+                        break;
+                    case Mode.TouchDown:
+                        UI_Tools.Warning($"Touch Down...");
+                        break;
                 }
+
+                if (current_executor != null && !string.IsNullOrEmpty(current_executor.status_line))
+                    UI_Tools.Console(current_executor.status_line);
             }
+            
 
             if (burn_dV.burned_dV > 0)
                 UI_Tools.Console($"Burned : {burn_dV.burned_dV} m/s");

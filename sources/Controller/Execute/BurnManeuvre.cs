@@ -106,6 +106,8 @@ namespace K2D2.Controller
         }
 
         Vector3d initial_dir = Vector3d.zero;
+        int sign = 0;
+        float angle;
 
         public override void Update()
         {
@@ -148,10 +150,10 @@ namespace K2D2.Controller
                 Vector velocity_after_maneuver = current_vessel.VesselComponent.Orbiter.ManeuverPlanSolver.GetVelocityAfterFirstManeuver(out ut);
                 var current_vel = current_vessel.VesselComponent.Orbit.GetOrbitalVelocityAtUTZup(ut);
                 var delta_speed_vector = velocity_after_maneuver.vector - current_vel;
+                sign = Math.Sign(Vector3d.Dot(initial_dir, delta_speed_vector));
 
-                var sign = Math.Sign(Vector3d.Dot(initial_dir, delta_speed_vector));
-
-                remaining_dv = delta_speed_vector.magnitude;
+                angle = (float) Vector3d.Angle(initial_dir, delta_speed_vector);
+                remaining_dv = sign * delta_speed_vector.magnitude;
 
                 if (last_remaining_dv > 0 && last_remaining_dv  < 1 && remaining_dv > last_remaining_dv)
                 {
@@ -234,8 +236,10 @@ namespace K2D2.Controller
                 //UI_Tools.Console($"end_dt {Tools.remainingEndTime(maneuver)}");
 
                 UI_Tools.Console($"BurnRequiredDV {maneuver.BurnRequiredDV}");
-
+                UI_Tools.Console($"angle {angle}");
+                UI_Tools.Console($"sign {sign}");
                 UI_Tools.Console($"remaining_dv {remaining_dv}");
+
                 UI_Tools.Console($"remaining_full_burn_time {remaining_full_burn_time}");
 
 

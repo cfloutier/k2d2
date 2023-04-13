@@ -156,7 +156,7 @@ namespace K2D2.Controller
             if (dt < 0)
                 return 0;
 
-            double time_ratio = 1 + dt / ( 10 + WarpToSettings.warp_speed );
+            double time_ratio = 1 + dt / ( 10 - WarpToSettings.warp_speed );
 
             // adding 1 because x1 during the warp mode is a lame
             return TimeWarpTools.ratioToIndex((float)time_ratio);
