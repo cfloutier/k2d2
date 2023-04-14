@@ -12,6 +12,13 @@ namespace K2D2.InfosPages
     {
         public override void onGUI()
         {
+            if (K2D2_Plugin.Instance.settings_visible)
+            {
+                Settings.onGUI();
+                return;
+            }
+
+
             var current_vessel = K2D2_Plugin.Instance.current_vessel;
             PatchedConicsOrbit orbit = current_vessel.VesselComponent.Orbit;
 

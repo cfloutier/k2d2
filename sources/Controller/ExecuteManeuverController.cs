@@ -16,7 +16,7 @@ namespace K2D2.Controller
     public class ExecuteSettings
     {
 
-       public bool show_node_infos
+        public bool show_node_infos
         {
             get => Settings.s_settings_file.GetBool("land.show_node_infos", true);
             set {
@@ -25,11 +25,38 @@ namespace K2D2.Controller
                 }
         }
 
+        public enum StartMode { precise, constant, half_duration}
+        private static string[] StartMode_Labels = { "T0", "before", "mid-duration" };
+        public StartMode start_mode
+        {
+            get => Settings.s_settings_file.GetEnum<StartMode>("land.start_mode", StartMode.precise);
+            set {
+                // value = Mathf.Clamp(value, 0 , 1);
+                Settings.s_settings_file.SetEnum<StartMode>("land.start_mode", value);
+                }
+        }
+
+        public float start_before
+        {
+            get => Settings.s_settings_file.GetFloat("land.start_before", 1);
+            set {
+                // value = Mathf.Clamp(value, 0 , 1);
+                Settings.s_settings_file.SetFloat("land.start_before", value);
+                }
+        }
+
         public void settings_UI()
         {
-            UI_Tools.Title("// Execute");
             show_node_infos = UI_Tools.Toggle(show_node_infos, "Show Nodes Infos");
-        }
+
+            start_mode = UI_Tools.EnumGrid<StartMode>("Start Burn at :", start_mode, StartMode_Labels);
+
+            if (start_mode == StartMode.constant)
+            {
+                start_before = UI_Tools.FloatSlider(start_before, "Start before T0", 0, 10, "s");
+            }
+
+       }
     }
 
 
@@ -40,6 +67,7 @@ namespace K2D2.Controller
         public static AutoExecuteManeuver Instance { get; set; }
 
         public ManeuverNodeData current_maneuvre_node = null;
+        ManeuverNodeData execute_node = null;
 
 
         ExecuteSettings execute_settings = new ExecuteSettings();
@@ -94,7 +122,6 @@ namespace K2D2.Controller
 
             if (mode == Mode.Off)
             {
-
                 TimeWarpTools.SetRateIndex(0, false);
                 current_executor.setController( null );
                 return;
@@ -106,16 +133,17 @@ namespace K2D2.Controller
                     current_executor.setController( null );
                     break;
                 case Mode.Turn:
+                    execute_node = current_maneuvre_node;
                     current_executor.setController( turn );
-                    turn.StartManeuver(current_maneuvre_node);
+                    turn.StartManeuver(execute_node);
                     break;
                 case Mode.Warp:
                     current_executor.setController( warp );
-                    warp.StartManeuver(current_maneuvre_node);
+                    warp.StartManeuver(execute_node);
                     break;
                 case Mode.Burn:
                     current_executor.setController( burn );
-                    burn.StartManeuver(current_maneuvre_node);
+                    burn.StartManeuver(execute_node);
                     break;
             }
 
@@ -127,7 +155,7 @@ namespace K2D2.Controller
             if (current_maneuvre_node == null)
                 return false;
 
-            var dt = GeneralTools.remainingStartTime(current_maneuvre_node);
+            var dt = current_maneuvre_node.Time - GeneralTools.Game.UniverseModel.UniversalTime;
             if (dt < 0)
             {
                 return false;
@@ -159,22 +187,24 @@ namespace K2D2.Controller
             {
                 // default Settings UI
                 Settings.onGUI();
-                // 
                 settingsUI();
                 return;
             }
 
-            if (current_maneuvre_node == null)
+            if (!isActive )
             {
-                UI_Tools.Label("no Maneuvre node");
-                return;
-            }
+                if (current_maneuvre_node == null)
+                {
+                    UI_Tools.Label("No Maneuvre node.");
+                    return;
+                }
 
-            if (!valid_maneuver)
-            {
-                UI_Tools.Label("Invalid Maneuvre node.");
-                UI_Tools.Console("Actually a KSP2 bug when loading scenaries. Please open map to fix it");
-                return;
+                if (!valid_maneuver)
+                {
+                    UI_Tools.Label("Invalid Maneuvre node.");
+                    UI_Tools.Console("Actually a KSP2 bug when loading scenaries. Please open map to fix it");
+                    return;
+                }
             }
 
 
@@ -183,8 +213,7 @@ namespace K2D2.Controller
                 node_infos();
             }
 
-
-            if (!canStart())
+            if (!isActive && !canStart())
             {
                 UI_Tools.Label("No Maneuver node in the future");
                 return;
@@ -245,10 +274,32 @@ namespace K2D2.Controller
 
         public override void Update()
         {
-
             checkManeuver();
 
+
+
             base.Update();
+
+
+            if (isActive)
+            {
+                double UT = 0;
+                switch(execute_settings.start_mode)
+                {
+                    case ExecuteSettings.StartMode.precise:
+                        UT = execute_node.Time;
+                        break;
+                    case ExecuteSettings.StartMode.half_duration:
+                        UT = execute_node.Time - execute_node.BurnDuration/2;
+                        break;
+                    case ExecuteSettings.StartMode.constant:
+                        UT = execute_node.Time - execute_settings.start_before;
+                        break;
+                }
+
+                warp.UT = UT;
+                burn.UT = UT;
+            }
 
             if (current_executor.finished && Settings.auto_next)
             {
@@ -257,8 +308,12 @@ namespace K2D2.Controller
             }
         }
 
+
+        public SimpleAccordion accordion = new SimpleAccordion();
+
         void settingsUI()
         {
+
             if (Settings.debug_mode)
             {
                 Settings.auto_next = UI_Tools.Toggle(Settings.auto_next, "Auto Next Phase", "Debug Mode : Need to press next");
@@ -266,16 +321,31 @@ namespace K2D2.Controller
             else
                 Settings.auto_next = true;
 
-            execute_settings.settings_UI();
+            if (accordion.Count == 0)
+            {
+                accordion.addChapter("Execute",execute_settings.settings_UI);
+                accordion.addChapter("Warp", WarpToSettings.onGUI);
+                accordion.addChapter("Burn", BurnManeuvreSettings.onGUI);
 
-            WarpToSettings.onGUI();
-            BurnManeuvreSettings.ui();
+                accordion.singleChapter = true;
+            }
+
+            accordion.OnGui();
         }
 
         void node_infos()
         {
             UI_Tools.Title("// Node Infos");
-            var dt = GeneralTools.remainingStartTime(current_maneuvre_node);
+            ManeuverNodeData node = null;
+            if (isActive)
+                node = execute_node;
+            else
+                node = current_maneuvre_node;
+
+            if (node == null)
+                return;
+
+            var dt = GeneralTools.remainingStartTime(node);
             UI_Tools.Label($"Node in <b>{StrTool.DurationToString(dt)}</b>");
             UI_Tools.Label($"dV {current_maneuvre_node.BurnRequiredDV:n2} m/s");
             UI_Tools.Label($"Duration {StrTool.DurationToString(current_maneuvre_node.BurnDuration)}");
@@ -289,8 +359,6 @@ namespace K2D2.Controller
                 }
             }
         }
-
-
 
 
         bool _active = false;
@@ -315,6 +383,7 @@ namespace K2D2.Controller
                     // reset controller to desactivate other controllers.
                     K2D2_Plugin.ResetControllers();
                     _active = true;
+
                     setMode(Mode.Turn);
                 }
             }

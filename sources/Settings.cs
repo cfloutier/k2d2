@@ -61,12 +61,12 @@ namespace K2D2
             // VERSION
             UI_Tools.Console($"v{K2D2_Plugin.ModVer}");
 
-            if (UI_Tools.Button("back"))
+            Settings.debug_mode = UI_Tools.miniToggle(Settings.debug_mode, "dbg", "Debug mode open\nWIP features and verbose informations.");
+
+            if (UI_Tools.miniButton("bck", "close settings"))
                 K2D2_Plugin.Instance.settings_visible = false;
 
             GUILayout.EndHorizontal();
-            Settings.debug_mode = UI_Tools.Toggle(Settings.debug_mode,
-                "debug mode", "Debug mode open\nWIP features and verbose informations.");
         }
     }
 

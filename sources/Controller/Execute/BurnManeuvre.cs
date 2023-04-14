@@ -32,15 +32,23 @@ namespace K2D2.Controller
             }
         }
 
-        static public void ui()
+        static public bool rotate_during_burn
         {
-            UI_Tools.Title("// Burn");
+            get => Settings.s_settings_file.GetBool("land.rotate_during_burn", false);
+            set {
+                // value = Mathf.Clamp(value, 0 , 1);
+                Settings.s_settings_file.SetBool("land.rotate_during_burn", value);
+                }
+        }
 
-            burn_adjust = UI_Tools.FloatSlider("Adjusting rate", burn_adjust, 0, 2, "Used during final adjust phase");
+        static public void onGUI()
+        {
+            burn_adjust = UI_Tools.FloatSlider(burn_adjust, "Adjusting rate" , 0, 2, "Used during final adjust phase");
             UI_Tools.Right_Left_Text("Precise", "Quick");
 
-            max_dv_error = UI_Tools.FloatSlider("Precision",
-                        max_dv_error, 0.001f, 0.5f, "m/s");
+            max_dv_error = UI_Tools.FloatSlider(max_dv_error, "Precision", 0.001f, 0.5f, "m/s");
+
+            rotate_during_burn = UI_Tools.Toggle(rotate_during_burn, "Rotate During burn", "Keep following Maneuver Node\ndirection during burn phase");
         }
     }
 
@@ -78,6 +86,7 @@ namespace K2D2.Controller
         public void StartManeuver(ManeuverNodeData node)
         {
             maneuver = node;
+            UT = node.Time;
             Start();
         }
 
@@ -109,6 +118,8 @@ namespace K2D2.Controller
         int sign = 0;
         float angle;
 
+        public double UT = 0;
+
         public override void Update()
         {
             if (maneuver == null) return;
@@ -120,7 +131,7 @@ namespace K2D2.Controller
 
             if (mode == Mode.Waiting)
             {
-                start_dt = GeneralTools.remainingStartTime(maneuver);
+                start_dt = UT - GeneralTools.Game.UniverseModel.UniversalTime;
                 if (start_dt > 0)
                 {
                     status_line = $"start in {StrTool.DurationToString(start_dt)}";
@@ -134,7 +145,12 @@ namespace K2D2.Controller
 
                     // force autopilot
                     autopilot.Enabled = true;
-                    autopilot.SetMode(AutopilotMode.StabilityAssist);
+
+                    if (BurnManeuvreSettings.rotate_during_burn)
+                        autopilot.SetMode(AutopilotMode.Maneuver);
+                    else
+                        autopilot.SetMode(AutopilotMode.StabilityAssist);
+
                 }
             }
 

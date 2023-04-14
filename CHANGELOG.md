@@ -1,8 +1,8 @@
 
 # v0.7.2
 * Landing : correction of the collision detection
-
-
+* Execute : Added options on direction and start burn time
+* UI : added Chapters in settings (more compact)
 
 # v0.7.1 : important corrections
 * Rebuild with KSP v0.1.2.0 Assemblies

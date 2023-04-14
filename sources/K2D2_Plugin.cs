@@ -36,7 +36,7 @@ namespace K2D2
 
         public const string ModGuid = "K2D2";
         public const string ModName = "K2D2";
-        public const string ModVer = "0.7.1";
+        public const string ModVer = "0.7.2";
 
         #region Fields
 

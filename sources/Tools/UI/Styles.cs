@@ -157,20 +157,24 @@ namespace K2D2
             small_button.alignment = TextAnchor.MiddleCenter;
 
             accordion_close = new GUIStyle(small_button);
+            accordion_close.padding = new RectOffset(23, 2, 2, 2);
+
             accordion_close.normal.background = AssetsLoader.loadIcon("Chapter_Off_Normal");
+            accordion_close.normal.textColor = ColorTools.parseColor("#D4D4D4");
+            accordion_close.alignment = TextAnchor.MiddleLeft;
             setAllFromNormal(accordion_close);
             accordion_close.hover.background = AssetsLoader.loadIcon("Chapter_Off_Hover");
             accordion_close.active.background = AssetsLoader.loadIcon("Chapter_Off_Active");
-
             accordion_close.border = new RectOffset(23, 7, 23, 7);
 
 
             accordion_open = new GUIStyle(accordion_close);
             accordion_open.normal.background = AssetsLoader.loadIcon("Chapter_On_Normal");
+            accordion_open.normal.textColor = ColorTools.parseColor("#8BFF95");
+            setAllFromNormal(accordion_open);
+
             accordion_open.hover.background = AssetsLoader.loadIcon("Chapter_On_Hover");
             accordion_open.active.background = AssetsLoader.loadIcon("Chapter_On_Active");
-
-
 
             big_button = new GUIStyle(GUI.skin.GetStyle("Button"));
             big_button.normal.background = AssetsLoader.loadIcon("BigButton_Normal");

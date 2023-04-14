@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Globalization;
 using UnityEngine;
 
 namespace K2D2
@@ -79,8 +81,6 @@ namespace K2D2
     }
 
 
-
-
     public class TopButtons
     {
         static Rect position = Rect.zero;
@@ -126,11 +126,31 @@ namespace K2D2
     public class UI_Tools
     {
 
+        public static int GetEnumValue<T>(T inputEnum) where T: struct, IConvertible
+        {
+            Type t = typeof(T);
+            if (!t.IsEnum)
+            {
+                throw new ArgumentException("Input type must be an enum.");
+            }
+
+            return inputEnum.ToInt32(CultureInfo.InvariantCulture.NumberFormat);
+        }
+
+        public static TEnum EnumGrid<TEnum>(string label, TEnum value, string[] labels) where TEnum : struct, Enum
+        {
+            int int_value = value.GetHashCode();
+            UI_Tools.Label(label);
+            int result = GUILayout.SelectionGrid(int_value, labels, labels.Length);
+
+           return (TEnum) Enum.ToObject(typeof(TEnum), result);
+        }
+
         public static bool Toggle(bool is_on, string txt, string tooltip = null)
         {
             if (tooltip != null)
                 return GUILayout.Toggle(is_on, new GUIContent(txt, tooltip), Styles.toggle);
-            else 
+            else
                 return GUILayout.Toggle(is_on, txt, Styles.toggle);
         }
 
@@ -162,6 +182,18 @@ namespace K2D2
         {
             return GUILayout.Button(txt, Styles.small_button);
         }
+
+        public static bool miniToggle(bool value, string txt, string tooltip)
+        {
+            return GUILayout.Toggle(value, new GUIContent(txt, tooltip), Styles.small_button, GUILayout.Height(20));
+        }
+
+        public static bool miniButton(string txt, string tooltip)
+        {
+            return GUILayout.Button(new GUIContent(txt, tooltip), Styles.small_button, GUILayout.Height(20));
+        }
+
+
 
         public static bool ToolTipButton(string tooltip)
         {
@@ -216,7 +248,7 @@ namespace K2D2
             return value;
         }
 
-        public static float FloatSlider(string txt, float value, float min, float max, string postfix = "", string tooltip = "")
+        public static float FloatSlider(float value, string txt, float min, float max, string postfix = "", string tooltip = "")
         {
             // simple float slider with a lavel value
 

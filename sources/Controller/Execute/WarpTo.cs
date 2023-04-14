@@ -36,9 +36,7 @@ namespace K2D2.Controller
 
         public static void onGUI()
         {
-            UI_Tools.Title("// Warp");
-
-            warp_speed = UI_Tools.FloatSlider("Warp Speed", warp_speed, 0, 7, "", "Warp adjust rate");
+            warp_speed = UI_Tools.FloatSlider(warp_speed, "Warp Speed",  0, 7, "", "Warp adjust rate");
             UI_Tools.Right_Left_Text("Safe", "Quick");
 
             warp_safe_duration = UI_Fields.IntField("warp_safe_duration", "Before Burn Time", warp_safe_duration, 5, int.MaxValue,
@@ -58,12 +56,13 @@ namespace K2D2.Controller
         TurnTo turn_to = null;
 
         public bool check_direction = false;
-        public float max_angle;
 
+        public float max_angle;
 
         public void StartManeuver(ManeuverNodeData node, bool check_direction = false)
         {
             maneuver = node;
+            this.UT = node.Time;
             this.check_direction = check_direction;
 
             Start();
@@ -75,7 +74,7 @@ namespace K2D2.Controller
             }
         }
 
-        public void Start_UT(double UT, bool check_direction = false, float max_angle = 30)
+        public void Start_Retrograde(double UT, bool check_direction = false, float max_angle = 30)
         {
             maneuver = null;
             this.UT = UT;
@@ -101,11 +100,7 @@ namespace K2D2.Controller
         public override void Update()
         {
             finished = false;
-            if (maneuver != null)
-            {
-                UT = maneuver.Time;
-            }
-
+          
             status_line = "";
 
             if (check_direction)
@@ -140,7 +135,7 @@ namespace K2D2.Controller
             wanted_warp_index = compute_wanted_warp_index(dt);
             if (wanted_warp_index < 2)
                 wanted_warp_index = 2;
-                
+
             float wanted_rate = TimeWarpTools.indexToRatio(wanted_warp_index);
             TimeWarpTools.SetRateIndex(wanted_warp_index, false);
             status_line = $"End warp : {StrTool.DurationToString(dt)} | x{wanted_rate}";
