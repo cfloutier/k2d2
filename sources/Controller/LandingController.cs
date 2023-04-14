@@ -81,17 +81,16 @@ namespace K2D2.Controller
                 }
         }
 
-        public void settings_UI()
+
+        public SimpleAccordion accordion = new SimpleAccordion();
+
+        void LandingUI()
         {
-        //    UI_Tools.Console("Try to compensate gravity by adding dv to needed burn ");
-        //    gravity_compensation = UI_Tools.Toggle(gravity_compensation, "Gravity Compensation");
+            burn_before = UI_Tools.FloatSlider("Burn Before", burn_before, 0, 10, "s", "Secure burn before critical time");
+        }
 
-            UI_Tools.Title("// Landing Settings");
-            burn_before = UI_Tools.FloatSlider("Burn Before", burn_before, 0, 10, "s");
-            // UI_Tools.Console($"(Safe time before burn)");
-
-          
-
+        void WarpUI()
+        {
             auto_warp = UI_Tools.Toggle(auto_warp, "Auto Time-Warp");
 
             if (auto_warp)
@@ -112,7 +111,10 @@ namespace K2D2.Controller
                 }
 
             }
+        }
 
+        void TouchDown_UI()
+        {
             UI_Tools.Title("// Touch Down");
             start_touchdown_altitude = UI_Tools.FloatSlider("Start TouchDown Altitude", start_touchdown_altitude, 100, 5000, "m", "Altitude for starting Touch-Down Phase");
 
@@ -120,6 +122,22 @@ namespace K2D2.Controller
             UI_Tools.Right_Left_Text("Safe", "Danger");
 
             touch_down_speed = UI_Tools.FloatSlider("Touch-Down speed", touch_down_speed, 0.1f, 10, "m/s", "Speed when touching ground");
+
+        }
+
+
+
+        public void settings_UI()
+        {
+            if (accordion.Count == 0)
+            {
+                accordion.addChapter("// Landing Settings", LandingUI);
+                accordion.addChapter("// Warp", WarpUI);
+                accordion.addChapter("// Touch Down", TouchDown_UI);
+                accordion.singleChapter = true;
+            }
+
+            accordion.OnGui();
         }
 
         public float compute_limit_speed(float altitude)

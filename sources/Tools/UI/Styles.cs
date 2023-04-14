@@ -14,13 +14,16 @@ namespace K2D2
 
         public static GUIStyle tab_normal, tab_active;
 
-
+        public static GUIStyle accordion_close, accordion_open;
 
         public static GUIStyle label, mid_text, console_text, phase_ok, phase_warning, phase_error;
 
         public static GUIStyle toggle;
 
         public static GUIStyle slider_line, slider_node, slider_text;
+
+
+
 
         public static GUIStyle icons_label, title;
 
@@ -143,7 +146,6 @@ namespace K2D2
             small_button.normal.background = AssetsLoader.loadIcon("Small_Button");
             setAllFromNormal(small_button);
             small_button.hover.background = AssetsLoader.loadIcon("Small_Button_hover");
-
             small_button.active.background = AssetsLoader.loadIcon("Small_Button_active");
             small_button.onNormal = small_button.active;
             setFromOn(small_button);
@@ -153,6 +155,22 @@ namespace K2D2
             small_button.overflow = new RectOffset(0, 0, 0, 0);
            // small_button.fontSize = 14;
             small_button.alignment = TextAnchor.MiddleCenter;
+
+            accordion_close = new GUIStyle(small_button);
+            accordion_close.normal.background = AssetsLoader.loadIcon("Chapter_Off_Normal");
+            setAllFromNormal(accordion_close);
+            accordion_close.hover.background = AssetsLoader.loadIcon("Chapter_Off_Hover");
+            accordion_close.active.background = AssetsLoader.loadIcon("Chapter_Off_Active");
+
+            accordion_close.border = new RectOffset(23, 7, 23, 7);
+
+
+            accordion_open = new GUIStyle(accordion_close);
+            accordion_open.normal.background = AssetsLoader.loadIcon("Chapter_On_Normal");
+            accordion_open.hover.background = AssetsLoader.loadIcon("Chapter_On_Hover");
+            accordion_open.active.background = AssetsLoader.loadIcon("Chapter_On_Active");
+
+
 
             big_button = new GUIStyle(GUI.skin.GetStyle("Button"));
             big_button.normal.background = AssetsLoader.loadIcon("BigButton_Normal");
