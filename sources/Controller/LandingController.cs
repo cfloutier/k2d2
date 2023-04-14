@@ -81,14 +81,6 @@ namespace K2D2.Controller
                 }
         }
 
-        public bool suicide_burn
-        {
-            get => Settings.s_settings_file.GetBool("land.suicide_burn", false);
-            set {
-                Settings.s_settings_file.SetBool("land.suicide_burn", value);
-            }
-        }
-
         public void settings_UI()
         {
         //    UI_Tools.Console("Try to compensate gravity by adding dv to needed burn ");
@@ -98,8 +90,7 @@ namespace K2D2.Controller
             burn_before = UI_Tools.FloatSlider("Burn Before", burn_before, 0, 10, "s");
             // UI_Tools.Console($"(Safe time before burn)");
 
-            if (Settings.debug_mode)
-                suicide_burn = UI_Tools.Toggle(suicide_burn, "Suicide burn mode", "Warning ! Work In Progress" );
+          
 
             auto_warp = UI_Tools.Toggle(auto_warp, "Auto Time-Warp");
 
@@ -172,7 +163,7 @@ namespace K2D2.Controller
         {
             Off,
             QuickWarp,
-            RotWarp,
+            RotationWarp,
             Waiting,
             Brake,
             TouchDown
@@ -210,7 +201,7 @@ namespace K2D2.Controller
                         warp_to.Start_UT(startSafeWarp_UT);
                     }
                     break;
-                case Mode.RotWarp:
+                case Mode.RotationWarp:
                     current_vessel.SetThrottle(0);
                     if (!land_settings.auto_warp)
                         setMode(Mode.Waiting);
@@ -285,7 +276,6 @@ namespace K2D2.Controller
 
         bool collision_detected = false;
 
-        double collision_UT = 0;
         double adjusted_collision_UT = 0;
         double startBurn_UT = 0;
         double startSafeWarp_UT = 0;
@@ -293,7 +283,7 @@ namespace K2D2.Controller
         double burn_duration;
 
         public void computeValues()
-        { 
+        {
             collision_detected = false;
             var current_vessel = K2D2_Plugin.Instance.current_vessel;
             if (current_vessel == null)
@@ -303,45 +293,32 @@ namespace K2D2.Controller
             }
 
             PatchedConicsOrbit orbit = current_vessel.VesselComponent.Orbit;
-            if (orbit.PatchEndTransition == PatchTransitionType.Collision)
-            {
-                collision_detected = true;
-                collision_UT = orbit.collisionPointUT;
-                adjusted_collision_UT = compute_real_collision();
 
-                //var dt = GeneralTools.Game.UniverseModel.UniversalTime - orbit.collisionPointUT;
-                speed_collision = orbit.GetOrbitalVelocityAtUTZup(adjusted_collision_UT).magnitude;
-                burn_duration = (speed_collision / burn_dV.full_dv);
-                compute_startBurn();
-            }
+            collision_detected = compute_real_collision();
+            speed_collision = orbit.GetOrbitalVelocityAtUTZup(adjusted_collision_UT).magnitude;
+            burn_duration = (speed_collision / burn_dV.full_dv);
+
+            compute_startBurn();
         }
 
         public void compute_startBurn()
         {
-            if (land_settings.suicide_burn)
-            {
-                // compute distance corrected by accelation
-                var delta_move = speed_collision * burn_duration - 0.5f * burn_dV.full_dv * burn_duration * burn_duration;
-                // correct time
-                var delta_time = delta_move / speed_collision;
-
-                startBurn_UT = adjusted_collision_UT - burn_duration - land_settings.burn_before + delta_time;
-            }
-            else
-            {
-                startBurn_UT = adjusted_collision_UT - burn_duration - land_settings.burn_before;
-                startSafeWarp_UT = startBurn_UT - land_settings.rotation_warp_duration;
-            }
+            startBurn_UT = adjusted_collision_UT - burn_duration - land_settings.burn_before;
+            startSafeWarp_UT = startBurn_UT - land_settings.rotation_warp_duration;
         }
 
-        public double compute_real_collision()
+        public bool compute_real_collision()
         {
+             // start in 2 minutes
+            double start_time = GeneralTools.Game.UniverseModel.UniversalTime + 2*60;
+            bool collide = false;
+
             PatchedConicsOrbit orbit = current_vessel.VesselComponent.Orbit;
             var body = orbit.referenceBody;
             double current_time_ut = GeneralTools.Game.UniverseModel.UniversalTime;
-            double deltaTime = -10; // seconds in the past
+            double deltaTime = 60; // seconds in the future
             int max_occurrences = 100;
-            double time = orbit.collisionPointUT;
+            double time = start_time;
             double terrainAltitude;
 
             float radius = current_vessel.VesselComponent.SimulationObject.objVesselBehavior.BoundingSphere.radius;
@@ -363,6 +340,7 @@ namespace K2D2.Controller
 
                 if (terrainAltitude < 0)
                 {
+                    collide = true;
                     if (deltaTime > 0)
                     {
                         // dychotomy
@@ -386,7 +364,8 @@ namespace K2D2.Controller
                 }
             }
 
-            return time;
+            adjusted_collision_UT = time;
+            return collide;
         }
 
         public override void Update()
@@ -427,7 +406,7 @@ namespace K2D2.Controller
             {
                 warp_to.UT = startSafeWarp_UT;
             }
-            else if (mode == Mode.RotWarp)
+            else if (mode == Mode.RotationWarp)
             {
                 warp_to.UT = startBurn_UT;
             }
@@ -519,7 +498,7 @@ namespace K2D2.Controller
                     case Mode.QuickWarp:
                         UI_Tools.OK("Quick Warp"); 
                         break;
-                    case Mode.RotWarp:
+                    case Mode.RotationWarp:
                         UI_Tools.Warning("Rotating Warp");
                         break;
                     case Mode.Waiting:

@@ -1,7 +1,4 @@
 using UnityEngine;
-using System.Text.RegularExpressions;
-using System.Collections.Generic;
-using KSP.Game;
 
 namespace K2D2
 {
@@ -49,54 +46,6 @@ namespace K2D2
     /// TODO : remove static, make it singleton
     public class UI_Tools
     {
-        /// <summary>
-        ///  checks if the window is in screen
-        /// </summary>
-        /// <param name="window_frame"></param>
-        public static void check_window_pos(ref Rect window_frame)
-        {
-            if (window_frame.xMax > Screen.width)
-            {
-                var dx = Screen.width - window_frame.xMax;
-                window_frame.x += dx;
-            }
-            if (window_frame.yMax > Screen.height)
-            {
-                var dy = Screen.height - window_frame.yMax;
-                window_frame.y += dy;
-            }
-            if (window_frame.xMin < 0)
-            {
-                window_frame.x = 0;
-            }
-            if (window_frame.yMin < 0)
-            {
-                window_frame.y = 0;
-            }
-        }
-         
-        /// <summary>
-        /// check the window pos and load settings if not set
-        /// </summary>
-        /// <param name="window_frame"></param>
-        public static void check_main_window_pos(ref Rect window_frame)
-        {
-            if (window_frame == Rect.zero)
-            {
-                int x_pos = Settings.window_x_pos;
-                int y_pos = Settings.window_y_pos;
-
-                if (x_pos == -1)
-                {
-                    x_pos = 100;
-                    y_pos = 50;
-                }
-
-                window_frame = new Rect(x_pos, y_pos, 500, 100);
-            }
-
-            check_window_pos(ref window_frame);
-        }
 
         public static bool Toggle(bool is_on, string txt, string tooltip = null)
         {
@@ -218,81 +167,5 @@ namespace K2D2
             GUILayout.Space(10);
         }
     }
-
-    public class UI_Fields
-    {
-        public static Dictionary<string, string> temp_dict = new Dictionary<string, string>();
-        public static List<string> inputFields = new List<string>();
-        static bool gameInputState = true;
-
-        static public void CheckEditor()
-        {
-            if (gameInputState && inputFields.Contains(GUI.GetNameOfFocusedControl()))
-            {
-                // Logger.LogInfo($"[Flight Plan]: Disabling Game Input: Focused Item '{GUI.GetNameOfFocusedControl()}'");
-                gameInputState = false;
-                // game.Input.Flight.Disable();
-                GameManager.Instance.Game.Input.Disable();
-            }
-            else if (!gameInputState && !inputFields.Contains(GUI.GetNameOfFocusedControl()))
-            {
-                // Logger.LogInfo($"[Flight Plan]: Enabling Game Input: FYI, Focused Item '{GUI.GetNameOfFocusedControl()}'");
-                gameInputState = true;
-                // game.Input.Flight.Enable();
-                GameManager.Instance.Game.Input.Enable();
-            }
-        }
-
-        /// Simple Integer Field. for the moment there is a trouble. keys are sent to KSP2 events if focus is in the field
-        public static int IntField(string name, string label, int value, int min, int max, string tooltip)
-        {
-            string text_value = value.ToString();
-
-            if (temp_dict.ContainsKey(name))
-                // always use temp value
-                text_value = temp_dict[name];
-
-            if (!inputFields.Contains(name))
-                inputFields.Add(name);
-
-            GUILayout.BeginHorizontal();
-
-            GUI.SetNextControlName(name);
-            GUILayout.Label(label);
-            var typed_text = GUILayout.TextField(text_value);
-            typed_text = Regex.Replace(typed_text, @"[^\d-]+", "");
-
-            // save filtered temp value
-            temp_dict[name] = typed_text;
-
-            int result = value;
-            bool ok = true;
-            if (!int.TryParse(typed_text, out result))
-            {
-                ok = false;
-            }
-            if (result < min) {
-                ok = false;
-                result = value;
-            }
-            else if (result > max) {
-                ok = false;
-                result = value;
-            }
-
-            if (!ok)
-                GUILayout.Label("!!!");
-
-            if (!string.IsNullOrEmpty(tooltip))
-            {
-                UI_Tools.ToolTipButton(tooltip);
-            }
-
-            GUILayout.EndHorizontal();
-            return result;
-        }
-    }
-
-
 
 }

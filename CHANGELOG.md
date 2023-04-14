@@ -1,4 +1,9 @@
 
+# v0.7.2
+* Landing : correction of the collision detection
+
+
+
 # v0.7.1 : important corrections
 * Rebuild with KSP v0.1.2.0 Assemblies
 * Landing : Correction for KSP v0.1.2.0, Landing Touchdown was no more detected.
