@@ -22,9 +22,9 @@ namespace K2D2.Controller
 
         KSPVessel current_vessel;
 
-        float x_direction;
-        float y_direction;
-        float z_direction;
+        float elevation;
+        float heading;
+
 
         public override void onReset()
         {
@@ -81,13 +81,10 @@ namespace K2D2.Controller
 
             var up = telemetry.HorizonUp;
 
-            direction = QuaternionD.Euler(x_direction, y_direction, z_direction) * Vector3d.up;
+            direction = QuaternionD.Euler(elevation, heading, 0) * Vector3d.forward;
 
+            Vector direction_vector = new Vector(up.coordinateSystem,  direction);
 
-
-            Vector direction_vector = new Vector(up.coordinateSystem,  direction); 
-
-            
             autopilot.SAS.lockedMode = lockedMode;
             autopilot.SAS.SetTargetOrientation(direction_vector, reset);
 
@@ -110,9 +107,12 @@ namespace K2D2.Controller
             reset = UI_Tools.Toggle(reset, "Reset");
 
 
-            x_direction = UI_Tools.FloatSlider("X", x_direction, -180, 180, "°");
-            y_direction = UI_Tools.FloatSlider("Y", y_direction, -180, 180, "°");
-            z_direction = UI_Tools.FloatSlider("Z", z_direction, -180, 180, "°");
+            elevation = UI_Tools.FloatSlider("Elevation", elevation, -90, 90, "°");
+            heading = UI_Tools.FloatSlider("heading", heading, -180, 180, "°");
+            // z_direction = UI_Tools.FloatSlider("Z", z_direction, -180, 180, "°");
+            if (Mathf.Abs(elevation) < 2) elevation = 0;
+            if (Mathf.Abs(heading) < 2) heading = 0;
+            // if (Mathf.Abs(z_direction) < 2) z_direction = 0;
 
             isActive = UI_Tools.ToggleButton(isActive, "Start", "Stop");
 

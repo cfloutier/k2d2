@@ -396,6 +396,17 @@ namespace K2D2.KSPService
             return telemetryDataProvider.GetAltitudeDisplayValue(AltimeterDisplayMode.GroundLevel);
         }
 
+
+        public double GetSeaAltitude()
+        {
+            return telemetryDataProvider.GetAltitudeDisplayValue(AltimeterDisplayMode.SeaLevel);
+        }
+
+        public double GetGlobalAltitude()
+        {
+            return Math.Min(GetSeaAltitude(), GetGroundAltitude()); 
+        }
+
         public double GetDisplayAltitude()
         {
             AltimeterDisplayMode altimeterDisplayMode = GetAltimeterDisplayMode();

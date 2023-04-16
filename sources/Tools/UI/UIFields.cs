@@ -30,7 +30,7 @@ namespace K2D2
         }
 
         /// Simple Integer Field. for the moment there is a trouble. keys are sent to KSP2 events if focus is in the field
-        public static int IntField(string name, string label, int value, int min, int max, string tooltip)
+        public static int IntField(string name, string label, int value, int min, int max, string tooltip = "")
         {
             string text_value = value.ToString();
 

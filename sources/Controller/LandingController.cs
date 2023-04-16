@@ -510,7 +510,7 @@ namespace K2D2.Controller
                     default:
                     case Mode.Off:  break;
                     case Mode.QuickWarp:
-                        UI_Tools.OK("Quick Warp"); 
+                        UI_Tools.OK("Quick Warp");
                         break;
                     case Mode.RotationWarp:
                         UI_Tools.Warning("Rotating Warp");
