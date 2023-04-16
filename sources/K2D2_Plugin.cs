@@ -36,7 +36,7 @@ namespace K2D2
 
         public const string ModGuid = "K2D2";
         public const string ModName = "K2D2";
-        public const string ModVer = "0.7.2";
+        public const string ModVer = "0.8.0";
 
         #region Fields
 
@@ -130,6 +130,7 @@ namespace K2D2
             controllerManager.AddController(new SimpleManeuverController(logger,ref _maneuverProvider));
             controllerManager.AddController(new AutoExecuteManeuver());
             controllerManager.AddController(new LandingController());
+            controllerManager.AddController(new VSpeedController());
 
             // Add PopUp Tabs here:
             _popUpContent = new PopUpContent(ref _popUp);
@@ -146,10 +147,9 @@ namespace K2D2
 
         void Awake()
         {
-         
+
         }
 
-       
         void save_rect_pos()
         {
             Settings.window_x_pos = (int)windowRect.xMin;
@@ -194,7 +194,6 @@ namespace K2D2
         {
             if(!ValidScene())
                 return;
-
 
             if (drawUI)
             {

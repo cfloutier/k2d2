@@ -36,7 +36,7 @@ namespace K2D2.Controller
 
         public static void onGUI()
         {
-            warp_speed = UI_Tools.FloatSlider(warp_speed, "Warp Speed",  0, 7, "", "Warp adjust rate");
+            warp_speed = UI_Tools.FloatSlider("Warp Speed", warp_speed, 0, 7, "", "Warp adjust rate");
             UI_Tools.Right_Left_Text("Safe", "Quick");
 
             warp_safe_duration = UI_Fields.IntField("warp_safe_duration", "Before Burn Time", warp_safe_duration, 5, int.MaxValue,
@@ -100,8 +100,18 @@ namespace K2D2.Controller
         public override void Update()
         {
             finished = false;
-          
+
             status_line = "";
+
+            var ut_modified = UT - WarpToSettings.warp_safe_duration;
+            dt = ut_modified - GeneralTools.Game.UniverseModel.UniversalTime;
+
+            if (dt < 0)
+            {
+                TimeWarpTools.SetRateIndex(0, false);
+                finished = true;
+                return;
+            }
 
             if (check_direction)
             {
@@ -120,16 +130,6 @@ namespace K2D2.Controller
                     if (turn_to.angle > 1)
                         return;
                 }
-            }
-
-            var ut_modified = UT - WarpToSettings.warp_safe_duration;
-            dt = ut_modified - GeneralTools.Game.UniverseModel.UniversalTime;
-
-            if (dt < 0)
-            {
-                TimeWarpTools.SetRateIndex(0, false);
-                finished = true;
-                return;
             }
 
             wanted_warp_index = compute_wanted_warp_index(dt);

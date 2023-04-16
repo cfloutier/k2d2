@@ -53,7 +53,7 @@ namespace K2D2.Controller
 
             if (start_mode == StartMode.constant)
             {
-                start_before = UI_Tools.FloatSlider(start_before, "Start before T0", 0, 10, "s");
+                start_before = UI_Tools.FloatSlider("Start before T0", start_before, 0, 10, "s");
             }
 
        }

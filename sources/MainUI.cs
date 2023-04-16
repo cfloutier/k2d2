@@ -59,8 +59,8 @@ namespace K2D2
     {
         public ManualLogSource logger;
 
-        private static string[] interfaceModes = { "Execute", "Landing", "Circle" };
-        private static string[] interfaceModes_debug = { "Execute", "Landing", "Circle", "Orbit", "SAS", "Vessel" };
+        private static string[] interfaceModes = { "Execute", "Landing", "V-Speed", "Navigation" };
+        private static string[] interfaceModes_debug = { "Execute", "Landing", "V-Speed", "Navigation", "Orbit", "SAS", "Vessel" };
 
         bool init_done = false;
         public List<BaseController> pages = new List<BaseController>();
@@ -87,7 +87,10 @@ namespace K2D2
             {
                 pages.Add(AutoExecuteManeuver.Instance);
                 pages.Add(LandingController.Instance);
+                pages.Add(VSpeedController.Instance);
+
                 pages.Add(SimpleManeuverController.Instance);
+
                 pages.Add(new OrbitInfos());
                 pages.Add(new K2D2.InfosPages.SASInfos());
                 pages.Add(new VesselInfos());
@@ -97,7 +100,7 @@ namespace K2D2
             }
 
             string [] pages_str = Settings.debug_mode ? interfaceModes_debug : interfaceModes;
-            int result = MainTabs.DrawTabs( Settings.current_interface_mode, pages_str, active_pages);
+            int result = MainTabs.DrawTabs( Settings.current_interface_mode, pages_str, active_pages, 4);
             if (result != Settings.current_interface_mode)
             {
                 pages[Settings.current_interface_mode].ui_visible = false;
@@ -106,30 +109,6 @@ namespace K2D2
             }
 
             pages[result].onGUI();
-
-            // return;
-            // Draw one of the modes.
-            // switch (Settings.current_interface_mode)
-            // {
-            //     case InterfaceMode.ExeNode:
-            //         AutoExecuteManeuver.Instance.onGUI();
-            //         break;
-            //     case InterfaceMode.Circularize:
-            //         SimpleManeuverController.Instance.onGUI();
-            //         break;
-            //     case InterfaceMode.Landing:
-            //         LandingController.Instance.onGUI();
-            //         break;
-
-            //     case InterfaceMode.Orbit:
-            //         K2D2.InfosPages.OrbitInfos.onGUI();
-            //         break;
-            //     case InterfaceMode.SAS: K2D2.InfosPages.SASInfos.onGUI(); break;
-            //     case InterfaceMode.Vessel: VesselInfos.onGUI(); break;
-            //     default:
-            //         break;
-            // }
         }
-
     }
 }

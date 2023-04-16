@@ -32,8 +32,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <KSP2Path>G:\SteamLibrary\steamapps\common\Kerbal Space Program 2\</KSP2Path>
-    <ModName>KSP2FlightAssistant</ModName>
+
+    <ModName>K2D2</ModName>
     <ModPath>$(KSP2Path)BepInEx\plugins\$(ModName)</ModPath>
     <FinalModFolder>$(ProjectDir)$(ModName)</FinalModFolder>
   </PropertyGroup>

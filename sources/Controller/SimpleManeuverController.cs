@@ -58,7 +58,6 @@ namespace K2D2.Controller
                 return;
             }
 
-
             if (_maneuverProvider == null)
             {
                 return;

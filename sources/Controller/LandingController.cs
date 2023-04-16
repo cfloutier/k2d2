@@ -28,7 +28,7 @@ namespace K2D2.Controller
 
         public float burn_before
         {
-            get => Settings.s_settings_file.GetFloat("land.burnBefore", 1f);
+            get => Settings.s_settings_file.GetFloat("land.burnBefore", 0f);
             set
             {
                 // value = Mathf.Clamp(value, 0 , 1);
@@ -81,12 +81,11 @@ namespace K2D2.Controller
                 }
         }
 
-
         public SimpleAccordion accordion = new SimpleAccordion();
 
         void LandingUI()
         {
-            burn_before = UI_Tools.FloatSlider(burn_before, "Burn Before", 0, 10, "s", "Secure burn before critical time");
+            burn_before = UI_Tools.FloatSlider("Burn Before", burn_before, 0, 10, "s", "Secure burn before critical time");
         }
 
         void WarpUI()
@@ -102,7 +101,7 @@ namespace K2D2.Controller
                     UI_Tools.Title("// Rotation Warp");
                     rotation_warp_duration = UI_Fields.IntField("rotation_warp_duration", "Rot. Warp Duration", rotation_warp_duration, 0, int.MaxValue,
                     "During Rotation Warp, Attitude is checked");
-                    max_rotation = UI_Tools.FloatSlider(max_rotation, "Safe Warp Rotation",0, 90, "°", "Max angle (stop warp when reached)");
+                    max_rotation = UI_Tools.FloatSlider("Safe Warp Rotation", max_rotation, 0, 90, "°", "Max angle (stop warp when reached)");
                 }
                 else
                 {
@@ -115,12 +114,12 @@ namespace K2D2.Controller
         void TouchDown_UI()
         {
             UI_Tools.Title("// Touch Down");
-            start_touchdown_altitude = UI_Tools.FloatSlider(start_touchdown_altitude, "Start TouchDown Altitude", 100, 5000, "m", "Altitude for starting Touch-Down Phase");
+            start_touchdown_altitude = UI_Tools.FloatSlider("Start TouchDown Altitude", start_touchdown_altitude, 100, 5000, "m", "Altitude for starting Touch-Down Phase");
 
-            touch_down_ratio = UI_Tools.FloatSlider(touch_down_ratio, "Altitude/speed ratio", 0.5f, 3, "", "Speed is based on altitude");
+            touch_down_ratio = UI_Tools.FloatSlider("Altitude/speed ratio", touch_down_ratio, 0.5f, 3, "", "Speed is based on altitude");
             UI_Tools.Right_Left_Text("Safe", "Danger");
 
-            touch_down_speed = UI_Tools.FloatSlider(touch_down_speed, "Touch-Down speed", 0.1f, 10, "m/s", "Speed when touching ground");
+            touch_down_speed = UI_Tools.FloatSlider("Touch-Down speed", touch_down_speed, 0.1f, 10, "m/s", "Speed when touching ground");
 
         }
 
@@ -159,7 +158,7 @@ namespace K2D2.Controller
 
         public WarpTo warp_to = new WarpTo();
 
-        public BrakeController brake = new BrakeController();
+        public TouchDown brake = new TouchDown();
 
         public SingleExecuteController current_executor = new SingleExecuteController();
 
@@ -530,7 +529,6 @@ namespace K2D2.Controller
                 if (current_executor != null && !string.IsNullOrEmpty(current_executor.status_line))
                     UI_Tools.Console(current_executor.status_line);
             }
-            
 
             if (burn_dV.burned_dV > 0)
                 UI_Tools.Console($"Burned : {burn_dV.burned_dV} m/s");

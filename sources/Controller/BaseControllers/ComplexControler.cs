@@ -6,10 +6,7 @@ using KSP.Messages;
 
 namespace K2D2.Controller
 {
-   
-
     // a controller that have some sub controler
-    // contains also an active flag,
     public class ComplexControler : BaseController
     {
 
@@ -62,7 +59,6 @@ namespace K2D2.Controller
             }
         }
     }
-
 }
 
 

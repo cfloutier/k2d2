@@ -239,16 +239,20 @@ namespace K2D2
 
 
 
-        public static int IntSlider(string txt, int value, int min, int max, string postfix = "")
+        public static int IntSlider(string txt, int value, int min, int max, string postfix = "", string tooltip = "")
         {
             string content = txt + $" : {value} " + postfix;
 
             GUILayout.Label(content, Styles.slider_text);
             value = (int) GUILayout.HorizontalSlider((int) value, min, max, Styles.slider_line, Styles.slider_node);
+            if (!string.IsNullOrEmpty(tooltip))
+            {
+                UI_Tools.ToolTipButton(tooltip);
+            }
             return value;
         }
 
-        public static float FloatSlider(float value, string txt, float min, float max, string postfix = "", string tooltip = "")
+        public static float FloatSlider(string txt, float value, float min, float max, string postfix = "", string tooltip = "")
         {
             // simple float slider with a lavel value
 

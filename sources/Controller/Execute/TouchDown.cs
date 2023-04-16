@@ -8,7 +8,7 @@ namespace K2D2.Controller
 {
 
     /// apply the wanted speed in the good direction
-    public class BrakeController  : ExecuteController
+    public class TouchDown  : ExecuteController
     {
 
         public bool gravity_compensation;
@@ -23,7 +23,7 @@ namespace K2D2.Controller
 
         float wanted_throttle = 0;
 
-        public BrakeController()
+        public TouchDown()
         {
             sub_contollers.Add(burn_dV);
             // logger.LogMessage("LandingController !");
