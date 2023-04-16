@@ -131,6 +131,7 @@ namespace K2D2
             controllerManager.AddController(new AutoExecuteManeuver());
             controllerManager.AddController(new LandingController());
             controllerManager.AddController(new VSpeedController());
+            controllerManager.AddController(new AttitudeController());
 
             // Add PopUp Tabs here:
             _popUpContent = new PopUpContent(ref _popUp);

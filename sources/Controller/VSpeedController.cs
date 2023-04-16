@@ -37,11 +37,11 @@ namespace K2D2.Controller
                 }
         }
 
-        public float speed_limit
+        public int speed_limit
         {
-            get => Settings.s_settings_file.GetFloat("speed.speed_limit", 10);
+            get => Settings.s_settings_file.GetInt("speed.speed_limit", 10);
             set {
-                Settings.s_settings_file.SetFloat("speed.speed_limit", value);
+                Settings.s_settings_file.SetInt("speed.speed_limit", value);
                 }
         }
 
@@ -49,7 +49,7 @@ namespace K2D2.Controller
         {
             UI_Tools.Title("V-Speed Settings");
 
-            speed_limit = UI_Tools.IntSlider("Min-Max Speed", (int) speed_limit/10, 5, 100,"m/s", "just affect the Main UI");
+            speed_limit = UI_Tools.IntSlider("Min-Max Speed", (int) speed_limit, 5, 100,"m/s", "just affect the Main UI");    
         }
     }
 

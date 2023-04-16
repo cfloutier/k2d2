@@ -244,11 +244,16 @@ namespace K2D2
             string content = txt + $" : {value} " + postfix;
 
             GUILayout.Label(content, Styles.slider_text);
+            GUILayout.BeginHorizontal();
             value = (int) GUILayout.HorizontalSlider((int) value, min, max, Styles.slider_line, Styles.slider_node);
+            if (value < min) value = min;
+            if (value > max) value = max;
+
             if (!string.IsNullOrEmpty(tooltip))
             {
                 UI_Tools.ToolTipButton(tooltip);
             }
+            GUILayout.EndHorizontal();
             return value;
         }
 

@@ -59,8 +59,8 @@ namespace K2D2
     {
         public ManualLogSource logger;
 
-        private static string[] interfaceModes = { "Execute", "Landing", "V-Speed", "Navigation" };
-        private static string[] interfaceModes_debug = { "Execute", "Landing", "V-Speed", "Navigation", "Orbit", "SAS", "Vessel" };
+        private static string[] interfaceModes = { "Execute", "Landing", "V-Speed", };
+        private static string[] interfaceModes_debug = { "Execute", "Landing", "V-Speed", "Attitude", "Navigation", "Orbit", "SAS", "Vessel" };
 
         bool init_done = false;
         public List<BaseController> pages = new List<BaseController>();
@@ -89,8 +89,8 @@ namespace K2D2
                 pages.Add(LandingController.Instance);
                 pages.Add(VSpeedController.Instance);
 
+                pages.Add(AttitudeController.Instance);
                 pages.Add(SimpleManeuverController.Instance);
-
                 pages.Add(new OrbitInfos());
                 pages.Add(new K2D2.InfosPages.SASInfos());
                 pages.Add(new VesselInfos());
