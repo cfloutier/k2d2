@@ -1,4 +1,11 @@
 
+# todo : next release
+warp : correct the over warp in atm
+print altitude in landing mode
+min atltitude is sea level
+ramantes quand je change de direction, si l'ui est visible
+
+
 # v0.7.2
 * Landing : correction of the collision detection
 * Execute : Added options on direction and start burn time

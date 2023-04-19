@@ -9,24 +9,25 @@ namespace K2D2
     {
         public static Dictionary<string, string> temp_dict = new Dictionary<string, string>();
         public static List<string> inputFields = new List<string>();
-        static bool gameInputState = true;
+        static bool _inputState = true;
+
+        static public bool GameInputState
+        {
+            set {
+                if (_inputState != value)
+                {
+                    if (value)
+                        GameManager.Instance.Game.Input.Enable();
+                    else
+                        GameManager.Instance.Game.Input.Disable();
+                }
+                _inputState = value;
+            }
+        }
 
         static public void CheckEditor()
         {
-            if (gameInputState && inputFields.Contains(GUI.GetNameOfFocusedControl()))
-            {
-                // Logger.LogInfo($"[Flight Plan]: Disabling Game Input: Focused Item '{GUI.GetNameOfFocusedControl()}'");
-                gameInputState = false;
-                // game.Input.Flight.Disable();
-                GameManager.Instance.Game.Input.Disable();
-            }
-            else if (!gameInputState && !inputFields.Contains(GUI.GetNameOfFocusedControl()))
-            {
-                // Logger.LogInfo($"[Flight Plan]: Enabling Game Input: FYI, Focused Item '{GUI.GetNameOfFocusedControl()}'");
-                gameInputState = true;
-                // game.Input.Flight.Enable();
-                GameManager.Instance.Game.Input.Enable();
-            }
+            GameInputState = !inputFields.Contains(GUI.GetNameOfFocusedControl());
         }
 
         /// Simple Integer Field. for the moment there is a trouble. keys are sent to KSP2 events if focus is in the field
@@ -45,7 +46,7 @@ namespace K2D2
 
             GUI.SetNextControlName(name);
             GUILayout.Label(label);
-            var typed_text = GUILayout.TextField(text_value);
+            var typed_text = GUILayout.TextField(text_value, GUILayout.Width(100));
             typed_text = Regex.Replace(typed_text, @"[^\d-]+", "");
 
             // save filtered temp value

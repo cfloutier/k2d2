@@ -133,7 +133,6 @@ namespace K2D2
             controllerManager.AddController(new VSpeedController());
             controllerManager.AddController(new AttitudeController());
             controllerManager.AddController(new AutoLiftController());
-            
 
             // Add PopUp Tabs here:
             _popUpContent = new PopUpContent(ref _popUp);
@@ -161,6 +160,7 @@ namespace K2D2
 
         void Update()
         {
+            Debug.developerConsoleVisible = false;
             if (ValidScene())
             {
                 // Debug.developerConsoleVisible = false;
@@ -173,7 +173,6 @@ namespace K2D2
 
                 // Update Controllers
                 controllerManager.UpdateControllers();
-
             }
         }
 
@@ -232,7 +231,7 @@ namespace K2D2
             GameObject.Find("BTN-K2D2Button")?.GetComponent<UIValue_WriteBool_Toggle>()?.SetValue(toggle);
             if (!drawUI)
             {
-                GameManager.Instance.Game.Input.Enable();
+                UI_Fields.GameInputState = true;
             }
         }
         private void FillWindow(int windowID)

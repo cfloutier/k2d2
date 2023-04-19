@@ -13,19 +13,72 @@ using VehiclePhysics;
 using System;
 
 
-
 namespace K2D2.Controller
 {
+
+    public class AutoLiftSettings
+    {
+
+        public float heading
+        {
+            get => Settings.s_settings_file.GetFloat("lift.heading", 2);
+            set {
+                // value = Mathf.Clamp(value, 0 , 1);
+                Settings.s_settings_file.SetFloat("lift.heading", value);
+                }
+        }
+
+        public int start_altitude_km
+        {
+            get => Settings.s_settings_file.GetInt("lift.start_altitude_km", 2);
+            set {
+                // value = Mathf.Clamp(value, 0 , 1);
+                Settings.s_settings_file.SetInt("lift.start_altitude_km", value);
+                }
+        }
+
+        public int mid_rotate_altitude_km
+        {
+            get => Settings.s_settings_file.GetInt("lift.mid_rotate_altitude_km", 15);
+            set {
+                // value = Mathf.Clamp(value, 0 , 1);
+                Settings.s_settings_file.SetInt("lift.mid_rotate_altitude_km", value);
+                }
+        }
+
+        public int end_rotate_altitude_km
+        {
+            get => Settings.s_settings_file.GetInt("lift.end_rotate_altitude_km", 50);
+            set {
+                // value = Mathf.Clamp(value, 0 , 1);
+                Settings.s_settings_file.SetInt("lift.end_rotate_altitude_km", value);
+                }
+        }
+
+
+        public int destination_Ap_km
+        {
+            get => Settings.s_settings_file.GetInt("lift.destination_Ap_km", 100);
+            set {
+                // value = Mathf.Clamp(value, 0 , 1);
+                Settings.s_settings_file.SetInt("lift.destination_Ap_km", value);
+                }
+        }
+    }
+
     public class AutoLiftController : ComplexControler
     {
         public static AutoLiftController Instance { get; set; }
 
+
+        AutoLiftSettings lift_settings = new AutoLiftSettings();
+
         KSPVessel current_vessel;
 
-        float elevation;
-        float heading = 90;
+        float inclination;
 
-           public override void onReset()
+
+        public override void onReset()
         {
             isActive = false;
         }
@@ -66,8 +119,8 @@ namespace K2D2.Controller
             autopilot.Enabled = true;
             autopilot.SetMode(AutopilotMode.StabilityAssist);
 
-            elevation = -90;
-            
+            inclination = -90;
+            current_vessel.SetThrottle(1);
         }
 
         public AutoLiftController()
@@ -91,7 +144,7 @@ namespace K2D2.Controller
 
             var up = telemetry.HorizonUp;
 
-            direction = QuaternionD.Euler(-elevation, heading, 0) * Vector3d.forward;
+            direction = QuaternionD.Euler(-inclination, lift_settings.heading, 0) * Vector3d.forward;
 
             Vector direction_vector = new Vector(up.coordinateSystem,  direction);
 
@@ -99,49 +152,52 @@ namespace K2D2.Controller
             autopilot.SAS.SetTargetOrientation(direction_vector, false);
         }
 
-        double altitude = 0;
+        float altitude_km = 0;
+        float ap_km = 0;
+        
 
-        int startAltitude = 2000;
-        int rot_1_altitude = 10000;
-        int rot_1_direction = 80;
+        void computeValues()
+        {
 
-        int rot_2_altitude = 15000;
-        int rot_2_direction = 45;
+            PatchedConicsOrbit orbit = current_vessel.VesselComponent.Orbit;
+            ap_km = (float)(orbit.Apoapsis - orbit.referenceBody.radius) / 1000;
+            altitude_km = (float)(current_vessel.GetSeaAltitude() / 1000);
 
-        int rot_3_altitude = 55000;
-        int rot_3_direction = 10;
-
+          
+            if (altitude_km < lift_settings.start_altitude_km)
+            {
+                inclination = 90;
+            }
+            else if (altitude_km < lift_settings.mid_rotate_altitude_km)
+            {
+                var ratio = Mathf.InverseLerp(lift_settings.start_altitude_km, lift_settings.mid_rotate_altitude_km, altitude_km);
+                inclination = Mathf.Lerp(90, 45, ratio);
+            }
+            else
+            {
+                var ratio = Mathf.InverseLerp(lift_settings.mid_rotate_altitude_km, lift_settings.end_rotate_altitude_km, (float)altitude_km);
+                inclination = Mathf.Lerp(45, 5, ratio);
+            }
+        }
 
         public override void Update()
         {
-            if (!isActive) return;
+            if (!isActive && !ui_visible) return;
             if (current_vessel == null) return;
 
-            altitude = current_vessel.GetSeaAltitude();
+            computeValues();
 
-            if (altitude < startAltitude)
-            {
-                elevation = 90;
-            }
-            else if (altitude < rot_1_altitude)
-            {
-                var ratio = Mathf.InverseLerp((float)startAltitude, (float)rot_1_altitude, (float)altitude);
-                elevation = Mathf.Lerp(90, rot_1_direction, ratio);
-            }
-            else if (altitude < rot_2_altitude)
-            {
-                var ratio = Mathf.InverseLerp((float)rot_1_altitude, (float)rot_2_altitude, (float)altitude);
-                elevation = Mathf.Lerp(rot_1_direction, rot_2_direction, ratio);
-            }
-            else if (altitude < rot_3_altitude)
-            {
-                var ratio = Mathf.InverseLerp( (float)rot_2_altitude, (float)rot_3_altitude, (float)altitude);
-                elevation = Mathf.Lerp(rot_2_direction, rot_3_direction, ratio);
-            }
-            else
-                elevation = 0;
+            if (!isActive)
+                return;
 
             applyDirection();
+
+
+            if (ap_km > lift_settings.destination_Ap_km)
+            {
+                current_vessel.SetThrottle(0);
+                isActive = false;
+            }
         }
 
 
@@ -150,23 +206,23 @@ namespace K2D2.Controller
             if (K2D2_Plugin.Instance.settings_visible)
             {
                 Settings.onGUI();
-
-                startAltitude = UI_Fields.IntField("lift.startAltitude", "start Alt.", startAltitude, 0, Int32.MaxValue);
-                rot_1_altitude = UI_Fields.IntField("lift.rot_1_altitude", "Alt. 1", rot_1_altitude, 0, Int32.MaxValue);
-                rot_1_direction = UI_Fields.IntField("lift.rot_1_direction", "Dir. 1", rot_1_direction, 0, 90);
-                rot_2_altitude = UI_Fields.IntField("lift.rot_2_altitude", "Alt. 2", rot_2_altitude, 0, Int32.MaxValue);
-                rot_2_direction = UI_Fields.IntField("lift.rot_2_direction", "Dir. 2", rot_2_direction, 0, 90);
-                rot_3_altitude = UI_Fields.IntField("lift.rot_3_altitude", "Alt. 3", rot_3_altitude, 0, Int32.MaxValue);
-                rot_3_direction = UI_Fields.IntField("lift.rot_3_direction", "Dir. 3", rot_3_direction, 0, 90);
                 return;
             }
 
-            heading = UI_Tools.FloatSlider("heading", heading, -180, 180, "°");
+
+            lift_settings.heading = UI_Tools.FloatSlider("heading", lift_settings.heading, -180, 180, "°");
+
+            lift_settings.start_altitude_km = UI_Fields.IntField("lift.start_altitude_km", "90° Alt (km)", lift_settings.start_altitude_km, 0, Int32.MaxValue);
+            lift_settings.mid_rotate_altitude_km = UI_Fields.IntField("lift.mid_rotate_altitude_km", "45° Alt (km)", lift_settings.mid_rotate_altitude_km, 0, Int32.MaxValue);
+            lift_settings.end_rotate_altitude_km = UI_Fields.IntField("lift.end_rotate_altitude_km", "5° Alt (km)", lift_settings.end_rotate_altitude_km, 0, Int32.MaxValue);
+
+            lift_settings.destination_Ap_km = UI_Fields.IntField("lift.destination_Ap_km", "Ap Altitude (km)", lift_settings.destination_Ap_km, 0, Int32.MaxValue);
 
             isActive = UI_Tools.ToggleButton(isActive, "Start", "Stop");
 
-            UI_Tools.Console($"Altitude = {altitude:n2} m");
-            UI_Tools.Console($"elevation = {elevation:n2} °");
+            UI_Tools.Console($"Altitude = {altitude_km:n2} km");
+            UI_Tools.Console($"ap = {ap_km:n2} km");
+            UI_Tools.Console($"inclination = {inclination:n2} °");
         }
     }
 }

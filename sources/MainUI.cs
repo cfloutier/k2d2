@@ -108,7 +108,7 @@ namespace K2D2
                 Settings.current_interface_mode = result;
                 pages[result].ui_visible = true;
             }
-
+        
             pages[result].onGUI();
         }
     }
