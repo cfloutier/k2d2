@@ -84,8 +84,10 @@ namespace K2D2.Controller
 
         public AutoExecuteManeuver()
         {
-
             Instance = this;
+            debug_mode = false;
+            Name = "Node";
+
             sub_contollers.Add(current_executor);
             current_vessel = K2D2_Plugin.Instance.current_vessel;
 

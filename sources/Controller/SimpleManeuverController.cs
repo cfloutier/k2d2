@@ -35,10 +35,13 @@ namespace K2D2.Controller
 
         public SimpleManeuverController(ref ManeuverProvider maneuverProvider)
         {
+            debug_mode = true;
+            Name = "Simple Maneuver Controller";
+
             _maneuverProvider = maneuverProvider;
             Instance = this;
         }
-        
+
         public SimpleManeuverController(ManualLogSource logger, ref ManeuverProvider maneuverProvider):this(ref maneuverProvider)
         {
             this.logger = logger;

@@ -55,12 +55,27 @@ namespace K2D2.Controller
 
     public class VSpeedController : ComplexControler
     {
+
+
         public static VSpeedController Instance { get; set; }
 
         public enum Direction { SurfaceUp, SurfaceSpeed }
         public static string[] direction_labels = {"V-Speed Control", "Touch-Down" };
 
         VSpeedSettings settings = new VSpeedSettings();
+
+        public VSpeedController()
+        {
+            debug_mode = false;
+            Name = "V-Speed";
+
+            sub_contollers.Add(burn_dV);
+            // logger.LogMessage("LandingController !");
+            current_vessel = K2D2_Plugin.Instance.current_vessel;
+
+            Instance = this;
+        }
+
 
         public override void onReset()
         {
@@ -109,15 +124,7 @@ namespace K2D2.Controller
 
         float wanted_throttle = 0;
 
-        public VSpeedController()
-        {
-            sub_contollers.Add(burn_dV);
-            // logger.LogMessage("LandingController !");
-            current_vessel = K2D2_Plugin.Instance.current_vessel;
-
-            Instance = this;
-        }
-
+       
         public void computeGravityRatio()
         {
             // current_vessel.getInclination();

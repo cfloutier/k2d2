@@ -17,6 +17,17 @@ namespace K2D2.Controller
 {
     public class LandingSettings
     {
+        public bool verbose_infos
+        {
+            get => Settings.s_settings_file.GetBool("land.verbose_infos", true);
+            set {
+                // value = Mathf.Clamp(value, 0 , 1);
+                Settings.s_settings_file.SetBool("land.verbose_infos", value);
+                }
+        }
+
+
+
         public bool auto_warp
         {
             get => Settings.s_settings_file.GetBool("land.auto_warp", true);
@@ -85,7 +96,8 @@ namespace K2D2.Controller
 
         void LandingUI()
         {
-            burn_before = UI_Tools.FloatSlider("Burn Before", burn_before, 0, 10, "s", "Secure burn before critical time");
+            verbose_infos = UI_Tools.Toggle(verbose_infos, "Verbose");
+            burn_before = UI_Tools.FloatSlider("Burn Before", burn_before, 0, 10, "s", "Burn before critical time (chicken mode)");
         }
 
         void WarpUI()
@@ -165,6 +177,9 @@ namespace K2D2.Controller
         public LandingController()
         {
             Instance = this;
+            debug_mode = false;
+            Name = "Landing";
+
             sub_contollers.Add(burn_dV);
             sub_contollers.Add(current_executor);
 
@@ -479,16 +494,21 @@ namespace K2D2.Controller
             {
                 UI_Tools.Title("Collision detected !");
 
-                //UI_Tools.Console($"collision in  {StrTool.DurationToString(collision_UT - GeneralTools.Game.UniverseModel.UniversalTime)}");
-                UI_Tools.Label($"Collision in {StrTool.DurationToString(adjusted_collision_UT - GeneralTools.Game.UniverseModel.UniversalTime)}");
-                UI_Tools.Label($"speed collision {speed_collision:n2} m/s");
-                UI_Tools.Label($"start_burn in <b>{StrTool.DurationToString(startBurn_UT - GeneralTools.Game.UniverseModel.UniversalTime)}</b>");
-                UI_Tools.Label($"burn_duration {burn_duration:n2} s");
+                if (land_settings.verbose_infos)
+                {
+                    UI_Tools.Label($"Collision in {StrTool.DurationToString(adjusted_collision_UT - GeneralTools.Game.UniverseModel.UniversalTime)}");
+                    UI_Tools.Label($"speed collision {speed_collision:n2} m/s");
+                    UI_Tools.Label($"start_burn in <b>{StrTool.DurationToString(startBurn_UT - GeneralTools.Game.UniverseModel.UniversalTime)}</b>");
+                    UI_Tools.Label($"burn_duration {burn_duration:n2} s");
+                }
             }
             else
             {
                 UI_Tools.Title("No Collision detected");
             }
+
+            if (land_settings.verbose_infos)
+                UI_Tools.Console($"Altitude : { StrTool.DistanceToString(altitude)}");
         }
 
         public override void onGUI()
@@ -529,6 +549,9 @@ namespace K2D2.Controller
                 if (current_executor != null && !string.IsNullOrEmpty(current_executor.status_line))
                     UI_Tools.Console(current_executor.status_line);
             }
+
+            UI_Tools.Console($"Altitude : { StrTool.DistanceToString(altitude)}");
+
 
             if (burn_dV.burned_dV > 0)
                 UI_Tools.Console($"Burned : {burn_dV.burned_dV} m/s");

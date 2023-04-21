@@ -17,6 +17,9 @@ namespace K2D2.Controller
         // set my the main UI, update can be ignore if not active and not visible
         public bool ui_visible = false;
 
+        public bool debug_mode = true;
+        public string Name = "Unamed";
+
         public bool need_update
         {
             get { return ui_visible || isActive; }

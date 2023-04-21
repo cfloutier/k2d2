@@ -77,6 +77,15 @@ namespace K2D2.Controller
 
         float inclination;
 
+        public AutoLiftController()
+        {
+            // logger.LogMessage("LandingController !");
+            current_vessel = K2D2_Plugin.Instance.current_vessel;
+
+            Instance = this;
+            debug_mode = true;
+            Name = "Lift";
+        }
 
         public override void onReset()
         {
@@ -123,13 +132,7 @@ namespace K2D2.Controller
             current_vessel.SetThrottle(1);
         }
 
-        public AutoLiftController()
-        {
-            // logger.LogMessage("LandingController !");
-            current_vessel = K2D2_Plugin.Instance.current_vessel;
-
-            Instance = this;
-        }
+    
 
          Vector3d direction = Vector3d.zero;
 

@@ -8,6 +8,14 @@ namespace K2D2.InfosPages
 {
     class VesselInfos : BaseController
     {
+        public VesselInfos()
+        {
+            debug_mode = true;
+            Name = "Vessel Infos";
+        }
+
+
+
         public override void onGUI()
         {
             if (K2D2_Plugin.Instance.settings_visible)
@@ -28,17 +36,12 @@ namespace K2D2.InfosPages
             GUILayout.Label($"mainThrottle {vehicle.mainThrottle}");
             GUILayout.Label($"pitch {vehicle.pitch:n3} yaw {vehicle.yaw:n3} roll {vehicle.roll:n3}");
 
-            GUILayout.Space(6);
-
-            GUILayout.Label($"AltitudeFromTerrain {vehicle.AltitudeFromTerrain:n2} m");
+            // GUILayout.Label($"AltitudeFromTerrain {vehicle.AltitudeFromTerrain:n2} m");
             GUILayout.Label($"Corrected alt : {K2D2_Plugin.Instance.current_vessel.GetApproxAltitude()} m");
             GUILayout.Label($"Landed : {vessel_component.Landed}");
-
             GUILayout.Label($"Lat {vehicle.Latitude:n2} Lon {vehicle.Longitude:n2}");
             GUILayout.Label($"IsInAtmosphere {vehicle.IsInAtmosphere}");
-
-
-            GUILayout.Label($"Body {K2D2_Plugin.Instance.current_vessel.currentBody()}");
+            GUILayout.Label($"Body {K2D2_Plugin.Instance.current_vessel.currentBody().Name}");
 
             //var body = K2D2_Plugin.Instance.current_vessel.currentBody();
             //var coord = body.coordinateSystem;

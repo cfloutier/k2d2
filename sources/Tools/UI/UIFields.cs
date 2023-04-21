@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
 using KSP.Game;
+using BepInEx.Logging;
 
 namespace K2D2
 {
@@ -11,11 +12,16 @@ namespace K2D2
         public static List<string> inputFields = new List<string>();
         static bool _inputState = true;
 
+
+        public static ManualLogSource logger = BepInEx.Logging.Logger.CreateLogSource("K2D2.MainUI");
+
         static public bool GameInputState
         {
             set {
                 if (_inputState != value)
                 {
+                    logger.LogWarning("input mode changed");
+
                     if (value)
                         GameManager.Instance.Game.Input.Enable();
                     else

@@ -8,6 +8,13 @@ namespace K2D2.InfosPages
 {
     class SASInfos : BaseController
     {
+        public SASInfos()
+        {
+            debug_mode = true;
+            Name = "SAS Infos";
+        }
+
+
         public override void onGUI()
         {
             if (K2D2_Plugin.Instance.settings_visible)

@@ -10,6 +10,14 @@ namespace K2D2.InfosPages
 {
     class OrbitInfos : BaseController
     {
+
+        public OrbitInfos()
+        {
+            debug_mode = true;
+            Name = "Orbit Infos";
+        }
+
+        
         public override void onGUI()
         {
             if (K2D2_Plugin.Instance.settings_visible)
@@ -39,14 +47,11 @@ namespace K2D2.InfosPages
             UI_Tools.Console($"epoch {orbit.epoch:n3}");
             UI_Tools.Console($"period {StrTool.DurationToString(orbit.period)}");
 
-
             if (orbit.PatchEndTransition == PatchTransitionType.Collision)
             {
                 var dt = GeneralTools.Game.UniverseModel.UniversalTime - orbit.collisionPointUT;
                 UI_Tools.Console($"collision in  {StrTool.DurationToString(dt)}");
             }
-
-            GUILayout.Label("todo");
         }
     }
 }

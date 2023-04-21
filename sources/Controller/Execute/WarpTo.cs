@@ -46,7 +46,6 @@ namespace K2D2.Controller
 
     public class WarpTo : ExecuteController
     {
-
         public ManualLogSource logger = BepInEx.Logging.Logger.CreateLogSource("K2D2.Controller.WarpTo");
 
         int wanted_warp_index = 0;
@@ -58,6 +57,9 @@ namespace K2D2.Controller
         public bool check_direction = false;
 
         public float max_angle;
+
+
+        public K2D2.KSPService.KSPVessel current_vessel;
 
         public void StartManeuver(ManeuverNodeData node, bool check_direction = false)
         {
@@ -93,6 +95,7 @@ namespace K2D2.Controller
         public override void Start()
         {
             finished = false;
+            current_vessel = K2D2_Plugin.Instance.current_vessel;
         }
 
         double dt;
@@ -133,8 +136,14 @@ namespace K2D2.Controller
             }
 
             wanted_warp_index = compute_wanted_warp_index(dt);
+            // minimum is x4
             if (wanted_warp_index < 2)
                 wanted_warp_index = 2;
+
+            // max is x4
+            if (current_vessel.VesselVehicle.IsInAtmosphere)
+                if (wanted_warp_index > 2)
+                    wanted_warp_index = 2;
 
             float wanted_rate = TimeWarpTools.indexToRatio(wanted_warp_index);
             TimeWarpTools.SetRateIndex(wanted_warp_index, false);

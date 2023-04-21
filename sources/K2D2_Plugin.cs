@@ -133,12 +133,13 @@ namespace K2D2
             controllerManager.AddController(new VSpeedController());
             controllerManager.AddController(new AttitudeController());
             controllerManager.AddController(new AutoLiftController());
+            controllerManager.AddController(new CircleController());
 
             // Add PopUp Tabs here:
             _popUpContent = new PopUpContent(ref _popUp);
             _popUp.AddPopUpContents("Active Maneuvers",new Action (()=>_popUpContent.DisplayManeuverList(ref maneuverManager)));
 
-            main_ui = new MainUI(logger);
+            main_ui = new MainUI();
 
             Appbar.RegisterAppButton(
                 "K2-D2",
@@ -160,6 +161,8 @@ namespace K2D2
 
         void Update()
         {
+             main_ui?.Update();
+
             Debug.developerConsoleVisible = false;
             if (ValidScene())
             {

@@ -46,7 +46,7 @@ namespace K2D2.Controller
             burn_adjust = UI_Tools.FloatSlider("Adjusting rate", burn_adjust, 0.5f, 2, "m/s", "Used during final adjust phase");
             UI_Tools.Right_Left_Text("Precise", "Quick");
 
-            max_dv_error = UI_Tools.FloatSlider("Precision", max_dv_error, 0.001f, 0.1f, "m/s", "max delta speed in final adjust phase");
+            max_dv_error = UI_Tools.FloatSlider("Precision", max_dv_error, 0.001f, 0.1f, "m/s", "max delta speed in final adjust phase", 3);
 
             rotate_during_burn = UI_Tools.Toggle(rotate_during_burn, "Rotate During burn", "Keep following Maneuver Node\ndirection during burn phase");
         }

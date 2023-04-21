@@ -1,10 +1,30 @@
 
 # todo : next release
-warp : correct the over warp in atm
-print altitude in landing mode
-min atltitude is sea level
-ramantes quand je change de direction, si l'ui est visible
+print altitude in landing mode --
+min atltitude is sea level --
+ramantes quand je change de direction, si l'ui est visible --
+Lift : snap tous les x degrés 
+circle : corriger l'ajout de noeuds --
+Node exe : précision du slider --
+Tabs : le nom est déclaré dans la page --
 
+Touch-down appelé depuis le land
+Touch-down = Brake dans le V Speed
+
+Finir refacto circle
+
+# v0.8.0
+Features :
+* Lift v0.1 : no auto circularize for the moment. and Settings is quite awfull, but it's quite useful.
+* Drone Flight v0.1 : Funny way to flight. very expensive in dv ....
+
+Fixes :
+* Correction of serious lags when Ui is opened (Int Fields and focus trouble)
+* Execute Node : added more precision options. Corrected the default options values
+* Landing : use sea level if above ground :)
+
+Know bugs :
+* Execute node does not work on several nodes !
 
 # v0.7.2
 * Landing : correction of the collision detection

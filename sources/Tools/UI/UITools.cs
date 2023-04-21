@@ -257,11 +257,14 @@ namespace K2D2
             return value;
         }
 
-        public static float FloatSlider(string txt, float value, float min, float max, string postfix = "", string tooltip = "")
+        public static float FloatSlider(string txt, float value, float min, float max, string postfix = "", string tooltip = "", int precision = 2)
         {
             // simple float slider with a lavel value
 
-            string content = txt + $" : {value:n2} " + postfix;
+
+            string value_str = value.ToString("N"+precision);
+
+            string content =  $"{txt} : {value_str} {postfix}";
 
             GUILayout.Label(content, Styles.slider_text);
             GUILayout.BeginHorizontal();

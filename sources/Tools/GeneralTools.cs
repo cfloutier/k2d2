@@ -9,6 +9,8 @@ namespace K2D2
     {
         public static GameInstance Game => GameManager.Instance == null ? null : GameManager.Instance.Game;
 
+        public static double Current_UT => Game.UniverseModel.UniversalTime;
+
         /// <summary>
         /// Converts a string to a double, if the string contains a number. Else returns -1
         /// </summary>

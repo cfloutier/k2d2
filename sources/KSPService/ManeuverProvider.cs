@@ -8,20 +8,20 @@ namespace K2D2.sources.KSPService
     public class ManeuverProvider
     {
         public ManeuverManager ManeuverManager { get; set; }
-        private Maneuver _maneuver { get; set; }
+        private ManeuverCreator _maneuver { get; set; }
 
         private ManualLogSource logger;
 
         public ManeuverProvider(ref ManeuverManager maneuverManager)
         {
             ManeuverManager = maneuverManager;
-            _maneuver = new Maneuver();
+            _maneuver = new ManeuverCreator();
         }
 
         public ManeuverProvider(ref ManeuverManager maneuverManager, ManualLogSource logger)
         {
             ManeuverManager = maneuverManager;
-            _maneuver = new Maneuver(logger);
+            _maneuver = new ManeuverCreator();
             this.logger = logger;
 
         }

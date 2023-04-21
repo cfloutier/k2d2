@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using BepInEx.Logging;
 using K2D2.KSPService;
@@ -14,7 +15,7 @@ using UnityEngine.PlayerLoop;
 
 namespace K2D2.KSPService
 {
-    public class Maneuver
+    public class ManeuverCreator
     {
         // Fields-------------------------------------------------------------------------------------------------------
 
@@ -25,24 +26,17 @@ namespace K2D2.KSPService
 
         public KSPVessel kspVessel { get; set; }
 
-        public ManualLogSource logger { get; set; }
+        public ManualLogSource logger = BepInEx.Logging.Logger.CreateLogSource("K2D2.CircleController");
 
-        public Maneuver()
+        public ManeuverCreator()
         {
-            kspVessel = K2D2_Plugin.Instance.current_vessel;
-            _vesselComponent = kspVessel.GetActiveSimVessel();
-        }
 
-        public Maneuver(ManualLogSource logger = null):this()
-        {
-            this.logger = logger;
         }
 
         public void Update()
         {
             kspVessel = K2D2_Plugin.Instance.current_vessel;
             _vesselComponent = kspVessel.GetActiveSimVessel();
-            
         }
 
         #endregion
@@ -77,6 +71,8 @@ namespace K2D2.KSPService
 
 
             Vector3d burnVector = ProgradeBurnVector(deltaV);
+
+            // ManeuverNodeController.NodeControl.CreateManeuverNodeAtUT(burnVector, GeneralTools.Game.UniverseModel.UniversalTime + orbit.TimeToAp ,0);
             CreateManeuverNode(burnVector, 180);
             return deltaV;
         }
@@ -109,6 +105,7 @@ namespace K2D2.KSPService
             double deltaV = periapsisVelocity - circularizedVelocity;
 
             Vector3d burnVector = RetrogradeBurnVector(deltaV);
+            // ManeuverNodeController.NodeControl.CreateManeuverNodeAtUT(burnVector, GeneralTools.Game.UniverseModel.UniversalTime + orbit.TimeToPe, 0);
             CreateManeuverNode(burnVector, 0);
             return deltaV;
         }
@@ -257,41 +254,57 @@ namespace K2D2.KSPService
         /// <param name="TrueAnomaly"></param>
         private void CreateManeuverNode(Vector3d burnVector, double TrueAnomaly)
         {
-            PatchedConicsOrbit referencedOrbit = GetLastOrbit() as PatchedConicsOrbit;
-            if (referencedOrbit == null)
-            {
-                logger.LogError("CreateManeuverNode: referencedOrbit is null!");
-                return;
-            }
+            K2D2_Plugin.Instance.StartCoroutine(CreateManeuverNode_Co(burnVector, TrueAnomaly));
+        }
+
+        private IEnumerator CreateManeuverNode_Co(Vector3d burnVector, double TrueAnomaly)
+        {
+
+
+
+            PatchedConicsOrbit referencedOrbit = _vesselComponent.Orbit;
 
             double TrueAnomalyRad = TrueAnomaly * Math.PI / 180;
             double UT = referencedOrbit.GetUTforTrueAnomaly(TrueAnomalyRad, 0);
 
-            ManeuverNodeData maneuverNodeData = new ManeuverNodeData(kspVessel.GetGlobalIDActiveVessel(), true, UT);
+            var SimulationObject = _vesselComponent.SimulationObject;
 
-            IPatchedOrbit orbit = referencedOrbit;
+            // Create Node
+            ManeuverNodeData nodeData = new ManeuverNodeData(SimulationObject.GlobalId, false, UT);
+            referencedOrbit.PatchEndTransition = PatchTransitionType.Maneuver;
+            nodeData.SetManeuverState((PatchedConicsOrbit)referencedOrbit);
 
-            orbit.PatchStartTransition = PatchTransitionType.Maneuver;
-            //orbit.PatchEndTransition = PatchTransitionType.Final;
+            nodeData.BurnVector = burnVector;
 
-            maneuverNodeData.SetManeuverState((PatchedConicsOrbit)orbit);
+            Game.SpaceSimulation.Maneuvers.AddNodeToVessel(nodeData);
 
-            maneuverNodeData.BurnVector = burnVector;
-            AddManeuverNode(maneuverNodeData);
-        }
-
-        private void AddManeuverNode(ManeuverNodeData maneuverNodeData)
-        {
-            Game.SpaceSimulation.Maneuvers.AddNodeToVessel(maneuverNodeData);
-
+            yield return new WaitForFixedUpdate();
 
             MapCore mapCore = null;
             Game.Map.TryGetMapCore(out mapCore);
-            mapCore.map3D.ManeuverManager.GetNodeDataForVessels();
-            mapCore.map3D.ManeuverManager.UpdatePositionForGizmo(maneuverNodeData.NodeID);
-            mapCore.map3D.ManeuverManager.UpdateAll();
-            mapCore.map3D.ManeuverManager.RemoveAll();
+            if (mapCore)
+            {
+                mapCore.map3D.ManeuverManager.GetNodeDataForVessels();
+                mapCore.map3D.ManeuverManager.UpdatePositionForGizmo(nodeData.NodeID);
+                // mapCore.map3D.ManeuverManager.UpdateAll();
+                // mapCore.map3D.ManeuverManager.RemoveAll();
+            }
+
+
         }
+
+
+
+
+        private VesselComponent activeVessel
+        {
+            get {
+
+                return KSPVessel.current.VesselComponent;
+            }
+        }
+
+
 
         #endregion
 

@@ -35,8 +35,18 @@ namespace K2D2.KSPService
             // telemetryDataProvider = this.Game.ViewController.DataProvider.TelemetryDataProvider;
         }
 
+        static KSPVessel _current;
+
+        public static KSPVessel current
+        {
+            get{
+                return _current;
+            }
+        }
+
         public void Update()
         {
+            _current = this;
             VesselComponent = GetActiveSimVessel();
             VesselVehicle = GetActiveSimVehicle();
             if (Game.ViewController == null) return;
@@ -381,9 +391,10 @@ namespace K2D2.KSPService
             return VesselComponent.Landed;
         }
 
+        /// Correct the altitude unsing the vessel radius
         public double GetApproxAltitude()
         {
-            var altitude_from_ground = GetGroundAltitude();
+            var altitude_from_ground = GetGlobalGroundAltitude();
             // VesselComponent.SimulationObject.objVesselBehavior.ShowCenterOfMass;
             // var center = VesselComponent.SimulationObject.objVesselBehavior.BoundingBox.center.y - VesselComponent.SimulationObject.objVesselBehavior.BoundingBox.extents.z;
             //var bounding_sphere = VesselComponent.SimulationObject.objVesselBehavior.BoundingSphere;
@@ -402,9 +413,9 @@ namespace K2D2.KSPService
             return telemetryDataProvider.GetAltitudeDisplayValue(AltimeterDisplayMode.SeaLevel);
         }
 
-        public double GetGlobalAltitude()
+        public double GetGlobalGroundAltitude()
         {
-            return Math.Min(GetSeaAltitude(), GetGroundAltitude()); 
+            return Math.Min(GetSeaAltitude(), GetGroundAltitude());
         }
 
         public double GetDisplayAltitude()

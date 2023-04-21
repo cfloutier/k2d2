@@ -25,6 +25,15 @@ namespace K2D2.Controller
         float elevation;
         float heading;
 
+        public AttitudeController()
+        {
+            // logger.LogMessage("LandingController !");
+            current_vessel = K2D2_Plugin.Instance.current_vessel;
+
+            Instance = this;
+            debug_mode = true;
+            Name = "Attitude";
+        }
 
         public override void onReset()
         {
@@ -57,13 +66,7 @@ namespace K2D2.Controller
             }
         }
 
-        public AttitudeController()
-        {
-            // logger.LogMessage("LandingController !");
-            current_vessel = K2D2_Plugin.Instance.current_vessel;
-
-            Instance = this;
-        }
+      
 
         Vector3d direction = Vector3d.zero;
 
