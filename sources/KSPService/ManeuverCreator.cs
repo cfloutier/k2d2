@@ -259,9 +259,6 @@ namespace K2D2.KSPService
 
         private IEnumerator CreateManeuverNode_Co(Vector3d burnVector, double TrueAnomaly)
         {
-
-
-
             PatchedConicsOrbit referencedOrbit = _vesselComponent.Orbit;
 
             double TrueAnomalyRad = TrueAnomaly * Math.PI / 180;

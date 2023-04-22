@@ -15,13 +15,11 @@ using System;
 
 namespace K2D2.Controller
 {
-
     public class AutoLiftSettings
     {
-
         public float heading
         {
-            get => Settings.s_settings_file.GetFloat("lift.heading", 2);
+            get => Settings.s_settings_file.GetFloat("lift.heading", 90);
             set {
                 // value = Mathf.Clamp(value, 0 , 1);
                 Settings.s_settings_file.SetFloat("lift.heading", value);
@@ -55,7 +53,6 @@ namespace K2D2.Controller
                 }
         }
 
-
         public int destination_Ap_km
         {
             get => Settings.s_settings_file.GetInt("lift.destination_Ap_km", 100);
@@ -70,7 +67,6 @@ namespace K2D2.Controller
     {
         public static AutoLiftController Instance { get; set; }
 
-
         AutoLiftSettings lift_settings = new AutoLiftSettings();
 
         KSPVessel current_vessel;
@@ -83,7 +79,7 @@ namespace K2D2.Controller
             current_vessel = K2D2_Plugin.Instance.current_vessel;
 
             Instance = this;
-            debug_mode = true;
+            debug_mode = false;
             Name = "Lift";
         }
 
@@ -132,8 +128,6 @@ namespace K2D2.Controller
             current_vessel.SetThrottle(1);
         }
 
-    
-
          Vector3d direction = Vector3d.zero;
 
         public void applyDirection()
@@ -157,16 +151,13 @@ namespace K2D2.Controller
 
         float altitude_km = 0;
         float ap_km = 0;
-        
 
         void computeValues()
         {
-
             PatchedConicsOrbit orbit = current_vessel.VesselComponent.Orbit;
             ap_km = (float)(orbit.Apoapsis - orbit.referenceBody.radius) / 1000;
             altitude_km = (float)(current_vessel.GetSeaAltitude() / 1000);
 
-          
             if (altitude_km < lift_settings.start_altitude_km)
             {
                 inclination = 90;
@@ -203,29 +194,31 @@ namespace K2D2.Controller
             }
         }
 
-
         public override void onGUI()
         {
             if (K2D2_Plugin.Instance.settings_visible)
             {
                 Settings.onGUI();
+
+                lift_settings.heading = UI_Tools.HeadingSlider("heading", lift_settings.heading);
+
+                lift_settings.start_altitude_km = UI_Fields.IntField("lift.start_altitude_km", "90° Alt (km)", lift_settings.start_altitude_km, 0, Int32.MaxValue);
+                lift_settings.mid_rotate_altitude_km = UI_Fields.IntField("lift.mid_rotate_altitude_km", "45° Alt (km)", lift_settings.mid_rotate_altitude_km, 0, Int32.MaxValue);
+                lift_settings.end_rotate_altitude_km = UI_Fields.IntField("lift.end_rotate_altitude_km", "5° Alt (km)", lift_settings.end_rotate_altitude_km, 0, Int32.MaxValue);
+
+                lift_settings.destination_Ap_km = UI_Fields.IntField("lift.destination_Ap_km", "Ap Altitude (km)", lift_settings.destination_Ap_km, 0, Int32.MaxValue);
+
                 return;
             }
 
-
-            lift_settings.heading = UI_Tools.FloatSlider("heading", lift_settings.heading, -180, 180, "°");
-
-            lift_settings.start_altitude_km = UI_Fields.IntField("lift.start_altitude_km", "90° Alt (km)", lift_settings.start_altitude_km, 0, Int32.MaxValue);
-            lift_settings.mid_rotate_altitude_km = UI_Fields.IntField("lift.mid_rotate_altitude_km", "45° Alt (km)", lift_settings.mid_rotate_altitude_km, 0, Int32.MaxValue);
-            lift_settings.end_rotate_altitude_km = UI_Fields.IntField("lift.end_rotate_altitude_km", "5° Alt (km)", lift_settings.end_rotate_altitude_km, 0, Int32.MaxValue);
-
-            lift_settings.destination_Ap_km = UI_Fields.IntField("lift.destination_Ap_km", "Ap Altitude (km)", lift_settings.destination_Ap_km, 0, Int32.MaxValue);
-
             isActive = UI_Tools.ToggleButton(isActive, "Start", "Stop");
 
-            UI_Tools.Console($"Altitude = {altitude_km:n2} km");
-            UI_Tools.Console($"ap = {ap_km:n2} km");
-            UI_Tools.Console($"inclination = {inclination:n2} °");
+            if (isActive)
+            {
+                UI_Tools.Console($"Altitude = {altitude_km:n2} km");
+                UI_Tools.Console($"Apoapsis Alt. = {ap_km:n2} km");
+                UI_Tools.Console($"Inclination = {inclination:n2} °");
+            }
         }
     }
 }

@@ -7,7 +7,12 @@ namespace K2D2
     {
         private static bool guiLoaded = false;
 
-        public static GUIStyle window, error, warning;
+        public static GUIStyle window;
+
+
+        public static GUIStyle separator;
+
+        public static GUIStyle progress_bar_empty, progress_bar_full;
 
 
         public static GUIStyle small_button, big_button, button;
@@ -16,7 +21,7 @@ namespace K2D2
 
         public static GUIStyle accordion_close, accordion_open;
 
-        public static GUIStyle label, mid_text, console_text, phase_ok, phase_warning, phase_error;
+        public static GUIStyle error, warning, label, mid_text, console_text, phase_ok, phase_warning, phase_error;
 
         public static GUIStyle toggle;
 
@@ -157,7 +162,9 @@ namespace K2D2
             small_button.alignment = TextAnchor.MiddleCenter;
 
             accordion_close = new GUIStyle(small_button);
+            accordion_close.fixedHeight = 30;
             accordion_close.padding = new RectOffset(23, 2, 2, 2);
+            accordion_close.border = new RectOffset(23, 7, 27, 3);
 
             accordion_close.normal.background = AssetsLoader.loadIcon("Chapter_Off_Normal");
             accordion_close.normal.textColor = ColorTools.parseColor("#D4D4D4");
@@ -165,7 +172,7 @@ namespace K2D2
             setAllFromNormal(accordion_close);
             accordion_close.hover.background = AssetsLoader.loadIcon("Chapter_Off_Hover");
             accordion_close.active.background = AssetsLoader.loadIcon("Chapter_Off_Active");
-            accordion_close.border = new RectOffset(23, 7, 23, 7);
+
 
 
             accordion_open = new GUIStyle(accordion_close);
@@ -209,6 +216,26 @@ namespace K2D2
             toggle.padding = new RectOffset(34, 16, 0, 0);
             toggle.overflow = new RectOffset(0, 0, 0, 2);
 
+            // separator
+            separator = new GUIStyle(GUI.skin.box);
+            separator.normal.background = AssetsLoader.loadIcon("line");
+            separator.border = new RectOffset(2,2,0,0);
+            separator.margin = new RectOffset(10,10,5,5);
+            separator.fixedHeight = 3;
+            setAllFromNormal(separator);
+
+            // progress bar
+            progress_bar_empty = new GUIStyle(GUI.skin.box);
+            progress_bar_empty.normal.background = AssetsLoader.loadIcon("progress_empty");
+            progress_bar_empty.border = new RectOffset(2,2,2,2);
+            progress_bar_empty.margin = new RectOffset(5,5,5,5);
+            progress_bar_empty.fixedHeight = 20;
+            setAllFromNormal(progress_bar_empty);
+
+            progress_bar_full = new GUIStyle(progress_bar_empty);
+            progress_bar_full.normal.background = AssetsLoader.loadIcon("progress_full");
+            setAllFromNormal(progress_bar_empty);
+
             // icons
             gear = AssetsLoader.loadIcon("gear");
             icon = AssetsLoader.loadIcon("icon");
@@ -220,7 +247,6 @@ namespace K2D2
             icons_label.padding = new RectOffset(0, 0, 0, 0);
             icons_label.margin = new RectOffset(0, 0, 0, 0);
             icons_label.overflow = new RectOffset(0, 0, 0, 0);
-
 
             error = new GUIStyle(GUI.skin.GetStyle("Label"));
             warning = new GUIStyle(GUI.skin.GetStyle("Label"));

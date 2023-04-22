@@ -10,6 +10,7 @@ using System;
 using K2D2.Controller;
 using K2D2.InfosPages;
 using KSP.Game;
+using KSP.Rendering.impl;
 
 namespace K2D2
 {
@@ -36,40 +37,60 @@ namespace K2D2
 
         }
 
-        public int DrawTabs(int current, int max_line = 3)
+
+        List<float> tabs_Width = new List<float>();
+
+        public int DrawTabs(int current, float max_width = 300)
         {
             current = GeneralTools.ClampInt(current, 0, filtered_pages.Count - 1);
             GUILayout.BeginHorizontal();
 
             int result = current;
-            int index_in_line = 0;
+
+            // compute sizes
+            if (tabs_Width.Count != filtered_pages.Count)
+            {
+                tabs_Width.Clear();
+                for (int index = 0; index < filtered_pages.Count; index++)
+                {
+                    var page = filtered_pages[index];
+                    float minWidth , maxWidth;
+                    Styles.tab_normal.CalcMinMaxWidth(new GUIContent(page.Name, ""), out minWidth, out maxWidth);
+                    tabs_Width.Add(minWidth);
+                }
+            }
+            float xPos = 0;
 
             for (int index = 0; index < filtered_pages.Count; index++)
             {
                 var page = filtered_pages[index];
-                if (index_in_line >= max_line)
+
+                float width = tabs_Width[index];
+
+                if (xPos > max_width)
                 {
                     GUILayout.EndHorizontal();
                     GUILayout.BeginHorizontal();
-                    index_in_line = 0;
+                    xPos = 0;
                 }
+                xPos += width;
 
                 bool is_current = current == index;
                 if (MainTabs.TabButton(is_current, page.isActive, page.Name))
                 {
                     if (!is_current)
+
                         result = index;
                 }
-
-                index_in_line++;
             }
 
-
-            if (index_in_line != max_line)
+            if (xPos < max_width * 0.7f)
+            {
                 GUILayout.FlexibleSpace();
+            }
             GUILayout.EndHorizontal();
 
-            GUILayout.Space(30);
+            UI_Tools.Separator();
             return result;
         }
 
@@ -81,7 +102,7 @@ namespace K2D2
                 pages.Add(CircleController.Instance);
 
                 pages.Add(LandingController.Instance);
-                pages.Add(VSpeedController.Instance);
+                pages.Add(SpeedController.Instance);
 
                 pages.Add(AutoLiftController.Instance);
                 pages.Add(AttitudeController.Instance);
@@ -114,15 +135,12 @@ namespace K2D2
             }
         }
 
-
-
-
         public void onGUI()
         {
             if (!init_done) return;
 
             // string [] pages_str = Settings.debug_mode ? interfaceModes_debug : interfaceModes;
-            int result = DrawTabs( Settings.current_interface_mode, 4);
+            int result = DrawTabs(Settings.current_interface_mode);
             if (result != Settings.current_interface_mode)
             {
                 current_page.ui_visible = false;

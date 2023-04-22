@@ -9,7 +9,6 @@ namespace K2D2
         {
             if (Event.current.type == EventType.Repaint)
             {
-                // tooltip = "toto";
                 if (last_tool_tip != tooltip)
                 {
                     //Debug.Log("changed");

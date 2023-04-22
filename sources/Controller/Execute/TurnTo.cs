@@ -12,6 +12,34 @@ using KSP.Sim.Maneuver;
 
 namespace K2D2.Controller
 {
+    class TurnToSettings
+    {
+
+        public static float max_angle_maneuver
+        {
+            get => Settings.s_settings_file.GetFloat("turn.max_angle_maneuver", 0.3f);
+            set {
+                    value = Mathf.Clamp(value, 0, 7);
+                    Settings.s_settings_file.SetFloat("turn.max_angle_maneuver", value); 
+                }
+        }
+
+        public static float max_angular_speed
+        {
+            get => Settings.s_settings_file.GetFloat("turn.max_angular_speed", 1f);
+            set {
+                    value = Mathf.Clamp(value, 0, 7);
+                    Settings.s_settings_file.SetFloat("turn.max_angular_speed", value); 
+                }
+        }
+
+        public static void onGUI()
+        {
+            max_angle_maneuver = UI_Tools.FloatSlider("Max Angle", max_angle_maneuver, 0.01f, 1, "°", "Accepted Angular error.");
+            max_angular_speed = UI_Tools.FloatSlider("Max Angular Speed", max_angular_speed, 0.01f, 1, "°/s", "Accepted Angular speed.");
+        }
+
+    }
 
     public class TurnTo : ExecuteController
     {
@@ -19,7 +47,7 @@ namespace K2D2.Controller
         Vector3 wanted_dir = Vector3.zero;
 
         KSPVessel current_vessel;
-        
+
         public double angle;
 
         public void StartManeuver(ManeuverNodeData node)
@@ -105,7 +133,7 @@ namespace K2D2.Controller
 
         public bool checkManeuvreDirection()
         {
-            double max_angle = 0.2;
+            double max_angle = TurnToSettings.max_angle_maneuver;
 
             var telemetry = SASInfos.getTelemetry();
             if (!telemetry.HasManeuver)
@@ -126,7 +154,7 @@ namespace K2D2.Controller
 
         public bool checkAngularRotation()
         {
-            double max_angular_speed = 0.5;
+            double max_angular_speed = TurnToSettings.max_angular_speed;
             var angular_rotation_pc = current_vessel.GetAngularSpeed().vector;
 
             status_line = "Waiting for stabilisation";
@@ -147,7 +175,7 @@ namespace K2D2.Controller
             UI_Tools.Warning("Check Attitude");
             UI_Tools.Console(status_line);
 
-            // GUILayout.Label($"sas.sas_response v {Tools.print_vector(sas_response)}");
+            // UI_Tools.Console($"sas.sas_response v {Tools.print_vector(sas_response)}");
 
             if (Settings.debug_mode)
             {
@@ -160,13 +188,13 @@ namespace K2D2.Controller
                 // var angulor_vel_coord = VesselInfos.GetAngularSpeed().coordinateSystem;
                 var angularVelocity = current_vessel.GetAngularSpeed().vector;
 
-                // GUILayout.Label($"angulor_vel_coord {angulor_vel_coord}");
+                // UI_Tools.Console($"angulor_vel_coord {angulor_vel_coord}");
                 Vector maneuvre_dir = telemetry.ManeuverDirection;
-                GUILayout.Label($"maneuvre_dir ref {maneuvre_dir.coordinateSystem}");
-                GUILayout.Label($"maneuvre_dir {StrTool.VectorToString(maneuvre_dir.vector)}");
-                GUILayout.Label($"angularVelocity {StrTool.VectorToString(angularVelocity)}");
-                GUILayout.Label($"angularVelocity {StrTool.VectorToString(angularVelocity)}");
-                GUILayout.Label($"autopilot {autopilot.AutopilotMode}");
+                // UI_Tools.Console($"maneuvre_dir ref {maneuvre_dir.coordinateSystem}");
+                // UI_Tools.Console($"maneuvre_dir {StrTool.VectorToString(maneuvre_dir.vector)}");
+                UI_Tools.Console($"angularVelocity {StrTool.VectorToString(angularVelocity)}");
+                // UI_Tools.Console($"angularVelocity {StrTool.VectorToString(angularVelocity)}");
+                UI_Tools.Console($"autopilot {autopilot.AutopilotMode}");
             }
         }
     }

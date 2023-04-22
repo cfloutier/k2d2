@@ -110,11 +110,11 @@ namespace K2D2.KSPService
             if (vehicle == null) return;
             var mainThrottle = vehicle.mainThrottle;
 
-            //GUILayout.Label($"nb_engines {engineInfos.Count}  ");
+            //UI_Tools.Console($"nb_engines {engineInfos.Count}  ");
 
 
             UI_Tools.Console($"mainThrottle {mainThrottle}");
-            // GUILayout.Label($"actual_thrust  {Tools.printVector(actual_thrust)}  ");
+            // UI_Tools.Console($"actual_thrust  {Tools.printVector(actual_thrust)}  ");
             UI_Tools.Console($"actual_dv  {actual_dv:n5}  ");
 
 

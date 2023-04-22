@@ -28,20 +28,20 @@ namespace K2D2.InfosPages
             var sas = current_vessel.Autopilot.SAS;
             if (sas == null)
             {
-                GUILayout.Label("NO SAS");
+                UI_Tools.Console("NO SAS");
                 return;
             }
 
-            GUILayout.Label($"sas.dampingMode {sas.dampingMode}");
-            GUILayout.Label($"sas.ReferenceFrame {sas.ReferenceFrame}");
-            GUILayout.Label($"sas.AutoTune {sas.AutoTune}");
-            GUILayout.Label($"sas.lockedMode {sas.lockedMode}");
-            GUILayout.Label($"sas.LockedRotation {StrTool.VectorToString(sas.LockedRotation.eulerAngles)}");
+            UI_Tools.Console($"sas.dampingMode {sas.dampingMode}");
+            UI_Tools.Console($"sas.ReferenceFrame {sas.ReferenceFrame}");
+            UI_Tools.Console($"sas.AutoTune {sas.AutoTune}");
+            UI_Tools.Console($"sas.lockedMode {sas.lockedMode}");
+            UI_Tools.Console($"sas.LockedRotation {StrTool.VectorToString(sas.LockedRotation.eulerAngles)}");
 
-            GUILayout.Label($"sas.TargetOrientation {StrTool.VectorToString(sas.TargetOrientation)}");
-            GUILayout.Label($"sas.PidLockedPitch {sas.PidLockedPitch}");
-            GUILayout.Label($"sas.PidLockedRoll {sas.PidLockedRoll}");
-            GUILayout.Label($"sas.PidLockedYaw {sas.PidLockedYaw}");
+            UI_Tools.Console($"sas.TargetOrientation {StrTool.VectorToString(sas.TargetOrientation)}");
+            UI_Tools.Console($"sas.PidLockedPitch {sas.PidLockedPitch}");
+            UI_Tools.Console($"sas.PidLockedRoll {sas.PidLockedRoll}");
+            UI_Tools.Console($"sas.PidLockedYaw {sas.PidLockedYaw}");
         }
     }
 }

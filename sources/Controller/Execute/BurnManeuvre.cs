@@ -236,13 +236,14 @@ namespace K2D2.Controller
             {
                 case Mode.Waiting:
                     UI_Tools.OK("Waiting !");
+                    UI_Tools.Console(status_line);
                     break;
                 case Mode.Burning:
                     UI_Tools.Warning("Burning !");
-                    break;
+                    UI_Tools.ProgressBar(remaining_dv, 0, maneuver.BurnRequiredDV);
+                    UI_Tools.Console(StrTool.DurationToString(remaining_full_burn_time));
+                    break;  
             }
-
-            UI_Tools.Console(status_line);
 
             if (Settings.debug_mode)
             {
@@ -255,10 +256,7 @@ namespace K2D2.Controller
                 UI_Tools.Console($"angle {angle}");
                 UI_Tools.Console($"sign {sign}");
                 UI_Tools.Console($"remaining_dv {remaining_dv}");
-
                 UI_Tools.Console($"remaining_full_burn_time {remaining_full_burn_time}");
-
-
                 UI_Tools.Console($"needed_throttle {needed_throttle}");
 
                 //burn_dV.onGUI();

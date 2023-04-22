@@ -55,7 +55,7 @@ namespace K2D2.Controller
         public override void LateUpdate() { if (sub_controler != null) sub_controler.LateUpdate(); }
         public override void FixedUpdate() { if (sub_controler != null) sub_controler.FixedUpdate(); }
 
-    }
+    } 
 
 
 

@@ -1,33 +1,40 @@
 
 # todo : next release
-print altitude in landing mode --
-min atltitude is sea level --
-ramantes quand je change de direction, si l'ui est visible --
-Lift : snap tous les x degrés 
-circle : corriger l'ajout de noeuds --
-Node exe : précision du slider --
-Tabs : le nom est déclaré dans la page --
 
-Touch-down appelé depuis le land
-Touch-down = Brake dans le V Speed
+Touch-down appelé depuis le land.
+et auto touch down si < altitude
+Landing : interdit de de retourner
 
-Finir refacto circle
+<!-- ACCORDION SIZES -->
+<!-- auto warp option dans execute !!   ------- -->
+<!-- progres bar : execute dv + remaing time -->
 
 # v0.8.0
 Features :
-* Lift v0.1 : no auto circularize for the moment. and Settings is quite awfull, but it's quite useful.
+* Lift v0.1 : UI is quite awfull, but it's working. It uses the KSP 2 SAS to turn in a proper direction during ascent burn
+  Just Choose Turn altitudes. you can finalize the orbit using Circle Tool
+
 * Drone Flight v0.1 : Funny way to flight. very expensive in dv ....
+  Can Brake agains Surface Speed or in Vertical mode you can choose your V-Speed and fly on Moons.
+  Still need improvements :)
+
+Improvements :
+* many UI details : main Tabs, added separator, ToolTip position, chapters in settings
+* added a progress bar during burn maneuvers
+* 
 
 Fixes :
 * Correction of serious lags when Ui is opened (Int Fields and focus trouble)
 * Execute Node : added more precision options. Corrected the default options values
 * Landing : use sea level if above ground :)
+* Circularize : Corrected the double coninc patches.
 
 Know bugs :
-* Execute node does not work on several nodes !
+* Execute node does not work on multi nodes plans ! meaning if you programmed more than one maneuver the dv computed is totally weird....
+* Circularize can sometime create invalid node. please remove nodes and retry.
 
 # v0.7.2
-* Landing : correction of the collision detection
+* Landing : correction of the collision detection, more accurate but sometime not perfect, just have a try
 * Execute : Added options on direction and start burn time
 * UI : added Chapters in settings (more compact)
 

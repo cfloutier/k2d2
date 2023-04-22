@@ -162,12 +162,12 @@ namespace K2D2.Controller
             {
                 if (gravity_compensation)
                 {
-                    GUILayout.Label($"gravity : {gravity:n2}");
-                    GUILayout.Label($"gravity inclination : {gravity_inclination:n2}°");
-                    //GUILayout.Label($"gravity_direction_factor : {gravity_direction_factor:n2}");
+                    UI_Tools.Console($"gravity : {gravity:n2}");
+                    UI_Tools.Console($"gravity inclination : {gravity_inclination:n2}°");
+                    //UI_Tools.Console($"gravity_direction_factor : {gravity_direction_factor:n2}");
                 }
 
-                GUILayout.Label($"wanted_throttle : {wanted_throttle:n2}");
+                UI_Tools.Console($"wanted_throttle : {wanted_throttle:n2}");
 
 
 

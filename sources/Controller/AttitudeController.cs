@@ -112,6 +112,11 @@ namespace K2D2.Controller
 
             elevation = UI_Tools.FloatSlider("Elevation", elevation, -90, 90, "°");
             heading = UI_Tools.FloatSlider("heading", heading, -180, 180, "°");
+
+
+            UI_Tools.ProgressBar(heading, -180, 180);
+
+
             // z_direction = UI_Tools.FloatSlider("Z", z_direction, -180, 180, "°");
             if (Mathf.Abs(elevation) < 2) elevation = 0;
             if (Mathf.Abs(heading) < 2) heading = 0;

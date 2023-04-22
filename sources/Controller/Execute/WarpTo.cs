@@ -173,9 +173,9 @@ namespace K2D2.Controller
 
             if (Settings.debug_mode)
             {
-                GUILayout.Label($"CurrentRateIndex {TimeWarpTools.CurrentRateIndex}");
-                GUILayout.Label($"CurrentRate x{TimeWarpTools.CurrentRate}");
-                GUILayout.Label($"index_rate x{TimeWarpTools.indexToRatio(TimeWarpTools.CurrentRateIndex)}");
+                UI_Tools.Console($"CurrentRateIndex {TimeWarpTools.CurrentRateIndex}");
+                UI_Tools.Console($"CurrentRate x{TimeWarpTools.CurrentRate}");
+                UI_Tools.Console($"index_rate x{TimeWarpTools.indexToRatio(TimeWarpTools.CurrentRateIndex)}");
             }
         }
     }

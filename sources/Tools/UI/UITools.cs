@@ -34,8 +34,6 @@ namespace K2D2
             {
                 Chapter chapter = chapters[i];
                 var style = chapter.opened ? Styles.accordion_open : Styles.accordion_close;
-
-
                 if (GUILayout.Button(chapter.Title, style))
                 {
                     chapter.opened = !chapter.opened;
@@ -49,7 +47,6 @@ namespace K2D2
                                 chapters[j].opened = false;
                         }
                     }
-
                 }
 
                 if (chapter.opened)
@@ -185,15 +182,13 @@ namespace K2D2
 
         public static bool miniToggle(bool value, string txt, string tooltip)
         {
-            return GUILayout.Toggle(value, new GUIContent(txt, tooltip), Styles.small_button, GUILayout.Height(20));
+            return GUILayout.Toggle(value, new GUIContent(txt, tooltip), Styles.small_button, GUILayout.Height(22));
         }
 
         public static bool miniButton(string txt, string tooltip)
         {
             return GUILayout.Button(new GUIContent(txt, tooltip), Styles.small_button, GUILayout.Height(20));
         }
-
-
 
         public static bool ToolTipButton(string tooltip)
         {
@@ -255,6 +250,58 @@ namespace K2D2
             }
             GUILayout.EndHorizontal();
             return value;
+        }
+
+        public static float HeadingSlider(string txt, float value, string tooltip = "")
+        {
+            string value_str = value.ToString("N"+1);
+            string content =  $"{txt} : {value_str} °";
+            GUILayout.Label(content, Styles.slider_text);
+            GUILayout.BeginHorizontal();
+            value = GUILayout.HorizontalSlider( value, -180, 180, Styles.slider_line, Styles.slider_node);
+
+            int step = 45;
+            float precision = 5;
+            int index = Mathf.RoundToInt( value / step);
+            float rounded = index * step;
+
+            float delta = Mathf.Abs( rounded - value);
+            if (delta < precision)
+                value = rounded;
+
+            index = index + 4;
+            string[] directions = {"S", "SW", "W", "NW", "N", "NE", "E", "SE", "S", "??" };
+            GUILayout.Label(directions[index], GUILayout.Width(15));
+            if (!string.IsNullOrEmpty(tooltip))
+            {
+                UI_Tools.ToolTipButton(tooltip);
+            }
+
+            GUILayout.EndHorizontal();
+            // GUILayout.Label($"rounded {rounded} index {index}, delta {delta}");
+            return value;
+
+        }
+
+        public static void Separator()
+        {
+            GUILayout.Box("", Styles.separator);
+        }
+
+        public static void ProgressBar(double value, double min, double max)
+        {
+            ProgressBar((float) value, (float) min, (float) max);
+        }
+
+        public static void ProgressBar(float value, float min, float max)
+        {
+            var ratio = Mathf.InverseLerp(min, max, value);
+
+            GUILayout.Box("", Styles.progress_bar_empty, GUILayout.ExpandWidth(true));
+            var lastrect = GUILayoutUtility.GetLastRect();
+
+            lastrect.width = Mathf.Clamp(lastrect.width * ratio, 4, 10000000);
+            GUI.Box(lastrect, "", Styles.progress_bar_full);
         }
 
         public static float FloatSlider(string txt, float value, float min, float max, string postfix = "", string tooltip = "", int precision = 2)

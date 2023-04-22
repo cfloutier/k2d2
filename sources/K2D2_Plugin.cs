@@ -130,7 +130,7 @@ namespace K2D2
             controllerManager.AddController(new SimpleManeuverController(logger,ref _maneuverProvider));
             controllerManager.AddController(new AutoExecuteManeuver());
             controllerManager.AddController(new LandingController());
-            controllerManager.AddController(new VSpeedController());
+            controllerManager.AddController(new SpeedController());
             controllerManager.AddController(new AttitudeController());
             controllerManager.AddController(new AutoLiftController());
             controllerManager.AddController(new CircleController());
