@@ -35,8 +35,8 @@ namespace K2D2.Controller
 
         public static void onGUI()
         {
-            max_angle_maneuver = UI_Tools.FloatSlider("Max Angle", max_angle_maneuver, 0.01f, 1, "°", "Accepted Angular error.");
-            max_angular_speed = UI_Tools.FloatSlider("Max Angular Speed", max_angular_speed, 0.01f, 1, "°/s", "Accepted Angular speed.");
+            max_angle_maneuver = UI_Tools.FloatSliderTxt("Max Angle", max_angle_maneuver, 0.01f, 1, "°", "Accepted Angular error.");
+            max_angular_speed = UI_Tools.FloatSliderTxt("Max Angular Speed", max_angular_speed, 0.01f, 1, "°/s", "Accepted Angular speed.");
         }
 
     }
@@ -75,12 +75,8 @@ namespace K2D2.Controller
             if (maneuver != null)
             {
                 finished = false;
-                var autopilot = current_vessel.Autopilot;
 
-                // force autopilot
-                autopilot.Enabled = true;
-                if (autopilot.AutopilotMode != AutopilotMode.Maneuver)
-                    autopilot.SetMode(AutopilotMode.Maneuver);
+                SASTool.setAutoPilot(AutopilotMode.Maneuver);
 
                 if (!checkManeuvreDirection())
                     return;
@@ -95,12 +91,7 @@ namespace K2D2.Controller
             {
                 // SURFACE RETROGRADE MODE
                 current_vessel.SetSpeedMode(KSP.Sim.SpeedDisplayMode.Surface);
-                var autopilot = current_vessel.Autopilot;
-
-                // force autopilot
-                autopilot.Enabled = true;
-                if (autopilot.AutopilotMode != AutopilotMode.Retrograde)
-                    autopilot.SetMode(AutopilotMode.Retrograde);
+                SASTool.setAutoPilot(AutopilotMode.Retrograde);
 
                 if (!checkRetroGradeDirection())
                     return;
@@ -117,7 +108,7 @@ namespace K2D2.Controller
         {
             double max_angle = 5;
 
-            var telemetry = SASInfos.getTelemetry();
+            var telemetry = SASTool.getTelemetry();
             Vector retro_dir = telemetry.SurfaceMovementRetrograde;
             Rotation vessel_rotation = current_vessel.GetRotation();
 
@@ -135,7 +126,7 @@ namespace K2D2.Controller
         {
             double max_angle = TurnToSettings.max_angle_maneuver;
 
-            var telemetry = SASInfos.getTelemetry();
+            var telemetry = SASTool.getTelemetry();
             if (!telemetry.HasManeuver)
                 return false;
 
@@ -179,7 +170,7 @@ namespace K2D2.Controller
 
             if (Settings.debug_mode)
             {
-                var telemetry = SASInfos.getTelemetry();
+                var telemetry = SASTool.getTelemetry();
                 if (!telemetry.HasManeuver)
                     return;
 

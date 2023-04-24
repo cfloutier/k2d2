@@ -22,5 +22,8 @@ echo dest path is : %DEST_PATH%
 @REM rd /s/q %DEST_PATH%
 if not exist %DEST_PATH% mkdir %DEST_PATH%
 
+dir %LOCAL_DIR%
+dir %DEST_PATH%
+
 xcopy /Y /s  /d %LOCAL_DIR% %DEST_PATH%
 

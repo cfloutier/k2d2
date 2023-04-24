@@ -1,32 +1,29 @@
 
-# todo : next release
-
-Touch-down appelé depuis le land.
-et auto touch down si < altitude
-Landing : interdit de de retourner
-
-<!-- ACCORDION SIZES -->
-<!-- auto warp option dans execute !!   ------- -->
-<!-- progres bar : execute dv + remaing time -->
-
 # v0.8.0
 Features :
-* Lift v0.1 : UI is quite awfull, but it's working. It uses the KSP 2 SAS to turn in a proper direction during ascent burn
-  Just Choose Turn altitudes. you can finalize the orbit using Circle Tool
+* Lift v1 : UI is quite awfull, but it's working. It uses the KSP 2 SAS to turn in a proper direction during ascent burn
+  You choose in settings Start Altitude, Wanted Ap and the altitudes where to turn to 45° and 5°. All using ui and sliders.
+  Not quite very UI friendly, I should add an ascent profile graph..
 
-* Drone Flight v0.1 : Funny way to flight. very expensive in dv ....
+  Once Ap is reached burn is stopped and you can finalize the orbit using Circle Tool.
+  Not precise enough for the moment it can be improved too. I usually do a second circularize to fully finalize the Final Orbit.
+
+* Drone Flight v1 : Funny way to flight. very expensive in dv ....
   Can Brake agains Surface Speed or in Vertical mode you can choose your V-Speed and fly on Moons.
-  Still need improvements :)
+  Still need improvements to remove horizontal speed, but really precise in playing with Vertical Speed and removing gravity.
 
 Improvements :
-* many UI details : main Tabs, added separator, ToolTip position, chapters in settings
-* added a progress bar during burn maneuvers
-* 
+* many UI details : main Tabs, added separator, ToolTip position, chapters in settings. Big Work Here.
+* Added a progress bar during burn maneuvers.
+* Landing v3 : better than in previous version. added a TouchDown Button to force to start the final mode.
+  During Touch-Down the speed depends on altitude.
+  There is no check of current TWR so, use slow mode for heavy landers.
+  I'll adapt to vessel mass and power in future versions.
 
 Fixes :
 * Correction of serious lags when Ui is opened (Int Fields and focus trouble)
-* Execute Node : added more precision options. Corrected the default options values
-* Landing : use sea level if above ground :)
+* Execute Node : added more precision options and warp options. The default values where corrected
+* Landing : use sea level if above ground :) and no U Turn facing the sky !
 * Circularize : Corrected the double coninc patches.
 
 Know bugs :

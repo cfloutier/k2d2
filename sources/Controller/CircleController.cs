@@ -34,25 +34,19 @@ namespace K2D2.Controller
 
         public override void onGUI()
         {
-            if (K2D2_Plugin.Instance.settings_visible)
-            {
-                Settings.onGUI();
-                return;
-            }
-
-            if (UI_Tools.Button("Circularize At Ap"))
+            if (UI_Tools.SmallButton("Circularize At Ap"))
             {
                 maneuver_creator.CircularizeOrbitApoapsis();
             }
 
-            if (UI_Tools.Button("Circularize At Pe"))
+            if (UI_Tools.SmallButton("Circularize At Pe"))
             {
                 maneuver_creator.CircularizeOrbitPeriapsis();
             }
 
             if (AutoExecuteManeuver.Instance.canStart())
             {
-                if (UI_Tools.Button("Execute"))
+                if (UI_Tools.SmallButton("Execute"))
                 {
                     AutoExecuteManeuver.Instance.Start();
                 }

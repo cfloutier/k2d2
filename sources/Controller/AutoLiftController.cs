@@ -35,21 +35,21 @@ namespace K2D2.Controller
                 }
         }
 
-        public int mid_rotate_altitude_km
+        public float mid_rotate_ratio
         {
-            get => Settings.s_settings_file.GetInt("lift.mid_rotate_altitude_km", 15);
+            get => Settings.s_settings_file.GetFloat("lift.mid_rotate_ratio", 0.2f);
             set {
-                // value = Mathf.Clamp(value, 0 , 1);
-                Settings.s_settings_file.SetInt("lift.mid_rotate_altitude_km", value);
+                value = Mathf.Clamp(value, 0 , end_rotate_ratio);
+                Settings.s_settings_file.SetFloat("lift.mid_rotate_ratio", value);
                 }
         }
 
-        public int end_rotate_altitude_km
+        public float end_rotate_ratio
         {
-            get => Settings.s_settings_file.GetInt("lift.end_rotate_altitude_km", 50);
+            get => Settings.s_settings_file.GetFloat("lift.end_rotate_ratio", 0.5f);
             set {
-                // value = Mathf.Clamp(value, 0 , 1);
-                Settings.s_settings_file.SetInt("lift.end_rotate_altitude_km", value);
+                value = Mathf.Clamp(value, mid_rotate_ratio , 1);
+                Settings.s_settings_file.SetFloat("lift.end_rotate_ratio", value);
                 }
         }
 
@@ -57,7 +57,6 @@ namespace K2D2.Controller
         {
             get => Settings.s_settings_file.GetInt("lift.destination_Ap_km", 100);
             set {
-                // value = Mathf.Clamp(value, 0 , 1);
                 Settings.s_settings_file.SetInt("lift.destination_Ap_km", value);
                 }
         }
@@ -120,9 +119,7 @@ namespace K2D2.Controller
         {
             var autopilot = current_vessel.Autopilot;
 
-            // force autopilot
-            autopilot.Enabled = true;
-            autopilot.SetMode(AutopilotMode.StabilityAssist);
+            SASTool.setAutoPilot(AutopilotMode.StabilityAssist);
 
             inclination = -90;
             current_vessel.SetThrottle(1);
@@ -137,7 +134,7 @@ namespace K2D2.Controller
             // force autopilot
             autopilot.Enabled = true;
 
-            var telemetry = SASInfos.getTelemetry();
+            var telemetry = SASTool.getTelemetry();
 
             var up = telemetry.HorizonUp;
 
@@ -152,24 +149,30 @@ namespace K2D2.Controller
         float altitude_km = 0;
         float ap_km = 0;
 
+        float mid_rotate_altitude_km;
+        float end_rotate_altitude_km;
+        
+
         void computeValues()
         {
             PatchedConicsOrbit orbit = current_vessel.VesselComponent.Orbit;
             ap_km = (float)(orbit.Apoapsis - orbit.referenceBody.radius) / 1000;
             altitude_km = (float)(current_vessel.GetSeaAltitude() / 1000);
+            mid_rotate_altitude_km = Mathf.Lerp(lift_settings.start_altitude_km, lift_settings.destination_Ap_km, lift_settings.mid_rotate_ratio );
+            end_rotate_altitude_km = Mathf.Lerp(lift_settings.start_altitude_km, lift_settings.destination_Ap_km, lift_settings.end_rotate_ratio );
 
             if (altitude_km < lift_settings.start_altitude_km)
             {
                 inclination = 90;
             }
-            else if (altitude_km < lift_settings.mid_rotate_altitude_km)
+            else if (altitude_km < mid_rotate_altitude_km)
             {
-                var ratio = Mathf.InverseLerp(lift_settings.start_altitude_km, lift_settings.mid_rotate_altitude_km, altitude_km);
+                var ratio = Mathf.InverseLerp(lift_settings.start_altitude_km, mid_rotate_altitude_km, altitude_km);
                 inclination = Mathf.Lerp(90, 45, ratio);
             }
             else
             {
-                var ratio = Mathf.InverseLerp(lift_settings.mid_rotate_altitude_km, lift_settings.end_rotate_altitude_km, (float)altitude_km);
+                var ratio = Mathf.InverseLerp(mid_rotate_altitude_km, end_rotate_altitude_km, (float)altitude_km);
                 inclination = Mathf.Lerp(45, 5, ratio);
             }
         }
@@ -199,15 +202,17 @@ namespace K2D2.Controller
             if (K2D2_Plugin.Instance.settings_visible)
             {
                 Settings.onGUI();
-
                 lift_settings.heading = UI_Tools.HeadingSlider("heading", lift_settings.heading);
 
                 lift_settings.start_altitude_km = UI_Fields.IntField("lift.start_altitude_km", "90° Alt (km)", lift_settings.start_altitude_km, 0, Int32.MaxValue);
-                lift_settings.mid_rotate_altitude_km = UI_Fields.IntField("lift.mid_rotate_altitude_km", "45° Alt (km)", lift_settings.mid_rotate_altitude_km, 0, Int32.MaxValue);
-                lift_settings.end_rotate_altitude_km = UI_Fields.IntField("lift.end_rotate_altitude_km", "5° Alt (km)", lift_settings.end_rotate_altitude_km, 0, Int32.MaxValue);
+
+                GUILayout.Label($"45° Alt. : {mid_rotate_altitude_km:n0} km", Styles.slider_text);
+                lift_settings.mid_rotate_ratio = UI_Tools.FloatSlider(lift_settings.mid_rotate_ratio, 0, 1);
+
+                GUILayout.Label($"5° Alt. : {end_rotate_altitude_km:n0} km", Styles.slider_text);
+                lift_settings.end_rotate_ratio = UI_Tools.FloatSlider(lift_settings.end_rotate_ratio, 0, 1);
 
                 lift_settings.destination_Ap_km = UI_Fields.IntField("lift.destination_Ap_km", "Ap Altitude (km)", lift_settings.destination_Ap_km, 0, Int32.MaxValue);
-
                 return;
             }
 

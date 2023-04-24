@@ -80,7 +80,7 @@ namespace K2D2.Controller
             // force autopilot
             autopilot.Enabled = true;
 
-            var telemetry = SASInfos.getTelemetry();
+            var telemetry = SASTool.getTelemetry();
 
             var up = telemetry.HorizonUp;
 
@@ -90,8 +90,6 @@ namespace K2D2.Controller
 
             autopilot.SAS.lockedMode = lockedMode;
             autopilot.SAS.SetTargetOrientation(direction_vector, reset);
-
-            // autopilot.SetMode(AutopilotMode.Maneuver);
         }
 
 
@@ -110,8 +108,8 @@ namespace K2D2.Controller
             reset = UI_Tools.Toggle(reset, "Reset");
 
 
-            elevation = UI_Tools.FloatSlider("Elevation", elevation, -90, 90, "°");
-            heading = UI_Tools.FloatSlider("heading", heading, -180, 180, "°");
+            elevation = UI_Tools.FloatSliderTxt("Elevation", elevation, -90, 90, "°");
+            heading = UI_Tools.FloatSliderTxt("heading", heading, -180, 180, "°");
 
 
             UI_Tools.ProgressBar(heading, -180, 180);
@@ -124,7 +122,7 @@ namespace K2D2.Controller
 
             isActive = UI_Tools.ToggleButton(isActive, "Start", "Stop");
 
-            var telemetry = SASInfos.getTelemetry();
+            var telemetry = SASTool.getTelemetry();
 
             var up = telemetry.HorizonUp;
             UI_Tools.Label($"up dir = {StrTool.VectorToString(up.vector)}");

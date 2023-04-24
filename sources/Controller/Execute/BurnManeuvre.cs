@@ -43,10 +43,10 @@ namespace K2D2.Controller
 
         static public void onGUI()
         {
-            burn_adjust = UI_Tools.FloatSlider("Adjusting rate", burn_adjust, 0.5f, 2, "m/s", "Used during final adjust phase");
+            burn_adjust = UI_Tools.FloatSliderTxt("Adjusting rate", burn_adjust, 0.5f, 2, "m/s", "Used during final adjust phase");
             UI_Tools.Right_Left_Text("Precise", "Quick");
 
-            max_dv_error = UI_Tools.FloatSlider("Precision", max_dv_error, 0.001f, 0.1f, "m/s", "max delta speed in final adjust phase", 3);
+            max_dv_error = UI_Tools.FloatSliderTxt("Precision", max_dv_error, 0.001f, 0.1f, "m/s", "max delta speed in final adjust phase", 3);
 
             rotate_during_burn = UI_Tools.Toggle(rotate_during_burn, "Rotate During burn", "Keep following Maneuver Node\ndirection during burn phase");
         }
@@ -98,12 +98,8 @@ namespace K2D2.Controller
             last_remaining_dv = -1;
 
             if (current_vessel == null) return;
-            var autopilot = current_vessel.Autopilot;
 
-            // force autopilot
-            autopilot.Enabled = true;
-            autopilot.SetMode(AutopilotMode.Maneuver);
-
+            SASTool.setAutoPilot(AutopilotMode.Maneuver);
 
             // compute initial direction
 
@@ -141,15 +137,11 @@ namespace K2D2.Controller
                 else
                 {
                     mode = Mode.Burning;
-                    var autopilot = current_vessel.Autopilot;
-
-                    // force autopilot
-                    autopilot.Enabled = true;
 
                     if (BurnManeuvreSettings.rotate_during_burn)
-                        autopilot.SetMode(AutopilotMode.Maneuver);
+                        SASTool.setAutoPilot(AutopilotMode.Maneuver);
                     else
-                        autopilot.SetMode(AutopilotMode.StabilityAssist);
+                        SASTool.setAutoPilot(AutopilotMode.StabilityAssist);
 
                 }
             }

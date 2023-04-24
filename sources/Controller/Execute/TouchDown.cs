@@ -54,8 +54,13 @@ namespace K2D2.Controller
 
             if (gravity_compensation)
             {
-                float minimum_dv = gravity_direction_factor * gravity;
-                min_throttle = minimum_dv / burn_dV.full_dv;
+                if (gravity_direction_factor == 0)
+                    min_throttle = 0;
+                else
+                {
+                    float minimum_dv = gravity_direction_factor * gravity;
+                    min_throttle = minimum_dv / burn_dV.full_dv;
+                }
             }
 
 
@@ -68,7 +73,6 @@ namespace K2D2.Controller
         float delta_speed = 0;
 
         public bool NeedBurn => delta_speed > 0;
-    
 
         public bool checkSpeed()
         {
@@ -82,12 +86,29 @@ namespace K2D2.Controller
 
         float retrograde_angle;
 
-        public bool checkBurnDirection()
+        public bool checkDirection()
         {
             double max_angle = 5;
 
-            var telemetry = SASInfos.getTelemetry();
+            var telemetry = SASTool.getTelemetry();
+
+            // check that the speed
+            Vector HorizonUp = telemetry.HorizonUp;
             Vector retro_dir = telemetry.SurfaceMovementRetrograde;
+
+            retro_dir.Reframe(HorizonUp.coordinateSystem);
+
+            var speed_vertical_angle = (float) Vector3d.Angle(retro_dir.vector, HorizonUp.vector);
+
+            if (speed_vertical_angle > 90)
+            {
+                status_line = $"Waiting for speed Down\nAngle = {speed_vertical_angle:n2}°\nFree Time Warp";
+                return false;
+            }
+
+            TimeWarpTools.SetRateIndex(0, false);
+            SASTool.setAutoPilot(AutopilotMode.Retrograde);
+
             Rotation vessel_rotation = current_vessel.GetRotation();
 
             // convert rotation to maneuvre coordinates
@@ -95,7 +116,7 @@ namespace K2D2.Controller
             Vector3d forward_direction = (vessel_rotation.localRotation * Vector3.up).normalized;
 
             retrograde_angle = (float) Vector3d.Angle(retro_dir.vector, forward_direction);
-            // status_line = $"Waiting for good sas direction\nAngle = {angle:n2}°";
+            status_line = $"Waiting for Vessel rotation\nAngle = {retrograde_angle:n2}°";
 
             return retrograde_angle < max_angle;
         }
@@ -118,17 +139,22 @@ namespace K2D2.Controller
                 computeGravityRatio();
 
             current_vessel.SetSpeedMode(KSP.Sim.SpeedDisplayMode.Surface);
-            var autopilot = current_vessel.Autopilot;
 
-            // force autopilot
-            autopilot.Enabled = true;
-            if (autopilot.AutopilotMode != AutopilotMode.Retrograde)
-                autopilot.SetMode(AutopilotMode.Retrograde);
+            // if (autopilot.AutopilotMode != AutopilotMode.Retrograde)
+            //         autopilot.SetMode(AutopilotMode.Retrograde);
+            // else
 
-            if (!checkBurnDirection())
+         
+                // if (autopilot.AutopilotMode != AutopilotMode.Retrograde)
+                //     autopilot.SetMode(AutopilotMode.Retrograde);
+            // else
+            //     if (autopilot.AutopilotMode != AutopilotMode.StabilityAssist)
+            //         autopilot.SetMode(AutopilotMode.StabilityAssist);
+
+            if (!checkDirection())
             {
                 current_vessel.SetThrottle(0);
-                status_line = $"Turning : {retrograde_angle:n2} °";
+                // status_line = $"Turning : {retrograde_angle:n2} °";
                 return;
             }
 
@@ -168,9 +194,6 @@ namespace K2D2.Controller
                 }
 
                 UI_Tools.Console($"wanted_throttle : {wanted_throttle:n2}");
-
-
-
             }
         }
 

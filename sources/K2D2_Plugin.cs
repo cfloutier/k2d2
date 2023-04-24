@@ -130,7 +130,7 @@ namespace K2D2
             controllerManager.AddController(new SimpleManeuverController(logger,ref _maneuverProvider));
             controllerManager.AddController(new AutoExecuteManeuver());
             controllerManager.AddController(new LandingController());
-            controllerManager.AddController(new SpeedController());
+            controllerManager.AddController(new DroneController());
             controllerManager.AddController(new AttitudeController());
             controllerManager.AddController(new AutoLiftController());
             controllerManager.AddController(new CircleController());
@@ -143,7 +143,7 @@ namespace K2D2
 
             Appbar.RegisterAppButton(
                 "K2-D2",
-                "BTN-K2D2Button",
+                "BTN-K2D2Button", 
                 AssetManager.GetAsset<Texture2D>($"{SpaceWarpMetadata.ModID}/images/icon.png"),
                 ToggleAppBarButton);
         }

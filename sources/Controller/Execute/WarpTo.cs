@@ -36,7 +36,7 @@ namespace K2D2.Controller
 
         public static void onGUI()
         {
-            warp_speed = UI_Tools.FloatSlider("Warp Speed", warp_speed, 0, 7, "", "Warp adjust rate");
+            warp_speed = UI_Tools.FloatSliderTxt("Warp Speed", warp_speed, 0, 7, "", "Warp adjust rate");
             UI_Tools.Right_Left_Text("Safe", "Quick");
 
             warp_safe_duration = UI_Fields.IntField("warp_safe_duration", "Before Burn Time", warp_safe_duration, 5, int.MaxValue,
@@ -57,6 +57,8 @@ namespace K2D2.Controller
         public bool check_direction = false;
 
         public float max_angle;
+
+        public int max_warp_index = -1;
 
 
         public K2D2.KSPService.KSPVessel current_vessel;
@@ -144,6 +146,14 @@ namespace K2D2.Controller
             if (current_vessel.VesselVehicle.IsInAtmosphere)
                 if (wanted_warp_index > 2)
                     wanted_warp_index = 2;
+
+            if (current_vessel.GetApproxAltitude() < 3000)
+                if (wanted_warp_index > 2)
+                    wanted_warp_index = 2;
+            
+            if (max_warp_index > 0)
+                if (wanted_warp_index > max_warp_index)
+                    wanted_warp_index = max_warp_index;
 
             float wanted_rate = TimeWarpTools.indexToRatio(wanted_warp_index);
             TimeWarpTools.SetRateIndex(wanted_warp_index, false);

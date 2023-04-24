@@ -102,7 +102,7 @@ namespace K2D2
                 pages.Add(CircleController.Instance);
 
                 pages.Add(LandingController.Instance);
-                pages.Add(SpeedController.Instance);
+                pages.Add(DroneController.Instance);
 
                 pages.Add(AutoLiftController.Instance);
                 pages.Add(AttitudeController.Instance);

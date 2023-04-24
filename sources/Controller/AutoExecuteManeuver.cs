@@ -63,7 +63,7 @@ namespace K2D2.Controller
 
             if (start_mode == StartMode.constant)
             {
-                start_before = UI_Tools.FloatSlider("Start before T0", start_before, 0, 10, "s");
+                start_before = UI_Tools.FloatSliderTxt("Start before T0", start_before, 0, 10, "s");
             }
 
        }
@@ -252,12 +252,12 @@ namespace K2D2.Controller
                 UI_Tools.Label($"finished {current_executor.finished}");
                 if (!current_executor.finished)
                 {
-                    if (UI_Tools.Button("Next /!\\"))
+                    if (UI_Tools.SmallButton("Next /!\\"))
                         nextMode();
                 }
                 else
                 {
-                    if (UI_Tools.Button("Next"))
+                    if (UI_Tools.SmallButton("Next"))
                         nextMode();
                 }
             }

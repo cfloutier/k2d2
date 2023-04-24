@@ -153,39 +153,34 @@ namespace K2D2
 
         public static bool ToggleButton(bool is_on, string txt_run, string txt_stop)
         {
-            int height_bt = 40;
+            int height_bt = 30;
+            int min_width_bt = 150;
 
-            //GUILayout.BeginHorizontal();
-            // GUILayout.FlexibleSpace();
             var txt = is_on ? txt_stop : txt_run;
-
-            is_on = GUILayout.Toggle(is_on, txt, Styles.big_button, GUILayout.Height(height_bt));
-
+            // GUILayout.BeginHorizontal();
             // GUILayout.FlexibleSpace();
-            //GUILayout.EndHorizontal();
-
+            is_on = GUILayout.Toggle(is_on, txt, Styles.big_button, GUILayout.Height(height_bt), GUILayout.MinWidth(min_width_bt));
+            // GUILayout.FlexibleSpace();
+            // GUILayout.EndHorizontal();
             return is_on;
         }
 
-        public static bool BigButton(string txt, bool is_on = false)
+        public static bool BigButton(string txt)
         {
-            int width_bt = 200;
-            int height_bt = 40;
-
-            return GUILayout.Button(txt, GUILayout.Height(width_bt), GUILayout.Height(height_bt));
+            return GUILayout.Button(txt, Styles.big_button);
         }
 
-        public static bool Button(string txt)
+        public static bool SmallButton(string txt)
         {
             return GUILayout.Button(txt, Styles.small_button);
         }
 
         public static bool miniToggle(bool value, string txt, string tooltip)
         {
-            return GUILayout.Toggle(value, new GUIContent(txt, tooltip), Styles.small_button, GUILayout.Height(22));
+            return GUILayout.Toggle(value, new GUIContent(txt, tooltip), Styles.small_button, GUILayout.Height(20));
         }
 
-        public static bool miniButton(string txt, string tooltip)
+        public static bool miniButton(string txt, string tooltip = "")
         {
             return GUILayout.Button(new GUIContent(txt, tooltip), Styles.small_button, GUILayout.Height(20));
         }
@@ -304,16 +299,12 @@ namespace K2D2
             GUI.Box(lastrect, "", Styles.progress_bar_full);
         }
 
-        public static float FloatSlider(string txt, float value, float min, float max, string postfix = "", string tooltip = "", int precision = 2)
+
+
+
+        public static float FloatSlider(float value, float min, float max, string tooltip = "")
         {
-            // simple float slider with a lavel value
-
-
-            string value_str = value.ToString("N"+precision);
-
-            string content =  $"{txt} : {value_str} {postfix}";
-
-            GUILayout.Label(content, Styles.slider_text);
+            // simple float slider
             GUILayout.BeginHorizontal();
             value = GUILayout.HorizontalSlider( value, min, max, Styles.slider_line, Styles.slider_node);
 
@@ -322,6 +313,20 @@ namespace K2D2
                 UI_Tools.ToolTipButton(tooltip);
             }
             GUILayout.EndHorizontal();
+
+            value = Mathf.Clamp(value, min, max);
+            return value;
+        }
+
+        public static float FloatSliderTxt(string txt, float value, float min, float max, string postfix = "", string tooltip = "", int precision = 2)
+        {
+            // simple float slider with a printed value
+            string value_str = value.ToString("N"+precision);
+
+            string content =  $"{txt} : {value_str} {postfix}";
+
+            GUILayout.Label(content, Styles.slider_text);
+            value = FloatSlider(value, min, max, tooltip);
             return value;
         }
 

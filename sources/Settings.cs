@@ -55,23 +55,20 @@ namespace K2D2
         public static void onGUI()
         {
             GUILayout.BeginHorizontal();
-            UI_Tools.Title("// Settings");
+            if (UI_Tools.miniButton("Close Settings"))
+            {
+                K2D2_Plugin.Instance.settings_visible = false;
+            }
 
             GUILayout.FlexibleSpace();
             // VERSION
             UI_Tools.Console($"v{K2D2_Plugin.ModVer}");
-
-            Settings.debug_mode = UI_Tools.miniToggle(Settings.debug_mode, "dbg", "Debug mode open\nWIP features and verbose informations.");
-
-            if (UI_Tools.miniButton("bck", "close settings"))
-                K2D2_Plugin.Instance.settings_visible = false;
-
+            GUILayout.FlexibleSpace();
+            Settings.debug_mode = UI_Tools.miniToggle(Settings.debug_mode, "DBG MODE", "Debug mode open\nWIP features and verbose informations.");
             GUILayout.EndHorizontal();
+            UI_Tools.Separator();
         }
     }
-
-
-
 }
 
 
