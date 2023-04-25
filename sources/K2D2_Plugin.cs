@@ -28,15 +28,16 @@ using Action = System.Action;
 
 namespace K2D2
 {
+    // [BepInPlugin(ModGuid, ModName, ModVer)]
+    [BepInPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
     [BepInDependency(SpaceWarpPlugin.ModGuid,SpaceWarpPlugin.ModVer)]
-    [BepInPlugin(ModGuid, ModName, ModVer)]
     public class K2D2_Plugin : BaseSpaceWarpPlugin
     {
         public static K2D2_Plugin Instance { get; private set; }
 
-        public const string ModGuid = "K2D2";
-        public const string ModName = "K2D2";
-        public const string ModVer = "0.7.1";
+        public const string ModGuid = MyPluginInfo.PLUGIN_GUID; // "K2D2";
+        public const string ModName = MyPluginInfo.PLUGIN_NAME; // "K2D2";
+        public const string ModVer = MyPluginInfo.PLUGIN_VERSION; // "0.7.1";
 
         #region Fields
 
@@ -256,6 +257,11 @@ namespace K2D2
             GUI.DragWindow(new Rect(0, 0, 10000, 500));
 
             ToolTipsManager.setToolTip(GUI.tooltip);
+        }
+
+        public void FlyNode()
+        {
+            // AutoExecuteManeuver.Instance.  AutoExecuteManeuver();
         }
     }
 
