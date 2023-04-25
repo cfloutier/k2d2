@@ -122,22 +122,6 @@ namespace K2D2
             gameObject.hideFlags = HideFlags.HideAndDontSave;
             DontDestroyOnLoad(gameObject);
 
-            // Test logging to make sure things are set right - remove when done testing
-            try
-            {
-                logger.LogMessage($"ModGuid = {ModGuid}");
-                logger.LogMessage($"ModName = {ModName}");
-                logger.LogMessage($"ModVer = {ModVer}");
-            }
-            catch (Exception ex) { logger.LogMessage($"Unable to check ModGuid, ModName, or ModVer: {ex}"); }
-            try
-            {
-                logger.LogMessage($"MyPluginInfo.PLUGIN_GUID = {MyPluginInfo.PLUGIN_GUID}");
-                logger.LogMessage($"MyPluginInfo.PLUGIN_NAME = {MyPluginInfo.PLUGIN_NAME}");
-                logger.LogMessage($"MyPluginInfo.PLUGIN_VERSION = {MyPluginInfo.PLUGIN_VERSION}");
-            }
-            catch (Exception ex) { logger.LogMessage($"Unable to check MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, or MyPluginInfo.PLUGIN_VERSION: {ex}"); }
-
             logger.LogMessage("building AutoExecuteManeuver");
 
             // Setups
