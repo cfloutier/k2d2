@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <LangVersion>latest</LangVersion>
+        <ImplicitUsings>true</ImplicitUsings>
+        <AssemblyName>com.github.cfloutier.k2d2</AssemblyName>
+        <Product>K2-D2</Product>
+        <Description>The KSP astromech, Keybind is ALT+O</Description>
+        <Version>0.8.1</Version>
+        <RestoreAdditionalProjectSources>
+            https://nuget.spacewarp.org/v3/index.json
+        </RestoreAdditionalProjectSources>
+        <RootNamespace>K2D2</RootNamespace>
+        <ModId Condition="'$(ModId)'==''">K2D2</ModId>
+    </PropertyGroup>
+    <ItemGroup>
+        <Reference Include="Assembly-CSharp">
+            <HintPath>..\external_dlls\Assembly-CSharp.dll</HintPath>
+            <Publicize>true</Publicize>
+            <Private>false</Private>
+        </Reference>
+    </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="BepInEx.Analyzers" Version="1.*" PrivateAssets="all" />
+        <PackageReference Include="BepInEx.AssemblyPublicizer.MSBuild" Version="0.4.0" PrivateAssets="all" />
+        <PackageReference Include="BepInEx.Core" Version="5.*" />
+        <PackageReference Include="BepInEx.PluginInfoProps" Version="2.*" />
+        <PackageReference Include="HarmonyX" Version="2.10.1" />
+        <PackageReference Include="SpaceWarp" Version="1.1.1" />
+        <PackageReference Include="UnityEngine.Modules" Version="2020.3.33" IncludeAssets="compile" />
+    </ItemGroup>
+    <ItemGroup>
+      <Folder Include="Properties\" />
+    </ItemGroup>
+    <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+        <Exec Command="rm -rf &quot;$(ProjectDir)..\$(ConfigurationName)\&quot;&#xA;echo d | xcopy /y /s &quot;$(ProjectDir)..\$(ModId)\&quot; &quot;$(ProjectDir)..\$(ConfigurationName)\BepInEx\plugins\$(ModId)\&quot;&#xA;echo f | xcopy /y &quot;$(TargetPath)&quot; &quot;$(ProjectDir)..\$(ConfigurationName)\BepInEx\plugins\$(ModId)\$(ModId).dll&quot;&#xA;if $(ConfigurationName) == Debug echo f | xcopy /y &quot;$(TargetDir)$(TargetName).pdb&quot; &quot;$(ProjectDir)..\$(ConfigurationName)\BepInEx\plugins\$(ModId)\$(ModId).pdb&quot;&#xA;xcopy /y &quot;$(ProjectDir)..\LICENSE.md&quot; &quot;$(ProjectDir)..\$(ConfigurationName)\BepInEx\plugins\$(ModId)\&quot;&#xA;echo f | xcopy /y &quot;$(ProjectDir)..\README.md&quot; &quot;$(ProjectDir)..\$(ConfigurationName)\BepInEx\plugins\$(ModId)\README.txt&quot;&#xD;&#xA;&#xD;&#xA;echo Copying output .dll to &quot;..Kerbal Space Program 2 Debug\BepInEx\plugins\$(ModId)&quot;&#xD;&#xA;xcopy /y &quot;$(ProjectDir)..\$(ConfigurationName)\BepInEx\plugins\$(ModId)\$(ModId).dll&quot; &quot;C:\Kerbal Space Program 2 Debug\BepInEx\plugins\$(ModId)&quot;&#xD;&#xA;&#xD;&#xA;echo Copying swinfo.json to &quot;..Kerbal Space Program 2 Debug\BepInEx\plugins\$(ModId)&quot;&#xD;&#xA;xcopy /y &quot;$(ProjectDir)..\$(ConfigurationName)\BepInEx\plugins\$(ModId)\swinfo.json&quot; &quot;C:\Kerbal Space Program 2 Debug\BepInEx\plugins\$(ModId)&quot;&#xD;&#xA;&#xD;&#xA;echo Copying output .pdb to &quot;..Kerbal Space Program 2 Debug\BepInEx\plugins\$(ModId)&quot;&#xD;&#xA;xcopy /y &quot;$(ProjectDir)..\$(ConfigurationName)\BepInEx\plugins\$(ModId)\$(ModId).pdb&quot; &quot;C:\Kerbal Space Program 2 Debug\BepInEx\plugins\$(ModId)&quot;&#xD;&#xA;&#xD;&#xA;echo Copying output .dll to &quot;C:\KSP2 Mods\FlightPlan\external_dlls&quot;&#xD;&#xA;xcopy /y &quot;$(ProjectDir)..\$(ConfigurationName)\BepInEx\plugins\$(ModId)\$(ModId).dll&quot; &quot;C:\KSP2 Mods\FlightPlan\external_dlls&quot;&#xD;&#xA;&#xD;&#xA;echo Starting KSP2_x64.exe&#xD;&#xA;powershell &quot;start-process &quot;&quot;C:\Kerbal Space Program 2 Debug\KSP2_x64.exe&quot;&quot;&quot;" />
+    </Target>
+</Project>
