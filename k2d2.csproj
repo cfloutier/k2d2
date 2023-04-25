@@ -11,8 +11,8 @@
 		<FileAlignment>512</FileAlignment>
 		<Deterministic>true</Deterministic>
 		<AssemblyName>com.github.cfloutier.K2D2</AssemblyName>
-		<Product>K2-D2</Product>
-		<Description>K2-D2 Description Goes Here</Description>
+		<Product>K2D2</Product>
+		<Description>"Small set of navigation tools. Use Alt+O to open</Description>
 		<Version>0.8.1</Version>
 		<RestoreAdditionalProjectSources>
 			https://nuget.spacewarp.org/v3/index.json
