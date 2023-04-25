@@ -28,7 +28,6 @@ using Action = System.Action;
 
 namespace K2D2
 {
-    // [BepInPlugin(ModGuid, ModName, ModVer)]
     [BepInPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
     [BepInDependency(SpaceWarpPlugin.ModGuid,SpaceWarpPlugin.ModVer)]
     public class K2D2_Plugin : BaseSpaceWarpPlugin
@@ -121,6 +120,22 @@ namespace K2D2
 
             gameObject.hideFlags = HideFlags.HideAndDontSave;
             DontDestroyOnLoad(gameObject);
+
+            // Test logging to make sure things are set right - remove when done testing
+            try
+            {
+                logger.LogMessage($"ModGuid = {ModGuid}");
+                logger.LogMessage($"ModName = {ModName}");
+                logger.LogMessage($"ModVer = {ModVer}");
+            }
+            catch (Exception ex) { logger.LogMessage($"Unable to check ModGuid, ModName, or ModVer: {ex}"); }
+            try
+            {
+                logger.LogMessage($"MyPluginInfo.PLUGIN_GUID = {MyPluginInfo.PLUGIN_GUID}");
+                logger.LogMessage($"MyPluginInfo.PLUGIN_NAME = {MyPluginInfo.PLUGIN_NAME}");
+                logger.LogMessage($"MyPluginInfo.PLUGIN_VERSION = {MyPluginInfo.PLUGIN_VERSION}");
+            }
+            catch (Exception ex) { logger.LogMessage($"Unable to check MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, or MyPluginInfo.PLUGIN_VERSION: {ex}"); }
 
             logger.LogMessage("building AutoExecuteManeuver");
 
@@ -259,9 +274,10 @@ namespace K2D2
             ToolTipsManager.setToolTip(GUI.tooltip);
         }
 
+        // Public API to perform a precision node execution using K2-D2
         public void FlyNode()
         {
-            // AutoExecuteManeuver.Instance.  AutoExecuteManeuver();
+            AutoExecuteManeuver.Instance.Start();
         }
     }
 
