@@ -1,4 +1,4 @@
-@REM Create the zip fro SpaceDocks
+@REM Create the zip for SpaceDock
 @REM echo off
 echo on
 set build_mode=%1
