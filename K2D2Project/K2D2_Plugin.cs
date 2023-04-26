@@ -35,15 +35,11 @@ namespace K2D2
     {
         public static K2D2_Plugin Instance { get; private set; }
 
-<<<<<<< HEAD:sources/K2D2_Plugin.cs
-        public const string ModGuid = "K2D2";
-        public const string ModName = "K2D2";
-        public const string ModVer = "0.8.0";
-=======
+
         public const string ModGuid = MyPluginInfo.PLUGIN_GUID; // "K2D2";
         public const string ModName = MyPluginInfo.PLUGIN_NAME; // "K2D2";
         public const string ModVer = MyPluginInfo.PLUGIN_VERSION; // "0.7.1";
->>>>>>> 8522c3b47c4887270bb5556d0b799ac4f20d5dec:K2D2Project/K2D2_Plugin.cs
+
 
         #region Fields
 

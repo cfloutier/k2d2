@@ -10,7 +10,6 @@ namespace K2D2.Controller
     /// apply the wanted speed in the good direction
     public class TouchDown  : ExecuteController
     {
-
         public bool gravity_compensation;
         public float max_speed = 0;
 
