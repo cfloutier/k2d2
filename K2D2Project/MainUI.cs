@@ -17,7 +17,7 @@ namespace K2D2
     public class MainTabs
     {
         public static bool TabButton(bool is_current, bool isActive, string txt)
-        {
+        { 
             GUIStyle style = isActive ? Styles.tab_active : Styles.tab_normal;
             return GUILayout.Toggle(is_current, txt, style);
         }

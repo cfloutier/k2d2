@@ -36,9 +36,9 @@ namespace K2D2
         public static K2D2_Plugin Instance { get; private set; }
 
 
-        public const string ModGuid = MyPluginInfo.PLUGIN_GUID; // "K2D2";
-        public const string ModName = MyPluginInfo.PLUGIN_NAME; // "K2D2";
-        public const string ModVer = MyPluginInfo.PLUGIN_VERSION; // "0.7.1";
+        public const string ModGuid = MyPluginInfo.PLUGIN_GUID; 
+        public const string ModName = MyPluginInfo.PLUGIN_NAME; 
+        public const string ModVer = MyPluginInfo.PLUGIN_VERSION; 
 
 
         #region Fields
@@ -253,8 +253,7 @@ namespace K2D2
                 if(GUI.Button(new Rect(windowRect.width - 81, 4, 25, 25), "P", Styles.small_button))
                     _popUp.isPopupVisible = !_popUp.isPopupVisible;
 
-            GUI.Label(new Rect(9, 2, 29, 29), Styles.big_icon, Styles.icons_label);
-
+            GUI.Label(new Rect(9, 2, 29, 29), Styles.big_icon, Styles.icons_label); 
             GUILayout.BeginVertical();
 
             main_ui.onGUI();
