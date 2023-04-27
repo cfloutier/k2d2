@@ -1,16 +1,30 @@
-set ConfigurationName=%1
-
 echo off
 
-@REM call the ksp_location
+@REM call the local_dev_options
 call local_dev_options.bat
 
-@REM define the default build mode to Debug 
-IF [%ConfigurationName%] == [] set ConfigurationName=Debug
+set ConfigurationName=%1
+set PROJECT_NAME=%2
+
+
+
 
 if "%Close_KSP2%"=="True" (
-    call kill_ksp.bat
+   @REM test if KSP2_x64.exe is running
+    tasklist /fi "imagename eq KSP2_x64.exe" |find ":" > nul
+    if errorlevel 1 (
+        echo "Kill KSP2 !!!!"
+        taskkill /f /im "KSP2_x64.exe"
+        timeout 2
+    ) else echo "KSP2 Not running"
 )
 
-@REM call make_zip.bat %ConfigurationName%
-@REM call copy_to_ksp.bat
+if "%Create_zip%"=="True" (
+    call make_zip.bat %ConfigurationName% %Project_name%
+)
+
+call copy_to_ksp.bat %ConfigurationName% %Project_name%
+
+if "%Open_KSP2%"=="True" (
+    "%KSP2_LOCATION%\KSP2_x64.exe"
+)

@@ -1,4 +1,4 @@
-@REM copy debug dll (unity) to ksp
+@REM copy release dll (unity) to ksp, quick and official version
 echo off
 
 @REM call the local_dev_options

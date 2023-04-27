@@ -1,9 +1,8 @@
 echo off
-set PROJECT_NAME=K2D2
-set CONFIG=Debug
+set ConfigurationName=%1
+set PROJECT_NAME=%2
 
-set OUTPUT=..\output
-set LOCAL_DIR=%OUTPUT%\BepInEx\plugins\%PROJECT_NAME%\
+set SOURCE_DIR=..\%ConfigurationName%\BepInEx\plugins\%PROJECT_NAME%\
 
 @REM call the local_dev_options
 call local_dev_options.bat
@@ -15,8 +14,8 @@ echo dest path is : %DEST_PATH%
 @REM rd /s/q %DEST_PATH%
 if not exist %DEST_PATH% mkdir %DEST_PATH%
 
-@REM dir %LOCAL_DIR%
+@REM dir %SOURCE_DIR%
 @REM dir %DEST_PATH%
 
-xcopy /Y /s  /d %LOCAL_DIR% %DEST_PATH%
+xcopy /Y /s /d %SOURCE_DIR% %DEST_PATH%
 

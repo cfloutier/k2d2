@@ -234,7 +234,7 @@ $RECYCLE.BIN/
 
 *.exe
 releases/
-ksp_location.bat
+local_dev_options.bat
 
 # Riderfiles
 .idea/

@@ -1,4 +1,4 @@
-@REM copy debug dll (unity) to ksp
+@REM copy debug dll (unity) to ksp, useful for debuging
 echo off
 
 @REM call the local_dev_options
