@@ -1,7 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.IO;
+// using System;
+// using System.Collections.Generic;
+// using System.Linq;
+// using System.IO;
 using System.Reflection;
 
 using UnityEngine;
@@ -12,19 +12,20 @@ using KSP.UI.Binding;
 
 using BepInEx;
 using SpaceWarp;
-using SpaceWarp.API;
+// using SpaceWarp.API;
 using SpaceWarp.API.Mods;
 using SpaceWarp.API.Assets;
 using SpaceWarp.API.UI;
 using SpaceWarp.API.UI.Appbar;
 using BepInEx.Logging;
-using JetBrains.Annotations;
+// using JetBrains.Annotations;
 using K2D2.Controller;
 using K2D2.Models;
 using K2D2.sources.Models;
 using K2D2.KSPService;
 using K2D2.sources.KSPService;
 using Action = System.Action;
+// using KSP.Networking.MP;
 
 namespace K2D2
 {
@@ -268,6 +269,51 @@ namespace K2D2
         public void FlyNode()
         {
             AutoExecuteManeuver.Instance.Start();
+        }
+
+        // Public API to get the status of K2D2
+        public string GetStatus()
+        {
+            string status = "";
+            var instance = AutoExecuteManeuver.Instance;
+            if (instance.current_maneuvre_node == null)
+            {
+                status = "No Maneuvre Node";
+            }
+            else
+            {
+                if (!instance.valid_maneuver) status = "Invalid Maneuvre Node";
+                // else if (!AutoExecuteManeuver.Instance.canStart()) status = "No Future Maneuver Node";
+                else if (instance.isActive)
+                {
+                    if (instance.mode == AutoExecuteManeuver.Mode.Off) status = "Off";
+                    else if (instance.mode == AutoExecuteManeuver.Mode.Turn)
+                    {
+                        status = $"Turning: {instance.current_executor.status_line}";
+                        // report angle deviation?
+                    }
+                    else if (instance.mode == AutoExecuteManeuver.Mode.Warp)
+                    {
+                        status = $"Warping: {instance.current_executor.status_line}";
+                        // report time to node?
+                    }
+                    else if (instance.mode == AutoExecuteManeuver.Mode.Burn)
+                    {
+                        if (Game.UniverseModel.UniversalTime < instance.current_maneuvre_node.Time)
+                        {
+                            status = $"Waiting to Burn: {instance.current_executor.status_line}";
+                        }
+                        else
+                        {
+                            status = $"Burning: {instance.current_executor.status_line}";
+                            // report burn remaining (delta-v?)
+                        }
+                    }
+                }
+                else status = "Done";
+                // else status = "Unknown";
+            }
+            return status;
         }
     }
 

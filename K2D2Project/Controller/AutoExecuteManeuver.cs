@@ -263,7 +263,7 @@ namespace K2D2.Controller
             }
         }
 
-        bool valid_maneuver = false;
+        public bool valid_maneuver = false;
 
         public bool checkManeuver()
         {
