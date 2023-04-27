@@ -233,7 +233,7 @@ $RECYCLE.BIN/
 .vs
 
 *.exe
-output/
+releases/
 ksp_location.bat
 
 # Riderfiles
