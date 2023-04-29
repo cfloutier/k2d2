@@ -182,7 +182,7 @@ namespace K2D2.Controller
                 {
                     compute_throttle();
                     set_throttle(needed_throttle);
-                    status_line = $"remaining dV : {remaining_dv} m/S";
+                    status_line = $"remaining dV : {remaining_dv:n2} m/S";
                 }
             }
         }

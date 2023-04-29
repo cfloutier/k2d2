@@ -147,7 +147,7 @@ namespace K2D2
 
             Appbar.RegisterAppButton(
                 "K2-D2",
-                "BTN-K2D2Button", 
+                "BTN-K2D2Button",
                 AssetManager.GetAsset<Texture2D>($"{SpaceWarpMetadata.ModID}/images/icon.png"),
                 ToggleAppBarButton);
         }
@@ -241,6 +241,7 @@ namespace K2D2
                 UI_Fields.GameInputState = true;
             }
         }
+
         private void FillWindow(int windowID)
         {
             TopButtons.Init(windowRect.width);
@@ -254,7 +255,7 @@ namespace K2D2
                 if(GUI.Button(new Rect(windowRect.width - 81, 4, 25, 25), "P", Styles.small_button))
                     _popUp.isPopupVisible = !_popUp.isPopupVisible;
 
-            GUI.Label(new Rect(9, 2, 29, 29), Styles.big_icon, Styles.icons_label); 
+            GUI.Label(new Rect(9, 2, 29, 29), Styles.big_icon, Styles.icons_label);
             GUILayout.BeginVertical();
 
             main_ui.onGUI();
