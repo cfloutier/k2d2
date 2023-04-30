@@ -1,3 +1,7 @@
+# v0.8.1
+Features :
+* Little open API that schlorat's [FlightPlan](https://spacedock.info/mod/3359/Flight%20Plan) will use in next version
+
 
 # v0.8.0
 Features :
