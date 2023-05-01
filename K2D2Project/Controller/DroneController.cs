@@ -9,6 +9,7 @@ using K2D2.KSPService;
 using KSP.Sim;
 
 using K2D2.UI;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace K2D2.Controller;
 
@@ -41,7 +42,7 @@ public class DroneSettings
         }
     }
 
-    public bool lock_sas
+    public bool sas_up
     {
         get => Settings.s_settings_file.GetBool("speed.lock_sas", true);
         set
@@ -50,6 +51,23 @@ public class DroneSettings
         }
     }
 
+    public bool kill_h_speed
+    {
+        get => Settings.s_settings_file.GetBool("speed.kill_h_speed", true);
+        set
+        {
+            Settings.s_settings_file.SetBool("speed.kill_h_speed", value);
+        }
+    }
+
+    public float inclinaison_ratio
+    {
+        get => Settings.s_settings_file.GetFloat("speed.inclinaison_ratio", 1);
+        set
+        {
+            Settings.s_settings_file.SetFloat("speed.inclinaison_ratio", value);
+        }
+    }
 
     public void onGUI()
     {
@@ -230,7 +248,7 @@ public class DroneController : ComplexControler
                 current_vessel.SetSpeedMode(KSP.Sim.SpeedDisplayMode.Surface);
                 current_speed = -(float)current_vessel.VesselVehicle.SurfaceSpeed;
 
-                if (settings.lock_sas)
+                if (settings.sas_up)
                     SASTool.setAutoPilot(AutopilotMode.Retrograde);
 
                 max_DiffDirection = 85;
@@ -242,7 +260,7 @@ public class DroneController : ComplexControler
                 current_vessel.SetSpeedMode(KSP.Sim.SpeedDisplayMode.Surface);
                 current_speed = (float)current_vessel.VesselVehicle.VerticalSpeed;
 
-                if (settings.lock_sas)
+                if (settings.sas_up)
                     SASTool.setAutoPilot(AutopilotMode.RadialOut);
 
                 max_DiffDirection = 85;
@@ -265,8 +283,67 @@ public class DroneController : ComplexControler
         // no stop for gravity compensation
         current_vessel.SetThrottle(wanted_throttle);
 
+        if (settings.kill_h_speed)
+        {
+            // compute
+            KillHSpeed();
+        }
+
         base.Update();
     }
+
+    void KillHSpeed()
+    {
+        // use Up local coordinate as reference frame
+        var Upcoords = current_vessel.VesselVehicle.Up.coordinateSystem;
+        var SurfaceVelocity = Vector.Reframed(current_vessel.VesselVehicle.SurfaceVelocity, Upcoords).vector;
+        var North = Vector.Reframed(current_vessel.VesselVehicle.North, Upcoords).vector;
+        var East = Vector.Reframed(current_vessel.VesselVehicle.East, Upcoords).vector;
+        var Up = Vector.Reframed(current_vessel.VesselVehicle.Up, Upcoords).vector;
+
+
+        // UI_Tools.Console($"Up : {StrTool.VectorToString(Up)}");
+        // //UI_Tools.Console($"Up coordinateSystem  : {Up.coordinateSystem}");
+
+        // UI_Tools.Console($"SurfaceVelocity : {StrTool.VectorToString(SurfaceVelocity)}");
+        // // UI_Tools.Console($"SurfaceVelocity coordinateSystem  : {SurfaceVelocity.coordinateSystem}");
+
+        // UI_Tools.Console($"North : {StrTool.VectorToString(North)}");
+
+        var UpSpeed = Up.normalized * Vector3d.Dot(SurfaceVelocity, Up);
+        var LocalHSpeed = SurfaceVelocity - UpSpeed;
+
+        // UI_Tools.Console($"UpSpeed : {StrTool.VectorToString(UpSpeed)}");
+        // UI_Tools.Console($"LocalHSpeed : {StrTool.VectorToString(LocalHSpeed)}");
+
+        retro_h_speed_heading = (float)-Vector3d.SignedAngle(-LocalHSpeed.normalized, North, Up);
+        // UI_Tools.Console($"SpeedHeading : {retro_h_speed_heading:n2} °");
+
+        // set direction
+        var autopilot = current_vessel.Autopilot;
+        // force autopilot
+        autopilot.Enabled = true;
+
+        var telemetry = SASTool.getTelemetry();
+
+        var up = telemetry.HorizonUp;
+
+        var inc = settings.inclinaison_ratio * H_Speed;
+        inc = Mathf.Clamp(inc, 0, 80);
+
+        elevation = inc - 90;
+
+        var direction = QuaternionD.Euler(elevation, retro_h_speed_heading, 0) * Vector3d.forward;
+
+        Vector direction_vector = new Vector(up.coordinateSystem, direction);
+
+        autopilot.SAS.lockedMode = false;
+        autopilot.SAS.SetTargetOrientation(direction_vector, false);
+    }
+
+    float retro_h_speed_heading = 0;
+
+    float elevation = 0;
 
     public override void onGUI()
     {
@@ -281,14 +358,37 @@ public class DroneController : ComplexControler
         // settings.speed_mode = UI_Tools.EnumGrid<SpeedMode>("Mode",
         //                                         settings.speed_mode, mode_labels);
 
+
+        GUILayout.BeginHorizontal();
+
         settings.speed_mode = SpeedMode.SurfaceUp;
-        var lock_sas = UI_Tools.Toggle(settings.lock_sas, "Lock SAS");
-        if (!lock_sas && lock_sas != settings.lock_sas)
+        var lock_sas = UI_Tools.Toggle(settings.sas_up, "SAS UP");
+        if (lock_sas != settings.sas_up)
         {
-            // unlock the SAS goes to stability assist
-            SASTool.setAutoPilot(AutopilotMode.StabilityAssist);
+            if (lock_sas)
+                settings.kill_h_speed = false;
+            else
+                // unlock the SAS goes to stability assist
+                SASTool.setAutoPilot(AutopilotMode.StabilityAssist);
+            settings.sas_up = lock_sas;
         }
-        settings.lock_sas = lock_sas;
+
+
+        var kill_h_speed = UI_Tools.Toggle(settings.kill_h_speed, "Kill H Speed");
+        if (kill_h_speed != settings.kill_h_speed)
+        {
+            if (kill_h_speed)
+            {
+                settings.sas_up = false;
+            }
+            else
+                SASTool.setAutoPilot(AutopilotMode.RadialOut);
+
+            SASTool.setAutoPilot(AutopilotMode.StabilityAssist);
+            settings.kill_h_speed = kill_h_speed;
+        }
+    
+        GUILayout.EndHorizontal();
 
         if (settings.speed_mode == SpeedMode.SurfaceSpeed)
         {
@@ -308,11 +408,15 @@ public class DroneController : ComplexControler
         if (Mathf.Abs(settings.wanted_speed) < 0.3f)
             settings.wanted_speed = 0;
 
-        isActive = UI_Tools.ToggleButton(isActive, "Run", "Stop");
+        if (settings.kill_h_speed)
+        {
+            // UI_Tools.Console($"Kill H_speed");
+            settings.inclinaison_ratio = UI_Tools.FloatSliderTxt("Kill Speed Ratio", settings.inclinaison_ratio, 0, 10, "", "", 0);
+        }
 
+        isActive = UI_Tools.ToggleButton(isActive, "Run", "Stop");
         if (!isActive)
             return;
-
 
         UI_Tools.Console($"V. Speed  : {V_Speed:n2} m/s");
         UI_Tools.Console($"H. Speed  : {H_Speed:n2} m/s");
@@ -322,16 +426,22 @@ public class DroneController : ComplexControler
 
         if (Settings.debug_mode)
         {
-            if (gravity_compensation)
-            {
-                UI_Tools.Console($"gravity : {gravity:n2}");
-                UI_Tools.Console($"gravity inclination : {gravity_inclination:n2}°");
-                //GUILayout.Label($"gravity_direction_factor : {gravity_direction_factor:n2}");
-            }
+            // if (gravity_compensation)
+            // {
+            //     UI_Tools.Console($"gravity : {gravity:n2}");
+            //     UI_Tools.Console($"gravity inclination : {gravity_inclination:n2}°");
+            //     //GUILayout.Label($"gravity_direction_factor : {gravity_direction_factor:n2}");
+            // }
 
             UI_Tools.Console($"delta speed  : {delta_speed:n2}  m/s");
             UI_Tools.Console($"delta_angle_ratio : {delta_angle_ratio:n2}");
             UI_Tools.Console($"wanted_throttle : {wanted_throttle:n2}");
+
+            if (settings.kill_h_speed)
+            {
+                UI_Tools.Console($"retro_h_speed_heading  : {retro_h_speed_heading:n2} °");
+                UI_Tools.Console($"elevation : {elevation:n2}°");
+            }
         }
 
         if (!string.IsNullOrEmpty(status_line))

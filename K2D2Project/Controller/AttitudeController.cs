@@ -112,9 +112,7 @@ public class AttitudeController : ComplexControler
         elevation = UI_Tools.FloatSliderTxt("Elevation", elevation, -90, 90, "°");
         heading = UI_Tools.FloatSliderTxt("heading", heading, -180, 180, "°");
 
-
-        UI_Tools.ProgressBar(heading, -180, 180);
-
+        // UI_Tools.ProgressBar(heading, -180, 180);
 
         // z_direction = UI_Tools.FloatSlider("Z", z_direction, -180, 180, "°");
         if (Mathf.Abs(elevation) < 2) elevation = 0;

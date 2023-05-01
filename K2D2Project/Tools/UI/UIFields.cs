@@ -17,6 +17,7 @@ public class UI_Fields
 
     static public bool GameInputState
     {
+        get { return _inputState; }
         set
         {
             if (_inputState != value)
