@@ -31,7 +31,7 @@ public class AttitudeController : ComplexControler
         current_vessel = K2D2_Plugin.Instance.current_vessel;
 
         Instance = this;
-        debug_mode = true;
+        debug_mode = false;
         Name = "Attitude";
     }
 

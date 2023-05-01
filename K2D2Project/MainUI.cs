@@ -109,7 +109,8 @@ public class MainUI
             pages.Add(AutoLiftController.Instance);
             pages.Add(AttitudeController.Instance);
 
-            pages.Add(SimpleManeuverController.Instance);
+            // waiting for mole
+            // pages.Add(SimpleManeuverController.Instance);
             pages.Add(new OrbitInfos());
             pages.Add(new K2D2.InfosPages.SASInfos());
             pages.Add(new VesselInfos());

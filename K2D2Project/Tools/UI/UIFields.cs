@@ -37,27 +37,61 @@ public class UI_Fields
         GameInputState = !inputFields.Contains(GUI.GetNameOfFocusedControl());
     }
 
+    public static double DoubleField(string entryName, double value)
+    {
+        string text_value;
+        if (temp_dict.ContainsKey(entryName))
+            // always use temp value
+            text_value = temp_dict[entryName];
+        else
+            text_value = value.ToString();
+
+        if (!inputFields.Contains(entryName))
+            inputFields.Add(entryName);
+
+        Color normal = GUI.color;
+        double num = 0;
+        bool parsed = double.TryParse(text_value, out num);
+        if (!parsed) GUI.color = Color.red;
+
+        GUI.SetNextControlName(entryName);
+        text_value = GUILayout.TextField(text_value, GUILayout.Width(100));
+
+        GUI.color = normal;
+
+        // save filtered temp value
+        temp_dict[entryName] = text_value;
+        if (parsed)
+            return num;
+
+        return value;
+    }
+
     /// Simple Integer Field. for the moment there is a trouble. keys are sent to KSP2 events if focus is in the field
-    public static int IntField(string name, string label, int value, int min, int max, string tooltip = "")
+    public static int IntField(string entryName, string label, int value, int min, int max, string tooltip = "")
     {
         string text_value = value.ToString();
 
-        if (temp_dict.ContainsKey(name))
+        if (temp_dict.ContainsKey(entryName))
             // always use temp value
-            text_value = temp_dict[name];
+            text_value = temp_dict[entryName];
 
-        if (!inputFields.Contains(name))
-            inputFields.Add(name);
+        if (!inputFields.Contains(entryName))
+            inputFields.Add(entryName);
 
         GUILayout.BeginHorizontal();
 
-        GUI.SetNextControlName(name);
-        GUILayout.Label(label);
+        if (!string.IsNullOrEmpty(label))
+        {
+            GUILayout.Label(label);
+        }
+
+        GUI.SetNextControlName(entryName);
         var typed_text = GUILayout.TextField(text_value, GUILayout.Width(100));
         typed_text = Regex.Replace(typed_text, @"[^\d-]+", "");
 
         // save filtered temp value
-        temp_dict[name] = typed_text;
+        temp_dict[entryName] = typed_text;
 
         int result = value;
         bool ok = true;
@@ -65,19 +99,17 @@ public class UI_Fields
         {
             ok = false;
         }
-        if (result < min)
-        {
+        if (result < min) {
             ok = false;
             result = value;
         }
-        else if (result > max)
-        {
+        else if (result > max) {
             ok = false;
             result = value;
         }
 
         if (!ok)
-            GUILayout.Label("!!!");
+            GUILayout.Label("!!!", GUILayout.Width(30));
 
         if (!string.IsNullOrEmpty(tooltip))
         {
@@ -88,6 +120,3 @@ public class UI_Fields
         return result;
     }
 }
-
-
-

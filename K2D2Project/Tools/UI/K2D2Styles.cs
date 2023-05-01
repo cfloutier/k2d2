@@ -203,12 +203,76 @@ public class K2D2Styles
     }
 
 
+    public static GUIStyle bigicon_button, icon_button, small_button, big_button, button;
+
+    static void BuildButtons()
+    {
+        // button std
+        button = new GUIStyle(GUI.skin.GetStyle("Button"));
+        button.normal.background = AssetsLoader.loadIcon("BigButton_Normal");
+        button.normal.textColor = ColorTools.parseColor("#FFFFFF");
+        setAllFromNormal(button);
+
+        button.hover.background = AssetsLoader.loadIcon("BigButton_hover");
+        button.active.background = AssetsLoader.loadIcon("BigButton_hover");
+        // button.active.background = AssetsLoader.loadIcon("BigButton_on");
+        // button.onNormal = button.active;
+        // setFromOn(button);
+
+        button.border = new RectOffset(5, 5, 5, 5);
+        button.padding = new RectOffset(4, 4, 4, 4);
+        button.overflow = new RectOffset(0, 0, 0, 0);
+        // button.fontSize = 20;
+        button.alignment = TextAnchor.MiddleCenter;
+        skin.button = button;
+
+        // Small Button
+        small_button = new GUIStyle(GUI.skin.GetStyle("Button"));
+        small_button.normal.background = AssetsLoader.loadIcon("Small_Button");
+        setAllFromNormal(small_button);
+        small_button.hover.background = AssetsLoader.loadIcon("Small_Button_hover");
+        small_button.active.background = AssetsLoader.loadIcon("Small_Button_active");
+        small_button.onNormal = small_button.active;
+        setFromOn(small_button);
+
+        small_button.border = new RectOffset(5, 5, 5, 5);
+        small_button.padding = new RectOffset(5, 5, 5, 5);
+        small_button.overflow = new RectOffset(0, 0, 0, 0);
+        small_button.alignment = TextAnchor.MiddleCenter;
+
+        big_button = new GUIStyle(GUI.skin.GetStyle("Button"));
+        big_button.normal.background = AssetsLoader.loadIcon("BigButton_Normal");
+        big_button.normal.textColor = ColorTools.parseColor("#FFFFFF");
+        setAllFromNormal(big_button);
+
+        big_button.hover.background = AssetsLoader.loadIcon("BigButton_Hover");
+        big_button.active.background = AssetsLoader.loadIcon("BigButton_Active");
+        big_button.onNormal = big_button.active;
+        setFromOn(big_button);
+
+        big_button.border = new RectOffset(5, 5, 5, 5);
+        big_button.padding = new RectOffset(8, 8, 10, 10);
+        big_button.overflow = new RectOffset(0, 0, 0, 0);
+        // big_button.fontSize = 20;
+        big_button.alignment = TextAnchor.MiddleCenter;
+
+        // Small Button
+        icon_button = new GUIStyle(small_button);
+        icon_button.padding = new RectOffset(4, 4, 4, 4);
+
+        bigicon_button = new GUIStyle(icon_button);
+        bigicon_button.fixedWidth = 50;
+        bigicon_button.fixedHeight = 50;
+        bigicon_button.fontStyle = FontStyle.Bold;
+
+    }
+
     public static GUIStyle tab_normal, tab_active;
     static void BuildTabs()
     {
         tab_normal = new GUIStyle(button);
         tab_normal.border = new RectOffset(5, 5, 5, 5);
-        tab_normal.padding = new RectOffset(4, 3, 4, 3);
+        tab_normal.padding = new RectOffset(10, 10, 5, 5);
         tab_normal.overflow = new RectOffset(0, 0, 0, 0);
         // big_button.fontSize = 20;
         tab_normal.alignment = TextAnchor.MiddleCenter;
@@ -232,69 +296,11 @@ public class K2D2Styles
         setFromOn(tab_active);
     }
 
-    public static GUIStyle bigicon_button, icon_button, small_button, big_button, button;
 
-    static void BuildButtons()
-    {
-        // button std
-        button = new GUIStyle(GUI.skin.GetStyle("Button"));
-        button.normal.background = AssetsLoader.loadIcon("BigButton_Normal");
-        button.normal.textColor = ColorTools.parseColor("#FFFFFF");
-        setAllFromNormal(button);
 
-        button.hover.background = AssetsLoader.loadIcon("BigButton_hover");
-        button.active.background = AssetsLoader.loadIcon("BigButton_hover");
-        // button.active.background = AssetsLoader.loadIcon("BigButton_on");
-        // button.onNormal = button.active;
-        // setFromOn(button);
 
-        button.border = new RectOffset(5, 5, 5, 5);
-        button.padding = new RectOffset(4, 3, 4, 3);
-        button.overflow = new RectOffset(0, 0, 0, 0);
-        // button.fontSize = 20;
-        button.alignment = TextAnchor.MiddleCenter;
-        skin.button = button;
 
-        // Small Button
-        small_button = new GUIStyle(GUI.skin.GetStyle("Button"));
-        small_button.normal.background = AssetsLoader.loadIcon("Small_Button");
-        setAllFromNormal(small_button);
-        small_button.hover.background = AssetsLoader.loadIcon("Small_Button_hover");
-        small_button.active.background = AssetsLoader.loadIcon("Small_Button_active");
-        small_button.onNormal = small_button.active;
-        setFromOn(small_button);
 
-        small_button.border = new RectOffset(5, 5, 5, 5);
-        small_button.padding = new RectOffset(4, 4, 2, 2);
-        small_button.overflow = new RectOffset(0, 0, 0, 0);
-        small_button.alignment = TextAnchor.MiddleCenter;
-
-        big_button = new GUIStyle(GUI.skin.GetStyle("Button"));
-        big_button.normal.background = AssetsLoader.loadIcon("BigButton_Normal");
-        big_button.normal.textColor = ColorTools.parseColor("#FFFFFF");
-        setAllFromNormal(big_button);
-
-        big_button.hover.background = AssetsLoader.loadIcon("BigButton_Hover");
-        big_button.active.background = AssetsLoader.loadIcon("BigButton_Active");
-        big_button.onNormal = big_button.active;
-        setFromOn(big_button);
-
-        big_button.border = new RectOffset(5, 5, 5, 5);
-        big_button.padding = new RectOffset(4, 3, 4, 3);
-        big_button.overflow = new RectOffset(0, 0, 0, 0);
-        // big_button.fontSize = 20;
-        big_button.alignment = TextAnchor.MiddleCenter;
-
-        // Small Button
-        icon_button = new GUIStyle(small_button);
-        icon_button.padding = new RectOffset(4, 4, 4, 4);
-
-        bigicon_button = new GUIStyle(icon_button);
-        bigicon_button.fixedWidth = 50;
-        bigicon_button.fixedHeight = 50;
-        bigicon_button.fontStyle = FontStyle.Bold;
-
-    }
     public static GUIStyle foldout_close, foldout_open;
 
     static void BuildFoldout()
