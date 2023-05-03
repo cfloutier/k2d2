@@ -135,6 +135,7 @@ public class ExTabPage
         current_page.UIVisible = true;
     }
 
+    // must be called to rebuild the filtered_pages list 
     public void Update()
     {
         filtered_pages = new List<PageContent>();
@@ -156,7 +157,6 @@ public class ExTabPage
         }
 
         current_index = GeneralTools.ClampInt(current_index, 0, filtered_pages.Count - 1);
-        // string [] pages_str = Settings.debug_mode ? interfaceModes_debug : interfaceModes;
         int result = DrawTabs(current_index);
         if (result != current_index)
         {
@@ -183,8 +183,13 @@ public class MainUI
 
     }
 
-
     public void Update()
+    {
+        if (init_done)
+            tabs.Update();
+    }
+
+    public void onGUI()
     {
         if (!init_done)
         {
@@ -208,14 +213,6 @@ public class MainUI
 
             init_done = true;
         }
-
-
-        tabs.Update();
-    }
-
-    public void onGUI()
-    {
-        if (!init_done) return;
 
         tabs.onGUI();
     }
