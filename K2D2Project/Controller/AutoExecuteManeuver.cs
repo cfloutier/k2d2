@@ -110,7 +110,7 @@ public class AutoExecuteManeuver : ComplexControler
     {
         Instance = this;
         debug_mode = false;
-        Name = "Node";
+        name = "Node";
 
         sub_contollers.Add(current_executor);
         current_vessel = K2D2_Plugin.Instance.current_vessel;
@@ -222,7 +222,7 @@ public class AutoExecuteManeuver : ComplexControler
             return;
         }
 
-        if (!isActive)
+        if (!isRunning)
         {
             if (current_maneuvre_node == null)
             {
@@ -243,13 +243,13 @@ public class AutoExecuteManeuver : ComplexControler
             node_infos();
         }
 
-        if (!isActive && !canStart())
+        if (!isRunning && !canStart())
         {
             UI_Tools.Label("No Maneuver node in the future");
             return;
         }
 
-        isActive = UI_Tools.ToggleButton(isActive, "Run", "Stop");
+        isRunning = UI_Tools.ToggleButton(isRunning, "Run", "Stop");
 
         current_executor.onGUI();
         if (!Settings.auto_next)
@@ -307,7 +307,7 @@ public class AutoExecuteManeuver : ComplexControler
         checkManeuver();
         base.Update();
 
-        if (isActive)
+        if (isRunning)
         {
             double UT = 0;
             switch (execute_settings.start_mode)
@@ -364,7 +364,7 @@ public class AutoExecuteManeuver : ComplexControler
     {
         UI_Tools.Title("// Node Infos");
         ManeuverNodeData node = null;
-        if (isActive)
+        if (isRunning)
             node = execute_node;
         else
             node = current_maneuvre_node;
@@ -389,7 +389,7 @@ public class AutoExecuteManeuver : ComplexControler
 
 
     bool _active = false;
-    public override bool isActive
+    public override bool isRunning
     {
         get { return _active; }
         set
@@ -419,12 +419,12 @@ public class AutoExecuteManeuver : ComplexControler
 
     public void Start()
     {
-        isActive = true;
+        isRunning = true;
     }
 
     public void Stop()
     {
-        isActive = false;
+        isRunning = false;
     }
 
     public override void onReset()

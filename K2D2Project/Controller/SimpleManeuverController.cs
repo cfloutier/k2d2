@@ -25,7 +25,7 @@ public class SimpleManeuverController : ButtonController
     public SimpleManeuverController(ref ManeuverProvider maneuverProvider)
     {
         debug_mode = true;
-        Name = "Simple Maneuver Controller";
+        name = "Simple Maneuver Controller";
 
         _maneuverProvider = maneuverProvider;
         Instance = this;

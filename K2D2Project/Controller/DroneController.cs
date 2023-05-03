@@ -92,7 +92,7 @@ public class DroneController : ComplexControler
     public DroneController()
     {
         debug_mode = false;
-        Name = "Drone";
+        name = "Drone";
 
         sub_contollers.Add(burn_dV);
         // logger.LogMessage("LandingController !");
@@ -103,11 +103,11 @@ public class DroneController : ComplexControler
 
     public override void onReset()
     {
-        isActive = false;
+        isRunning = false;
     }
 
     bool _active = false;
-    public override bool isActive
+    public override bool isRunning
     {
         get { return _active; }
         set
@@ -235,13 +235,13 @@ public class DroneController : ComplexControler
 
     public override void Update()
     {
-        if (!ui_visible && !isActive) return;
+        if (!ui_visible && !isRunning) return;
         if (current_vessel == null || current_vessel.VesselVehicle == null)
             return;
 
         V_Speed = (float)current_vessel.VesselVehicle.VerticalSpeed;
         H_Speed = (float)current_vessel.VesselVehicle.HorizontalSpeed;
-        if (!isActive) return;
+        if (!isRunning) return;
 
         switch (settings.speed_mode)
         {
@@ -401,8 +401,8 @@ public class DroneController : ComplexControler
         if (Mathf.Abs(settings.wanted_speed) < 0.3f)
             settings.wanted_speed = 0;
 
-        isActive = UI_Tools.ToggleButton(isActive, "Run", "Stop");
-        if (!isActive)
+        isRunning = UI_Tools.ToggleButton(isRunning, "Run", "Stop");
+        if (!isRunning)
             return;
 
         UI_Tools.Console($"V. Speed  : {V_Speed:n2} m/s");

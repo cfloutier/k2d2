@@ -13,7 +13,7 @@ class OrbitInfos : BaseController
     public OrbitInfos()
     {
         debug_mode = true;
-        Name = "Orbit Infos";
+        name = "Orbit Infos";
     }
 
 

@@ -13,7 +13,7 @@ class VesselInfos : BaseController
     public VesselInfos()
     {
         debug_mode = true;
-        Name = "Vessel Infos";
+        name = "Vessel Infos";
     }
 
 

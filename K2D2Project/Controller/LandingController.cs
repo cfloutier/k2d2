@@ -171,7 +171,7 @@ public class LandingController : ComplexControler
     {
         Instance = this;
         debug_mode = false;
-        Name = "Landing";
+        name = "Landing";
 
         sub_contollers.Add(burn_dV);
         sub_contollers.Add(current_executor);
@@ -261,7 +261,7 @@ public class LandingController : ComplexControler
         // start
         if (mode == Mode.Off)
         {
-            isActive = true;
+            isRunning = true;
             return;
         }
 
@@ -270,7 +270,7 @@ public class LandingController : ComplexControler
     }
 
     bool _active = false;
-    public override bool isActive
+    public override bool isRunning
     {
         get { return _active; }
         set
@@ -303,7 +303,7 @@ public class LandingController : ComplexControler
 
     public override void onReset()
     {
-        isActive = false;
+        isRunning = false;
     }
 
     float current_falling_speed = 0;
@@ -402,7 +402,7 @@ public class LandingController : ComplexControler
     Vector SurfaceVelocity;
     public override void Update()
     {
-        if (!ui_visible && !isActive) return;
+        if (!ui_visible && !isRunning) return;
         if (current_vessel == null || current_vessel.VesselVehicle == null)
             return;
 
@@ -418,25 +418,25 @@ public class LandingController : ComplexControler
         if (!collision_detected)
         {
             // after patch ksp detect with altitude and remove the collision point
-            if (isActive)
+            if (isRunning)
             {
                 setMode(Mode.TouchDown);
             }
             else
             {
                 // no more collision
-                isActive = false;
+                isRunning = false;
             }
         }
 
-        if (!isActive)
+        if (!isRunning)
             return;
 
         // landing detection....
         if (altitude < 5 && current_falling_speed < 1)
         {
             //current_vessel.SetThrottle(0);
-            isActive = false;
+            isRunning = false;
             return;
         }
         if (mode == Mode.Pause)
@@ -556,18 +556,18 @@ public class LandingController : ComplexControler
         }
         GUILayout.BeginHorizontal();
 
-        isActive = UI_Tools.ToggleButton(isActive, "Brake", "Stop");
+        isRunning = UI_Tools.ToggleButton(isRunning, "Brake", "Stop");
 
         if (mode != Mode.TouchDown)
             if (UI_Tools.BigButton("Touch-Down !"))
             {
-                isActive = true;
+                isRunning = true;
                 setMode(Mode.TouchDown);
             }
 
         GUILayout.EndHorizontal();
 
-        if (isActive)
+        if (isRunning)
         {
             switch (mode)
             {
@@ -601,7 +601,7 @@ public class LandingController : ComplexControler
 
         //    UI_Tools.Console("SurfaceVelocity" + StrTool.VectorToString(SurfaceVelocity.vector));
 
-        if (isActive && burn_dV.burned_dV > 0)
+        if (isRunning && burn_dV.burned_dV > 0)
             UI_Tools.Console($"Burned : {burn_dV.burned_dV:n1} m/s");
     }
 }

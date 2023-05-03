@@ -32,16 +32,16 @@ public class AttitudeController : ComplexControler
 
         Instance = this;
         debug_mode = false;
-        Name = "Attitude";
+        name = "Attitude";
     }
 
     public override void onReset()
     {
-        isActive = false;
+        isRunning = false;
     }
 
     bool _active = false;
-    public override bool isActive
+    public override bool isRunning
     {
         get { return _active; }
         set
@@ -73,7 +73,7 @@ public class AttitudeController : ComplexControler
 
     public override void Update()
     {
-        if (!isActive) return;
+        if (!isRunning) return;
 
         if (current_vessel == null) return;
         var autopilot = current_vessel.Autopilot;
@@ -119,7 +119,7 @@ public class AttitudeController : ComplexControler
         if (Mathf.Abs(heading) < 2) heading = 0;
         // if (Mathf.Abs(z_direction) < 2) z_direction = 0;
 
-        isActive = UI_Tools.ToggleButton(isActive, "Start", "Stop");
+        isRunning = UI_Tools.ToggleButton(isRunning, "Start", "Stop");
 
         var telemetry = SASTool.getTelemetry();
 

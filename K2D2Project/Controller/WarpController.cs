@@ -29,17 +29,17 @@ public class WarpController : ComplexControler
 
         Instance = this;
         debug_mode = false;
-        Name = "Warp";
+        name = "Warp";
         warp = new WarpTo();
     }
 
     public override void onReset()
     {
-        isActive = false;
+        isRunning = false;
     }
 
     bool _active = false;
-    public override bool isActive
+    public override bool isRunning
     {
         get { return _active; }
         set
@@ -65,11 +65,11 @@ public class WarpController : ComplexControler
 
     public override void Update()
     {
-        if (!isActive) return;
+        if (!isRunning) return;
 
         warp.Update();
         if (warp.finished)
-            isActive = false;
+            isRunning = false;
     }
 
     public override void onGUI()
@@ -88,13 +88,13 @@ public class WarpController : ComplexControler
         UI_Tools.Console($"PatchStartTransition : {orbit.PatchStartTransition }");
         UI_Tools.Console($"PatchEndTransition : {orbit.PatchEndTransition }");
 
-        bool go = UI_Tools.ToggleButton(isActive, "Warp to SOI Change", "Stop");
-        if (go != isActive && go)
+        bool go = UI_Tools.ToggleButton(isRunning, "Warp to SOI Change", "Stop");
+        if (go != isRunning && go)
         {
             if (go)
                 warp.Start_Ut(orbit.timeToTransition1 + GeneralTools.Game.UniverseModel.UniversalTime + 60);
 
-            isActive = go;
+            isRunning = go;
         }
       
 

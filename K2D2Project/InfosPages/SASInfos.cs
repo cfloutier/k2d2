@@ -10,7 +10,7 @@ class SASInfos : BaseController
     public SASInfos()
     {
         debug_mode = true;
-        Name = "SAS Infos";
+        name = "SAS Infos";
     }
 
 

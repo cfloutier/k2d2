@@ -42,10 +42,10 @@ public class Settings
         set { s_settings_file.SetInt("window_y_pos", value); }
     }
 
-    public static int current_interface_mode
+    public static int main_tab_index
     {
-        get { return s_settings_file.GetInt("interface_setting", 0); }
-        set { s_settings_file.SetInt("interface_setting", value); }
+        get { return s_settings_file.GetInt("main_tab_index", 0); }
+        set { s_settings_file.SetInt("main_tab_index", value); }
     }
 
     public static void onGUI()

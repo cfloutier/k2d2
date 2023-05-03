@@ -18,7 +18,7 @@ class CircleController : BaseController
     {
         Instance = this;
         debug_mode = false;
-        Name = "Circle";
+        name = "Circle";
     }
 
     public override void Update()

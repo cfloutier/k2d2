@@ -19,15 +19,11 @@ public class K2D2Styles
         // Load specific icon and style here
         k2d2_big_icon = AssetsLoader.loadIcon("k2d2_big_icon");
 
+      //  guiLoaded = true;
         return true;
     }
 
     public static Texture2D k2d2_big_icon;
-
-
-
-
-
 }
 
 
@@ -204,7 +200,7 @@ public class GenericStyle
     }
 
     // icons
-    public static Texture2D gear, icon, k2d2_big_icon, mnc_icon, cross;
+    public static Texture2D gear, icon, mnc_icon, cross;
 
     static void BuildIcons()
     {

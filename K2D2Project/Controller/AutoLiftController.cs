@@ -82,16 +82,16 @@ public class AutoLiftController : ComplexControler
 
         Instance = this;
         debug_mode = false;
-        Name = "Lift";
+        name = "Lift";
     }
 
     public override void onReset()
     {
-        isActive = false;
+        isRunning = false;
     }
 
     bool _active = false;
-    public override bool isActive
+    public override bool isRunning
     {
         get { return _active; }
         set
@@ -183,12 +183,12 @@ public class AutoLiftController : ComplexControler
 
     public override void Update()
     {
-        if (!isActive && !ui_visible) return;
+        if (!isRunning && !ui_visible) return;
         if (current_vessel == null) return;
 
         computeValues();
 
-        if (!isActive)
+        if (!isRunning)
             return;
 
         applyDirection();
@@ -197,7 +197,7 @@ public class AutoLiftController : ComplexControler
         if (ap_km > lift_settings.destination_Ap_km)
         {
             current_vessel.SetThrottle(0);
-            isActive = false;
+            isRunning = false;
         }
     }
 
@@ -220,9 +220,9 @@ public class AutoLiftController : ComplexControler
             return;
         }
 
-        isActive = UI_Tools.ToggleButton(isActive, "Start", "Stop");
+        isRunning = UI_Tools.ToggleButton(isRunning, "Start", "Stop");
 
-        if (isActive)
+        if (isRunning)
         {
             UI_Tools.Console($"Altitude = {altitude_km:n2} km");
             UI_Tools.Console($"Apoapsis Alt. = {ap_km:n2} km");

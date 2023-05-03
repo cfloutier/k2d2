@@ -209,15 +209,16 @@ public class K2D2_Plugin : BaseSpaceWarpPlugin
 
         if (drawUI)
         {
-            GenericStyle.Init();
+            K2D2Styles.Init();
             GUI.skin = GenericStyle.skin;
 
             WindowTool.check_main_window_pos(ref windowRect);
+
             windowRect = GUILayout.Window(
                 GUIUtility.GetControlID(FocusType.Passive),
                 windowRect,
                 FillWindow,
-                "<color=#71DBDB>K2-D2</color>",
+                $"<color=#71DBDB>K2-D2</color>",
                 GUILayout.Height(0),
                 GUILayout.Width(350));
 
@@ -253,10 +254,14 @@ public class K2D2_Plugin : BaseSpaceWarpPlugin
         settings_visible = TopButtons.Toggle(settings_visible, GenericStyle.gear);
 
         if (Settings.debug_mode)
-            if (GUI.Button(new Rect(windowRect.width - 81, 4, 25, 25), "P", GenericStyle.small_button))
-                _popUp.isPopupVisible = !_popUp.isPopupVisible;
+        {
+            // if (GUI.Button(new Rect(windowRect.width - 81, 4, 25, 25), "P", GenericStyle.small_button))
+            //     _popUp.isPopupVisible = !_popUp.isPopupVisible;
+            if (TopButtons.Button("D"))
+                Settings.debug_mode = false;
+        }
 
-        GUI.Label(new Rect(9, 2, 29, 29), GenericStyle.k2d2_big_icon, GenericStyle.icons_label);
+        GUI.Label(new Rect(9, 2, 29, 29), K2D2Styles.k2d2_big_icon, GenericStyle.icons_label);
         GUILayout.BeginVertical();
 
         main_ui.onGUI();
@@ -286,7 +291,7 @@ public class K2D2_Plugin : BaseSpaceWarpPlugin
         {
             if (!instance.valid_maneuver) status = "Invalid Maneuvre Node";
             // else if (!AutoExecuteManeuver.Instance.canStart()) status = "No Future Maneuver Node";
-            else if (instance.isActive)
+            else if (instance.isRunning)
             {
                 if (instance.mode == AutoExecuteManeuver.Mode.Off) status = "Off";
                 else if (instance.mode == AutoExecuteManeuver.Mode.Turn)
