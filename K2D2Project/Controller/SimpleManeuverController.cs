@@ -1,187 +1,175 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reflection.Emit;
-using AwesomeTechnologies.VegetationSystem;
+﻿
 using BepInEx.Logging;
-using JetBrains.Annotations;
 using UnityEngine;
-using KSP.Game;
-using K2D2.KSPService;
-using K2D2;
-using K2D2.sources.Models;
-using KSP.Map;
-using KSP2FlightAssistant.MathLibrary;
-using KSP.Sim.Maneuver;
 using ManeuverProvider = K2D2.sources.KSPService.ManeuverProvider;
 
 #pragma warning disable CS0414
 
-namespace K2D2.Controller
+namespace K2D2.Controller;
+
+public class SimpleManeuverController : ButtonController
 {
-    public class SimpleManeuverController : ButtonController
+
+    ManualLogSource logger;
+    public Rect windowRect { get; set; }
+
+    public static SimpleManeuverController Instance { get; set; }
+
+    //private bool _circularizeApoapsis = false, _circularizePeriapsis = false, _hohmannTransfer = false;
+    private string distanceHohmannS = "0", timeHohmannS = "0";
+    double distanceHohmann = 0, timeHohmann = 0;
+    string periapsisS = "0", apoapsisS = "0";
+
+    private ManeuverProvider _maneuverProvider;
+
+    public SimpleManeuverController(ref ManeuverProvider maneuverProvider)
     {
+        debug_mode_only = true;
+        name = "Simple Maneuver Controller";
 
-        ManualLogSource logger;
-        public Rect windowRect { get; set; }
+        _maneuverProvider = maneuverProvider;
+        Instance = this;
+    }
 
-        public static SimpleManeuverController Instance { get; set; }
+    public SimpleManeuverController(ManualLogSource logger, ref ManeuverProvider maneuverProvider) : this(ref maneuverProvider)
+    {
+        this.logger = logger;
+        logger.LogMessage("SimpleManeuverController !");
+    }
 
-        //private bool _circularizeApoapsis = false, _circularizePeriapsis = false, _hohmannTransfer = false;
-        private string distanceHohmannS ="0", timeHohmannS="0";
-        double distanceHohmann = 0, timeHohmann = 0;
-        string periapsisS = "0", apoapsisS = "0";
 
-        private ManeuverProvider _maneuverProvider;
+    public override void Update()
+    {
+    }
 
-        public SimpleManeuverController(ref ManeuverProvider maneuverProvider)
+    public override void onGUI()
+    {
+        if (K2D2_Plugin.Instance.settings_visible)
         {
-            debug_mode = true;
-            Name = "Simple Maneuver Controller";
-
-            _maneuverProvider = maneuverProvider;
-            Instance = this;
+            K2D2Settings.onGUI();
+            return;
         }
 
-        public SimpleManeuverController(ManualLogSource logger, ref ManeuverProvider maneuverProvider):this(ref maneuverProvider)
+        if (_maneuverProvider == null)
         {
-            this.logger = logger;
-            logger.LogMessage("SimpleManeuverController !");
+            return;
+        }
+
+        if (GUILayout.Button("Circularize Node in Apoapsis"))
+        {
+            _maneuverProvider.CircularizeApoapsis();
+            if (!K2D2Settings.debug_mode)
+                _maneuverProvider.ManeuverManager.StartManeuver();
         }
 
 
-        public override void Update()
+        if (GUILayout.Button("Circularize Node in Periapsis"))
         {
+            _maneuverProvider.CircularizePeriapsis();
+            if (!K2D2Settings.debug_mode)
+                _maneuverProvider.ManeuverManager.StartManeuver();
         }
 
-        public override void onGUI()
+        if (GUILayout.Button("Circularize Hyperbolic Orbit"))
         {
-            if (K2D2_Plugin.Instance.settings_visible)
+            _maneuverProvider.CircularizeHyperbolicOrbit();
+            if (!K2D2Settings.debug_mode)
+                _maneuverProvider.ManeuverManager.StartManeuver();
+        }
+
+
+        GUILayout.Label("Periapsis (km):");
+        periapsisS = GUILayout.TextField(periapsisS);
+        GUILayout.Label("Apoapsis (km):");
+        apoapsisS = GUILayout.TextField(apoapsisS);
+
+        if (GUILayout.Button("Change Orbit"))
+        {
+            logger.LogMessage(GeneralTools.GetNumberString(periapsisS));
+            logger.LogMessage(GeneralTools.GetNumberString(apoapsisS));
+            _maneuverProvider.ChangeOrbit(GeneralTools.GetNumberString(periapsisS), GeneralTools.GetNumberString(apoapsisS));
+            if (!K2D2Settings.debug_mode)
+                _maneuverProvider.ManeuverManager.StartManeuver();
+            return;
+        }
+
+        GUILayout.Label("Hohmann Transfer Distance (km):");
+        distanceHohmannS = GUILayout.TextField(distanceHohmannS);
+        GUILayout.Label("Hohmann Transfer Time (s):");
+        timeHohmannS = GUILayout.TextField(timeHohmannS);
+
+
+
+        if (GUILayout.Button("Hohmann Transfer"))
+        {
+            distanceHohmann = GeneralTools.GetNumberString(distanceHohmannS);
+            timeHohmann = GeneralTools.GetNumberString(timeHohmannS);
+            if (distanceHohmann < 0 || timeHohmann < 0)
             {
-                Settings.onGUI();
+                GUILayout.Label("Invalid input");
+                logger.LogError("Invalid input: Hohmann Transfer");
                 return;
             }
 
-            if (_maneuverProvider == null)
+            try
             {
-                return;
-            }
-
-            if (GUILayout.Button("Circularize Node in Apoapsis"))
-            {
-                _maneuverProvider.CircularizeApoapsis();
-                if (!Settings.debug_mode)
-                    _maneuverProvider.ManeuverManager.StartManeuver();
-            }
 
 
-            if (GUILayout.Button("Circularize Node in Periapsis"))
-            {
-                _maneuverProvider.CircularizePeriapsis();
-                if (!Settings.debug_mode)
-                    _maneuverProvider.ManeuverManager.StartManeuver();
-            }
+                double UT = timeHohmann + Game.UniverseModel.UniversalTime;
+                logger.LogMessage("Hohmann Time: " + UT);
 
-            if (GUILayout.Button("Circularize Hyperbolic Orbit"))
-            {
-                _maneuverProvider.CircularizeHyperbolicOrbit();
-                if (!Settings.debug_mode)
-                    _maneuverProvider.ManeuverManager.StartManeuver();
-            }
+                //double deltaV = _maneuver.ChangePeriapsis(Math.Abs(distanceHohmann));//_maneuver.HohmannTransfer(UT, distance);
 
-
-            GUILayout.Label("Periapsis (km):");
-            periapsisS = GUILayout.TextField(periapsisS);
-            GUILayout.Label("Apoapsis (km):");
-            apoapsisS = GUILayout.TextField(apoapsisS);
-
-            if (GUILayout.Button("Change Orbit"))
-            {
-                logger.LogMessage(GeneralTools.GetNumberString(periapsisS));
-                logger.LogMessage(GeneralTools.GetNumberString(apoapsisS));
-                _maneuverProvider.ChangeOrbit(GeneralTools.GetNumberString(periapsisS), GeneralTools.GetNumberString(apoapsisS));
-                if (!Settings.debug_mode)
-                    _maneuverProvider.ManeuverManager.StartManeuver();
-                return;
-            }
-
-            GUILayout.Label("Hohmann Transfer Distance (km):");
-            distanceHohmannS = GUILayout.TextField(distanceHohmannS);
-            GUILayout.Label("Hohmann Transfer Time (s):");
-            timeHohmannS = GUILayout.TextField(timeHohmannS);
-
-
-
-            if (GUILayout.Button("Hohmann Transfer"))
-            {
-                distanceHohmann = GeneralTools.GetNumberString(distanceHohmannS);
-                timeHohmann = GeneralTools.GetNumberString(timeHohmannS);
-                if (distanceHohmann < 0 || timeHohmann < 0)
-                {
-                    GUILayout.Label("Invalid input");
-                    logger.LogError("Invalid input: Hohmann Transfer");
-                    return;
-                }
-
-                try
-                {
-
-
-                    double UT = timeHohmann + Game.UniverseModel.UniversalTime;
-                    logger.LogMessage("Hohmann Time: " + UT);
-
-                    //double deltaV = _maneuver.ChangePeriapsis(Math.Abs(distanceHohmann));//_maneuver.HohmannTransfer(UT, distance);
-
-                    //GUILayout.Label($"Required dV: {deltaV}");
-
-                }
-                catch (Exception e)
-                {
-                    logger.LogError(e.Message);
-                }
-            }
-
-            GUILayout.Label("Orbit Periapsis (km):");
-            periapsisS = GUILayout.TextField(periapsisS);
-            GUILayout.Label("Orbit Apoapsis (km):");
-            apoapsisS = GUILayout.TextField(apoapsisS);
-
-            if (GUILayout.Button("Set Orbit"))
-            {
-                double periapsis = GeneralTools.GetNumberString(periapsisS);
-                double apoapsis = GeneralTools.GetNumberString(apoapsisS);
-
-                if (periapsis < 0 || apoapsis < 0)
-                {
-                    GUILayout.Label("Invalid input");
-                    logger.LogError("Invalid input: Set Orbit");
-                    return;
-                }
-
-                if (periapsis > apoapsis)
-                {
-                    GUILayout.Label("Invalid input");
-                    logger.LogError("Invalid input: Set Orbit");
-                    return;
-                }
-
-                try
-                {
-                    // _maneuver.ChangeApoapsis(2500000);
-                    // _maneuver.ChangePeriapsis(1500000);
-
-
-                    //_maneuver.CreateOrbit(apoapsis, periapsis);
-
-
-                }
-                catch (Exception e)
-                {
-                    logger.LogError(e.Message);
-                }
+                //GUILayout.Label($"Required dV: {deltaV}");
 
             }
-
-            //Run();
+            catch (Exception e)
+            {
+                logger.LogError(e.Message);
+            }
         }
+
+        GUILayout.Label("Orbit Periapsis (km):");
+        periapsisS = GUILayout.TextField(periapsisS);
+        GUILayout.Label("Orbit Apoapsis (km):");
+        apoapsisS = GUILayout.TextField(apoapsisS);
+
+        if (GUILayout.Button("Set Orbit"))
+        {
+            double periapsis = GeneralTools.GetNumberString(periapsisS);
+            double apoapsis = GeneralTools.GetNumberString(apoapsisS);
+
+            if (periapsis < 0 || apoapsis < 0)
+            {
+                GUILayout.Label("Invalid input");
+                logger.LogError("Invalid input: Set Orbit");
+                return;
+            }
+
+            if (periapsis > apoapsis)
+            {
+                GUILayout.Label("Invalid input");
+                logger.LogError("Invalid input: Set Orbit");
+                return;
+            }
+
+            try
+            {
+                // _maneuver.ChangeApoapsis(2500000);
+                // _maneuver.ChangePeriapsis(1500000);
+
+
+                //_maneuver.CreateOrbit(apoapsis, periapsis);
+
+
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e.Message);
+            }
+
+        }
+
+        //Run();
     }
 }

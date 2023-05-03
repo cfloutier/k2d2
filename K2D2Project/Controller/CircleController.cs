@@ -1,55 +1,48 @@
 
 using BepInEx.Logging;
-using K2D2.Controller;
 using K2D2.KSPService;
-using KSP.Sim;
-using KSP.Sim.impl;
-using UnityEngine;
-using KSP.Sim.Maneuver;
-using System.Collections;
-using KSP.Map;
 
-namespace K2D2.Controller
+using K2D2.UI;
+namespace K2D2.Controller;
+
+/// a simple test page to add the simple circle maneuvers node made by @mole
+class CircleController : BaseController
 {
-    /// a simple test page to add the simple circle maneuvers node made by @mole
-    class CircleController : BaseController
+    public ManualLogSource logger = BepInEx.Logging.Logger.CreateLogSource("K2D2.CircleController");
+
+    ManeuverCreator maneuver_creator = new ManeuverCreator();
+
+    public static CircleController Instance { get; set; }
+
+    public CircleController()
     {
-        public ManualLogSource logger = BepInEx.Logging.Logger.CreateLogSource("K2D2.CircleController");
+        Instance = this;
+        debug_mode_only = true;
+        name = "Circle";
+    }
 
-        ManeuverCreator maneuver_creator = new ManeuverCreator();
+    public override void Update()
+    {
+        maneuver_creator.Update();
+    }
 
-        public static CircleController Instance { get; set; }
-
-        public CircleController()
+    public override void onGUI()
+    {
+        if (UI_Tools.SmallButton("Circularize At Ap"))
         {
-            Instance = this;
-            debug_mode = false;
-            Name = "Circle";
+            maneuver_creator.CircularizeOrbitApoapsis();
         }
 
-        public override void Update()
+        if (UI_Tools.SmallButton("Circularize At Pe"))
         {
-            maneuver_creator.Update();
+            maneuver_creator.CircularizeOrbitPeriapsis();
         }
 
-        public override void onGUI()
+        if (AutoExecuteManeuver.Instance.canStart())
         {
-            if (UI_Tools.SmallButton("Circularize At Ap"))
+            if (UI_Tools.SmallButton("Execute"))
             {
-                maneuver_creator.CircularizeOrbitApoapsis();
-            }
-
-            if (UI_Tools.SmallButton("Circularize At Pe"))
-            {
-                maneuver_creator.CircularizeOrbitPeriapsis();
-            }
-
-            if (AutoExecuteManeuver.Instance.canStart())
-            {
-                if (UI_Tools.SmallButton("Execute"))
-                {
-                    AutoExecuteManeuver.Instance.Start();
-                }
+                AutoExecuteManeuver.Instance.Start();
             }
         }
     }

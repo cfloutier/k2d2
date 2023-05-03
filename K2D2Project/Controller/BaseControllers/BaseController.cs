@@ -6,7 +6,7 @@ using KSP.Messages;
 
 namespace K2D2.Controller
 {
-    public class BaseController
+    public class BaseController : PageContent
     {
         //public List<KSP.Game.GameState> applicableStates = new List<KSP.Game.GameState>();
 
@@ -17,20 +17,42 @@ namespace K2D2.Controller
         // set my the main UI, update can be ignore if not active and not visible
         public bool ui_visible = false;
 
-        public bool debug_mode = true;
-        public string Name = "Unamed";
+        public bool debug_mode_only = true;
+        public string name = "Unamed";
+
+        public string Name
+        {
+            get
+            {
+                return name;
+            }
+        }
 
         public bool need_update
         {
-            get { return ui_visible || isActive; }
+            get { return ui_visible || isRunning; }
         }
 
-                // true if the controller is running
-        public virtual bool isActive
+        // true if the controller is running
+        public virtual bool isRunning
         {
-            get { return false;}
+            get { return false; }
             set { }
         }
+
+        public bool isActive
+        {
+            get {
+               
+                if (debug_mode_only && !K2D2Settings.debug_mode)
+                    return false;
+
+                return true; 
+            
+            } 
+        }
+
+        public bool UIVisible { get { return ui_visible; } set { ui_visible = value; } }
 
         public virtual void onReset()
         {

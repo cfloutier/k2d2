@@ -12,144 +12,208 @@ using K2D2.InfosPages;
 using KSP.Game;
 using KSP.Rendering.impl;
 
-namespace K2D2
+using K2D2.UI;
+
+namespace K2D2;
+
+
+public interface PageContent
 {
-    public class MainTabs
+    // Name drawn in the Tab button 
+    public string Name
     {
-        public static bool TabButton(bool is_current, bool isActive, string txt)
-        { 
-            GUIStyle style = isActive ? Styles.tab_active : Styles.tab_normal;
-            return GUILayout.Toggle(is_current, txt, style);
-        }
+        get;
     }
 
-    public class MainUI
+    // if is isRunning, UI is drawn lighted
+    public bool isRunning
     {
-        public ManualLogSource logger = BepInEx.Logging.Logger.CreateLogSource("K2D2.MainUI");
+        get;
+    }
 
-        bool init_done = false;
-        BaseController current_page = null;
-        public List<BaseController> pages = new List<BaseController>();
-        public List<BaseController> filtered_pages = new List<BaseController>();
+    // if isActive Tab is visible
+    public bool isActive
+    {
+        get;
+    }
 
-        public MainUI()
+    // usefull to knows is current page is visible (you can switch off not needed updates if not set)
+    public bool UIVisible
+    {
+        get;
+        set;
+    }
+
+    // Main Page UI called Here
+    public void onGUI();
+}
+
+
+
+public class ExTabPage
+{
+    public List<PageContent> pages = new List<PageContent>();
+
+    private List<PageContent> filtered_pages = new List<PageContent>();
+
+    PageContent current_page = null;
+
+    // must be called after adding pages
+   
+
+
+
+    private bool TabButton(bool is_current, bool isActive, string txt)
+    {
+        GUIStyle style = isActive ? GenericStyle.tab_active : GenericStyle.tab_normal;
+        return GUILayout.Toggle(is_current, txt, style);
+    }
+
+
+    List<float> tabs_Width = new List<float>();
+
+    public int DrawTabs(int current, float max_width = 300)
+    {
+       
+
+        current = GeneralTools.ClampInt(current, 0, filtered_pages.Count - 1);
+        GUILayout.BeginHorizontal();
+
+        int result = current;
+
+        // compute sizes
+        if (tabs_Width.Count != filtered_pages.Count)
         {
-
-        }
-
-
-        List<float> tabs_Width = new List<float>();
-
-        public int DrawTabs(int current, float max_width = 300)
-        {
-            current = GeneralTools.ClampInt(current, 0, filtered_pages.Count - 1);
-            GUILayout.BeginHorizontal();
-
-            int result = current;
-
-            // compute sizes
-            if (tabs_Width.Count != filtered_pages.Count)
-            {
-                tabs_Width.Clear();
-                for (int index = 0; index < filtered_pages.Count; index++)
-                {
-                    var page = filtered_pages[index];
-                    float minWidth , maxWidth;
-                    Styles.tab_normal.CalcMinMaxWidth(new GUIContent(page.Name, ""), out minWidth, out maxWidth);
-                    tabs_Width.Add(minWidth);
-                }
-            }
-            float xPos = 0;
-
+            tabs_Width.Clear();
             for (int index = 0; index < filtered_pages.Count; index++)
             {
                 var page = filtered_pages[index];
-
-                float width = tabs_Width[index];
-
-                if (xPos > max_width)
-                {
-                    GUILayout.EndHorizontal();
-                    GUILayout.BeginHorizontal();
-                    xPos = 0;
-                }
-                xPos += width;
-
-                bool is_current = current == index;
-                if (MainTabs.TabButton(is_current, page.isActive, page.Name))
-                {
-                    if (!is_current)
-
-                        result = index;
-                }
+                float minWidth, maxWidth;
+                GenericStyle.tab_normal.CalcMinMaxWidth(new GUIContent(page.Name, ""), out minWidth, out maxWidth);
+                tabs_Width.Add(minWidth);
             }
-
-            if (xPos < max_width * 0.7f)
-            {
-                GUILayout.FlexibleSpace();
-            }
-            GUILayout.EndHorizontal();
-
-            UI_Tools.Separator();
-            return result;
         }
+        float xPos = 0;
 
-        public void Update()
+        for (int index = 0; index < filtered_pages.Count; index++)
         {
-            if (!init_done)
+            var page = filtered_pages[index];
+
+            float width = tabs_Width[index];
+
+            if (xPos > max_width)
             {
-                pages.Add(AutoExecuteManeuver.Instance);
-                pages.Add(CircleController.Instance);
-
-                pages.Add(LandingController.Instance);
-                pages.Add(DroneController.Instance);
-
-                pages.Add(AutoLiftController.Instance);
-                pages.Add(AttitudeController.Instance);
-
-                pages.Add(SimpleManeuverController.Instance);
-                pages.Add(new OrbitInfos());
-                pages.Add(new K2D2.InfosPages.SASInfos());
-                pages.Add(new VesselInfos());
-
-                Settings.current_interface_mode = GeneralTools.ClampInt(Settings.current_interface_mode, 0, pages.Count - 1);
-                current_page = pages[Settings.current_interface_mode];
-                current_page.ui_visible = true;
-
-                init_done = true;
+                GUILayout.EndHorizontal();
+                GUILayout.BeginHorizontal();
+                xPos = 0;
             }
+            xPos += width;
 
-            if (Settings.debug_mode)
+            bool is_current = current == index;
+            if (TabButton(is_current, page.isRunning, page.Name))
             {
-                filtered_pages = pages;
-            }
-            else
-            {
-                filtered_pages = new List<BaseController>();
-                for (int index = 0; index < pages.Count; index++)
-                {
-                    if (!pages[index].debug_mode)
-                        filtered_pages.Add(pages[index]);
+                if (!is_current)
 
-                }
+                    result = index;
             }
         }
 
-        public void onGUI()
+        if (xPos < max_width * 0.7f)
         {
-            if (!init_done) return;
-
-            // string [] pages_str = Settings.debug_mode ? interfaceModes_debug : interfaceModes;
-            int result = DrawTabs(Settings.current_interface_mode);
-            if (result != Settings.current_interface_mode)
-            {
-                current_page.ui_visible = false;
-                Settings.current_interface_mode = result;
-                current_page = filtered_pages[Settings.current_interface_mode];
-                current_page.ui_visible = true;
-            }
-
-            pages[result].onGUI();
+            GUILayout.FlexibleSpace();
         }
+        GUILayout.EndHorizontal();
+
+        UI_Tools.Separator();
+        return result;
+    }
+
+
+    public void Init()
+    {
+        current_page = pages[Settings.main_tab_index];
+        current_page.UIVisible = true;
+    }
+
+    // must be called to rebuild the filtered_pages list 
+    public void Update()
+    {
+        filtered_pages = new List<PageContent>();
+        for (int index = 0; index < pages.Count; index++)
+        {
+            if (pages[index].isActive)
+                filtered_pages.Add(pages[index]);
+        }
+    }
+
+    public void onGUI()
+    {
+        int current_index = Settings.main_tab_index;
+
+        if (filtered_pages.Count == 0 )
+        {
+            UI_Tools.Error("NO active Tab tage !!!");
+            return;
+        }
+
+        current_index = GeneralTools.ClampInt(current_index, 0, filtered_pages.Count - 1);
+        int result = DrawTabs(current_index);
+        if (result != current_index)
+        {
+            current_page.UIVisible = false;
+            Settings.main_tab_index = result;
+            current_page = filtered_pages[result];
+            current_page.UIVisible = true;
+        }
+
+        current_page.onGUI();
+    }
+}
+
+public class MainUI
+{
+    public ManualLogSource logger = BepInEx.Logging.Logger.CreateLogSource("K2D2.MainUI");
+
+    bool init_done = false;
+
+    ExTabPage tabs = new ExTabPage();
+
+    public MainUI()
+    {
+
+    }
+
+    public void Update()
+    {
+        if (init_done)
+            tabs.Update();
+    }
+
+    public void onGUI()
+    {
+        if (!init_done)
+        {
+            tabs.pages.Add(AutoExecuteManeuver.Instance);
+            tabs.pages.Add(CircleController.Instance);
+
+            tabs.pages.Add(LandingController.Instance);
+            tabs.pages.Add(DroneController.Instance);
+
+            tabs.pages.Add(AutoLiftController.Instance);
+            tabs.pages.Add(AttitudeController.Instance);
+            tabs.pages.Add(WarpController.Instance);
+            tabs.pages.Add(new FindSecrets());
+            // waiting for mole
+            // pages.Add(SimpleManeuverController.Instance);
+            tabs.pages.Add(new OrbitInfos());
+            tabs.pages.Add(new K2D2.InfosPages.SASInfos());
+            tabs.pages.Add(new VesselInfos());
+
+            tabs.Init();
+
+            init_done = true;
+        }
+
+        tabs.onGUI();
     }
 }
