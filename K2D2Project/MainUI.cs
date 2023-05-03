@@ -19,9 +19,7 @@ namespace K2D2;
 
 public interface PageContent
 {
-    
-
-
+    // Name drawn in the Tab button 
     public string Name
     {
         get;
@@ -39,18 +37,15 @@ public interface PageContent
         get;
     }
 
-
+    // usefull to knows is current page is visible (you can switch off not needed updates if not set)
     public bool UIVisible
     {
         get;
         set;
     }
 
-
+    // Main Page UI called Here
     public void onGUI();
-
-
-
 }
 
 
@@ -79,11 +74,8 @@ public class ExTabPage
 
     public int DrawTabs(int current, float max_width = 300)
     {
-        if (filtered_pages.Count == 0 )
-        {
-            UI_Tools.Error("NO active Tab tage !!!");
-            return 0;
-        }
+       
+
         current = GeneralTools.ClampInt(current, 0, filtered_pages.Count - 1);
         GUILayout.BeginHorizontal();
 
@@ -139,7 +131,6 @@ public class ExTabPage
 
     public void Init()
     {
-        Settings.main_tab_index = GeneralTools.ClampInt(Settings.main_tab_index, 0, pages.Count - 1);
         current_page = pages[Settings.main_tab_index];
         current_page.UIVisible = true;
     }
@@ -157,6 +148,14 @@ public class ExTabPage
     public void onGUI()
     {
         int current_index = Settings.main_tab_index;
+
+        if (filtered_pages.Count == 0 )
+        {
+            UI_Tools.Error("NO active Tab tage !!!");
+            return;
+        }
+
+        current_index = GeneralTools.ClampInt(current_index, 0, filtered_pages.Count - 1);
         // string [] pages_str = Settings.debug_mode ? interfaceModes_debug : interfaceModes;
         int result = DrawTabs(current_index);
         if (result != current_index)
@@ -167,7 +166,7 @@ public class ExTabPage
             current_page.UIVisible = true;
         }
 
-        pages[result].onGUI();
+        current_page.onGUI();
     }
 }
 

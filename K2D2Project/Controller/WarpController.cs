@@ -28,7 +28,7 @@ public class WarpController : ComplexControler
         current_vessel = K2D2_Plugin.Instance.current_vessel;
 
         Instance = this;
-        debug_mode_only = false;
+        debug_mode_only = true;
         name = "Warp";
         warp = new WarpTo();
     }

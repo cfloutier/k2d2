@@ -17,7 +17,7 @@ class CircleController : BaseController
     public CircleController()
     {
         Instance = this;
-        debug_mode_only = false;
+        debug_mode_only = true;
         name = "Circle";
     }
 

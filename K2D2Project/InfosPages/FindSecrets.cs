@@ -24,10 +24,9 @@ public class FindSecrets : BaseController
     {
         // logger.LogMessage("LandingController !");
         current_vessel = K2D2_Plugin.Instance.current_vessel;
-        debug_mode_only = false;
+        debug_mode_only = true;
         name = "Secrets";
     }
-
 
     public override void Update()
     {

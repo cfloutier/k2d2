@@ -43,9 +43,9 @@ namespace K2D2.Controller
         public bool isActive
         {
             get {
-                return false;
-            /*    if (debug_mode_only && !K2D2Settings.debug_mode)
-                    return false;*/
+               
+                if (debug_mode_only && !K2D2Settings.debug_mode)
+                    return false;
 
                 return true; 
             
