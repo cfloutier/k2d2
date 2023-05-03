@@ -73,6 +73,9 @@ public class DroneSettings
     {
         UI_Tools.Title("Speed Controller Settings");
         speed_limit = UI_Tools.IntSlider("Min-Max Speed", (int)speed_limit, 5, 100, "m/s", "just affect the Main UI");
+
+        UI_Tools.Title($"Kill H_speed");
+        inclinaison_ratio = UI_Tools.FloatSliderTxt("Kill Speed Ratio", inclinaison_ratio, 0, 10, "", "", 0);
     }
 }
 
@@ -139,7 +142,6 @@ public class DroneController : ComplexControler
     KSPVessel current_vessel;
     BurndV burn_dV = new BurndV();
 
-    float gravity_inclination = 0;
     float gravity_direction_factor = 0;
     float gravity;
 
@@ -282,7 +284,7 @@ public class DroneController : ComplexControler
 
         // no stop for gravity compensation
         current_vessel.SetThrottle(wanted_throttle);
-
+        computHeading();
         if (settings.kill_h_speed)
         {
             // compute
@@ -292,33 +294,25 @@ public class DroneController : ComplexControler
         base.Update();
     }
 
-    void KillHSpeed()
+    void computHeading()
     {
         // use Up local coordinate as reference frame
         var Upcoords = current_vessel.VesselVehicle.Up.coordinateSystem;
         var SurfaceVelocity = Vector.Reframed(current_vessel.VesselVehicle.SurfaceVelocity, Upcoords).vector;
         var North = Vector.Reframed(current_vessel.VesselVehicle.North, Upcoords).vector;
-        var East = Vector.Reframed(current_vessel.VesselVehicle.East, Upcoords).vector;
-        var Up = Vector.Reframed(current_vessel.VesselVehicle.Up, Upcoords).vector;
-
-
-        // UI_Tools.Console($"Up : {StrTool.VectorToString(Up)}");
-        // //UI_Tools.Console($"Up coordinateSystem  : {Up.coordinateSystem}");
-
-        // UI_Tools.Console($"SurfaceVelocity : {StrTool.VectorToString(SurfaceVelocity)}");
-        // // UI_Tools.Console($"SurfaceVelocity coordinateSystem  : {SurfaceVelocity.coordinateSystem}");
-
-        // UI_Tools.Console($"North : {StrTool.VectorToString(North)}");
+        var Up = current_vessel.VesselVehicle.Up.vector;
 
         var UpSpeed = Up.normalized * Vector3d.Dot(SurfaceVelocity, Up);
         var LocalHSpeed = SurfaceVelocity - UpSpeed;
 
         // UI_Tools.Console($"UpSpeed : {StrTool.VectorToString(UpSpeed)}");
         // UI_Tools.Console($"LocalHSpeed : {StrTool.VectorToString(LocalHSpeed)}");
-
+        h_speed_heading = (float)-Vector3d.SignedAngle(LocalHSpeed.normalized, North, Up);
         retro_h_speed_heading = (float)-Vector3d.SignedAngle(-LocalHSpeed.normalized, North, Up);
-        // UI_Tools.Console($"SpeedHeading : {retro_h_speed_heading:n2} °");
+    }
 
+    void KillHSpeed()
+    {
         // set direction
         var autopilot = current_vessel.Autopilot;
         // force autopilot
@@ -341,6 +335,7 @@ public class DroneController : ComplexControler
         autopilot.SAS.SetTargetOrientation(direction_vector, false);
     }
 
+    float h_speed_heading = 0;
     float retro_h_speed_heading = 0;
 
     float elevation = 0;
@@ -360,7 +355,6 @@ public class DroneController : ComplexControler
 
 
         GUILayout.BeginHorizontal();
-
         settings.speed_mode = SpeedMode.SurfaceUp;
         var lock_sas = UI_Tools.Toggle(settings.sas_up, "SAS UP");
         if (lock_sas != settings.sas_up)
@@ -372,7 +366,6 @@ public class DroneController : ComplexControler
                 SASTool.setAutoPilot(AutopilotMode.StabilityAssist);
             settings.sas_up = lock_sas;
         }
-
 
         var kill_h_speed = UI_Tools.Toggle(settings.kill_h_speed, "Kill H Speed");
         if (kill_h_speed != settings.kill_h_speed)
@@ -408,21 +401,21 @@ public class DroneController : ComplexControler
         if (Mathf.Abs(settings.wanted_speed) < 0.3f)
             settings.wanted_speed = 0;
 
-        if (settings.kill_h_speed)
-        {
-            // UI_Tools.Console($"Kill H_speed");
-            settings.inclinaison_ratio = UI_Tools.FloatSliderTxt("Kill Speed Ratio", settings.inclinaison_ratio, 0, 10, "", "", 0);
-        }
-
         isActive = UI_Tools.ToggleButton(isActive, "Run", "Stop");
         if (!isActive)
             return;
 
         UI_Tools.Console($"V. Speed  : {V_Speed:n2} m/s");
-        UI_Tools.Console($"H. Speed  : {H_Speed:n2} m/s");
+        GUILayout.BeginHorizontal();
+        UI_Tools.Console($"H. Speed  : {H_Speed:n2} m/s"); 
+        UI_Tools.Console($"Heading  : {h_speed_heading:n2} °");
+        GUILayout.EndHorizontal();
 
-        if (burn_dV.burned_dV > 0)
-            UI_Tools.Console($"dV consumed : {burn_dV.burned_dV:n2} m/s");
+        GUILayout.BeginHorizontal();
+        UI_Tools.Console($"dV consumed : {burn_dV.burned_dV:n2} m/s");
+        if (UI_Tools.miniButton("Rst"))
+            burn_dV.reset();
+        GUILayout.EndHorizontal();
 
         if (Settings.debug_mode)
         {

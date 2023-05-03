@@ -20,7 +20,7 @@ public class MainTabs
 {
     public static bool TabButton(bool is_current, bool isActive, string txt)
     {
-        GUIStyle style = isActive ? K2D2Styles.tab_active : K2D2Styles.tab_normal;
+        GUIStyle style = isActive ? GenericStyle.tab_active : GenericStyle.tab_normal;
         return GUILayout.Toggle(is_current, txt, style);
     }
 }
@@ -57,7 +57,7 @@ public class MainUI
             {
                 var page = filtered_pages[index];
                 float minWidth, maxWidth;
-                K2D2Styles.tab_normal.CalcMinMaxWidth(new GUIContent(page.Name, ""), out minWidth, out maxWidth);
+                GenericStyle.tab_normal.CalcMinMaxWidth(new GUIContent(page.Name, ""), out minWidth, out maxWidth);
                 tabs_Width.Add(minWidth);
             }
         }
@@ -108,7 +108,8 @@ public class MainUI
 
             pages.Add(AutoLiftController.Instance);
             pages.Add(AttitudeController.Instance);
-
+            pages.Add(WarpController.Instance);
+            pages.Add(new FindSecrets());
             // waiting for mole
             // pages.Add(SimpleManeuverController.Instance);
             pages.Add(new OrbitInfos());

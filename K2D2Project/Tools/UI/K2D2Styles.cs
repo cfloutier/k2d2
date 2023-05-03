@@ -8,13 +8,43 @@ public class K2D2Styles
 {
     private static bool guiLoaded = false;
 
-
-    public static GUISkin skin;
-
-    public static void BuildStyles()
+    public static bool Init()
     {
         if (guiLoaded)
-            return;
+            return true;
+
+        if (!GenericStyle.Init())
+            return false;
+
+        // Load specific icon and style here
+        k2d2_big_icon = AssetsLoader.loadIcon("k2d2_big_icon");
+
+        return true;
+    }
+
+    public static Texture2D k2d2_big_icon;
+
+
+
+
+
+}
+
+
+public class GenericStyle
+{
+    public static bool Init()
+    {
+        return BuildStyles();
+    }
+
+    public static GUISkin skin;
+    private static bool guiLoaded = false;
+
+    public static bool BuildStyles()
+    {
+        if (guiLoaded)
+            return true;
 
         skin = CopySkin(Skins.ConsoleSkin);
 
@@ -29,6 +59,7 @@ public class K2D2Styles
         BuildLabels();
 
         guiLoaded = true;
+        return true;
     }
 
     public static GUIStyle error, warning, label, mid_text, console_text, phase_ok, phase_warning, phase_error;
@@ -180,7 +211,7 @@ public class K2D2Styles
         // icons
         gear = AssetsLoader.loadIcon("gear");
         icon = AssetsLoader.loadIcon("icon");
-        k2d2_big_icon = AssetsLoader.loadIcon("k2d2_big_icon");
+        
         // mnc_icon = AssetsLoader.loadIcon("mnc_new_icon_50");
         cross = AssetsLoader.loadIcon("Cross");
     }
@@ -297,10 +328,6 @@ public class K2D2Styles
     }
 
 
-
-
-
-
     public static GUIStyle foldout_close, foldout_open;
 
     static void BuildFoldout()
@@ -327,7 +354,6 @@ public class K2D2Styles
         foldout_open.active.background = AssetsLoader.loadIcon("Chapter_On_Active");
     }
 
-
     public static GUIStyle toggle;
     static void BuildToggle()
     {
@@ -349,14 +375,7 @@ public class K2D2Styles
         toggle.overflow = new RectOffset(0, 0, 0, 2);
     }
 
-    public static void Init()
-    {
-        if (!guiLoaded)
-        {
-            BuildStyles();
-        }
-    }
-
+   
     /// <summary>
     /// copy all styles from normal state to others
     /// </summary>

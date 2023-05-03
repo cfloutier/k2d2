@@ -1,8 +1,3 @@
-using UnityEngine;
-
-using System;
-
-
 namespace K2D2.UI;
 
 public class StrTool

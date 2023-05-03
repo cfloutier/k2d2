@@ -25,8 +25,7 @@
             "label": "open VisualStudio",
             "command": "./k2d2.sln",
             "type": "shell",
-            "args": [
-            ],
+            "args": [],
             "group": {
                 "kind": "build",
                 "isDefault": true

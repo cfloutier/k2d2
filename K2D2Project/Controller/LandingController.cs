@@ -118,7 +118,7 @@ public class LandingSettings
     {
         // UI_Tools.Title("// Touch Down");
 
-        GUILayout.Label("Start TouchDown Altitude : " + StrTool.DistanceToString(start_touchdown_altitude), K2D2Styles.slider_text);
+        GUILayout.Label("Start TouchDown Altitude : " + StrTool.DistanceToString(start_touchdown_altitude), GenericStyle.slider_text);
         start_touchdown_altitude = UI_Tools.FloatSlider(start_touchdown_altitude, 100, 5000, "Altitude for starting Touch-Down Phase");
 
         touch_down_ratio = UI_Tools.FloatSliderTxt("Altitude/speed ratio", touch_down_ratio, 0.5f, 3, "", "Speed is based on altitude");

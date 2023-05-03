@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using UnityEngine;
 
-
 namespace K2D2.UI;
 
 public class SimpleAccordion
@@ -34,7 +33,7 @@ public class SimpleAccordion
         for (int i = 0; i < chapters.Count; i++)
         {
             Chapter chapter = chapters[i];
-            var style = chapter.opened ? K2D2Styles.foldout_open : K2D2Styles.foldout_close;
+            var style = chapter.opened ? GenericStyle.foldout_open : GenericStyle.foldout_close;
             if (GUILayout.Button(chapter.Title, style))
             {
                 chapter.opened = !chapter.opened;
@@ -96,24 +95,24 @@ public class TopButtons
     static public bool Button(string txt)
     {
         position.x -= space;
-        return GUI.Button(position, txt, K2D2Styles.icon_button);
+        return GUI.Button(position, txt, GenericStyle.icon_button);
     }
     static public bool Button(Texture2D icon)
     {
         position.x -= space;
-        return GUI.Button(position, icon, K2D2Styles.icon_button);
+        return GUI.Button(position, icon, GenericStyle.icon_button);
     }
 
     static public bool Toggle(bool value, string txt)
     {
         position.x -= space;
-        return GUI.Toggle(position, value, txt, K2D2Styles.small_button);
+        return GUI.Toggle(position, value, txt, GenericStyle.small_button);
     }
 
     static public bool Toggle(bool value, Texture2D icon)
     {
         position.x -= space;
-        return GUI.Toggle(position, value, icon, K2D2Styles.small_button);
+        return GUI.Toggle(position, value, icon, GenericStyle.small_button);
     }
 }
 
@@ -147,20 +146,20 @@ public class UI_Tools
     public static bool Toggle(bool is_on, string txt, string tooltip = null)
     {
         if (tooltip != null)
-            return GUILayout.Toggle(is_on, new GUIContent(txt, tooltip), K2D2Styles.toggle);
+            return GUILayout.Toggle(is_on, new GUIContent(txt, tooltip), GenericStyle.toggle);
         else
-            return GUILayout.Toggle(is_on, txt, K2D2Styles.toggle);
+            return GUILayout.Toggle(is_on, txt, GenericStyle.toggle);
     }
 
     public static bool ToggleButton(bool is_on, string txt_run, string txt_stop)
     {
-        int height_bt = 30;
+        // int height_bt = 30;
         int min_width_bt = 150;
 
         var txt = is_on ? txt_stop : txt_run;
         // GUILayout.BeginHorizontal();
         // GUILayout.FlexibleSpace();
-        is_on = GUILayout.Toggle(is_on, txt, K2D2Styles.big_button, GUILayout.Height(height_bt), GUILayout.MinWidth(min_width_bt));
+        is_on = GUILayout.Toggle(is_on, txt, GenericStyle.big_button, GUILayout.MinWidth(min_width_bt));
         // GUILayout.FlexibleSpace();
         // GUILayout.EndHorizontal();
         return is_on;
@@ -168,79 +167,82 @@ public class UI_Tools
 
     public static bool BigButton(string txt)
     {
-        return GUILayout.Button(txt, K2D2Styles.big_button);
+        // int height_bt = 30;
+        int min_width_bt = 150;
+
+        return GUILayout.Button(txt, GenericStyle.big_button, GUILayout.MinWidth(min_width_bt));
     }
 
     public static bool SmallButton(string txt)
     {
-        return GUILayout.Button(txt, K2D2Styles.small_button);
+        return GUILayout.Button(txt, GenericStyle.small_button);
     }
 
     public static bool BigIconButton(string txt)
     {
-        return GUILayout.Button(txt, K2D2Styles.bigicon_button);
+        return GUILayout.Button(txt, GenericStyle.bigicon_button);
     }
 
     public static bool ListButton(string txt)
     {
-        return GUILayout.Button(txt, K2D2Styles.button, GUILayout.ExpandWidth(true));
+        return GUILayout.Button(txt, GenericStyle.button, GUILayout.ExpandWidth(true));
     }
 
     public static bool miniToggle(bool value, string txt, string tooltip)
     {
-        return GUILayout.Toggle(value, new GUIContent(txt, tooltip), K2D2Styles.small_button, GUILayout.Height(20));
+        return GUILayout.Toggle(value, new GUIContent(txt, tooltip), GenericStyle.small_button, GUILayout.Height(20));
     }
 
     public static bool miniButton(string txt, string tooltip = "")
     {
-        return GUILayout.Button(new GUIContent(txt, tooltip), K2D2Styles.small_button, GUILayout.Height(20));
+        return GUILayout.Button(new GUIContent(txt, tooltip), GenericStyle.small_button, GUILayout.Height(20));
     }
 
     public static bool ToolTipButton(string tooltip)
     {
-        return GUILayout.Button(new GUIContent("?", tooltip), K2D2Styles.small_button, GUILayout.Width(16), GUILayout.Height(20));
+        return GUILayout.Button(new GUIContent("?", tooltip), GenericStyle.small_button, GUILayout.Width(16), GUILayout.Height(20));
     }
 
     static public bool BigIconButton(Texture2D icon)
     {
-        return GUILayout.Button(icon, K2D2Styles.bigicon_button);
+        return GUILayout.Button(icon, GenericStyle.bigicon_button);
     }
 
     public static void Title(string txt)
     {
-        GUILayout.Label($"<b>{txt}</b>", K2D2Styles.title);
+        GUILayout.Label($"<b>{txt}</b>", GenericStyle.title);
     }
 
     public static void Label(string txt)
     {
-        GUILayout.Label(txt, K2D2Styles.label);
+        GUILayout.Label(txt, GenericStyle.label);
     }
 
     public static void OK(string txt)
     {
-        GUILayout.Label(txt, K2D2Styles.phase_ok);
+        GUILayout.Label(txt, GenericStyle.phase_ok);
     }
 
     public static void Warning(string txt)
     {
-        GUILayout.Label(txt, K2D2Styles.phase_warning);
+        GUILayout.Label(txt, GenericStyle.phase_warning);
     }
 
     public static void Error(string txt)
     {
-        GUILayout.Label(txt, K2D2Styles.phase_error);
+        GUILayout.Label(txt, GenericStyle.phase_error);
     }
 
 
 
     public static void Console(string txt)
     {
-        GUILayout.Label(txt, K2D2Styles.console_text);
+        GUILayout.Label(txt, GenericStyle.console_text);
     }
 
     public static void Mid(string txt)
     {
-        GUILayout.Label(txt, K2D2Styles.mid_text);
+        GUILayout.Label(txt, GenericStyle.mid_text);
     }
 
 
@@ -249,9 +251,9 @@ public class UI_Tools
     {
         string content = txt + $" : {value} " + postfix;
 
-        GUILayout.Label(content, K2D2Styles.slider_text);
+        GUILayout.Label(content, GenericStyle.slider_text);
         GUILayout.BeginHorizontal();
-        value = (int)GUILayout.HorizontalSlider((int)value, min, max, K2D2Styles.slider_line, K2D2Styles.slider_node);
+        value = (int)GUILayout.HorizontalSlider((int)value, min, max, GenericStyle.slider_line, GenericStyle.slider_node);
         if (value < min) value = min;
         if (value > max) value = max;
 
@@ -267,9 +269,9 @@ public class UI_Tools
     {
         string value_str = value.ToString("N" + 1);
         string content = $"{txt} : {value_str} °";
-        GUILayout.Label(content, K2D2Styles.slider_text);
+        GUILayout.Label(content, GenericStyle.slider_text);
         GUILayout.BeginHorizontal();
-        value = GUILayout.HorizontalSlider(value, -180, 180, K2D2Styles.slider_line, K2D2Styles.slider_node);
+        value = GUILayout.HorizontalSlider(value, -180, 180, GenericStyle.slider_line, GenericStyle.slider_node);
 
         int step = 45;
         float precision = 5;
@@ -296,7 +298,7 @@ public class UI_Tools
 
     public static void Separator()
     {
-        GUILayout.Box("", K2D2Styles.separator);
+        GUILayout.Box("", GenericStyle.separator);
     }
 
     public static void ProgressBar(double value, double min, double max)
@@ -308,18 +310,18 @@ public class UI_Tools
     {
         var ratio = Mathf.InverseLerp(min, max, value);
 
-        GUILayout.Box("", K2D2Styles.progress_bar_empty, GUILayout.ExpandWidth(true));
+        GUILayout.Box("", GenericStyle.progress_bar_empty, GUILayout.ExpandWidth(true));
         var lastrect = GUILayoutUtility.GetLastRect();
 
         lastrect.width = Mathf.Clamp(lastrect.width * ratio, 4, 10000000);
-        GUI.Box(lastrect, "", K2D2Styles.progress_bar_full);
+        GUI.Box(lastrect, "", GenericStyle.progress_bar_full);
     }
 
     public static float FloatSlider(float value, float min, float max, string tooltip = "")
     {
         // simple float slider
         GUILayout.BeginHorizontal();
-        value = GUILayout.HorizontalSlider(value, min, max, K2D2Styles.slider_line, K2D2Styles.slider_node);
+        value = GUILayout.HorizontalSlider(value, min, max, GenericStyle.slider_line, GenericStyle.slider_node);
 
         if (!string.IsNullOrEmpty(tooltip))
         {
@@ -338,7 +340,7 @@ public class UI_Tools
 
         string content = $"{txt} : {value_str} {postfix}";
 
-        GUILayout.Label(content, K2D2Styles.slider_text);
+        GUILayout.Label(content, GenericStyle.slider_text);
         value = FloatSlider(value, min, max, tooltip);
         return value;
     }

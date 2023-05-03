@@ -8,8 +8,7 @@ using BepInEx.Logging;
 
 using System.Threading;
 
-
-namespace K2D2;
+namespace K2D2.Tools;
 
 public class SettingsFile
 {

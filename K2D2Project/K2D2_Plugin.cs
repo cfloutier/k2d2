@@ -140,6 +140,7 @@ public class K2D2_Plugin : BaseSpaceWarpPlugin
         controllerManager.AddController(new AttitudeController());
         controllerManager.AddController(new AutoLiftController());
         controllerManager.AddController(new CircleController());
+        controllerManager.AddController(new WarpController());
 
         // Add PopUp Tabs here:
         _popUpContent = new PopUpContent(ref _popUp);
@@ -208,8 +209,8 @@ public class K2D2_Plugin : BaseSpaceWarpPlugin
 
         if (drawUI)
         {
-            K2D2Styles.Init();
-            GUI.skin = K2D2Styles.skin;
+            GenericStyle.Init();
+            GUI.skin = GenericStyle.skin;
 
             WindowTool.check_main_window_pos(ref windowRect);
             windowRect = GUILayout.Window(
@@ -245,17 +246,17 @@ public class K2D2_Plugin : BaseSpaceWarpPlugin
     private void FillWindow(int windowID)
     {
         TopButtons.Init(windowRect.width);
-        if (TopButtons.Button(K2D2Styles.cross))
+        if (TopButtons.Button(GenericStyle.cross))
             ToggleAppBarButton(false);
 
         // settings button
-        settings_visible = TopButtons.Toggle(settings_visible, K2D2Styles.gear);
+        settings_visible = TopButtons.Toggle(settings_visible, GenericStyle.gear);
 
         if (Settings.debug_mode)
-            if (GUI.Button(new Rect(windowRect.width - 81, 4, 25, 25), "P", K2D2Styles.small_button))
+            if (GUI.Button(new Rect(windowRect.width - 81, 4, 25, 25), "P", GenericStyle.small_button))
                 _popUp.isPopupVisible = !_popUp.isPopupVisible;
 
-        GUI.Label(new Rect(9, 2, 29, 29), K2D2Styles.k2d2_big_icon, K2D2Styles.icons_label);
+        GUI.Label(new Rect(9, 2, 29, 29), GenericStyle.k2d2_big_icon, GenericStyle.icons_label);
         GUILayout.BeginVertical();
 
         main_ui.onGUI();

@@ -51,5 +51,13 @@ class OrbitInfos : BaseController
             var dt = GeneralTools.Game.UniverseModel.UniversalTime - orbit.collisionPointUT;
             UI_Tools.Console($"collision in  {StrTool.DurationToString(dt)}");
         }
+        else if (orbit.PatchEndTransition == PatchTransitionType.Escape)
+        {
+            UI_Tools.Console($"Leaving SOI in {StrTool.DurationToString(orbit.timeToTransition2)}");
+        }
+        else if (orbit.PatchEndTransition == PatchTransitionType.Encounter)
+        {
+            UI_Tools.Console($"Entering SOI in {StrTool.DurationToString(orbit.timeToTransition2)}");
+        }
     }
 }
