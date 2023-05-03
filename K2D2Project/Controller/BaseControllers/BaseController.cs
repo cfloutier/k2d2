@@ -17,12 +17,15 @@ namespace K2D2.Controller
         // set my the main UI, update can be ignore if not active and not visible
         public bool ui_visible = false;
 
-        public bool debug_mode = true;
+        public bool debug_mode_only = true;
         public string name = "Unamed";
 
         public string Name
         {
-            get { return Name; }
+            get
+            {
+                return name;
+            }
         }
 
         public bool need_update
@@ -37,7 +40,17 @@ namespace K2D2.Controller
             set { }
         }
 
-        public bool isActive        {            get            {                return Settings.debug_mode;            }        }
+        public bool isActive
+        {
+            get {
+                return false;
+            /*    if (debug_mode_only && !K2D2Settings.debug_mode)
+                    return false;*/
+
+                return true; 
+            
+            } 
+        }
 
         public bool UIVisible { get { return ui_visible; } set { ui_visible = value; } }
 

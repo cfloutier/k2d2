@@ -24,7 +24,7 @@ public class SimpleManeuverController : ButtonController
 
     public SimpleManeuverController(ref ManeuverProvider maneuverProvider)
     {
-        debug_mode = true;
+        debug_mode_only = true;
         name = "Simple Maneuver Controller";
 
         _maneuverProvider = maneuverProvider;
@@ -46,7 +46,7 @@ public class SimpleManeuverController : ButtonController
     {
         if (K2D2_Plugin.Instance.settings_visible)
         {
-            Settings.onGUI();
+            K2D2Settings.onGUI();
             return;
         }
 
@@ -58,7 +58,7 @@ public class SimpleManeuverController : ButtonController
         if (GUILayout.Button("Circularize Node in Apoapsis"))
         {
             _maneuverProvider.CircularizeApoapsis();
-            if (!Settings.debug_mode)
+            if (!K2D2Settings.debug_mode)
                 _maneuverProvider.ManeuverManager.StartManeuver();
         }
 
@@ -66,14 +66,14 @@ public class SimpleManeuverController : ButtonController
         if (GUILayout.Button("Circularize Node in Periapsis"))
         {
             _maneuverProvider.CircularizePeriapsis();
-            if (!Settings.debug_mode)
+            if (!K2D2Settings.debug_mode)
                 _maneuverProvider.ManeuverManager.StartManeuver();
         }
 
         if (GUILayout.Button("Circularize Hyperbolic Orbit"))
         {
             _maneuverProvider.CircularizeHyperbolicOrbit();
-            if (!Settings.debug_mode)
+            if (!K2D2Settings.debug_mode)
                 _maneuverProvider.ManeuverManager.StartManeuver();
         }
 
@@ -88,7 +88,7 @@ public class SimpleManeuverController : ButtonController
             logger.LogMessage(GeneralTools.GetNumberString(periapsisS));
             logger.LogMessage(GeneralTools.GetNumberString(apoapsisS));
             _maneuverProvider.ChangeOrbit(GeneralTools.GetNumberString(periapsisS), GeneralTools.GetNumberString(apoapsisS));
-            if (!Settings.debug_mode)
+            if (!K2D2Settings.debug_mode)
                 _maneuverProvider.ManeuverManager.StartManeuver();
             return;
         }

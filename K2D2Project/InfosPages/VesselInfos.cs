@@ -12,7 +12,7 @@ class VesselInfos : BaseController
 {
     public VesselInfos()
     {
-        debug_mode = true;
+        debug_mode_only = true;
         name = "Vessel Infos";
     }
 
@@ -22,7 +22,7 @@ class VesselInfos : BaseController
     {
         if (K2D2_Plugin.Instance.settings_visible)
         {
-            Settings.onGUI();
+            K2D2Settings.onGUI();
             return;
         }
 

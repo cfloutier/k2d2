@@ -17,50 +17,50 @@ public class AutoLiftSettings
 {
     public float heading
     {
-        get => Settings.s_settings_file.GetFloat("lift.heading", 90);
+        get => Settings.sfile.GetFloat("lift.heading", 90);
         set
         {
             // value = Mathf.Clamp(value, 0 , 1);
-            Settings.s_settings_file.SetFloat("lift.heading", value);
+            Settings.sfile.SetFloat("lift.heading", value);
         }
     }
 
     public int start_altitude_km
     {
-        get => Settings.s_settings_file.GetInt("lift.start_altitude_km", 2);
+        get => Settings.sfile.GetInt("lift.start_altitude_km", 2);
         set
         {
             // value = Mathf.Clamp(value, 0 , 1);
-            Settings.s_settings_file.SetInt("lift.start_altitude_km", value);
+            Settings.sfile.SetInt("lift.start_altitude_km", value);
         }
     }
 
     public float mid_rotate_ratio
     {
-        get => Settings.s_settings_file.GetFloat("lift.mid_rotate_ratio", 0.2f);
+        get => Settings.sfile.GetFloat("lift.mid_rotate_ratio", 0.2f);
         set
         {
             value = Mathf.Clamp(value, 0, end_rotate_ratio);
-            Settings.s_settings_file.SetFloat("lift.mid_rotate_ratio", value);
+            Settings.sfile.SetFloat("lift.mid_rotate_ratio", value);
         }
     }
 
     public float end_rotate_ratio
     {
-        get => Settings.s_settings_file.GetFloat("lift.end_rotate_ratio", 0.5f);
+        get => Settings.sfile.GetFloat("lift.end_rotate_ratio", 0.5f);
         set
         {
             value = Mathf.Clamp(value, mid_rotate_ratio, 1);
-            Settings.s_settings_file.SetFloat("lift.end_rotate_ratio", value);
+            Settings.sfile.SetFloat("lift.end_rotate_ratio", value);
         }
     }
 
     public int destination_Ap_km
     {
-        get => Settings.s_settings_file.GetInt("lift.destination_Ap_km", 100);
+        get => Settings.sfile.GetInt("lift.destination_Ap_km", 100);
         set
         {
-            Settings.s_settings_file.SetInt("lift.destination_Ap_km", value);
+            Settings.sfile.SetInt("lift.destination_Ap_km", value);
         }
     }
 }
@@ -81,7 +81,7 @@ public class AutoLiftController : ComplexControler
         current_vessel = K2D2_Plugin.Instance.current_vessel;
 
         Instance = this;
-        debug_mode = false;
+        debug_mode_only = false;
         name = "Lift";
     }
 
@@ -205,7 +205,7 @@ public class AutoLiftController : ComplexControler
     {
         if (K2D2_Plugin.Instance.settings_visible)
         {
-            Settings.onGUI();
+            K2D2Settings.onGUI();
             lift_settings.heading = UI_Tools.HeadingSlider("heading", lift_settings.heading);
 
             lift_settings.start_altitude_km = UI_Fields.IntField("lift.start_altitude_km", "90° Alt (km)", lift_settings.start_altitude_km, 0, Int32.MaxValue);

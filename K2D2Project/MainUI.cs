@@ -46,7 +46,7 @@ public interface PageContent
         set;
     }
 
-    
+
     public void onGUI();
 
 
@@ -79,6 +79,11 @@ public class ExTabPage
 
     public int DrawTabs(int current, float max_width = 300)
     {
+        if (filtered_pages.Count == 0 )
+        {
+            UI_Tools.Error("NO active Tab tage !!!");
+            return 0;
+        }
         current = GeneralTools.ClampInt(current, 0, filtered_pages.Count - 1);
         GUILayout.BeginHorizontal();
 
@@ -144,14 +149,13 @@ public class ExTabPage
         filtered_pages = new List<PageContent>();
         for (int index = 0; index < pages.Count; index++)
         {
-            if (!pages[index].isActive)
+            if (pages[index].isActive)
                 filtered_pages.Add(pages[index]);
         }
     }
 
     public void onGUI()
     {
-
         int current_index = Settings.main_tab_index;
         // string [] pages_str = Settings.debug_mode ? interfaceModes_debug : interfaceModes;
         int result = DrawTabs(current_index);

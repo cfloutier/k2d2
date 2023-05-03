@@ -253,12 +253,12 @@ public class K2D2_Plugin : BaseSpaceWarpPlugin
         // settings button
         settings_visible = TopButtons.Toggle(settings_visible, GenericStyle.gear);
 
-        if (Settings.debug_mode)
+        if (K2D2Settings.debug_mode)
         {
             // if (GUI.Button(new Rect(windowRect.width - 81, 4, 25, 25), "P", GenericStyle.small_button))
             //     _popUp.isPopupVisible = !_popUp.isPopupVisible;
             if (TopButtons.Button("D"))
-                Settings.debug_mode = false;
+                K2D2Settings.debug_mode = false;
         }
 
         GUI.Label(new Rect(9, 2, 29, 29), K2D2Styles.k2d2_big_icon, GenericStyle.icons_label);

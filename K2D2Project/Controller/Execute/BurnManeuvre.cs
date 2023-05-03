@@ -14,29 +14,29 @@ class BurnManeuvreSettings
 
     public static float burn_adjust
     {
-        get => Settings.s_settings_file.GetFloat("warp.burn_adjust", 1.5f);
+        get => Settings.sfile.GetFloat("warp.burn_adjust", 1.5f);
         set
         {             // value = Mathf.Clamp(0.1,)
-            Settings.s_settings_file.SetFloat("warp.burn_adjust", value);
+            Settings.sfile.SetFloat("warp.burn_adjust", value);
         }
     }
 
     public static float max_dv_error
     {
-        get => Settings.s_settings_file.GetFloat("warp.max_dv_error", 0.1f);
+        get => Settings.sfile.GetFloat("warp.max_dv_error", 0.1f);
         set
         {             // value = Mathf.Clamp(0.1,)
-            Settings.s_settings_file.SetFloat("warp.max_dv_error", value);
+            Settings.sfile.SetFloat("warp.max_dv_error", value);
         }
     }
 
     static public bool rotate_during_burn
     {
-        get => Settings.s_settings_file.GetBool("land.rotate_during_burn", false);
+        get => Settings.sfile.GetBool("land.rotate_during_burn", false);
         set
         {
             // value = Mathf.Clamp(value, 0 , 1);
-            Settings.s_settings_file.SetBool("land.rotate_during_burn", value);
+            Settings.sfile.SetBool("land.rotate_during_burn", value);
         }
     }
 
@@ -236,7 +236,7 @@ public class BurnManeuvre : ExecuteController
                 break;
         }
 
-        if (Settings.debug_mode)
+        if (K2D2Settings.debug_mode)
         {
             if (maneuver == null) return;
 

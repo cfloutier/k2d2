@@ -19,21 +19,21 @@ public class ExecuteSettings
 {
     public bool show_node_infos
     {
-        get => Settings.s_settings_file.GetBool("execute.show_node_infos", true);
+        get => Settings.sfile.GetBool("execute.show_node_infos", true);
         set
         {
             // value = Mathf.Clamp(value, 0 , 1);
-            Settings.s_settings_file.SetBool("execute.show_node_infos", value);
+            Settings.sfile.SetBool("execute.show_node_infos", value);
         }
     }
 
     public bool auto_warp
     {
-        get => Settings.s_settings_file.GetBool("execute.auto_warp", true);
+        get => Settings.sfile.GetBool("execute.auto_warp", true);
         set
         {
             // value = Mathf.Clamp(value, 0 , 1);
-            Settings.s_settings_file.SetBool("execute.auto_warp", value);
+            Settings.sfile.SetBool("execute.auto_warp", value);
         }
     }
 
@@ -42,21 +42,21 @@ public class ExecuteSettings
     private static string[] StartMode_Labels = { "T0", "before", "mid-duration" };
     public StartMode start_mode
     {
-        get => Settings.s_settings_file.GetEnum<StartMode>("execute.start_mode", StartMode.precise);
+        get => Settings.sfile.GetEnum<StartMode>("execute.start_mode", StartMode.precise);
         set
         {
             // value = Mathf.Clamp(value, 0 , 1);
-            Settings.s_settings_file.SetEnum<StartMode>("execute.start_mode", value);
+            Settings.sfile.SetEnum<StartMode>("execute.start_mode", value);
         }
     }
 
     public float start_before
     {
-        get => Settings.s_settings_file.GetFloat("execute.start_before", 1);
+        get => Settings.sfile.GetFloat("execute.start_before", 1);
         set
         {
             // value = Mathf.Clamp(value, 0 , 1);
-            Settings.s_settings_file.SetFloat("execute.start_before", value);
+            Settings.sfile.SetFloat("execute.start_before", value);
         }
     }
 
@@ -109,7 +109,7 @@ public class AutoExecuteManeuver : ComplexControler
     public AutoExecuteManeuver()
     {
         Instance = this;
-        debug_mode = false;
+        debug_mode_only = false;
         name = "Node";
 
         sub_contollers.Add(current_executor);
@@ -217,7 +217,7 @@ public class AutoExecuteManeuver : ComplexControler
         if (K2D2_Plugin.Instance.settings_visible)
         {
             // default Settings UI
-            Settings.onGUI();
+            K2D2Settings.onGUI();
             settingsUI();
             return;
         }
@@ -252,7 +252,7 @@ public class AutoExecuteManeuver : ComplexControler
         isRunning = UI_Tools.ToggleButton(isRunning, "Run", "Stop");
 
         current_executor.onGUI();
-        if (!Settings.auto_next)
+        if (!K2D2Settings.auto_next)
         {
             UI_Tools.Label($"finished {current_executor.finished}");
             if (!current_executor.finished)
@@ -327,7 +327,7 @@ public class AutoExecuteManeuver : ComplexControler
             burn.UT = UT;
         }
 
-        if (current_executor.finished && Settings.auto_next)
+        if (current_executor.finished && K2D2Settings.auto_next)
         {
             // auto next
             nextMode();
@@ -340,12 +340,12 @@ public class AutoExecuteManeuver : ComplexControler
     void settingsUI()
     {
 
-        if (Settings.debug_mode)
+        if (K2D2Settings.debug_mode)
         {
-            Settings.auto_next = UI_Tools.Toggle(Settings.auto_next, "Auto Next Phase", "Debug Mode : Need to press next");
+            K2D2Settings.auto_next = UI_Tools.Toggle(K2D2Settings.auto_next, "Auto Next Phase", "Debug Mode : Need to press next");
         }
         else
-            Settings.auto_next = true;
+            K2D2Settings.auto_next = true;
 
         if (accordion.Count == 0)
         {
@@ -377,7 +377,7 @@ public class AutoExecuteManeuver : ComplexControler
         UI_Tools.Label($"dV {current_maneuvre_node.BurnRequiredDV:n2} m/s");
         UI_Tools.Label($"Duration {StrTool.DurationToString(current_maneuvre_node.BurnDuration)}");
 
-        if (Settings.debug_mode)
+        if (K2D2Settings.debug_mode)
         {
             if (dt < 0)
             {

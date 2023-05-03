@@ -15,33 +15,33 @@ public class LandingSettings
 {
     public bool verbose_infos
     {
-        get => Settings.s_settings_file.GetBool("land.verbose_infos", true);
-        set { Settings.s_settings_file.SetBool("land.verbose_infos", value); }
+        get => Settings.sfile.GetBool("land.verbose_infos", true);
+        set { Settings.sfile.SetBool("land.verbose_infos", value); }
     }
 
     public bool auto_warp
     {
-        get => Settings.s_settings_file.GetBool("land.auto_warp", true);
-        set { Settings.s_settings_file.SetBool("land.auto_warp", value); }
+        get => Settings.sfile.GetBool("land.auto_warp", true);
+        set { Settings.sfile.SetBool("land.auto_warp", value); }
     }
 
     public float burn_before
     {
-        get => Settings.s_settings_file.GetFloat("land.burnBefore", 0f);
-        set { Settings.s_settings_file.SetFloat("land.burnBefore", value); }
+        get => Settings.sfile.GetFloat("land.burnBefore", 0f);
+        set { Settings.sfile.SetFloat("land.burnBefore", value); }
     }
 
     // Warp with check of rotation
     public int rotation_warp_duration
     {
-        get => Settings.s_settings_file.GetInt("land.rotation_warp_duration", 60);
-        set { Settings.s_settings_file.SetInt("land.rotation_warp_duration", value); }
+        get => Settings.sfile.GetInt("land.rotation_warp_duration", 60);
+        set { Settings.sfile.SetInt("land.rotation_warp_duration", value); }
     }
 
     public float max_rotation
     {
-        get => Settings.s_settings_file.GetFloat("land.max_rotation", 30);
-        set { Settings.s_settings_file.SetFloat("land.max_rotation", value); }
+        get => Settings.sfile.GetFloat("land.max_rotation", 30);
+        set { Settings.sfile.SetFloat("land.max_rotation", value); }
     }
 
 
@@ -63,23 +63,23 @@ public class LandingSettings
 
     public float start_touchdown_altitude
     {
-        get => Settings.s_settings_file.GetFloat("land.touch_down_altitude", 1500);
-        set { Settings.s_settings_file.SetFloat("land.touch_down_altitude", value); }
+        get => Settings.sfile.GetFloat("land.touch_down_altitude", 1500);
+        set { Settings.sfile.SetFloat("land.touch_down_altitude", value); }
     }
 
     public float touch_down_ratio
     {
-        get => Settings.s_settings_file.GetFloat("land.touch_down_ratio", 0.5f);
-        set { Settings.s_settings_file.SetFloat("land.touch_down_ratio", value); }
+        get => Settings.sfile.GetFloat("land.touch_down_ratio", 0.5f);
+        set { Settings.sfile.SetFloat("land.touch_down_ratio", value); }
     }
 
     public float touch_down_speed
     {
-        get => Settings.s_settings_file.GetFloat("land.touch_down_speed", 4);
+        get => Settings.sfile.GetFloat("land.touch_down_speed", 4);
         set
         {
             value = Mathf.Clamp(value, 0, 100);
-            Settings.s_settings_file.SetFloat("land.touch_down_speed", value);
+            Settings.sfile.SetFloat("land.touch_down_speed", value);
         }
     }
 
@@ -99,7 +99,7 @@ public class LandingSettings
         {
             WarpToSettings.onGUI();
 
-            if (Settings.debug_mode)
+            if (K2D2Settings.debug_mode)
             {
                 UI_Tools.Title("// Rotation Warp");
                 rotation_warp_duration = UI_Fields.IntField("rotation_warp_duration", "Rot. Warp Duration", rotation_warp_duration, 0, int.MaxValue,
@@ -170,7 +170,7 @@ public class LandingController : ComplexControler
     public LandingController()
     {
         Instance = this;
-        debug_mode = false;
+        debug_mode_only = false;
         name = "Landing";
 
         sub_contollers.Add(burn_dV);
@@ -538,7 +538,7 @@ public class LandingController : ComplexControler
     {
         if (K2D2_Plugin.Instance.settings_visible)
         {
-            Settings.onGUI();
+            K2D2Settings.onGUI();
             land_settings.settings_UI();
             return;
         }

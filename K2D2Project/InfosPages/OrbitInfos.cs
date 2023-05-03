@@ -12,7 +12,7 @@ class OrbitInfos : BaseController
 
     public OrbitInfos()
     {
-        debug_mode = true;
+        debug_mode_only = true;
         name = "Orbit Infos";
     }
 
@@ -21,10 +21,9 @@ class OrbitInfos : BaseController
     {
         if (K2D2_Plugin.Instance.settings_visible)
         {
-            Settings.onGUI();
+            K2D2Settings.onGUI();
             return;
         }
-
 
         var current_vessel = K2D2_Plugin.Instance.current_vessel;
         PatchedConicsOrbit orbit = current_vessel.VesselComponent.Orbit;

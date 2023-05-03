@@ -17,55 +17,55 @@ public class DroneSettings
 {
     public DroneController.SpeedMode speed_mode
     {
-        get => Settings.s_settings_file.GetEnum<DroneController.SpeedMode>("speed.direction", 0);
+        get => Settings.sfile.GetEnum<DroneController.SpeedMode>("speed.direction", 0);
         set
         {
-            Settings.s_settings_file.SetEnum<DroneController.SpeedMode>("speed.direction", value);
+            Settings.sfile.SetEnum<DroneController.SpeedMode>("speed.direction", value);
         }
     }
 
     public float wanted_speed
     {
-        get => Settings.s_settings_file.GetFloat("speed.wanted_speed", 0);
+        get => Settings.sfile.GetFloat("speed.wanted_speed", 0);
         set
         {
-            Settings.s_settings_file.SetFloat("speed.wanted_speed", value);
+            Settings.sfile.SetFloat("speed.wanted_speed", value);
         }
     }
 
     public int speed_limit
     {
-        get => Settings.s_settings_file.GetInt("speed.speed_limit", 10);
+        get => Settings.sfile.GetInt("speed.speed_limit", 10);
         set
         {
-            Settings.s_settings_file.SetInt("speed.speed_limit", value);
+            Settings.sfile.SetInt("speed.speed_limit", value);
         }
     }
 
     public bool sas_up
     {
-        get => Settings.s_settings_file.GetBool("speed.lock_sas", true);
+        get => Settings.sfile.GetBool("speed.lock_sas", true);
         set
         {
-            Settings.s_settings_file.SetBool("speed.lock_sas", value);
+            Settings.sfile.SetBool("speed.lock_sas", value);
         }
     }
 
     public bool kill_h_speed
     {
-        get => Settings.s_settings_file.GetBool("speed.kill_h_speed", true);
+        get => Settings.sfile.GetBool("speed.kill_h_speed", true);
         set
         {
-            Settings.s_settings_file.SetBool("speed.kill_h_speed", value);
+            Settings.sfile.SetBool("speed.kill_h_speed", value);
         }
     }
 
     public float inclinaison_ratio
     {
-        get => Settings.s_settings_file.GetFloat("speed.inclinaison_ratio", 1);
+        get => Settings.sfile.GetFloat("speed.inclinaison_ratio", 1);
         set
         {
-            Settings.s_settings_file.SetFloat("speed.inclinaison_ratio", value);
+            Settings.sfile.SetFloat("speed.inclinaison_ratio", value);
         }
     }
 
@@ -91,7 +91,7 @@ public class DroneController : ComplexControler
 
     public DroneController()
     {
-        debug_mode = false;
+        debug_mode_only = false;
         name = "Drone";
 
         sub_contollers.Add(burn_dV);
@@ -344,7 +344,7 @@ public class DroneController : ComplexControler
     {
         if (K2D2_Plugin.Instance.settings_visible)
         {
-            Settings.onGUI();
+            K2D2Settings.onGUI();
             settings.onGUI();
             return;
         }
@@ -417,7 +417,7 @@ public class DroneController : ComplexControler
             burn_dV.reset();
         GUILayout.EndHorizontal();
 
-        if (Settings.debug_mode)
+        if (K2D2Settings.debug_mode)
         {
             // if (gravity_compensation)
             // {

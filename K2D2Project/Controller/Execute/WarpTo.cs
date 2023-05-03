@@ -19,21 +19,21 @@ class WarpToSettings
 
     public static float warp_speed
     {
-        get => Settings.s_settings_file.GetFloat("warp.speed", 2);
+        get => Settings.sfile.GetFloat("warp.speed", 2);
         set
         {
             value = Mathf.Clamp(value, 0, 7);
-            Settings.s_settings_file.SetFloat("warp.speed", value);
+            Settings.sfile.SetFloat("warp.speed", value);
         }
     }
 
     public static int warp_safe_duration
     {
-        get => Settings.s_settings_file.GetInt("warp.safe_duration", 10);
+        get => Settings.sfile.GetInt("warp.safe_duration", 10);
         set
         {
             if (value < 5) value = 5;
-            Settings.s_settings_file.SetInt("warp.safe_duration", value);
+            Settings.sfile.SetInt("warp.safe_duration", value);
         }
     }
 
@@ -193,7 +193,7 @@ public class WarpTo : ExecuteController
         UI_Tools.OK("Time Warp");
         UI_Tools.Console(status_line);
 
-        if (Settings.debug_mode)
+        if (K2D2Settings.debug_mode)
         {
             UI_Tools.Console($"CurrentRateIndex {TimeWarpTools.CurrentRateIndex}");
             UI_Tools.Console($"CurrentRate x{TimeWarpTools.CurrentRate}");

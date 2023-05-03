@@ -19,21 +19,21 @@ class TurnToSettings
 
     public static float max_angle_maneuver
     {
-        get => Settings.s_settings_file.GetFloat("turn.max_angle_maneuver", 0.3f);
+        get => Settings.sfile.GetFloat("turn.max_angle_maneuver", 0.3f);
         set
         {
             value = Mathf.Clamp(value, 0, 7);
-            Settings.s_settings_file.SetFloat("turn.max_angle_maneuver", value);
+            Settings.sfile.SetFloat("turn.max_angle_maneuver", value);
         }
     }
 
     public static float max_angular_speed
     {
-        get => Settings.s_settings_file.GetFloat("turn.max_angular_speed", 1f);
+        get => Settings.sfile.GetFloat("turn.max_angular_speed", 1f);
         set
         {
             value = Mathf.Clamp(value, 0, 7);
-            Settings.s_settings_file.SetFloat("turn.max_angular_speed", value);
+            Settings.sfile.SetFloat("turn.max_angular_speed", value);
         }
     }
 
@@ -172,7 +172,7 @@ public class TurnTo : ExecuteController
 
         // UI_Tools.Console($"sas.sas_response v {Tools.print_vector(sas_response)}");
 
-        if (Settings.debug_mode)
+        if (K2D2Settings.debug_mode)
         {
             var telemetry = SASTool.getTelemetry();
             if (!telemetry.HasManeuver)

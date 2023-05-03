@@ -28,7 +28,7 @@ public class WarpController : ComplexControler
         current_vessel = K2D2_Plugin.Instance.current_vessel;
 
         Instance = this;
-        debug_mode = false;
+        debug_mode_only = false;
         name = "Warp";
         warp = new WarpTo();
     }
@@ -76,7 +76,7 @@ public class WarpController : ComplexControler
     {
         if (K2D2_Plugin.Instance.settings_visible)
         {
-            Settings.onGUI();
+            K2D2Settings.onGUI();
             UI_Tools.Title("No Warp Settings");
             if (UI_Tools.BigButton("close"))
                 K2D2_Plugin.Instance.settings_visible = false;

@@ -184,7 +184,7 @@ public class TouchDown : ExecuteController
         if (burn_dV.burned_dV > 0)
             UI_Tools.Console($"dV consumed : {burn_dV.burned_dV:n2} m/s");
 
-        if (Settings.debug_mode)
+        if (K2D2Settings.debug_mode)
         {
             if (gravity_compensation)
             {
