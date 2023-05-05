@@ -27,7 +27,7 @@ using K2D2.sources.KSPService;
 using Action = System.Action;
 // using KSP.Networking.MP;
 using K2D2.UI;
-
+using K2D2.Tools;
 
 namespace K2D2;
 
@@ -118,7 +118,7 @@ public class K2D2_Plugin : BaseSpaceWarpPlugin
         }
         Instance = this;
 
-        Settings.Init(SettingsPath);
+        GeneralSettings.Init(SettingsPath);
         mod_id = SpaceWarpMetadata.ModID;
 
         loaded = true;
@@ -162,8 +162,8 @@ public class K2D2_Plugin : BaseSpaceWarpPlugin
 
     void save_rect_pos()
     {
-        Settings.window_x_pos = (int)windowRect.xMin;
-        Settings.window_y_pos = (int)windowRect.yMin;
+        GeneralSettings.window_x_pos = (int)windowRect.xMin;
+        GeneralSettings.window_y_pos = (int)windowRect.yMin;
     }
 
     void Update()

@@ -6,6 +6,7 @@ using K2D2.KSPService;
 using KSP.Sim.Maneuver;
 
 using K2D2.UI;
+using K2D2.Tools;
 
 namespace K2D2.Controller;
 
@@ -14,29 +15,29 @@ class BurnManeuvreSettings
 
     public static float burn_adjust
     {
-        get => Settings.sfile.GetFloat("warp.burn_adjust", 1.5f);
+        get => GeneralSettings.sfile.GetFloat("warp.burn_adjust", 1.5f);
         set
         {             // value = Mathf.Clamp(0.1,)
-            Settings.sfile.SetFloat("warp.burn_adjust", value);
+            GeneralSettings.sfile.SetFloat("warp.burn_adjust", value);
         }
     }
 
     public static float max_dv_error
     {
-        get => Settings.sfile.GetFloat("warp.max_dv_error", 0.1f);
+        get => GeneralSettings.sfile.GetFloat("warp.max_dv_error", 0.1f);
         set
         {             // value = Mathf.Clamp(0.1,)
-            Settings.sfile.SetFloat("warp.max_dv_error", value);
+            GeneralSettings.sfile.SetFloat("warp.max_dv_error", value);
         }
     }
 
     static public bool rotate_during_burn
     {
-        get => Settings.sfile.GetBool("land.rotate_during_burn", false);
+        get => GeneralSettings.sfile.GetBool("land.rotate_during_burn", false);
         set
         {
             // value = Mathf.Clamp(value, 0 , 1);
-            Settings.sfile.SetBool("land.rotate_during_burn", value);
+            GeneralSettings.sfile.SetBool("land.rotate_during_burn", value);
         }
     }
 

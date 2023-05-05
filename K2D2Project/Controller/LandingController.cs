@@ -8,6 +8,7 @@ using BepInEx.Logging;
 using K2D2.KSPService;
 using K2D2.UI;
 
+using K2D2.Tools;
 
 namespace K2D2.Controller;
 
@@ -15,33 +16,33 @@ public class LandingSettings
 {
     public bool verbose_infos
     {
-        get => Settings.sfile.GetBool("land.verbose_infos", true);
-        set { Settings.sfile.SetBool("land.verbose_infos", value); }
+        get => GeneralSettings.sfile.GetBool("land.verbose_infos", true);
+        set { GeneralSettings.sfile.SetBool("land.verbose_infos", value); }
     }
 
     public bool auto_warp
     {
-        get => Settings.sfile.GetBool("land.auto_warp", true);
-        set { Settings.sfile.SetBool("land.auto_warp", value); }
+        get => GeneralSettings.sfile.GetBool("land.auto_warp", true);
+        set { GeneralSettings.sfile.SetBool("land.auto_warp", value); }
     }
 
     public float burn_before
     {
-        get => Settings.sfile.GetFloat("land.burnBefore", 0f);
-        set { Settings.sfile.SetFloat("land.burnBefore", value); }
+        get => GeneralSettings.sfile.GetFloat("land.burnBefore", 0f);
+        set { GeneralSettings.sfile.SetFloat("land.burnBefore", value); }
     }
 
     // Warp with check of rotation
     public int rotation_warp_duration
     {
-        get => Settings.sfile.GetInt("land.rotation_warp_duration", 60);
-        set { Settings.sfile.SetInt("land.rotation_warp_duration", value); }
+        get => GeneralSettings.sfile.GetInt("land.rotation_warp_duration", 60);
+        set { GeneralSettings.sfile.SetInt("land.rotation_warp_duration", value); }
     }
 
     public float max_rotation
     {
-        get => Settings.sfile.GetFloat("land.max_rotation", 30);
-        set { Settings.sfile.SetFloat("land.max_rotation", value); }
+        get => GeneralSettings.sfile.GetFloat("land.max_rotation", 30);
+        set { GeneralSettings.sfile.SetFloat("land.max_rotation", value); }
     }
 
 
@@ -63,23 +64,23 @@ public class LandingSettings
 
     public float start_touchdown_altitude
     {
-        get => Settings.sfile.GetFloat("land.touch_down_altitude", 1500);
-        set { Settings.sfile.SetFloat("land.touch_down_altitude", value); }
+        get => GeneralSettings.sfile.GetFloat("land.touch_down_altitude", 1500);
+        set { GeneralSettings.sfile.SetFloat("land.touch_down_altitude", value); }
     }
 
     public float touch_down_ratio
     {
-        get => Settings.sfile.GetFloat("land.touch_down_ratio", 0.5f);
-        set { Settings.sfile.SetFloat("land.touch_down_ratio", value); }
+        get => GeneralSettings.sfile.GetFloat("land.touch_down_ratio", 0.5f);
+        set { GeneralSettings.sfile.SetFloat("land.touch_down_ratio", value); }
     }
 
     public float touch_down_speed
     {
-        get => Settings.sfile.GetFloat("land.touch_down_speed", 4);
+        get => GeneralSettings.sfile.GetFloat("land.touch_down_speed", 4);
         set
         {
             value = Mathf.Clamp(value, 0, 100);
-            Settings.sfile.SetFloat("land.touch_down_speed", value);
+            GeneralSettings.sfile.SetFloat("land.touch_down_speed", value);
         }
     }
 

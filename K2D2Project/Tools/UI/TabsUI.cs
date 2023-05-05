@@ -1,13 +1,7 @@
-
 using UnityEngine;
-using BepInEx.Logging;
-using K2D2.Controller;
-using K2D2.InfosPages;
+
 using K2D2.Tools;
-using K2D2.UI;
-
-namespace K2D2;
-
+namespace K2D2.UI;
 
 public interface PageContent
 {
@@ -49,23 +43,16 @@ public class TabsUI
     PageContent current_page = null;
 
     // must be called after adding pages
-   
-
-
-
     private bool TabButton(bool is_current, bool isActive, string txt)
     {
         GUIStyle style = isActive ? GenericStyle.tab_active : GenericStyle.tab_normal;
         return GUILayout.Toggle(is_current, txt, style);
     }
 
-
     List<float> tabs_Width = new List<float>();
 
     public int DrawTabs(int current, float max_width = 300)
     {
-       
-
         current = GeneralTools.ClampInt(current, 0, filtered_pages.Count - 1);
         GUILayout.BeginHorizontal();
 
@@ -157,53 +144,5 @@ public class TabsUI
         }
 
         current_page.onGUI();
-    }
-}
-
-public class MainUI
-{
-    public ManualLogSource logger = BepInEx.Logging.Logger.CreateLogSource("K2D2.MainUI");
-
-    bool init_done = false;
-
-    TabsUI tabs = new TabsUI();
-
-    public MainUI()
-    {
-
-    }
-
-    public void Update()
-    {
-        if (init_done)
-            tabs.Update();
-    }
-
-    public void onGUI()
-    {
-        if (!init_done)
-        {
-            tabs.pages.Add(AutoExecuteManeuver.Instance);
-            tabs.pages.Add(CircleController.Instance);
-
-            tabs.pages.Add(LandingController.Instance);
-            tabs.pages.Add(DroneController.Instance);
-
-            tabs.pages.Add(AutoLiftController.Instance);
-            tabs.pages.Add(AttitudeController.Instance);
-            tabs.pages.Add(WarpController.Instance);
-            tabs.pages.Add(new FindSecrets());
-            // waiting for mole
-            // pages.Add(SimpleManeuverController.Instance);
-            tabs.pages.Add(new OrbitInfos());
-            tabs.pages.Add(new K2D2.InfosPages.SASInfos());
-            tabs.pages.Add(new VesselInfos());
-
-            tabs.Init();
-
-            init_done = true;
-        }
-
-        tabs.onGUI();
     }
 }

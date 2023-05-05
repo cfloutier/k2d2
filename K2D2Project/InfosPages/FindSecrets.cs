@@ -33,9 +33,6 @@ public class FindSecrets : BaseController
 
     }
 
-    bool lockedMode = false;
-    bool reset = false;
-
     public override void onGUI()
     {
         var body = current_vessel.VesselComponent.mainBody;

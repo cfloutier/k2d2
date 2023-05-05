@@ -9,7 +9,7 @@ using KSP.Sim;
 using K2D2.KSPService;
 using KSP.Sim.Maneuver;
 
-
+using K2D2.Tools;
 using K2D2.UI;
 
 namespace K2D2.Controller;
@@ -19,21 +19,21 @@ class TurnToSettings
 
     public static float max_angle_maneuver
     {
-        get => Settings.sfile.GetFloat("turn.max_angle_maneuver", 0.3f);
+        get => GeneralSettings.sfile.GetFloat("turn.max_angle_maneuver", 0.3f);
         set
         {
             value = Mathf.Clamp(value, 0, 7);
-            Settings.sfile.SetFloat("turn.max_angle_maneuver", value);
+            GeneralSettings.sfile.SetFloat("turn.max_angle_maneuver", value);
         }
     }
 
     public static float max_angular_speed
     {
-        get => Settings.sfile.GetFloat("turn.max_angular_speed", 1f);
+        get => GeneralSettings.sfile.GetFloat("turn.max_angular_speed", 1f);
         set
         {
             value = Mathf.Clamp(value, 0, 7);
-            Settings.sfile.SetFloat("turn.max_angular_speed", value);
+            GeneralSettings.sfile.SetFloat("turn.max_angular_speed", value);
         }
     }
 

@@ -6,7 +6,7 @@ using BepInEx.Logging;
 using K2D2.KSPService;
 using KSP.Sim;
 using KSP.Sim.impl;
-
+using K2D2.Tools;
 
 
 using K2D2.UI;
@@ -17,50 +17,50 @@ public class AutoLiftSettings
 {
     public float heading
     {
-        get => Settings.sfile.GetFloat("lift.heading", 90);
+        get => GeneralSettings.sfile.GetFloat("lift.heading", 90);
         set
         {
             // value = Mathf.Clamp(value, 0 , 1);
-            Settings.sfile.SetFloat("lift.heading", value);
+            GeneralSettings.sfile.SetFloat("lift.heading", value);
         }
     }
 
     public int start_altitude_km
     {
-        get => Settings.sfile.GetInt("lift.start_altitude_km", 2);
+        get => GeneralSettings.sfile.GetInt("lift.start_altitude_km", 2);
         set
         {
             // value = Mathf.Clamp(value, 0 , 1);
-            Settings.sfile.SetInt("lift.start_altitude_km", value);
+            GeneralSettings.sfile.SetInt("lift.start_altitude_km", value);
         }
     }
 
     public float mid_rotate_ratio
     {
-        get => Settings.sfile.GetFloat("lift.mid_rotate_ratio", 0.2f);
+        get => GeneralSettings.sfile.GetFloat("lift.mid_rotate_ratio", 0.2f);
         set
         {
             value = Mathf.Clamp(value, 0, end_rotate_ratio);
-            Settings.sfile.SetFloat("lift.mid_rotate_ratio", value);
+            GeneralSettings.sfile.SetFloat("lift.mid_rotate_ratio", value);
         }
     }
 
     public float end_rotate_ratio
     {
-        get => Settings.sfile.GetFloat("lift.end_rotate_ratio", 0.5f);
+        get => GeneralSettings.sfile.GetFloat("lift.end_rotate_ratio", 0.5f);
         set
         {
             value = Mathf.Clamp(value, mid_rotate_ratio, 1);
-            Settings.sfile.SetFloat("lift.end_rotate_ratio", value);
+            GeneralSettings.sfile.SetFloat("lift.end_rotate_ratio", value);
         }
     }
 
     public int destination_Ap_km
     {
-        get => Settings.sfile.GetInt("lift.destination_Ap_km", 100);
+        get => GeneralSettings.sfile.GetInt("lift.destination_Ap_km", 100);
         set
         {
-            Settings.sfile.SetInt("lift.destination_Ap_km", value);
+            GeneralSettings.sfile.SetInt("lift.destination_Ap_km", value);
         }
     }
 }

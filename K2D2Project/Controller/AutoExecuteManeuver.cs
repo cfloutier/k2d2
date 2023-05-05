@@ -1,12 +1,8 @@
 
-using System.Collections.Generic;
-using System.Linq;
-
-using UnityEngine;
 using KSP.Sim.Maneuver;
 using KSP.Messages;
 using BepInEx.Logging;
-
+using K2D2.Tools;
 
 using K2D2.KSPService;
 using KSP.Sim;
@@ -19,21 +15,21 @@ public class ExecuteSettings
 {
     public bool show_node_infos
     {
-        get => Settings.sfile.GetBool("execute.show_node_infos", true);
+        get => GeneralSettings.sfile.GetBool("execute.show_node_infos", true);
         set
         {
             // value = Mathf.Clamp(value, 0 , 1);
-            Settings.sfile.SetBool("execute.show_node_infos", value);
+            GeneralSettings.sfile.SetBool("execute.show_node_infos", value);
         }
     }
 
     public bool auto_warp
     {
-        get => Settings.sfile.GetBool("execute.auto_warp", true);
+        get => GeneralSettings.sfile.GetBool("execute.auto_warp", true);
         set
         {
             // value = Mathf.Clamp(value, 0 , 1);
-            Settings.sfile.SetBool("execute.auto_warp", value);
+            GeneralSettings.sfile.SetBool("execute.auto_warp", value);
         }
     }
 
@@ -42,21 +38,21 @@ public class ExecuteSettings
     private static string[] StartMode_Labels = { "T0", "before", "mid-duration" };
     public StartMode start_mode
     {
-        get => Settings.sfile.GetEnum<StartMode>("execute.start_mode", StartMode.precise);
+        get => GeneralSettings.sfile.GetEnum<StartMode>("execute.start_mode", StartMode.precise);
         set
         {
             // value = Mathf.Clamp(value, 0 , 1);
-            Settings.sfile.SetEnum<StartMode>("execute.start_mode", value);
+            GeneralSettings.sfile.SetEnum<StartMode>("execute.start_mode", value);
         }
     }
 
     public float start_before
     {
-        get => Settings.sfile.GetFloat("execute.start_before", 1);
+        get => GeneralSettings.sfile.GetFloat("execute.start_before", 1);
         set
         {
             // value = Mathf.Clamp(value, 0 , 1);
-            Settings.sfile.SetFloat("execute.start_before", value);
+            GeneralSettings.sfile.SetFloat("execute.start_before", value);
         }
     }
 

@@ -1,39 +1,31 @@
-
-using System.Collections.Generic;
-using System.Linq;
-
 using UnityEngine;
-using KSP.Sim.impl;
+
 using KSP.Sim.Maneuver;
-
 using BepInEx.Logging;
-using System;
-
+using K2D2.Tools;
 using K2D2.UI;
-
 namespace K2D2.Controller;
-
 
 class WarpToSettings
 {
 
     public static float warp_speed
     {
-        get => Settings.sfile.GetFloat("warp.speed", 2);
+        get => GeneralSettings.sfile.GetFloat("warp.speed", 2);
         set
         {
             value = Mathf.Clamp(value, 0, 7);
-            Settings.sfile.SetFloat("warp.speed", value);
+            GeneralSettings.sfile.SetFloat("warp.speed", value);
         }
     }
 
     public static int warp_safe_duration
     {
-        get => Settings.sfile.GetInt("warp.safe_duration", 10);
+        get => GeneralSettings.sfile.GetInt("warp.safe_duration", 10);
         set
         {
             if (value < 5) value = 5;
-            Settings.sfile.SetInt("warp.safe_duration", value);
+            GeneralSettings.sfile.SetInt("warp.safe_duration", value);
         }
     }
 

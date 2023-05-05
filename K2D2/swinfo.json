@@ -1,22 +1,20 @@
 {
-  "mod_id": "K2D2",
-  "author": "cfloutier",
-  "name": "K2-D2",
-  "description": "The KSP astromech",
-  "source": "https://github.com/schlosrat/k2d2",
-  "version": "0.8.1",
-  "version_check": "",
-  "dependencies": [
-    {
-      "id":  "SpaceWarp",
-      "version": {
-        "min": "1.1.1",
+    "mod_id": "K2D2",
+    "author": "cfloutier",
+    "name": "K2-D2",
+    "description": "The KSP astromech",
+    "source": "https://github.com/schlosrat/k2d2",
+    "version": "0.8.2",
+    "version_check": "",
+    "dependencies": [{
+        "id": "SpaceWarp",
+        "version": {
+            "min": "1.1.1",
+            "max": "*"
+        }
+    }],
+    "ksp2_version": {
+        "min": "0.1.0",
         "max": "*"
-      }
     }
-  ],
-  "ksp2_version": {
-    "min": "0.1.0",
-    "max": "*"
-  }
 }

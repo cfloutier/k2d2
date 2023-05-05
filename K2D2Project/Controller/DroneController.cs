@@ -1,15 +1,10 @@
 
-
-using System.Collections.Generic;
-using System.Linq;
-
 using UnityEngine;
 
 using K2D2.KSPService;
 using KSP.Sim;
-
 using K2D2.UI;
-using static System.Net.Mime.MediaTypeNames;
+using K2D2.Tools;
 
 namespace K2D2.Controller;
 
@@ -17,55 +12,55 @@ public class DroneSettings
 {
     public DroneController.SpeedMode speed_mode
     {
-        get => Settings.sfile.GetEnum<DroneController.SpeedMode>("speed.direction", 0);
+        get => GeneralSettings.sfile.GetEnum<DroneController.SpeedMode>("speed.direction", 0);
         set
         {
-            Settings.sfile.SetEnum<DroneController.SpeedMode>("speed.direction", value);
+            GeneralSettings.sfile.SetEnum<DroneController.SpeedMode>("speed.direction", value);
         }
     }
 
     public float wanted_speed
     {
-        get => Settings.sfile.GetFloat("speed.wanted_speed", 0);
+        get => GeneralSettings.sfile.GetFloat("speed.wanted_speed", 0);
         set
         {
-            Settings.sfile.SetFloat("speed.wanted_speed", value);
+            GeneralSettings.sfile.SetFloat("speed.wanted_speed", value);
         }
     }
 
     public int speed_limit
     {
-        get => Settings.sfile.GetInt("speed.speed_limit", 10);
+        get => GeneralSettings.sfile.GetInt("speed.speed_limit", 10);
         set
         {
-            Settings.sfile.SetInt("speed.speed_limit", value);
+            GeneralSettings.sfile.SetInt("speed.speed_limit", value);
         }
     }
 
     public bool sas_up
     {
-        get => Settings.sfile.GetBool("speed.lock_sas", true);
+        get => GeneralSettings.sfile.GetBool("speed.lock_sas", true);
         set
         {
-            Settings.sfile.SetBool("speed.lock_sas", value);
+            GeneralSettings.sfile.SetBool("speed.lock_sas", value);
         }
     }
 
     public bool kill_h_speed
     {
-        get => Settings.sfile.GetBool("speed.kill_h_speed", true);
+        get => GeneralSettings.sfile.GetBool("speed.kill_h_speed", true);
         set
         {
-            Settings.sfile.SetBool("speed.kill_h_speed", value);
+            GeneralSettings.sfile.SetBool("speed.kill_h_speed", value);
         }
     }
 
     public float inclinaison_ratio
     {
-        get => Settings.sfile.GetFloat("speed.inclinaison_ratio", 1);
+        get => GeneralSettings.sfile.GetFloat("speed.inclinaison_ratio", 1);
         set
         {
-            Settings.sfile.SetFloat("speed.inclinaison_ratio", value);
+            GeneralSettings.sfile.SetFloat("speed.inclinaison_ratio", value);
         }
     }
 
