@@ -1,15 +1,9 @@
-using System.Collections.Generic;
-using System.Linq;
-
-using UnityEngine;
-using BepInEx.Logging;
 using K2D2.KSPService;
 using KSP.Sim;
 using KSP.Sim.impl;
-using K2D2.Tools;
-
-
-using K2D2.UI;
+using KTools;
+using KTools.UI;
+using UnityEngine;
 
 namespace K2D2.Controller;
 
@@ -17,50 +11,50 @@ public class AutoLiftSettings
 {
     public float heading
     {
-        get => GeneralSettings.sfile.GetFloat("lift.heading", 90);
+        get => KBaseSettings.sfile.GetFloat("lift.heading", 90);
         set
         {
             // value = Mathf.Clamp(value, 0 , 1);
-            GeneralSettings.sfile.SetFloat("lift.heading", value);
+            KBaseSettings.sfile.SetFloat("lift.heading", value);
         }
     }
 
     public int start_altitude_km
     {
-        get => GeneralSettings.sfile.GetInt("lift.start_altitude_km", 2);
+        get => KBaseSettings.sfile.GetInt("lift.start_altitude_km", 2);
         set
         {
             // value = Mathf.Clamp(value, 0 , 1);
-            GeneralSettings.sfile.SetInt("lift.start_altitude_km", value);
+            KBaseSettings.sfile.SetInt("lift.start_altitude_km", value);
         }
     }
 
     public float mid_rotate_ratio
     {
-        get => GeneralSettings.sfile.GetFloat("lift.mid_rotate_ratio", 0.2f);
+        get => KBaseSettings.sfile.GetFloat("lift.mid_rotate_ratio", 0.2f);
         set
         {
             value = Mathf.Clamp(value, 0, end_rotate_ratio);
-            GeneralSettings.sfile.SetFloat("lift.mid_rotate_ratio", value);
+            KBaseSettings.sfile.SetFloat("lift.mid_rotate_ratio", value);
         }
     }
 
     public float end_rotate_ratio
     {
-        get => GeneralSettings.sfile.GetFloat("lift.end_rotate_ratio", 0.5f);
+        get => KBaseSettings.sfile.GetFloat("lift.end_rotate_ratio", 0.5f);
         set
         {
             value = Mathf.Clamp(value, mid_rotate_ratio, 1);
-            GeneralSettings.sfile.SetFloat("lift.end_rotate_ratio", value);
+            KBaseSettings.sfile.SetFloat("lift.end_rotate_ratio", value);
         }
     }
 
     public int destination_Ap_km
     {
-        get => GeneralSettings.sfile.GetInt("lift.destination_Ap_km", 100);
+        get => KBaseSettings.sfile.GetInt("lift.destination_Ap_km", 100);
         set
         {
-            GeneralSettings.sfile.SetInt("lift.destination_Ap_km", value);
+            KBaseSettings.sfile.SetInt("lift.destination_Ap_km", value);
         }
     }
 }
@@ -210,17 +204,17 @@ public class AutoLiftController : ComplexControler
 
             lift_settings.start_altitude_km = UI_Fields.IntField("lift.start_altitude_km", "90° Alt (km)", lift_settings.start_altitude_km, 0, Int32.MaxValue);
 
-            GUILayout.Label($"45° Alt. : {mid_rotate_altitude_km:n0} km", GenericStyle.slider_text);
+            GUILayout.Label($"45° Alt. : {mid_rotate_altitude_km:n0} km", KBaseStyle.slider_text);
             lift_settings.mid_rotate_ratio = UI_Tools.FloatSlider(lift_settings.mid_rotate_ratio, 0, 1);
 
-            GUILayout.Label($"5° Alt. : {end_rotate_altitude_km:n0} km", GenericStyle.slider_text);
+            GUILayout.Label($"5° Alt. : {end_rotate_altitude_km:n0} km", KBaseStyle.slider_text);
             lift_settings.end_rotate_ratio = UI_Tools.FloatSlider(lift_settings.end_rotate_ratio, 0, 1);
 
             lift_settings.destination_Ap_km = UI_Fields.IntField("lift.destination_Ap_km", "Ap Altitude (km)", lift_settings.destination_Ap_km, 0, Int32.MaxValue);
             return;
         }
 
-        isRunning = UI_Tools.ToggleButton(isRunning, "Start", "Stop");
+        isRunning = UI_Tools.BigToggleButton(isRunning, "Start", "Stop");
 
         if (isRunning)
         {

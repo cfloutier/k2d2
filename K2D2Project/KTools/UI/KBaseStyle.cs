@@ -1,33 +1,10 @@
 
-using UnityEngine;
 using SpaceWarp.API.UI;
+using UnityEngine;
 
-namespace K2D2.UI;
+namespace KTools.UI;
 
-public class K2D2Styles
-{
-    private static bool guiLoaded = false;
-
-    public static bool Init()
-    {
-        if (guiLoaded)
-            return true;
-
-        if (!GenericStyle.Init())
-            return false;
-
-        // Load specific icon and style here
-        k2d2_big_icon = AssetsLoader.loadIcon("k2d2_big_icon");
-
-      //  guiLoaded = true;
-        return true;
-    }
-
-    public static Texture2D k2d2_big_icon;
-}
-
-
-public class GenericStyle
+public class KBaseStyle
 {
     public static bool Init()
     {
@@ -120,7 +97,7 @@ public class GenericStyle
 
         window.border = new RectOffset(25, 25, 35, 25);
         window.margin = new RectOffset(0, 0, 0, 0);
-        window.padding = new RectOffset(20, 13, 44, 17);
+        window.padding = new RectOffset(10, 10, 44, 10);
         window.overflow = new RectOffset(0, 0, 0, 0);
 
         // window.fontSize = 20;
@@ -207,7 +184,7 @@ public class GenericStyle
         // icons
         gear = AssetsLoader.loadIcon("gear");
         icon = AssetsLoader.loadIcon("icon");
-        
+
         // mnc_icon = AssetsLoader.loadIcon("mnc_new_icon_50");
         cross = AssetsLoader.loadIcon("Cross");
     }
@@ -263,7 +240,7 @@ public class GenericStyle
         setFromOn(small_button);
 
         small_button.border = new RectOffset(5, 5, 5, 5);
-        small_button.padding = new RectOffset(5, 5, 5, 5);
+        small_button.padding = new RectOffset(2, 2, 2, 2);
         small_button.overflow = new RectOffset(0, 0, 0, 0);
         small_button.alignment = TextAnchor.MiddleCenter;
 
@@ -282,6 +259,9 @@ public class GenericStyle
         big_button.overflow = new RectOffset(0, 0, 0, 0);
         // big_button.fontSize = 20;
         big_button.alignment = TextAnchor.MiddleCenter;
+
+
+
 
         // Small Button
         icon_button = new GUIStyle(small_button);
@@ -303,6 +283,7 @@ public class GenericStyle
         tab_normal.overflow = new RectOffset(0, 0, 0, 0);
         // big_button.fontSize = 20;
         tab_normal.alignment = TextAnchor.MiddleCenter;
+        tab_normal.stretchWidth = true;
 
         tab_normal.normal.background = AssetsLoader.loadIcon("Tab_Normal");
         setAllFromNormal(tab_normal);
@@ -371,7 +352,7 @@ public class GenericStyle
         toggle.overflow = new RectOffset(0, 0, 0, 2);
     }
 
-   
+
     /// <summary>
     /// copy all styles from normal state to others
     /// </summary>

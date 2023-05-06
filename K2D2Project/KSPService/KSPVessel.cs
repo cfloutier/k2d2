@@ -1,16 +1,9 @@
 ﻿using KSP.Game;
 using KSP.Sim;
 using KSP.Sim.impl;
-using KSP.Sim.State;
-using System;
-using BepInEx.Logging;
-using KSP.Api;
 using KSP.Sim.Maneuver;
-using KSP.Map;
-using KSP2FlightAssistant.KSPService;
-using KSP2FlightAssistant.MathLibrary;
+using KSP.Sim.State;
 using UnityEngine;
-using K2D2.Controller;
 
 namespace K2D2.KSPService
 {
@@ -39,7 +32,8 @@ namespace K2D2.KSPService
 
         public static KSPVessel current
         {
-            get{
+            get
+            {
                 return _current;
             }
         }

@@ -1,12 +1,9 @@
 using K2D2.KSPService;
 using KSP.Sim;
-using KSP.Sim.impl;
+using KTools.UI;
 using UnityEngine;
 
-using K2D2.UI;
-
 namespace K2D2.Controller;
-
 
 /// apply the wanted speed in the good direction
 public class TouchDown : ExecuteController

@@ -1,9 +1,7 @@
 
 
-using UnityEngine;
-using KSP.Sim;
 using K2D2.Controller;
-using K2D2.UI;
+using KTools.UI;
 namespace K2D2.InfosPages;
 class SASInfos : BaseController
 {

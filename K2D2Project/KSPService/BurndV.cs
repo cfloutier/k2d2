@@ -1,13 +1,8 @@
-using UnityEngine;
-
-using KSP.Sim.DeltaV;
-using System.Collections.Generic;
 using BepInEx.Logging;
-using K2D2.KSPService;
-
 using K2D2.Controller;
-using K2D2.UI;
-
+using KSP.Sim.DeltaV;
+using KTools.UI;
+using UnityEngine;
 namespace K2D2.KSPService;
 
 /// Simple class used to compute Burned DV

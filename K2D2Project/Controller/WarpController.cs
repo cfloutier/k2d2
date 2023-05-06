@@ -1,18 +1,6 @@
-using System.Collections.Generic;
-using System.Linq;
-
-using UnityEngine;
-using BepInEx.Logging;
 using K2D2.KSPService;
-using KSP.Sim;
-using KSP.Sim.impl;
-
-using K2D2.Controller;
-using SpaceGraphicsToolkit;
-using VehiclePhysics;
-using System;
-
-using K2D2.UI;
+using KTools;
+using KTools.UI;
 
 namespace K2D2.Controller;
 
@@ -83,12 +71,12 @@ public class WarpController : ComplexControler
             return;
         }
         var orbit = current_vessel.VesselComponent.Orbit;
-        UI_Tools.Console($"timeToTransition1 : {StrTool.DurationToString( orbit.timeToTransition1 )}");
-        UI_Tools.Console($"timeToTransition2 : {StrTool.DurationToString( orbit.timeToTransition1 )}");
-        UI_Tools.Console($"PatchStartTransition : {orbit.PatchStartTransition }");
-        UI_Tools.Console($"PatchEndTransition : {orbit.PatchEndTransition }");
+        UI_Tools.Console($"timeToTransition1 : {StrTool.DurationToString(orbit.timeToTransition1)}");
+        UI_Tools.Console($"timeToTransition2 : {StrTool.DurationToString(orbit.timeToTransition1)}");
+        UI_Tools.Console($"PatchStartTransition : {orbit.PatchStartTransition}");
+        UI_Tools.Console($"PatchEndTransition : {orbit.PatchEndTransition}");
 
-        bool go = UI_Tools.ToggleButton(isRunning, "Warp to SOI Change", "Stop");
+        bool go = UI_Tools.BigToggleButton(isRunning, "Warp to SOI Change", "Stop");
         if (go != isRunning && go)
         {
             if (go)
@@ -96,11 +84,11 @@ public class WarpController : ComplexControler
 
             isRunning = go;
         }
-      
 
 
-      //  if (UI_Tools.BigButton("close"))
-       
+
+        //  if (UI_Tools.BigButton("close"))
+
 
     }
 

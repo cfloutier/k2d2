@@ -1,9 +1,8 @@
-﻿using System;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using KSP.Sim.Maneuver;
 using KSP.Game;
 
-namespace K2D2;
+namespace KTools;
 
 public static class GeneralTools
 {

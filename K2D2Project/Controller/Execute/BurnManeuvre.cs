@@ -1,12 +1,11 @@
 
 using BepInEx.Logging;
-using UnityEngine;
-using KSP.Sim;
 using K2D2.KSPService;
+using KSP.Sim;
 using KSP.Sim.Maneuver;
-
-using K2D2.UI;
-using K2D2.Tools;
+using KTools;
+using KTools.UI;
+using UnityEngine;
 
 namespace K2D2.Controller;
 
@@ -15,29 +14,29 @@ class BurnManeuvreSettings
 
     public static float burn_adjust
     {
-        get => GeneralSettings.sfile.GetFloat("warp.burn_adjust", 1.5f);
+        get => KBaseSettings.sfile.GetFloat("warp.burn_adjust", 1.5f);
         set
         {             // value = Mathf.Clamp(0.1,)
-            GeneralSettings.sfile.SetFloat("warp.burn_adjust", value);
+            KBaseSettings.sfile.SetFloat("warp.burn_adjust", value);
         }
     }
 
     public static float max_dv_error
     {
-        get => GeneralSettings.sfile.GetFloat("warp.max_dv_error", 0.1f);
+        get => KBaseSettings.sfile.GetFloat("warp.max_dv_error", 0.1f);
         set
         {             // value = Mathf.Clamp(0.1,)
-            GeneralSettings.sfile.SetFloat("warp.max_dv_error", value);
+            KBaseSettings.sfile.SetFloat("warp.max_dv_error", value);
         }
     }
 
     static public bool rotate_during_burn
     {
-        get => GeneralSettings.sfile.GetBool("land.rotate_during_burn", false);
+        get => KBaseSettings.sfile.GetBool("land.rotate_during_burn", false);
         set
         {
             // value = Mathf.Clamp(value, 0 , 1);
-            GeneralSettings.sfile.SetBool("land.rotate_during_burn", value);
+            KBaseSettings.sfile.SetBool("land.rotate_during_burn", value);
         }
     }
 

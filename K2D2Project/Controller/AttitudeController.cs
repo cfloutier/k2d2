@@ -1,18 +1,7 @@
-using System.Collections.Generic;
-using System.Linq;
-
-using UnityEngine;
-using BepInEx.Logging;
 using K2D2.KSPService;
 using KSP.Sim;
-using KSP.Sim.impl;
-
-using K2D2.Controller;
-using SpaceGraphicsToolkit;
-using VehiclePhysics;
-using System;
-
-using K2D2.UI;
+using KTools.UI;
+using UnityEngine;
 
 namespace K2D2.Controller;
 
@@ -119,7 +108,7 @@ public class AttitudeController : ComplexControler
         if (Mathf.Abs(heading) < 2) heading = 0;
         // if (Mathf.Abs(z_direction) < 2) z_direction = 0;
 
-        isRunning = UI_Tools.ToggleButton(isRunning, "Start", "Stop");
+        isRunning = UI_Tools.BigToggleButton(isRunning, "Start", "Stop");
 
         var telemetry = SASTool.getTelemetry();
 

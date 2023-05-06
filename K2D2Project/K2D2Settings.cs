@@ -1,7 +1,8 @@
 using UnityEngine;
 
-using K2D2.Tools;
-using K2D2.UI;
+
+using KTools;
+using KTools.UI;
 
 namespace K2D2;
 
@@ -9,14 +10,14 @@ public class K2D2Settings
 {
     public static bool debug_mode
     {
-        get => GeneralSettings.sfile.GetBool("debug_mode", false);
-        set { GeneralSettings.sfile.SetBool("debug_mode", value); }
+        get => KBaseSettings.sfile.GetBool("debug_mode", false);
+        set { KBaseSettings.sfile.SetBool("debug_mode", value); }
     }
 
     public static bool auto_next
     {
-        get => GeneralSettings.sfile.GetBool("auto_next", true);
-        set { GeneralSettings.sfile.SetBool("auto_next", value); }
+        get => KBaseSettings.sfile.GetBool("auto_next", true);
+        set { KBaseSettings.sfile.SetBool("auto_next", value); }
     }
 
 

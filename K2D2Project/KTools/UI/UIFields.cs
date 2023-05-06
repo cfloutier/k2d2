@@ -1,9 +1,9 @@
-using UnityEngine;
 using System.Text.RegularExpressions;
-using KSP.Game;
 using BepInEx.Logging;
+using KSP.Game;
+using UnityEngine;
 
-namespace K2D2.UI;
+namespace KTools.UI;
 
 public class UI_Fields
 {
@@ -12,7 +12,7 @@ public class UI_Fields
     static bool _inputState = true;
 
 
-    public static ManualLogSource logger = BepInEx.Logging.Logger.CreateLogSource("K2D2.MainUI");
+    public static ManualLogSource logger = BepInEx.Logging.Logger.CreateLogSource("KTools.UI_Fields");
 
     static public bool GameInputState
     {
@@ -99,11 +99,13 @@ public class UI_Fields
         {
             ok = false;
         }
-        if (result < min) {
+        if (result < min)
+        {
             ok = false;
             result = value;
         }
-        else if (result > max) {
+        else if (result > max)
+        {
             ok = false;
             result = value;
         }

@@ -3,8 +3,8 @@ using UnityEngine;
 
 using K2D2.KSPService;
 using KSP.Sim;
-using K2D2.UI;
-using K2D2.Tools;
+using KTools.UI;
+using KTools;
 
 namespace K2D2.Controller;
 
@@ -12,55 +12,55 @@ public class DroneSettings
 {
     public DroneController.SpeedMode speed_mode
     {
-        get => GeneralSettings.sfile.GetEnum<DroneController.SpeedMode>("speed.direction", 0);
+        get => KBaseSettings.sfile.GetEnum<DroneController.SpeedMode>("speed.direction", 0);
         set
         {
-            GeneralSettings.sfile.SetEnum<DroneController.SpeedMode>("speed.direction", value);
+            KBaseSettings.sfile.SetEnum<DroneController.SpeedMode>("speed.direction", value);
         }
     }
 
     public float wanted_speed
     {
-        get => GeneralSettings.sfile.GetFloat("speed.wanted_speed", 0);
+        get => KBaseSettings.sfile.GetFloat("speed.wanted_speed", 0);
         set
         {
-            GeneralSettings.sfile.SetFloat("speed.wanted_speed", value);
+            KBaseSettings.sfile.SetFloat("speed.wanted_speed", value);
         }
     }
 
     public int speed_limit
     {
-        get => GeneralSettings.sfile.GetInt("speed.speed_limit", 10);
+        get => KBaseSettings.sfile.GetInt("speed.speed_limit", 10);
         set
         {
-            GeneralSettings.sfile.SetInt("speed.speed_limit", value);
+            KBaseSettings.sfile.SetInt("speed.speed_limit", value);
         }
     }
 
     public bool sas_up
     {
-        get => GeneralSettings.sfile.GetBool("speed.lock_sas", true);
+        get => KBaseSettings.sfile.GetBool("speed.lock_sas", true);
         set
         {
-            GeneralSettings.sfile.SetBool("speed.lock_sas", value);
+            KBaseSettings.sfile.SetBool("speed.lock_sas", value);
         }
     }
 
     public bool kill_h_speed
     {
-        get => GeneralSettings.sfile.GetBool("speed.kill_h_speed", true);
+        get => KBaseSettings.sfile.GetBool("speed.kill_h_speed", true);
         set
         {
-            GeneralSettings.sfile.SetBool("speed.kill_h_speed", value);
+            KBaseSettings.sfile.SetBool("speed.kill_h_speed", value);
         }
     }
 
     public float inclinaison_ratio
     {
-        get => GeneralSettings.sfile.GetFloat("speed.inclinaison_ratio", 1);
+        get => KBaseSettings.sfile.GetFloat("speed.inclinaison_ratio", 1);
         set
         {
-            GeneralSettings.sfile.SetFloat("speed.inclinaison_ratio", value);
+            KBaseSettings.sfile.SetFloat("speed.inclinaison_ratio", value);
         }
     }
 
@@ -396,7 +396,7 @@ public class DroneController : ComplexControler
         if (Mathf.Abs(settings.wanted_speed) < 0.3f)
             settings.wanted_speed = 0;
 
-        isRunning = UI_Tools.ToggleButton(isRunning, "Run", "Stop");
+        isRunning = UI_Tools.BigToggleButton(isRunning, "Run", "Stop");
         if (!isRunning)
             return;
 

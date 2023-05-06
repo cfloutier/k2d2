@@ -1,13 +1,10 @@
-
-using KSP.Sim.Maneuver;
-using KSP.Messages;
 using BepInEx.Logging;
-using K2D2.Tools;
-
 using K2D2.KSPService;
+using KSP.Messages;
 using KSP.Sim;
-
-using K2D2.UI;
+using KSP.Sim.Maneuver;
+using KTools;
+using KTools.UI;
 
 namespace K2D2.Controller;
 
@@ -15,21 +12,21 @@ public class ExecuteSettings
 {
     public bool show_node_infos
     {
-        get => GeneralSettings.sfile.GetBool("execute.show_node_infos", true);
+        get => KBaseSettings.sfile.GetBool("execute.show_node_infos", true);
         set
         {
             // value = Mathf.Clamp(value, 0 , 1);
-            GeneralSettings.sfile.SetBool("execute.show_node_infos", value);
+            KBaseSettings.sfile.SetBool("execute.show_node_infos", value);
         }
     }
 
     public bool auto_warp
     {
-        get => GeneralSettings.sfile.GetBool("execute.auto_warp", true);
+        get => KBaseSettings.sfile.GetBool("execute.auto_warp", true);
         set
         {
             // value = Mathf.Clamp(value, 0 , 1);
-            GeneralSettings.sfile.SetBool("execute.auto_warp", value);
+            KBaseSettings.sfile.SetBool("execute.auto_warp", value);
         }
     }
 
@@ -38,21 +35,21 @@ public class ExecuteSettings
     private static string[] StartMode_Labels = { "T0", "before", "mid-duration" };
     public StartMode start_mode
     {
-        get => GeneralSettings.sfile.GetEnum<StartMode>("execute.start_mode", StartMode.precise);
+        get => KBaseSettings.sfile.GetEnum<StartMode>("execute.start_mode", StartMode.precise);
         set
         {
             // value = Mathf.Clamp(value, 0 , 1);
-            GeneralSettings.sfile.SetEnum<StartMode>("execute.start_mode", value);
+            KBaseSettings.sfile.SetEnum<StartMode>("execute.start_mode", value);
         }
     }
 
     public float start_before
     {
-        get => GeneralSettings.sfile.GetFloat("execute.start_before", 1);
+        get => KBaseSettings.sfile.GetFloat("execute.start_before", 1);
         set
         {
             // value = Mathf.Clamp(value, 0 , 1);
-            GeneralSettings.sfile.SetFloat("execute.start_before", value);
+            KBaseSettings.sfile.SetFloat("execute.start_before", value);
         }
     }
 
@@ -245,7 +242,7 @@ public class AutoExecuteManeuver : ComplexControler
             return;
         }
 
-        isRunning = UI_Tools.ToggleButton(isRunning, "Run", "Stop");
+        isRunning = UI_Tools.BigToggleButton(isRunning, "Run", "Stop");
 
         current_executor.onGUI();
         if (!K2D2Settings.auto_next)

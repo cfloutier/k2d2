@@ -1,9 +1,7 @@
-using UnityEngine;
-using System.Collections;
-using System;
 using System.Globalization;
+using UnityEngine;
 
-namespace K2D2.UI;
+namespace KTools.UI;
 
 /// <summary>
 /// A set of simple tools for colors that is missing in the main unity API

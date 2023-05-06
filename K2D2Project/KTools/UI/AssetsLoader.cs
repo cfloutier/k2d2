@@ -1,8 +1,8 @@
-
 using UnityEngine;
 using SpaceWarp.API.Assets;
+using K2D2;
 
-namespace K2D2.UI;
+namespace KTools.UI;
 
 public class AssetsLoader
 {

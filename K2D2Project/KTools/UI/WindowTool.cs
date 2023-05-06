@@ -1,7 +1,6 @@
 using UnityEngine;
-using K2D2.Tools;
 
-namespace K2D2.UI;
+namespace KTools.UI;
 
 public class WindowTool
 {
@@ -39,8 +38,8 @@ public class WindowTool
     {
         if (window_frame == Rect.zero)
         {
-            int x_pos = GeneralSettings.window_x_pos;
-            int y_pos = GeneralSettings.window_y_pos;
+            int x_pos = KBaseSettings.window_x_pos;
+            int y_pos = KBaseSettings.window_y_pos;
 
             if (x_pos == -1)
             {

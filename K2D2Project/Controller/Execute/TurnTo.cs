@@ -1,16 +1,9 @@
-
-using System.Collections.Generic;
-
-using System.Linq;
-
-using UnityEngine;
-
-using KSP.Sim;
 using K2D2.KSPService;
+using KSP.Sim;
 using KSP.Sim.Maneuver;
-
-using K2D2.Tools;
-using K2D2.UI;
+using KTools;
+using KTools.UI;
+using UnityEngine;
 
 namespace K2D2.Controller;
 
@@ -19,21 +12,21 @@ class TurnToSettings
 
     public static float max_angle_maneuver
     {
-        get => GeneralSettings.sfile.GetFloat("turn.max_angle_maneuver", 0.3f);
+        get => KBaseSettings.sfile.GetFloat("turn.max_angle_maneuver", 0.3f);
         set
         {
             value = Mathf.Clamp(value, 0, 7);
-            GeneralSettings.sfile.SetFloat("turn.max_angle_maneuver", value);
+            KBaseSettings.sfile.SetFloat("turn.max_angle_maneuver", value);
         }
     }
 
     public static float max_angular_speed
     {
-        get => GeneralSettings.sfile.GetFloat("turn.max_angular_speed", 1f);
+        get => KBaseSettings.sfile.GetFloat("turn.max_angular_speed", 1f);
         set
         {
             value = Mathf.Clamp(value, 0, 7);
-            GeneralSettings.sfile.SetFloat("turn.max_angular_speed", value);
+            KBaseSettings.sfile.SetFloat("turn.max_angular_speed", value);
         }
     }
 

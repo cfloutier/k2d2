@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace K2D2.UI;
+namespace KTools.UI;
 
 public class ToolTipsManager
 {

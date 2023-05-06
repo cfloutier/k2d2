@@ -1,14 +1,9 @@
 
 using UnityEngine;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.IO;
 using BepInEx.Logging;
 
-using System.Threading;
-
-namespace K2D2.Tools;
+namespace KTools;
 
 public class SettingsFile
 {

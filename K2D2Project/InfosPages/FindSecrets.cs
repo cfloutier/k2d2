@@ -1,18 +1,7 @@
-using System.Collections.Generic;
-using System.Linq;
-
-using UnityEngine;
-using BepInEx.Logging;
 using K2D2.KSPService;
 using KSP.Sim;
-using KSP.Sim.impl;
-
-using K2D2.Controller;
-using SpaceGraphicsToolkit;
-using VehiclePhysics;
-using System;
-
-using K2D2.UI;
+using KTools.UI;
+using UnityEngine;
 
 namespace K2D2.Controller;
 
@@ -46,15 +35,15 @@ public class FindSecrets : BaseController
             var Surface_Dir = Vector.Reframed(direction, Upcoords).vector;
             var North = Vector.Reframed(current_vessel.VesselVehicle.North, Upcoords).vector;
             var Up = current_vessel.VesselVehicle.Up.vector;
-            
+
             // var Up = Vector.Reframed(current_vessel.VesselVehicle.Up, Upcoords).vector;
             var heading = (float)-Vector3d.SignedAngle(Surface_Dir.normalized, North, Up);
             GUILayout.BeginHorizontal();
             UI_Tools.Console($"head. {heading}°");
-            UI_Tools.Console($"dist. {StrTool.DistanceToString( Surface_Dir.magnitude)}");
-            
+            UI_Tools.Console($"dist. {StrTool.DistanceToString(Surface_Dir.magnitude)}");
+
             GUILayout.EndHorizontal();
-            
+
         }
 
 

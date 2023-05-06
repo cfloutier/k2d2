@@ -1,8 +1,7 @@
-
 using BepInEx.Logging;
 using K2D2.KSPService;
 
-using K2D2.UI;
+using KTools.UI;
 namespace K2D2.Controller;
 
 /// a simple test page to add the simple circle maneuvers node made by @mole

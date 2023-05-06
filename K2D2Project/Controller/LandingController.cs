@@ -1,14 +1,11 @@
-using UnityEngine;
+using BepInEx.Logging;
+using K2D2.KSPService;
+using KSP.Game;
 using KSP.Sim;
 using KSP.Sim.impl;
-using KSP.Game;
-
-using BepInEx.Logging;
-
-using K2D2.KSPService;
-using K2D2.UI;
-
-using K2D2.Tools;
+using KTools;
+using KTools.UI;
+using UnityEngine;
 
 namespace K2D2.Controller;
 
@@ -16,33 +13,33 @@ public class LandingSettings
 {
     public bool verbose_infos
     {
-        get => GeneralSettings.sfile.GetBool("land.verbose_infos", true);
-        set { GeneralSettings.sfile.SetBool("land.verbose_infos", value); }
+        get => KBaseSettings.sfile.GetBool("land.verbose_infos", true);
+        set { KBaseSettings.sfile.SetBool("land.verbose_infos", value); }
     }
 
     public bool auto_warp
     {
-        get => GeneralSettings.sfile.GetBool("land.auto_warp", true);
-        set { GeneralSettings.sfile.SetBool("land.auto_warp", value); }
+        get => KBaseSettings.sfile.GetBool("land.auto_warp", true);
+        set { KBaseSettings.sfile.SetBool("land.auto_warp", value); }
     }
 
     public float burn_before
     {
-        get => GeneralSettings.sfile.GetFloat("land.burnBefore", 0f);
-        set { GeneralSettings.sfile.SetFloat("land.burnBefore", value); }
+        get => KBaseSettings.sfile.GetFloat("land.burnBefore", 0f);
+        set { KBaseSettings.sfile.SetFloat("land.burnBefore", value); }
     }
 
     // Warp with check of rotation
     public int rotation_warp_duration
     {
-        get => GeneralSettings.sfile.GetInt("land.rotation_warp_duration", 60);
-        set { GeneralSettings.sfile.SetInt("land.rotation_warp_duration", value); }
+        get => KBaseSettings.sfile.GetInt("land.rotation_warp_duration", 60);
+        set { KBaseSettings.sfile.SetInt("land.rotation_warp_duration", value); }
     }
 
     public float max_rotation
     {
-        get => GeneralSettings.sfile.GetFloat("land.max_rotation", 30);
-        set { GeneralSettings.sfile.SetFloat("land.max_rotation", value); }
+        get => KBaseSettings.sfile.GetFloat("land.max_rotation", 30);
+        set { KBaseSettings.sfile.SetFloat("land.max_rotation", value); }
     }
 
 
@@ -64,23 +61,23 @@ public class LandingSettings
 
     public float start_touchdown_altitude
     {
-        get => GeneralSettings.sfile.GetFloat("land.touch_down_altitude", 1500);
-        set { GeneralSettings.sfile.SetFloat("land.touch_down_altitude", value); }
+        get => KBaseSettings.sfile.GetFloat("land.touch_down_altitude", 1500);
+        set { KBaseSettings.sfile.SetFloat("land.touch_down_altitude", value); }
     }
 
     public float touch_down_ratio
     {
-        get => GeneralSettings.sfile.GetFloat("land.touch_down_ratio", 0.5f);
-        set { GeneralSettings.sfile.SetFloat("land.touch_down_ratio", value); }
+        get => KBaseSettings.sfile.GetFloat("land.touch_down_ratio", 0.5f);
+        set { KBaseSettings.sfile.SetFloat("land.touch_down_ratio", value); }
     }
 
     public float touch_down_speed
     {
-        get => GeneralSettings.sfile.GetFloat("land.touch_down_speed", 4);
+        get => KBaseSettings.sfile.GetFloat("land.touch_down_speed", 4);
         set
         {
             value = Mathf.Clamp(value, 0, 100);
-            GeneralSettings.sfile.SetFloat("land.touch_down_speed", value);
+            KBaseSettings.sfile.SetFloat("land.touch_down_speed", value);
         }
     }
 
@@ -119,7 +116,7 @@ public class LandingSettings
     {
         // UI_Tools.Title("// Touch Down");
 
-        GUILayout.Label("Start TouchDown Altitude : " + StrTool.DistanceToString(start_touchdown_altitude), GenericStyle.slider_text);
+        GUILayout.Label("Start TouchDown Altitude : " + StrTool.DistanceToString(start_touchdown_altitude), KBaseStyle.slider_text);
         start_touchdown_altitude = UI_Tools.FloatSlider(start_touchdown_altitude, 100, 5000, "Altitude for starting Touch-Down Phase");
 
         touch_down_ratio = UI_Tools.FloatSliderTxt("Altitude/speed ratio", touch_down_ratio, 0.5f, 3, "", "Speed is based on altitude");
@@ -557,7 +554,7 @@ public class LandingController : ComplexControler
         }
         GUILayout.BeginHorizontal();
 
-        isRunning = UI_Tools.ToggleButton(isRunning, "Brake", "Stop");
+        isRunning = UI_Tools.BigToggleButton(isRunning, "Brake", "Stop");
 
         if (mode != Mode.TouchDown)
             if (UI_Tools.BigButton("Touch-Down !"))

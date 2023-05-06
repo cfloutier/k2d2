@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 using BepInEx.Logging;
-using K2D2.KSPService;
 using KSP.Game;
 using KSP.Map;
 using KSP.Sim;
 using KSP.Sim.impl;
 using KSP.Sim.Maneuver;
-using KSP2FlightAssistant.KSPService;
 using KSP2FlightAssistant.MathLibrary;
 using UnityEngine;
-using UnityEngine.PlayerLoop;
+
 
 namespace K2D2.KSPService
 {
@@ -138,7 +134,7 @@ namespace K2D2.KSPService
         #region ChangeOrbit
 
 
-        
+
         public void ChangePeriapsis(double OrbitDistance)
         {
             PatchedConicsOrbit orbit = GetLastOrbit() as PatchedConicsOrbit;
@@ -148,8 +144,8 @@ namespace K2D2.KSPService
             double apoapsis = orbit.Apoapsis;
             double eccentricity = orbit.eccentricity;
             double gravitation = orbit.ReferenceBodyConstants.StandardGravitationParameter;
-            
-            if(eccentricity >= 1)
+
+            if (eccentricity >= 1)
             {
                 logger.LogMessage("Periapsis Change not possible for hyperbolic orbits");
                 return;
@@ -212,7 +208,7 @@ namespace K2D2.KSPService
         }
 
         #endregion
-        
+
         #region InterplanetaryTransfer
         public double HohmannTransfer(double UT, double OrbitDistance)
         {
@@ -295,7 +291,8 @@ namespace K2D2.KSPService
 
         private VesselComponent activeVessel
         {
-            get {
+            get
+            {
 
                 return KSPVessel.current.VesselComponent;
             }
@@ -409,25 +406,25 @@ namespace K2D2.KSPService
             double timeAP = orbit.GetUTforTrueAnomaly(Math.PI, 0);
             return timePE > timeAP;
         }
-        
+
         public bool IsOrbitElliptic()
         {
             PatchedConicsOrbit orbit = GetLastOrbit() as PatchedConicsOrbit;
             return orbit.eccentricity < 1;
         }
-        
+
         public double AddRadiusOfBody(double radius)
         {
             PatchedConicsOrbit orbit = GetLastOrbit() as PatchedConicsOrbit;
             return radius + orbit.ReferenceBodyConstants.Radius;
         }
-        
+
         public double GetCurrentPeriapsis()
         {
             PatchedConicsOrbit orbit = GetLastOrbit() as PatchedConicsOrbit;
             return orbit.Periapsis;
         }
-        
+
         public double GetCurrentApoapsis()
         {
             PatchedConicsOrbit orbit = GetLastOrbit() as PatchedConicsOrbit;
@@ -538,6 +535,6 @@ namespace K2D2.KSPService
         }
 
         #endregion
-        
+
     }
 }
