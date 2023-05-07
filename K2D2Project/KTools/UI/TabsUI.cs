@@ -142,13 +142,16 @@ public class TabsUI
         }
 
         result = GeneralTools.ClampInt(result, 0, filtered_pages.Count - 1);
-        if (result != current_index)
+        var page = filtered_pages[result];
+
+        if (page != current_page)
         {
             current_page.UIVisible = false;
-            KBaseSettings.main_tab_index = result;
-            current_page = filtered_pages[result];
+            current_page = page;
             current_page.UIVisible = true;
         }
+
+        KBaseSettings.main_tab_index = result;
 
         current_page.onGUI();
     }
