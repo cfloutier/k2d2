@@ -202,7 +202,7 @@ public class AutoLiftController : ComplexControler
             K2D2Settings.onGUI();
             lift_settings.heading = UI_Tools.HeadingSlider("heading", lift_settings.heading);
 
-            lift_settings.start_altitude_km = UI_Fields.IntField("lift.start_altitude_km", "90° Alt (km)", lift_settings.start_altitude_km, 0, Int32.MaxValue);
+            lift_settings.start_altitude_km = UI_Fields.IntFieldLine("lift.start_altitude_km", "90° Alt", lift_settings.start_altitude_km, 0, Int32.MaxValue, "km");
 
             GUILayout.Label($"45° Alt. : {mid_rotate_altitude_km:n0} km", KBaseStyle.slider_text);
             lift_settings.mid_rotate_ratio = UI_Tools.FloatSlider(lift_settings.mid_rotate_ratio, 0, 1);
@@ -210,7 +210,7 @@ public class AutoLiftController : ComplexControler
             GUILayout.Label($"5° Alt. : {end_rotate_altitude_km:n0} km", KBaseStyle.slider_text);
             lift_settings.end_rotate_ratio = UI_Tools.FloatSlider(lift_settings.end_rotate_ratio, 0, 1);
 
-            lift_settings.destination_Ap_km = UI_Fields.IntField("lift.destination_Ap_km", "Ap Altitude (km)", lift_settings.destination_Ap_km, 0, Int32.MaxValue);
+            lift_settings.destination_Ap_km = UI_Fields.IntFieldLine("lift.destination_Ap_km", "Ap Altitude", lift_settings.destination_Ap_km, 0, Int32.MaxValue, "km");
             return;
         }
 

@@ -295,7 +295,7 @@ public class UI_Tools
 
         index = index + 4;
         string[] directions = { "S", "SW", "W", "NW", "N", "NE", "E", "SE", "S", "??" };
-        GUILayout.Label(directions[index], GUILayout.Width(15));
+        GUILayout.Label(directions[index], GUILayout.Width(20));
         if (!string.IsNullOrEmpty(tooltip))
         {
             UI_Tools.ToolTipButton(tooltip);
@@ -332,8 +332,9 @@ public class UI_Tools
     {
         // simple float slider
         GUILayout.BeginHorizontal();
-        value = GUILayout.HorizontalSlider(value, min, max, KBaseStyle.slider_line, KBaseStyle.slider_node);
+        float new_value = GUILayout.HorizontalSlider(value, min, max, KBaseStyle.slider_line, KBaseStyle.slider_node);
 
+        value = new_value;
         if (!string.IsNullOrEmpty(tooltip))
         {
             UI_Tools.ToolTipButton(tooltip);
@@ -374,5 +375,6 @@ public class UI_Tools
             GUILayout.MinWidth(250),
             GUILayout.Height(height));
     }
+
 }
 

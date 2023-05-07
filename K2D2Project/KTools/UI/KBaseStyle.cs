@@ -35,7 +35,8 @@ public class KBaseStyle
         return true;
     }
 
-    public static GUIStyle error, warning, label, mid_text, console_text, phase_ok, phase_warning, phase_error;
+    public static GUIStyle error, warning, label, mid_text, console_text, phase_ok, phase_warning, phase_error, value_field;
+
     public static GUIStyle icons_label, title, slider_text;
 
     static void BuildLabels()
@@ -86,6 +87,10 @@ public class KBaseStyle
 
         title = new GUIStyle();
         title.normal.textColor = ColorTools.parseColor("#C0C1E2");
+
+        value_field = new GUIStyle(label);
+        value_field.alignment = TextAnchor.MiddleCenter;
+        value_field.normal = button.normal;
         // title.fontSize = 19;
     }
 

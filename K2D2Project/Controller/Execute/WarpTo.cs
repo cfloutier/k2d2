@@ -33,7 +33,7 @@ class WarpToSettings
         warp_speed = UI_Tools.FloatSliderTxt("Warp Speed", warp_speed, 0, 7, "", "Warp adjust rate");
         UI_Tools.Right_Left_Text("Safe", "Quick");
 
-        warp_safe_duration = UI_Fields.IntField("warp_safe_duration", "Before Burn Time", warp_safe_duration, 5, int.MaxValue,
+        warp_safe_duration = UI_Fields.IntFieldLine("warp_safe_duration", "Before Burn Time", warp_safe_duration, 5, int.MaxValue, "s",
             "Nb seconds in x1 before next phase (min:5)");
     }
 }

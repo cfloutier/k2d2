@@ -100,8 +100,8 @@ public class LandingSettings
             if (K2D2Settings.debug_mode)
             {
                 UI_Tools.Title("// Rotation Warp");
-                rotation_warp_duration = UI_Fields.IntField("rotation_warp_duration", "Rot. Warp Duration", rotation_warp_duration, 0, int.MaxValue,
-                "During Rotation Warp, Attitude is checked");
+                rotation_warp_duration = UI_Fields.IntFieldLine("rotation_warp_duration", "Rot. Warp Duration", rotation_warp_duration, 0, int.MaxValue,
+                                                                "During Rotation Warp, Attitude is checked");
                 max_rotation = UI_Tools.FloatSliderTxt("Safe Warp Rotation", max_rotation, 0, 90, "°", "Max angle (stop warp when reached)");
             }
             else

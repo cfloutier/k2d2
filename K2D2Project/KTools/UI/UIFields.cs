@@ -37,6 +37,45 @@ public class UI_Fields
         GameInputState = !inputFields.Contains(GUI.GetNameOfFocusedControl());
     }
 
+    public static int IntFieldLine(string entryName, string label, int value, int min, int max, string postfix, string tooltip = "")
+    {
+        GUILayout.BeginHorizontal();
+
+        UI_Tools.Label(label);
+        GUILayout.FlexibleSpace();
+
+        value = IntMinMaxField(entryName, value, min, max);
+        UI_Tools.Label(postfix);
+        if (!string.IsNullOrEmpty(tooltip))
+        {
+            UI_Tools.ToolTipButton(tooltip);
+        }
+
+        GUILayout.EndHorizontal();
+
+        return value;
+    }
+
+    public static int IntMinMaxField(string entryName, int value, int min, int max)
+    {
+        value = (int)DoubleField(entryName, value);
+        if (value < min) value = min;
+        if (value > max) value = max;
+        return value;
+    }
+
+    public static float FloatField(string entryName, float value)
+    {
+        return (float)DoubleField(entryName, value);
+    }
+
+    public static float FloatMinMaxField(string entryName, float value, float min, float max)
+    {
+        value = (float)DoubleField(entryName, value);
+        value = Mathf.Clamp(value, min, max);
+        return value;
+    }
+
     public static double DoubleField(string entryName, double value)
     {
         string text_value;
@@ -113,10 +152,7 @@ public class UI_Fields
         if (!ok)
             GUILayout.Label("!!!", GUILayout.Width(30));
 
-        if (!string.IsNullOrEmpty(tooltip))
-        {
-            UI_Tools.ToolTipButton(tooltip);
-        }
+       
 
         GUILayout.EndHorizontal();
         return result;

@@ -212,7 +212,7 @@ public class K2D2_Plugin : BaseSpaceWarpPlugin
         if (drawUI)
         {
             K2D2Styles.Init();
-            GUI.skin = GenericStyle.skin;
+            GUI.skin = KBaseStyle.skin;
 
             WindowTool.check_main_window_pos(ref windowRect);
 
@@ -249,21 +249,21 @@ public class K2D2_Plugin : BaseSpaceWarpPlugin
     private void FillWindow(int windowID)
     {
         TopButtons.Init(windowRect.width);
-        if (TopButtons.Button(GenericStyle.cross))
+        if (TopButtons.Button(KBaseStyle.cross))
             ToggleAppBarButton(false);
 
         // settings button
-        settings_visible = TopButtons.Toggle(settings_visible, GenericStyle.gear);
+        settings_visible = TopButtons.Toggle(settings_visible, KBaseStyle.gear);
 
         if (K2D2Settings.debug_mode)
         {
-            // if (GUI.Button(new Rect(windowRect.width - 81, 4, 25, 25), "P", GenericStyle.small_button))
+            // if (GUI.Button(new Rect(windowRect.width - 81, 4, 25, 25), "P", KBaseStyle.small_button))
             //     _popUp.isPopupVisible = !_popUp.isPopupVisible;
             if (TopButtons.Button("D"))
                 K2D2Settings.debug_mode = false;
         }
 
-        GUI.Label(new Rect(9, 2, 29, 29), K2D2Styles.k2d2_big_icon, GenericStyle.icons_label);
+        GUI.Label(new Rect(9, 2, 29, 29), K2D2Styles.k2d2_big_icon, KBaseStyle.icons_label);
         GUILayout.BeginVertical();
 
         main_ui.onGUI();

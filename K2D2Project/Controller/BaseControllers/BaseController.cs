@@ -4,6 +4,8 @@ using System.Linq;
 using KSP.Game;
 using KSP.Messages;
 
+using KTools.UI;
+
 namespace K2D2.Controller
 {
     public class BaseController : PageContent
