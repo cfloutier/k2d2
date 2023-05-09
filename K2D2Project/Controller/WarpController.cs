@@ -16,7 +16,7 @@ public class WarpController : ComplexControler
         current_vessel = K2D2_Plugin.Instance.current_vessel;
 
         Instance = this;
-        debug_mode_only = true;
+        debug_mode_only = false;
         name = "Warp";
         warp = new WarpTo();
     }
@@ -56,6 +56,7 @@ public class WarpController : ComplexControler
         if (!isRunning) return;
 
         warp.Update();
+
         if (warp.finished)
             isRunning = false;
     }
@@ -71,21 +72,33 @@ public class WarpController : ComplexControler
             return;
         }
         var orbit = current_vessel.VesselComponent.Orbit;
-        UI_Tools.Console($"timeToTransition1 : {StrTool.DurationToString(orbit.timeToTransition1)}");
-        UI_Tools.Console($"timeToTransition2 : {StrTool.DurationToString(orbit.timeToTransition1)}");
-        UI_Tools.Console($"PatchStartTransition : {orbit.PatchStartTransition}");
-        UI_Tools.Console($"PatchEndTransition : {orbit.PatchEndTransition}");
 
-        bool go = UI_Tools.BigToggleButton(isRunning, "Warp to SOI Change", "Stop");
-        if (go != isRunning && go)
+        if (orbit.PatchEndTransition == KSP.Sim.PatchTransitionType.Encounter ||
+            orbit.PatchEndTransition == KSP.Sim.PatchTransitionType.Escape)
         {
-            if (go)
-                warp.Start_Ut(orbit.timeToTransition1 + GeneralTools.Game.UniverseModel.UniversalTime + 60);
+            UI_Tools.Console($"SOI Change in : {StrTool.DurationToString(orbit.timeToTransition1)}");
 
-            isRunning = go;
+            bool go = UI_Tools.BigToggleButton(isRunning, "Warp to SOI Change", "Stop");
+            if (isRunning != go)
+            {
+                if (go)
+                {
+                    warp.Start_Ut(orbit.timeToTransition1 + GeneralTools.Game.UniverseModel.UniversalTime + 120);
+                    isRunning = true;
+                }
+                else 
+                {
+                    isRunning = false;
+                }
+            }
+
         }
-
-
+        else
+        {
+            // TODO : DBG why this does not set to false ??????
+            isRunning = false;
+            UI_Tools.Console("No SOI change");
+        }
 
         //  if (UI_Tools.BigButton("close"))
 

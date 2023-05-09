@@ -18,9 +18,11 @@ public class RepeatButton
         public float next_time;
         public float delta_time = 0;
 
+        const float min_delta_s = 0.001f;
+
         public float OnGUI(string txt, float value, float delta)
         {
-            bool is_On = GUILayout.RepeatButton(txt, KBaseStyle.small_button, GUILayout.Width(20), GUILayout.Height(22));
+            bool is_On = GUILayout.RepeatButton(txt, KBaseStyle.small_button, GUILayout.Height(22));
 
             if (Event.current.type == EventType.Repaint)
             {
@@ -31,17 +33,17 @@ public class RepeatButton
                         is_active = true;
                         delta_time = start_delta_time;
                         next_time = Time.time + delta_time;
-                        Debug.Log("value  " + value);
+                        //Debug.Log("value  " + value);
                         value += delta;
 
-                        Debug.Log("value  " + value);
-                        Debug.Log("delta  " + delta);
+                        //Debug.Log("value  " + value);
+                        //Debug.Log("delta  " + delta);
                     }
                     else if (Time.time > next_time)
                     {
                         delta_time = delta_time * 0.9f;
-                        if (delta_time < 0.1f)
-                            delta_time = 0.1f;
+                        if (delta_time < min_delta_s)
+                            delta_time = min_delta_s;
                         next_time = Time.time + delta_time;
 
                         value += delta;
@@ -60,7 +62,7 @@ public class RepeatButton
     static Dictionary<string, ButtonInstance> instances = new Dictionary<string, ButtonInstance>();
     static float start_delta_time = 0.3f;
 
-    public static float Draw(string instance_name, string txt, float value, float delta)
+    public static float OnGUI(string instance_name, string txt, float value, float delta)
     {
         ButtonInstance instance = null;
         if (!instances.ContainsKey(instance_name))
@@ -71,14 +73,12 @@ public class RepeatButton
         else
             instance = instances[instance_name];
 
-
         return instance.OnGUI(txt, value, delta);
-
     }
 
-    public static double Draw(string instance_name, string txt, double value, double delta)
+    public static double OnGUI(string instance_name, string txt, double value, double delta)
     {
-        return (double)Draw(instance_name, txt, (float)value, (float)delta);
+        return (double)OnGUI(instance_name, txt, (float)value, (float)delta);
     }
 
 }

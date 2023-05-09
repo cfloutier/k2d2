@@ -211,7 +211,7 @@ public class UI_Tools
 
     public static bool ToolTipButton(string tooltip)
     {
-        return GUILayout.Button(new GUIContent("?", tooltip), KBaseStyle.small_button, GUILayout.Width(16), GUILayout.Height(20));
+        return GUILayout.Button(new GUIContent("?", tooltip), KBaseStyle.small_button, GUILayout.Height(20));
     }
 
     static public bool BigIconButton(Texture2D icon)

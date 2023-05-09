@@ -18,7 +18,7 @@ internal class DoubleField
     public DoubleField(string entryName, double value)
     {
         this.entryName = entryName;
-        current_text_Value = value.ToString("0.####", CultureInfo.InvariantCulture);
+        current_text_Value = value.ToString("0.##", CultureInfo.InvariantCulture);
         current_value = value;
     }
 
@@ -47,7 +47,7 @@ internal class DoubleField
         {
             if (value != current_value)
             {
-                current_text_Value = value.ToString("0.####", CultureInfo.InvariantCulture);
+                current_text_Value = value.ToString("0.##", CultureInfo.InvariantCulture);
                 current_value = value;
             }
         }

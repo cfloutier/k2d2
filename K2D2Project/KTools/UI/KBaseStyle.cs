@@ -251,7 +251,7 @@ public class KBaseStyle
         setFromOn(small_button);
 
         small_button.border = new RectOffset(5, 5, 5, 5);
-        small_button.padding = new RectOffset(2, 2, 2, 2);
+        small_button.padding = new RectOffset(6, 6, 2, 2);
         small_button.overflow = new RectOffset(0, 0, 0, 0);
         small_button.alignment = TextAnchor.MiddleCenter;
 
@@ -286,6 +286,7 @@ public class KBaseStyle
     static void BuildTabs()
     {
         tab_normal = new GUIStyle(button);
+        
         tab_normal.border = new RectOffset(5, 5, 5, 5);
         tab_normal.padding = new RectOffset(10, 10, 5, 5);
         tab_normal.overflow = new RectOffset(0, 0, 0, 0);
@@ -301,9 +302,9 @@ public class KBaseStyle
         tab_normal.onNormal = tab_normal.active;
         setFromOn(tab_normal);
 
-
         tab_active = new GUIStyle(tab_normal);
         tab_active.normal.background = AssetsLoader.loadIcon("Tab_On_normal");
+        tab_active.normal.textColor = Color.black;
         setAllFromNormal(tab_active);
 
         tab_active.hover.background = AssetsLoader.loadIcon("Tab_On_hover");

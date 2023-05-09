@@ -67,7 +67,7 @@ public class AutoLiftController : ComplexControler
 
     KSPVessel current_vessel;
 
-    float inclination;
+    float elevation;
 
     public AutoLiftController()
     {
@@ -119,7 +119,7 @@ public class AutoLiftController : ComplexControler
 
         SASTool.setAutoPilot(AutopilotMode.StabilityAssist);
 
-        inclination = -90;
+        elevation = -90;
         current_vessel.SetThrottle(1);
     }
 
@@ -136,7 +136,7 @@ public class AutoLiftController : ComplexControler
 
         var up = telemetry.HorizonUp;
 
-        direction = QuaternionD.Euler(-inclination, lift_settings.heading, 0) * Vector3d.forward;
+        direction = QuaternionD.Euler(-elevation, lift_settings.heading, 0) * Vector3d.forward;
 
         Vector direction_vector = new Vector(up.coordinateSystem, direction);
 
@@ -161,17 +161,17 @@ public class AutoLiftController : ComplexControler
 
         if (altitude_km < lift_settings.start_altitude_km)
         {
-            inclination = 90;
+            elevation = 90;
         }
         else if (altitude_km < mid_rotate_altitude_km)
         {
             var ratio = Mathf.InverseLerp(lift_settings.start_altitude_km, mid_rotate_altitude_km, altitude_km);
-            inclination = Mathf.Lerp(90, 45, ratio);
+            elevation = Mathf.Lerp(90, 45, ratio);
         }
         else
         {
             var ratio = Mathf.InverseLerp(mid_rotate_altitude_km, end_rotate_altitude_km, (float)altitude_km);
-            inclination = Mathf.Lerp(45, 5, ratio);
+            elevation = Mathf.Lerp(45, 5, ratio);
         }
     }
 
@@ -220,7 +220,7 @@ public class AutoLiftController : ComplexControler
         {
             UI_Tools.Console($"Altitude = {altitude_km:n2} km");
             UI_Tools.Console($"Apoapsis Alt. = {ap_km:n2} km");
-            UI_Tools.Console($"Inclination = {inclination:n2} °");
+            UI_Tools.Console($"Inclination = {elevation:n2} °");
         }
     }
 }

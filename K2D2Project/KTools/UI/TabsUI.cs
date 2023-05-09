@@ -94,10 +94,10 @@ public class TabsUI
             }
         }
 
-        /*  if (xPos < max_width * 0.7f)
-          {
-              GUILayout.FlexibleSpace();
-          }*/
+        if (xPos < max_width * 0.9f)
+        {
+            GUILayout.FlexibleSpace();
+        }
         GUILayout.EndHorizontal();
 
         UI_Tools.Separator();
@@ -138,7 +138,7 @@ public class TabsUI
         }
         else
         {
-            result = DrawTabs(current_index);
+            result = DrawTabs(current_index, 350);
         }
 
         result = GeneralTools.ClampInt(result, 0, filtered_pages.Count - 1);
