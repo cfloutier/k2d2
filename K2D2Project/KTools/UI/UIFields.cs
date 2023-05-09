@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Text.RegularExpressions;
 using BepInEx.Logging;
 using KSP.Game;
@@ -5,14 +6,84 @@ using UnityEngine;
 
 namespace KTools.UI;
 
+internal class DoubleField
+{
+    string current_text_Value;
+    string entryName;
+    double current_value;
+    double last_parsed_value;
+    public bool focus = false;
+    bool valid = false;
+
+    public DoubleField(string entryName, double value)
+    {
+        this.entryName = entryName;
+        current_text_Value = value.ToString("0.####", CultureInfo.InvariantCulture);
+        current_value = value;
+    }
+
+    bool need_validate = false;
+
+    public void Validate()
+    {
+        if (valid)
+        {
+            need_validate = true;
+            GUI.FocusControl("");
+        }
+    }
+
+    public double OnGUI(double value)
+    {
+        Color normal = GUI.color;
+
+        if (Event.current.type == EventType.Repaint && need_validate)
+        {
+            value = last_parsed_value;
+            need_validate = false;
+        }
+       
+        if (!focus)
+        {
+            if (value != current_value)
+            {
+                current_text_Value = value.ToString("0.####", CultureInfo.InvariantCulture);
+                current_value = value;
+            }
+        }
+        else
+        {
+            double num = value;
+            bool parsed = double.TryParse(current_text_Value, NumberStyles.Any, CultureInfo.InvariantCulture, out num);
+            if (!parsed)
+            {
+                GUI.color = Color.red;
+                valid = false;
+            }
+            else
+            {
+                valid = true;
+                GUI.color = Color.green;
+                last_parsed_value = current_value = num;
+            }
+        }
+
+        GUI.SetNextControlName(entryName);
+        current_text_Value = GUILayout.TextField(current_text_Value, GUILayout.Width(100));
+
+        GUI.color = normal;
+        return value;
+    }
+}
+
+
 public class UI_Fields
 {
-    public static Dictionary<string, string> temp_dict = new Dictionary<string, string>();
-    public static List<string> inputFields = new List<string>();
+    internal static Dictionary<string, DoubleField> fields_dict = new Dictionary<string, DoubleField>();
+
     static bool _inputState = true;
 
-
-    public static ManualLogSource logger = BepInEx.Logging.Logger.CreateLogSource("KTools.UI_Fields");
+    //public static ManualLogSource logger = BepInEx.Logging.Logger.CreateLogSource("KTools.UI_Fields");
 
     static public bool GameInputState
     {
@@ -21,7 +92,7 @@ public class UI_Fields
         {
             if (_inputState != value)
             {
-                logger.LogWarning("input mode changed");
+                //logger.LogWarning("input mode changed");
 
                 if (value)
                     GameManager.Instance.Game.Input.Enable();
@@ -30,11 +101,45 @@ public class UI_Fields
             }
             _inputState = value;
         }
-    }
+     }
 
-    static public void CheckEditor()
+    static DoubleField current_focus = null;
+
+    // check editor focus and un set  Game Input, check enter key
+    static public void OnGUI()
     {
-        GameInputState = !inputFields.Contains(GUI.GetNameOfFocusedControl());
+        bool isFocused = fields_dict.ContainsKey(GUI.GetNameOfFocusedControl());
+        if (isFocused)
+        {
+            var focus = fields_dict[GUI.GetNameOfFocusedControl()];
+            if (current_focus != focus)
+            {
+                if (current_focus != null)
+                {
+                    current_focus.focus = false;
+                }
+                current_focus = focus;
+                current_focus.focus = true;
+            }
+        }
+        else
+        {
+            if (current_focus != null)
+            {
+                current_focus.focus = false;
+            }
+            current_focus = null;
+        }
+
+        if (current_focus != null)
+        {
+            if ((Event.current.type == EventType.KeyDown) && (Event.current.character == '\n'))
+            {
+                current_focus.Validate();
+            }
+        }
+
+        GameInputState = !isFocused;
     }
 
     public static int IntFieldLine(string entryName, string label, int value, int min, int max, string postfix, string tooltip = "")
@@ -78,83 +183,19 @@ public class UI_Fields
 
     public static double DoubleField(string entryName, double value)
     {
-        string text_value;
-        if (temp_dict.ContainsKey(entryName))
+        DoubleField field = null;
+
+        if (fields_dict.ContainsKey(entryName))
             // always use temp value
-            text_value = temp_dict[entryName];
+            field = fields_dict[entryName];
         else
-            text_value = value.ToString();
+        {
+            field = new DoubleField(entryName, value);
+            fields_dict[entryName] = field;
+        }
 
-        if (!inputFields.Contains(entryName))
-            inputFields.Add(entryName);
-
-        Color normal = GUI.color;
-        double num = 0;
-        bool parsed = double.TryParse(text_value, out num);
-        if (!parsed) GUI.color = Color.red;
-
-        GUI.SetNextControlName(entryName);
-        text_value = GUILayout.TextField(text_value, GUILayout.Width(100));
-
-        GUI.color = normal;
-
-        // save filtered temp value
-        temp_dict[entryName] = text_value;
-        if (parsed)
-            return num;
-
+        value = field.OnGUI(value);
         return value;
-    }
 
-    /// Simple Integer Field. for the moment there is a trouble. keys are sent to KSP2 events if focus is in the field
-    public static int IntField(string entryName, string label, int value, int min, int max, string tooltip = "")
-    {
-        string text_value = value.ToString();
-
-        if (temp_dict.ContainsKey(entryName))
-            // always use temp value
-            text_value = temp_dict[entryName];
-
-        if (!inputFields.Contains(entryName))
-            inputFields.Add(entryName);
-
-        GUILayout.BeginHorizontal();
-
-        if (!string.IsNullOrEmpty(label))
-        {
-            GUILayout.Label(label);
-        }
-
-        GUI.SetNextControlName(entryName);
-        var typed_text = GUILayout.TextField(text_value, GUILayout.Width(100));
-        typed_text = Regex.Replace(typed_text, @"[^\d-]+", "");
-
-        // save filtered temp value
-        temp_dict[entryName] = typed_text;
-
-        int result = value;
-        bool ok = true;
-        if (!int.TryParse(typed_text, out result))
-        {
-            ok = false;
-        }
-        if (result < min)
-        {
-            ok = false;
-            result = value;
-        }
-        else if (result > max)
-        {
-            ok = false;
-            result = value;
-        }
-
-        if (!ok)
-            GUILayout.Label("!!!", GUILayout.Width(30));
-
-       
-
-        GUILayout.EndHorizontal();
-        return result;
     }
 }

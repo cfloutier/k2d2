@@ -224,6 +224,26 @@ public class UI_Tools
         GUILayout.Label($"<b>{txt}</b>", KBaseStyle.title);
     }
 
+    public static void Value(string txt, float value)
+    {
+        GUILayout.Label(txt + " : "+ value.ToString("0.##", CultureInfo.InvariantCulture), KBaseStyle.console_text);
+    }
+
+    public static void Value(string txt, double value)
+    {
+        GUILayout.Label(txt + " : " + value.ToString("0.##", CultureInfo.InvariantCulture), KBaseStyle.console_text);
+    }
+
+    public static void Value(string txt, int value)
+    {
+        GUILayout.Label(txt + " : " + value.ToString(), KBaseStyle.console_text);
+    }
+
+    public static void Value(string txt, Vector3d value)
+    {
+        GUILayout.Label(txt + " : " +  StrTool.VectorToString(value), KBaseStyle.console_text);
+    }
+
     public static void Label(string txt)
     {
         GUILayout.Label(txt, KBaseStyle.label);

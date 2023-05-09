@@ -227,8 +227,8 @@ public class K2D2_Plugin : BaseSpaceWarpPlugin
             save_rect_pos();
             // Draw the tool tip if needed
             ToolTipsManager.DrawToolTips();
-            // check editor focus and un set Input
-            UI_Fields.CheckEditor();
+            // 
+            UI_Fields.OnGUI();
         }
         if (_popUp.isPopupVisible)
         {

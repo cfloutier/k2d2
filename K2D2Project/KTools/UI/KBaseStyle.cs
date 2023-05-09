@@ -8,18 +8,18 @@ public class KBaseStyle
 {
     public static bool Init()
     {
-        return BuildStyles();
+        return BuildStyles(Skins.ConsoleSkin);
     }
 
     public static GUISkin skin;
     private static bool guiLoaded = false;
 
-    public static bool BuildStyles()
+    public static bool BuildStyles(GUISkin baseSkin)
     {
         if (guiLoaded)
             return true;
 
-        skin = CopySkin(Skins.ConsoleSkin);
+        skin = CopySkin(baseSkin);
 
         BuildFrames();
         BuildSliders();
@@ -41,7 +41,6 @@ public class KBaseStyle
 
     static void BuildLabels()
     {
-
         icons_label = new GUIStyle(GUI.skin.GetStyle("Label"));
         icons_label.border = new RectOffset(0, 0, 0, 0);
         icons_label.padding = new RectOffset(0, 0, 0, 0);
@@ -92,13 +91,20 @@ public class KBaseStyle
         value_field.alignment = TextAnchor.MiddleCenter;
         value_field.normal = button.normal;
         // title.fontSize = 19;
+
+        var textField = skin.textField;
+        textField.padding = new RectOffset(5, 5, 0, 0);
+        //textField.margin = new RectOffset(0, 0, 0, 0);
+        textField.fixedHeight = 22;
+        //textField.fontSize = 5;
+
     }
 
-    public static GUIStyle separator;
+    public static GUIStyle separator, window;
     static void BuildFrames()
     {
         // Define the GUIStyle for the window
-        GUIStyle window = new GUIStyle(skin.window);
+        window = new GUIStyle(skin.window);
 
         window.border = new RectOffset(25, 25, 35, 25);
         window.margin = new RectOffset(0, 0, 0, 0);
@@ -264,9 +270,6 @@ public class KBaseStyle
         big_button.overflow = new RectOffset(0, 0, 0, 0);
         // big_button.fontSize = 20;
         big_button.alignment = TextAnchor.MiddleCenter;
-
-
-
 
         // Small Button
         icon_button = new GUIStyle(small_button);
