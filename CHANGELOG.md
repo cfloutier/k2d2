@@ -1,3 +1,12 @@
+# v0.9.1
+Improvements :
+
+* Drone new UI and options :
+  * Rool direction toward speed.
+  * Altitude and V-Speed are more flexibles
+  * New UI Infos
+
+
 # v0.9.0
 Features :
 * Added function to the open api : StopFlyNode and IsFlyNodeRunning. giving the ability to stop node execution
