@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Globalization;
 using UnityEngine;
 
@@ -136,7 +138,7 @@ public class UI_Tools
     {
         int int_value = value.GetHashCode();
         UI_Tools.Label(label);
-        int result = GUILayout.SelectionGrid(int_value, labels, labels.Length);
+        int result = GUILayout.SelectionGrid(int_value, labels, labels.Length, KBaseStyle.tab_normal);
 
         return (TEnum)Enum.ToObject(typeof(TEnum), result);
     }
@@ -211,7 +213,7 @@ public class UI_Tools
 
     public static bool ToolTipButton(string tooltip)
     {
-        return GUILayout.Button(new GUIContent("?", tooltip), KBaseStyle.small_button, GUILayout.Height(20));
+        return GUILayout.Button(new GUIContent("?", tooltip), KBaseStyle.small_button, GUILayout.Height(20), GUILayout.Width(20));
     }
 
     static public bool BigIconButton(Texture2D icon)
@@ -264,8 +266,6 @@ public class UI_Tools
         GUILayout.Label(txt, KBaseStyle.phase_error);
     }
 
-
-
     public static void Console(string txt)
     {
         GUILayout.Label(txt, KBaseStyle.console_text);
@@ -275,8 +275,6 @@ public class UI_Tools
     {
         GUILayout.Label(txt, KBaseStyle.mid_text);
     }
-
-
 
     public static int IntSlider(string txt, int value, int min, int max, string postfix = "", string tooltip = "")
     {
@@ -296,36 +294,57 @@ public class UI_Tools
         return value;
     }
 
-    public static float HeadingSlider(string txt, float value, string tooltip = "")
+
+    public static float ElevationSlider(string ui_code, float value, string tooltip = "")
     {
-        string value_str = value.ToString("N" + 1);
-        string content = $"{txt} : {value_str} °";
-        GUILayout.Label(content, KBaseStyle.slider_text);
         GUILayout.BeginHorizontal();
-        value = GUILayout.HorizontalSlider(value, -180, 180, KBaseStyle.slider_line, KBaseStyle.slider_node);
+        Label("Elevation (°)");
+        GUILayout.FlexibleSpace();
+        value = RepeatButton.OnGUI(ui_code+".elevation_minus", "--", value, -0.2f);
+        value = UI_Fields.FloatField(ui_code+".elevation_field", value);
+
+        value = RepeatButton.OnGUI(ui_code+".att.elevation_plus", "++", value, 0.2f);
+        GUILayout.FlexibleSpace();
+        GUILayout.EndHorizontal();
+
+        GUI.SetNextControlName("attitude.elevationSlider");
+        value = FloatSlider(value, -90, 90);
+
+        return value;
+    }
+
+    public static float HeadingSlider(string ui_code, float value)
+    {
+        GUILayout.BeginHorizontal();
+        Label("Heading (°)");
+        GUILayout.FlexibleSpace();
+
+        value = RepeatButton.OnGUI(ui_code+".heading_minus", "--", value, -0.2f);
+        if (value < 0)
+            value += 360;
+        value = UI_Fields.FloatField(ui_code+".heading_field", value);
+        value = RepeatButton.OnGUI(ui_code+".heading_minus", "++",value, 0.2f);
+
+        if (value > 360)
+            value -= 360;
+
+        GUILayout.FlexibleSpace();
+        GUILayout.EndHorizontal();
+
+        GUILayout.BeginHorizontal();
+        value = GUILayout.HorizontalSlider(value, 0, 360, KBaseStyle.slider_line, KBaseStyle.slider_node);
 
         int step = 45;
-        float precision = 5;
         int index = Mathf.RoundToInt(value / step);
-        float rounded = index * step;
 
-        float delta = Mathf.Abs(rounded - value);
-        if (delta < precision)
-            value = rounded;
-
-        index = index + 4;
-        string[] directions = { "S", "SW", "W", "NW", "N", "NE", "E", "SE", "S", "??" };
-        GUILayout.Label(directions[index], GUILayout.Width(20));
-        if (!string.IsNullOrEmpty(tooltip))
-        {
-            UI_Tools.ToolTipButton(tooltip);
-        }
-
+        string[] directions = { "N", "NE", "E", "SE", "S", "SW", "W", "NW", "N"};
+        GUILayout.Label(directions[index], GUILayout.Width(25));
         GUILayout.EndHorizontal();
-        // GUILayout.Label($"rounded {rounded} index {index}, delta {delta}");
-        return value;
 
+        return value;
     }
+
+
 
     public static void Separator()
     {

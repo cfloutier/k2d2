@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Globalization;
 using System.Text.RegularExpressions;
 using BepInEx.Logging;
@@ -15,10 +16,19 @@ internal class DoubleField
     public bool focus = false;
     bool valid = false;
 
-    public DoubleField(string entryName, double value)
+    string format = "0.##";
+
+    public DoubleField(string entryName, double value, int precision)
     {
         this.entryName = entryName;
-        current_text_Value = value.ToString("0.##", CultureInfo.InvariantCulture);
+
+        format = "0.";
+        for (int i = 0; i < precision ; i++)
+        {
+            format += "#";
+        }
+
+        current_text_Value = value.ToString(format, CultureInfo.InvariantCulture);
         current_value = value;
     }
 
@@ -47,7 +57,7 @@ internal class DoubleField
         {
             if (value != current_value)
             {
-                current_text_Value = value.ToString("0.##", CultureInfo.InvariantCulture);
+                current_text_Value = value.ToString(format, CultureInfo.InvariantCulture);
                 current_value = value;
             }
         }
@@ -63,7 +73,7 @@ internal class DoubleField
             else
             {
                 valid = true;
-                GUI.color = Color.green;
+                GUI.color = Color.yellow;
                 last_parsed_value = current_value = num;
             }
         }
@@ -169,19 +179,19 @@ public class UI_Fields
         return value;
     }
 
-    public static float FloatField(string entryName, float value)
+    public static float FloatField(string entryName, float value, int precision = 2)
     {
-        return (float)DoubleField(entryName, value);
+        return (float)DoubleField(entryName, value, precision);
     }
 
-    public static float FloatMinMaxField(string entryName, float value, float min, float max)
+    public static float FloatMinMaxField(string entryName, float value, float min, float max, int precision = 2)
     {
-        value = (float)DoubleField(entryName, value);
+        value = (float)DoubleField(entryName, value, precision);
         value = Mathf.Clamp(value, min, max);
         return value;
     }
 
-    public static double DoubleField(string entryName, double value)
+    public static double DoubleField(string entryName, double value, int precision = 2)
     {
         DoubleField field = null;
 
@@ -190,7 +200,7 @@ public class UI_Fields
             field = fields_dict[entryName];
         else
         {
-            field = new DoubleField(entryName, value);
+            field = new DoubleField(entryName, value, precision);
             fields_dict[entryName] = field;
         }
 

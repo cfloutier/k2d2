@@ -33,11 +33,7 @@ public class RepeatButton
                         is_active = true;
                         delta_time = start_delta_time;
                         next_time = Time.time + delta_time;
-                        //Debug.Log("value  " + value);
                         value += delta;
-
-                        //Debug.Log("value  " + value);
-                        //Debug.Log("delta  " + delta);
                     }
                     else if (Time.time > next_time)
                     {

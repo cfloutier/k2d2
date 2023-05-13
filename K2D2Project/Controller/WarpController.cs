@@ -71,6 +71,17 @@ public class WarpController : ComplexControler
                 K2D2_Plugin.Instance.settings_visible = false;
             return;
         }
+
+
+        UI_Tools.Title("// Warp to SOI");
+
+        if (isRunning)
+        {
+            isRunning = UI_Tools.BigToggleButton(isRunning, "Warping", "Stop");
+            warp.onGUI();  
+            return;
+        }
+
         var orbit = current_vessel.VesselComponent.Orbit;
 
         if (orbit.PatchEndTransition == KSP.Sim.PatchTransitionType.Encounter ||
@@ -78,29 +89,18 @@ public class WarpController : ComplexControler
         {
             UI_Tools.Console($"SOI Change in : {StrTool.DurationToString(orbit.timeToTransition1)}");
 
-            bool go = UI_Tools.BigToggleButton(isRunning, "Warp to SOI Change", "Stop");
+            bool go = UI_Tools.BigToggleButton(isRunning, "Warp to SOI Change (+1 min)", "Stop");
             if (isRunning != go)
             {
                 if (go)
-                {
-                    warp.Start_Ut(orbit.timeToTransition1 + GeneralTools.Game.UniverseModel.UniversalTime + 120);
+                { 
+                    warp.Start_Ut(orbit.timeToTransition1 + GeneralTools.Game.UniverseModel.UniversalTime + 60);
                     isRunning = true;
                 }
-                else 
-                {
-                    isRunning = false;
-                }
+
             }
-
-        }
-        else
-        {
-            // TODO : DBG why this does not set to false ??????
-            isRunning = false;
-            UI_Tools.Console("No SOI change");
         }
 
-        //  if (UI_Tools.BigButton("close"))
 
 
     }

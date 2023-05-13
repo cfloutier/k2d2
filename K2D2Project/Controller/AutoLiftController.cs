@@ -14,7 +14,7 @@ public class AutoLiftSettings
         get => KBaseSettings.sfile.GetFloat("lift.heading", 90);
         set
         {
-            // value = Mathf.Clamp(value, 0 , 1);
+            value = Mathf.Clamp(value, 0 , 360);
             KBaseSettings.sfile.SetFloat("lift.heading", value);
         }
     }
@@ -153,6 +153,9 @@ public class AutoLiftController : ComplexControler
 
     void computeValues()
     {
+        if (current_vessel.VesselComponent == null)
+            return;
+
         PatchedConicsOrbit orbit = current_vessel.VesselComponent.Orbit;
         ap_km = (float)(orbit.Apoapsis - orbit.referenceBody.radius) / 1000;
         altitude_km = (float)(current_vessel.GetSeaAltitude() / 1000);
@@ -200,9 +203,6 @@ public class AutoLiftController : ComplexControler
         if (K2D2_Plugin.Instance.settings_visible)
         {
             K2D2Settings.onGUI();
-            lift_settings.heading = UI_Tools.HeadingSlider("heading", lift_settings.heading);
-
-            lift_settings.start_altitude_km = UI_Fields.IntFieldLine("lift.start_altitude_km", "90° Alt", lift_settings.start_altitude_km, 0, Int32.MaxValue, "km");
 
             GUILayout.Label($"45° Alt. : {mid_rotate_altitude_km:n0} km", KBaseStyle.slider_text);
             lift_settings.mid_rotate_ratio = UI_Tools.FloatSlider(lift_settings.mid_rotate_ratio, 0, 1);
@@ -210,9 +210,12 @@ public class AutoLiftController : ComplexControler
             GUILayout.Label($"5° Alt. : {end_rotate_altitude_km:n0} km", KBaseStyle.slider_text);
             lift_settings.end_rotate_ratio = UI_Tools.FloatSlider(lift_settings.end_rotate_ratio, 0, 1);
 
-            lift_settings.destination_Ap_km = UI_Fields.IntFieldLine("lift.destination_Ap_km", "Ap Altitude", lift_settings.destination_Ap_km, 0, Int32.MaxValue, "km");
-            return;
+             return;
         }
+
+        lift_settings.heading = UI_Tools.HeadingSlider("lift", lift_settings.heading);
+        lift_settings.start_altitude_km = UI_Fields.IntFieldLine("lift.start_altitude_km", "90° Alt", lift_settings.start_altitude_km, 0, Int32.MaxValue, "km");
+        lift_settings.destination_Ap_km = UI_Fields.IntFieldLine("lift.destination_Ap_km", "Ap Altitude", lift_settings.destination_Ap_km, 0, Int32.MaxValue, "km");
 
         isRunning = UI_Tools.BigToggleButton(isRunning, "Start", "Stop");
 

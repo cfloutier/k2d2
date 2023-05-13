@@ -66,10 +66,6 @@ public class K2D2_Plugin : BaseSpaceWarpPlugin
     private bool drawUI = false;
     private Rect windowRect = Rect.zero;
 
-    private PopUp _popUp = new PopUp();
-    private PopUpContent _popUpContent;
-
-
     private static GameState[] validScenes = new[] { GameState.FlightView, GameState.Map3DView };
 
     //private static GameState last_game_state ;
@@ -143,10 +139,6 @@ public class K2D2_Plugin : BaseSpaceWarpPlugin
         controllerManager.AddController(new AutoLiftController());
         controllerManager.AddController(new CircleController());
         controllerManager.AddController(new WarpController());
-
-        // Add PopUp Tabs here:
-        _popUpContent = new PopUpContent(ref _popUp);
-        _popUp.AddPopUpContents("Active Maneuvers", new Action(() => _popUpContent.DisplayManeuverList(ref maneuverManager)));
 
         main_ui = new MainUI();
 
@@ -230,10 +222,6 @@ public class K2D2_Plugin : BaseSpaceWarpPlugin
             // 
             UI_Fields.OnGUI();
         }
-        if (_popUp.isPopupVisible)
-        {
-            _popUp.OnGUI();
-        }
     }
 
     public void ToggleAppBarButton(bool toggle)
@@ -257,8 +245,6 @@ public class K2D2_Plugin : BaseSpaceWarpPlugin
 
         if (K2D2Settings.debug_mode)
         {
-            // if (GUI.Button(new Rect(windowRect.width - 81, 4, 25, 25), "P", KBaseStyle.small_button))
-            //     _popUp.isPopupVisible = !_popUp.isPopupVisible;
             if (TopButtons.Button("D"))
                 K2D2Settings.debug_mode = false;
         }
@@ -278,6 +264,16 @@ public class K2D2_Plugin : BaseSpaceWarpPlugin
     public void FlyNode()
     {
         AutoExecuteManeuver.Instance.Start();
+    }
+
+    public void StopFlyNode()
+    {
+        AutoExecuteManeuver.Instance.Stop();
+    }
+
+    public bool IsFlyNodeRunning()
+    {
+        return AutoExecuteManeuver.Instance.isRunning;
     }
 
     // Public API to get the status of K2D2

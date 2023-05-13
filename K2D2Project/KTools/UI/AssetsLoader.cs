@@ -6,7 +6,7 @@ namespace KTools.UI;
 
 public class AssetsLoader
 {
-// BEPEXVersion
+    // BEPEXVersion
     public static Texture2D loadIcon(string path)
     {
         var imageTexture = AssetManager.GetAsset<Texture2D>($"{K2D2_Plugin.mod_id}/images/{path}.png");

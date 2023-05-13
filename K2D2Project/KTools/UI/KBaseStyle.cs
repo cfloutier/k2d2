@@ -53,23 +53,25 @@ public class KBaseStyle
         warning.normal.textColor = Color.yellow;
         //labelColor = GUI.skin.GetStyle("Label").normal.textColor;
 
-        phase_ok = new GUIStyle(GUI.skin.GetStyle("Label"));
-        phase_ok.normal.textColor = ColorTools.parseColor("#00BC16");
-        // phase_ok.fontSize = 20;
-
-        phase_warning = new GUIStyle(GUI.skin.GetStyle("Label"));
-        phase_warning.normal.textColor = ColorTools.parseColor("#BC9200");
-        // phase_warning.fontSize = 20;
-
-        phase_error = new GUIStyle(GUI.skin.GetStyle("Label"));
-        phase_error.normal.textColor = ColorTools.parseColor("#B30F0F");
-        // phase_error.fontSize = 20;
-
         console_text = new GUIStyle(GUI.skin.GetStyle("Label"));
         console_text.normal.textColor = ColorTools.parseColor("#B6B8FA");
         // console_text.fontSize = 15;
         console_text.padding = new RectOffset(0, 0, 0, 0);
         console_text.margin = new RectOffset(0, 0, 0, 0);
+
+
+        phase_ok = new GUIStyle(console_text);
+        phase_ok.normal.textColor = ColorTools.parseColor("#00BC16");
+        // phase_ok.fontSize = 20;
+
+        phase_warning = new GUIStyle(console_text);
+        phase_warning.normal.textColor = ColorTools.parseColor("#BC9200");
+        // phase_warning.fontSize = 20;
+
+        phase_error = new GUIStyle(console_text);
+        phase_error.normal.textColor = ColorTools.parseColor("#B30F0F");
+        // phase_error.fontSize = 20;
+
 
         slider_text = new GUIStyle(console_text);
         slider_text.normal.textColor = ColorTools.parseColor("#C0C1E2");
@@ -94,10 +96,9 @@ public class KBaseStyle
 
         var textField = skin.textField;
         textField.padding = new RectOffset(5, 5, 0, 0);
-        //textField.margin = new RectOffset(0, 0, 0, 0);
+        textField.margin = new RectOffset(0, 0, 3, 3);
         textField.fixedHeight = 22;
         //textField.fontSize = 5;
-
     }
 
     public static GUIStyle separator, window;

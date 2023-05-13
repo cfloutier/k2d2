@@ -1,7 +1,28 @@
+# v0.9.0
+Features :
+* Added function to the open api : StopFlyNode and IsFlyNodeRunning. giving the ability to stop node execution
+* Warp : added a little Warp to SOI Tool
+* Attitude : Enhanced the Attitude controller. Is is now not only in debug mode and have a more stable way to select the direction.
+  can be very useful for planes.
+* Lift : direction is back in main page
+
+Improvements :
+
+* bew UI textures for Tabs && button
+* new KTools Ui made for FlightPlan
+  * Added Repeat Buttons for attitude selection
+  * Added new version of editor fields : the value is validated only when Enter/Return is pressed. 
+  the yellow color mean than it is not yet used. No more value changes on the fly cause it could crash the vessel if wrong input were typed.
+
+* Drone : a small Kill H-Speed tool for final precise landing.
+  + Altitude Control rather than V-Speed only
+
+Fixes :
+* many little fixes when loading scene (Less NPE)
+
 # v0.8.1
 Features :
 * Little open API that schlorat's [FlightPlan](https://spacedock.info/mod/3359/Flight%20Plan) will use in next version
-
 
 # v0.8.0
 Features :
