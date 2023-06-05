@@ -27,13 +27,22 @@ public class AssetsLoader
         return imageTexture;
     }
 
-
-
-
     public static Font loadFont(string path)
     {
-        var font = AssetManager.GetAsset<Font>($"{K2D2_Plugin.mod_id}/images/fonts/{path}");
-         //   Check if the texture is null
+        var bundle = AssetManager.GetAsset<AssetBundle>($"{K2D2_Plugin.mod_id}/bundles/fonts.bundle");
+
+        if (bundle == null)
+        {
+            // Print an error message to the Console
+            Debug.LogError("Failed to load font from path: " + path);
+            return null;
+        }
+
+        Font font = bundle.LoadAsset<Font>(path);
+
+     //   Font font = AssetManager.GetAsset<Font>($"{K2D2_Plugin.mod_id}/fonts/{path}.ttf");
+     //   AssetManager.TryGetAsset<Font>($"{K2D2_Plugin.mod_id}/fonts/{path}.ttf", out font);
+         //   Check if the font is null
         if (font == null)
         {
             // Print an error message to the Console
