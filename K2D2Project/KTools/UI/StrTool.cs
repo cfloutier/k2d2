@@ -1,5 +1,8 @@
 namespace KTools.UI;
 
+using UnityEngine;
+
+
 public class StrTool
 {
     static public string DurationToString(double secs)
@@ -66,9 +69,14 @@ public class StrTool
         return sign + meters.ToString("0") + " m";
     }
 
-    static public string VectorToString(Vector3d vec)
+    static public string Vector3ToString(Vector3d vec)
     {
         return $"{vec.x:n2} {vec.y:n2} {vec.z:n2}";
+    }
+
+    static public string Vector2ToString(Vector2 vec)
+    {
+        return $"{vec.x:n2} {vec.y:n2}";
     }
 
 

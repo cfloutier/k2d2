@@ -26,4 +26,28 @@ public class AssetsLoader
 
         return imageTexture;
     }
+
+
+
+
+    public static Font loadFont(string path)
+    {
+        var font = AssetManager.GetAsset<Font>($"{K2D2_Plugin.mod_id}/images/fonts/{path}");
+         //   Check if the texture is null
+        if (font == null)
+        {
+            // Print an error message to the Console
+            Debug.LogError("Failed to load font from path: " + path);
+
+            // Print the full path of the resource
+            Debug.Log("Full resource path: " + Application.dataPath + "/" + path);
+
+            // Print the type of resource that was expected
+            Debug.Log("Expected resource type: Font");
+        }
+
+        return font;
+    }
+
+
 }

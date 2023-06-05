@@ -15,13 +15,13 @@ public class DroneSettings
 {
     public bool show_details
     {
-        get => KBaseSettings.sfile.GetBool("drone.wanted_speed", true);
+        get => KBaseSettings.sfile.GetBool("drone.show_details", true);
         set
         {
-            KBaseSettings.sfile.SetBool("drone.wanted_speed", value);
+            KBaseSettings.sfile.SetBool("drone.show_details", value);
         }
     }
-  
+
     public float wanted_speed
     {
         get => KBaseSettings.sfile.GetFloat("drone.wanted_speed", 0);
@@ -70,7 +70,6 @@ public class DroneSettings
         }
     }
 
-
     public void onGUI()
     {
         UI_Tools.Title("Drone Settings");
@@ -92,7 +91,6 @@ public class DroneController : ComplexControler
 
     public ManualLogSource logger = BepInEx.Logging.Logger.CreateLogSource("K2D2.DroneController");
 
-
     public SASMode sas_mode = SASMode.SurfaceUp;
     public enum SASMode { Locked, SurfaceUp, KillHSpeed }
     public static string[] sas_labels = { "Locked", "Up", "Kill Speed" };
@@ -101,7 +99,6 @@ public class DroneController : ComplexControler
     public VSpeedMode vspeed_mode = VSpeedMode.Direct;
     public enum VSpeedMode { Direct, Altitude }
     public static string[] vspeed_labels = { "Direct", "Altitude" };
-
 
     public ForwardDirection forward_dir = ForwardDirection.Free;
     public enum ForwardDirection { Free, Speed, Camera }
@@ -256,7 +253,6 @@ public class DroneController : ComplexControler
 
     float current_speed;
 
-
     public override void Update()
     {
         if (!ui_visible && !isRunning) return;
@@ -300,6 +296,10 @@ public class DroneController : ComplexControler
         base.Update();
     }
 
+
+    float delta_angular_speed = 0;
+
+
     void setForwardDirection()
     {
         if (forward_dir == ForwardDirection.Free)
@@ -307,7 +307,12 @@ public class DroneController : ComplexControler
 
         if (forward_dir == ForwardDirection.Speed)
         {
-            var roll = Mathf.Clamp(delta_forward_heading / 100, -1, 1);
+            var wanted_speed = delta_forward_heading / 10;
+            var angularVelocity = current_vessel.GetAngularSpeed().vector;
+
+            delta_angular_speed = (float) (wanted_speed - angularVelocity.z);
+
+            var roll = Mathf.Clamp(delta_angular_speed / 10, -1, 1);
 
             logger.LogInfo("set roll" + roll);
             current_vessel.SetRoll(roll);
@@ -511,6 +516,12 @@ public class DroneController : ComplexControler
         {
             UI_Tools.Console($"h_speed_heading  : {h_speed_heading:n2} °");
             UI_Tools.Console($"forward_heading  : {delta_forward_heading:n2} °");
+
+
+            var angularVelocity = current_vessel.GetAngularSpeed().vector;
+
+            UI_Tools.Console($"angularVelocity  : {  StrTool.Vector3ToString(angularVelocity)  } °");
+            UI_Tools.Console($"delta_angular_speed  : {delta_angular_speed:n2} °/s");
         }
     }
 

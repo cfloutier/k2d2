@@ -180,7 +180,7 @@ public class TurnTo : ExecuteController
             Vector maneuvre_dir = telemetry.ManeuverDirection;
             // UI_Tools.Console($"maneuvre_dir ref {maneuvre_dir.coordinateSystem}");
             // UI_Tools.Console($"maneuvre_dir {StrTool.VectorToString(maneuvre_dir.vector)}");
-            UI_Tools.Console($"angularVelocity {StrTool.VectorToString(angularVelocity)}");
+            UI_Tools.Console($"angularVelocity {StrTool.Vector3ToString(angularVelocity)}");
             // UI_Tools.Console($"angularVelocity {StrTool.VectorToString(angularVelocity)}");
             UI_Tools.Console($"autopilot {autopilot.AutopilotMode}");
         }

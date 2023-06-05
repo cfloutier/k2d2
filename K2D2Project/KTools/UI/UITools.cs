@@ -122,6 +122,16 @@ public class TopButtons
 /// TODO : remove static, make it singleton
 public class UI_Tools
 {
+    public static void OnGUI()
+    {
+        ToolTipsManager.DrawToolTips();
+        UI_Fields.OnGUI();
+    }
+
+    public static void OnUpdate()
+    {
+        HeadingSlider.onStaticUpdate();
+    }
 
     public static int GetEnumValue<T>(T inputEnum) where T : struct, IConvertible
     {
@@ -243,7 +253,12 @@ public class UI_Tools
 
     public static void Value(string txt, Vector3d value)
     {
-        GUILayout.Label(txt + " : " +  StrTool.VectorToString(value), KBaseStyle.console_text);
+        GUILayout.Label(txt + " : " +  StrTool.Vector3ToString(value), KBaseStyle.console_text);
+    }
+
+    public static void Value(string txt, Vector2 value)
+    {
+        GUILayout.Label(txt + " : " + StrTool.Vector2ToString(value), KBaseStyle.console_text);
     }
 
     public static void Label(string txt)
@@ -312,38 +327,6 @@ public class UI_Tools
 
         return value;
     }
-
-    public static float HeadingSlider(string ui_code, float value)
-    {
-        GUILayout.BeginHorizontal();
-        Label("Heading (°)");
-        GUILayout.FlexibleSpace();
-
-        value = RepeatButton.OnGUI(ui_code+".heading_minus", "--", value, -0.2f);
-        if (value < 0)
-            value += 360;
-        value = UI_Fields.FloatField(ui_code+".heading_field", value);
-        value = RepeatButton.OnGUI(ui_code+".heading_minus", "++",value, 0.2f);
-
-        if (value > 360)
-            value -= 360;
-
-        GUILayout.FlexibleSpace();
-        GUILayout.EndHorizontal();
-
-        GUILayout.BeginHorizontal();
-        value = GUILayout.HorizontalSlider(value, 0, 360, KBaseStyle.slider_line, KBaseStyle.slider_node);
-
-        int step = 45;
-        int index = Mathf.RoundToInt(value / step);
-
-        string[] directions = { "N", "NE", "E", "SE", "S", "SW", "W", "NW", "N"};
-        GUILayout.Label(directions[index], GUILayout.Width(25));
-        GUILayout.EndHorizontal();
-
-        return value;
-    }
-
 
 
     public static void Separator()

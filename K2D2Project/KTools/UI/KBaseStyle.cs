@@ -21,6 +21,11 @@ public class KBaseStyle
 
         skin = CopySkin(baseSkin);
 
+        LoadFonts();
+        LoadIcons();
+
+
+        BuildLabels();
         BuildFrames();
         BuildSliders();
         BuildButtons();
@@ -28,8 +33,8 @@ public class KBaseStyle
         BuildFoldout();
         BuildToggle();
         BuildProgressBar();
-        BuildIcons();
-        BuildLabels();
+      
+        BuildHeading();
 
         guiLoaded = true;
         return true;
@@ -38,6 +43,17 @@ public class KBaseStyle
     public static GUIStyle error, warning, label, mid_text, console_text, phase_ok, phase_warning, phase_error, value_field;
 
     public static GUIStyle icons_label, title, slider_text;
+    public static Font arial_font, arial_bold_font, caravan_font;
+
+
+    static void LoadFonts()
+    {
+        arial_font = AssetsLoader.loadFont("ARIAL");
+        arial_bold_font = AssetsLoader.loadFont("ARIALBD");
+        caravan_font = AssetsLoader.loadFont("Caravan");
+
+        skin.font = arial_font;
+    }
 
     static void BuildLabels()
     {
@@ -53,25 +69,23 @@ public class KBaseStyle
         warning.normal.textColor = Color.yellow;
         //labelColor = GUI.skin.GetStyle("Label").normal.textColor;
 
+        phase_ok = new GUIStyle(GUI.skin.GetStyle("Label"));
+        phase_ok.normal.textColor = ColorTools.parseColor("#00BC16");
+        // phase_ok.fontSize = 20;
+
+        phase_warning = new GUIStyle(GUI.skin.GetStyle("Label"));
+        phase_warning.normal.textColor = ColorTools.parseColor("#BC9200");
+        // phase_warning.fontSize = 20;
+
+        phase_error = new GUIStyle(GUI.skin.GetStyle("Label"));
+        phase_error.normal.textColor = ColorTools.parseColor("#B30F0F");
+        // phase_error.fontSize = 20;
+
         console_text = new GUIStyle(GUI.skin.GetStyle("Label"));
         console_text.normal.textColor = ColorTools.parseColor("#B6B8FA");
         // console_text.fontSize = 15;
         console_text.padding = new RectOffset(0, 0, 0, 0);
         console_text.margin = new RectOffset(0, 0, 0, 0);
-
-
-        phase_ok = new GUIStyle(console_text);
-        phase_ok.normal.textColor = ColorTools.parseColor("#00BC16");
-        // phase_ok.fontSize = 20;
-
-        phase_warning = new GUIStyle(console_text);
-        phase_warning.normal.textColor = ColorTools.parseColor("#BC9200");
-        // phase_warning.fontSize = 20;
-
-        phase_error = new GUIStyle(console_text);
-        phase_error.normal.textColor = ColorTools.parseColor("#B30F0F");
-        // phase_error.fontSize = 20;
-
 
         slider_text = new GUIStyle(console_text);
         slider_text.normal.textColor = ColorTools.parseColor("#C0C1E2");
@@ -88,20 +102,18 @@ public class KBaseStyle
 
         title = new GUIStyle();
         title.normal.textColor = ColorTools.parseColor("#C0C1E2");
-
-        value_field = new GUIStyle(label);
-        value_field.alignment = TextAnchor.MiddleCenter;
-        value_field.normal = button.normal;
-        // title.fontSize = 19;
+        title.font = arial_bold_font;
+        title.fontSize = 30;
 
         var textField = skin.textField;
         textField.padding = new RectOffset(5, 5, 0, 0);
-        textField.margin = new RectOffset(0, 0, 3, 3);
+        //textField.margin = new RectOffset(0, 0, 0, 0);
         textField.fixedHeight = 22;
         //textField.fontSize = 5;
+
     }
 
-    public static GUIStyle separator, window;
+    public static GUIStyle separator, window, box;
     static void BuildFrames()
     {
         // Define the GUIStyle for the window
@@ -112,21 +124,24 @@ public class KBaseStyle
         window.padding = new RectOffset(10, 10, 44, 10);
         window.overflow = new RectOffset(0, 0, 0, 0);
 
-        // window.fontSize = 20;
+        window.font = caravan_font;
+        window.fontSize = 25;
+
         window.contentOffset = new Vector2(31, -40);
 
         // Set the background color of the window
         window.normal.background = AssetsLoader.loadIcon("window");
-        window.normal.textColor = Color.black;
+        window.normal.textColor = Color.white;
         setAllFromNormal(window);
         window.alignment = TextAnchor.UpperLeft;
         window.stretchWidth = true;
-        // window.fontSize = 20;
+       
         window.contentOffset = new Vector2(31, -40);
+
         skin.window = window;
 
         // Define the GUIStyle for the box
-        GUIStyle box = new GUIStyle(window);
+        box = new GUIStyle(window);
         box.normal.background = AssetsLoader.loadIcon("Box");
         setAllFromNormal(box);
         box.border = new RectOffset(10, 10, 10, 10);
@@ -165,7 +180,7 @@ public class KBaseStyle
         setAllFromNormal(separator);
     }
 
-    public static GUIStyle slider_line, slider_node;
+    public static GUIStyle slider_line, slider_node, v_line;
 
     static void BuildSliders()
     {
@@ -186,17 +201,44 @@ public class KBaseStyle
         slider_node.fixedWidth = 21;
         slider_node.fixedHeight = 21;
 
+        v_line = new GUIStyle(GUI.skin.box);
+        v_line.normal.background = AssetsLoader.loadIcon("V_Line");
+        setAllFromNormal(v_line);
+        v_line.border = new RectOffset(0, 0, 0, 0);
+
     }
+
+    public static GUIStyle heading, text_heading_mini, text_heading_big;
+
+    static void BuildHeading()
+    {
+        heading = new GUIStyle(box);
+        heading.normal.background = AssetsLoader.loadIcon("HeadingFrame");
+        setAllFromNormal(heading);
+        heading.margin = new RectOffset(0, 0, 5, 5);
+
+        text_heading_mini = new GUIStyle(console_text);
+        text_heading_mini.alignment = TextAnchor.UpperCenter;
+        text_heading_mini.normal.textColor = Color.white;
+        text_heading_mini.fontSize = 10;
+        setAllFromNormal(text_heading_mini);
+
+        text_heading_big = new GUIStyle(small_button);
+        text_heading_big.padding = new RectOffset();
+        text_heading_big.normal.background = AssetsLoader.loadIcon("Empty");
+        text_heading_big.fontSize = 16;
+        text_heading_big.font = arial_bold_font;
+    }
+
 
     // icons
     public static Texture2D gear, icon, mnc_icon, cross;
 
-    static void BuildIcons()
+    static void LoadIcons()
     {
         // icons
         gear = AssetsLoader.loadIcon("gear");
         icon = AssetsLoader.loadIcon("icon");
-
         // mnc_icon = AssetsLoader.loadIcon("mnc_new_icon_50");
         cross = AssetsLoader.loadIcon("Cross");
     }
@@ -280,6 +322,11 @@ public class KBaseStyle
         bigicon_button.fixedWidth = 50;
         bigicon_button.fixedHeight = 50;
         bigicon_button.fontStyle = FontStyle.Bold;
+
+
+        value_field = new GUIStyle(label);
+        value_field.alignment = TextAnchor.MiddleCenter;
+        value_field.normal = button.normal;
 
     }
 

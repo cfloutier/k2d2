@@ -1,9 +1,10 @@
 using System.Collections.Generic;
 using System.Globalization;
-using System.Text.RegularExpressions;
-using BepInEx.Logging;
 using KSP.Game;
 using UnityEngine;
+
+using System.Text.RegularExpressions;
+using BepInEx.Logging;
 
 namespace KTools.UI;
 

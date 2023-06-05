@@ -124,7 +124,7 @@ public class AttitudeController : ComplexControler
         UI_Tools.Title("// Attitude Pilot");
 
         AttitudeSettings.elevation = UI_Tools.ElevationSlider("attitude", AttitudeSettings.elevation);
-        AttitudeSettings.heading = UI_Tools.HeadingSlider("attitude", AttitudeSettings.heading);
+        AttitudeSettings.heading = HeadingSlider.onGUI("attitude.heading", "Heading", AttitudeSettings.heading, true);
 
         isRunning = UI_Tools.BigToggleButton(isRunning, "Start", "Stop");
     }
