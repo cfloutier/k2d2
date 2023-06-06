@@ -28,7 +28,6 @@ SerializeReferenceClassIdentifiers:
   ClassName: UnityEngine.GUIStyle
 Assets:
 - Assets/AssetBundleSources/ARIAL.TTF
-- Assets/New GUISkin.guiskin
 - Assets/AssetBundleSources/ARIALBD.TTF
 - Assets/AssetBundleSources/Caravan.ttf
 Dependencies: []

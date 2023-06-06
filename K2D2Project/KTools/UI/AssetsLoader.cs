@@ -29,16 +29,16 @@ public class AssetsLoader
 
     public static Font loadFont(string path)
     {
-        var bundle = AssetManager.GetAsset<AssetBundle>($"{K2D2_Plugin.mod_id}/bundles/fonts.bundle");
+        var font = AssetManager.GetAsset<Font>($"{K2D2_Plugin.mod_id}/fonts/assetbundlesources/{path}.ttf");
 
-        if (bundle == null)
+      /*  if (bundle == null)
         {
             // Print an error message to the Console
             Debug.LogError("Failed to load font from path: " + path);
             return null;
-        }
+        }*/
 
-        Font font = bundle.LoadAsset<Font>(path);
+      //  Font font = bundle.LoadAsset<Font>(path);
 
      //   Font font = AssetManager.GetAsset<Font>($"{K2D2_Plugin.mod_id}/fonts/{path}.ttf");
      //   AssetManager.TryGetAsset<Font>($"{K2D2_Plugin.mod_id}/fonts/{path}.ttf", out font);
