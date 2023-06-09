@@ -81,7 +81,7 @@ public class LandingSettings
         }
     }
 
-    public SimpleAccordion accordion = new SimpleAccordion();
+    public FoldOut accordion = new FoldOut();
 
     void LandingUI()
     {

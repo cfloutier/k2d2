@@ -129,7 +129,7 @@ public class HeadingSlider
         dragin = false;    
     }
 
-    float onGUI(string label, float value)
+    public float onGUI(string label, float value)
     {
        // GUILayout.Box("", GUILayout.Width(200), GUILayout.Height(10));
         if (dragin )
@@ -139,7 +139,6 @@ public class HeadingSlider
         }
 
         value = fixDeg(value);
-        UI_Tools.Label(label + " : " + value.ToString("n1", CultureInfo.InvariantCulture));
 
         Rect rt = GUILayoutUtility.GetRect( new GUIContent("", ""), KBaseStyle.heading, GUILayout.Height(30));
         if (interactive)
@@ -154,13 +153,13 @@ public class HeadingSlider
             }
         }
         }
-        
+
         return drawContent(value, rt); 
     }
 
     public static Dictionary<string, HeadingSlider> sliders = new Dictionary<string, HeadingSlider>();
 
-    public static float onGUI(string ui_code, string label, float value, bool interactive, int pixel_per_deg = 3)
+    public static float onStaticGUI(string ui_code, string label, float value, bool interactive, int pixel_per_deg = 3)
     {
         HeadingSlider slider;
         if (!sliders.ContainsKey(ui_code))
@@ -174,7 +173,6 @@ public class HeadingSlider
         return slider.onGUI(label, value);
     }
 
-
     public static void onStaticUpdate()
     {
         if (Input.GetMouseButtonUp(0) || Input.GetMouseButtonUp(1))
@@ -185,5 +183,4 @@ public class HeadingSlider
             }
         }
     }
-    
 }

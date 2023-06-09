@@ -1,7 +1,8 @@
-namespace KTools.UI;
 
+using System;
 using UnityEngine;
 
+namespace KTools.UI;
 
 public class StrTool
 {
