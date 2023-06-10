@@ -177,6 +177,8 @@ public class K2D2_Plugin : BaseSpaceWarpPlugin
 
             // Update Controllers
             controllerManager.UpdateControllers();
+
+            UI_Tools.OnUpdate();
         }
     }
 
@@ -212,15 +214,12 @@ public class K2D2_Plugin : BaseSpaceWarpPlugin
                 GUIUtility.GetControlID(FocusType.Passive),
                 windowRect,
                 FillWindow,
-                $"<color=#71DBDB>K2-D2</color>",
+                "   K2-D2",
                 GUILayout.Height(0),
                 GUILayout.Width(350));
 
             save_rect_pos();
-            // Draw the tool tip if needed
-            ToolTipsManager.DrawToolTips();
-            // 
-            UI_Fields.OnGUI();
+            UI_Tools.OnGUI();
         }
     }
 

@@ -27,13 +27,14 @@ public class KBaseStyle
 
         BuildLabels();
         BuildFrames();
+
         BuildSliders();
         BuildButtons();
         BuildTabs();
         BuildFoldout();
         BuildToggle();
         BuildProgressBar();
-      
+
         BuildHeading();
 
         guiLoaded = true;
@@ -103,7 +104,8 @@ public class KBaseStyle
         title = new GUIStyle();
         title.normal.textColor = ColorTools.parseColor("#C0C1E2");
         title.font = arial_bold_font;
-        title.fontSize = 30;
+        title.fontSize = 20;
+        title.margin = new RectOffset(5, 0, 2, 10);
 
         var textField = skin.textField;
         textField.padding = new RectOffset(5, 5, 0, 0);
@@ -113,7 +115,7 @@ public class KBaseStyle
 
     }
 
-    public static GUIStyle separator, window, box;
+    public static GUIStyle separator, window, box, field;
     static void BuildFrames()
     {
         // Define the GUIStyle for the window
@@ -135,7 +137,6 @@ public class KBaseStyle
         setAllFromNormal(window);
         window.alignment = TextAnchor.UpperLeft;
         window.stretchWidth = true;
-       
         window.contentOffset = new Vector2(31, -40);
 
         skin.window = window;
@@ -150,7 +151,16 @@ public class KBaseStyle
         box.overflow = new RectOffset(0, 0, 0, 0);
         skin.box = box;
         skin.scrollView = box;
+        // Define the GUIStyle for the editor field
 
+        field = new GUIStyle(GUI.skin.textField);
+        field.normal.background = box.normal.background;
+        setAllFromNormal(field);
+        field.border = new RectOffset(10, 10, 10, 10);
+        field.fontSize = 14;
+        field.fixedHeight = 25;
+        field.contentOffset = new Vector2(2,1);
+        GUI.skin.textField = field;
 
         // define the V scrollbar
         GUIStyle verticalScrollbar = new GUIStyle(GUI.skin.verticalScrollbar);
@@ -215,7 +225,7 @@ public class KBaseStyle
         heading = new GUIStyle(box);
         heading.normal.background = AssetsLoader.loadIcon("HeadingFrame");
         setAllFromNormal(heading);
-        heading.margin = new RectOffset(0, 0, 5, 5);
+        heading.margin = new RectOffset(0, 0, 15, 20);
 
         text_heading_mini = new GUIStyle(console_text);
         text_heading_mini.alignment = TextAnchor.UpperCenter;

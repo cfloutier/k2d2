@@ -22,7 +22,7 @@ public class RepeatButton
 
         public float OnGUI(string txt, float value, float delta)
         {
-            bool is_On = GUILayout.RepeatButton(txt, KBaseStyle.small_button, GUILayout.Height(22));
+            bool is_On = GUILayout.RepeatButton(txt, KBaseStyle.small_button, GUILayout.Height(25));
 
             if (Event.current.type == EventType.Repaint)
             {

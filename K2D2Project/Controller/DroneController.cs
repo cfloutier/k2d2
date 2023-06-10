@@ -534,6 +534,8 @@ public class DroneController : ComplexControler
             return;
         }
 
+        UI_Tools.Title("Drone Pilot");
+
         isRunning = UI_Tools.BigToggleButton(isRunning, "Run", "Stop");
         if (!isRunning)
             return;

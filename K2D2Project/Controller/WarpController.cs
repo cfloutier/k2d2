@@ -72,8 +72,7 @@ public class WarpController : ComplexControler
             return;
         }
 
-
-        UI_Tools.Title("// Warp to SOI");
+        UI_Tools.Title("Warp to SOI");
 
         if (isRunning)
         {

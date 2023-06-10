@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using BepInEx.Logging;
 using UnityEngine;
 using System.Linq;
 using System.Globalization;
@@ -8,16 +9,15 @@ namespace KTools.UI;
 
 public class HeadingSlider
 {
+    public static ManualLogSource logger = BepInEx.Logging.Logger.CreateLogSource("K2D2.HeadingSlider");
+
     public HeadingSlider(bool interactive, int pixel_per_deg = 4)
     {
         this.pixel_per_deg = pixel_per_deg;
-
         this.interactive = interactive;
-
     }
 
     Vector2 pos = Vector2.zero;
-
 
     public bool interactive;
 
@@ -53,6 +53,7 @@ public class HeadingSlider
             GUI.BeginClip(rt);
 
             float xpos = 0;
+           
 
             float min_deg = Mathf.Ceil(xpos_to_deg(0, value, rt.width));
             float max_deg = Mathf.Floor(xpos_to_deg(rt.width, value, rt.width));
@@ -79,16 +80,18 @@ public class HeadingSlider
                         rc = new Rect(xpos - 20, h - 2, 40, 20);
                         if (interactive)
                         {
-                        if (GUI.Button(rc, directions[index], KBaseStyle.text_heading_big))
-                        {
+                            if (GUI.Button(rc, directions[index], KBaseStyle.text_heading_big))
+                            {
                                 value = drawn_deg;
+
+                                logger.LogInfo($"clic to {KBaseStyle.text_heading_big}");
                             }
                         }
                         else
                         {
                             GUI.Label(rc, directions[index], KBaseStyle.text_heading_big);
                         }
-                       
+
                     }
                     else
                         Debug.LogError("index = " + index);
@@ -96,9 +99,9 @@ public class HeadingSlider
                 else if (drawn_deg % 10 == 0)
                 {
                     if ( !forbiden_values.Contains((int) drawn_deg))
-                    { 
+                    {
                         rc = new Rect(xpos - 15, h, 30, 20);
-                        GUI.Label(rc, drawn_deg.ToString(), KBaseStyle.text_heading_mini);      
+                        GUI.Label(rc, drawn_deg.ToString(), KBaseStyle.text_heading_mini);
                     }
                 }
 
@@ -106,10 +109,11 @@ public class HeadingSlider
             }
 
 
-            GUI.Label(new Rect(0, 0, rt.width, rt.height), "", KBaseStyle.heading);
+            //GUI.Label(new Rect(0, 0, rt.width, rt.height), "", KBaseStyle.heading);
+            GUI.Button(new Rect(0, 0, rt.width, rt.height), "", KBaseStyle.heading);
             GUI.Label(new Rect(rt.width / 2, 0, 1, rt.height), "", KBaseStyle.v_line);
             GUI.EndClip();
-            
+
         }
         return value;
     }
@@ -126,10 +130,10 @@ public class HeadingSlider
 
     public void onMouseUp()
     {
-        dragin = false;    
+        dragin = false;
     }
 
-    public float onGUI(string label, float value)
+    float on_GUI(float value)
     {
        // GUILayout.Box("", GUILayout.Width(200), GUILayout.Height(10));
         if (dragin )
@@ -143,23 +147,24 @@ public class HeadingSlider
         Rect rt = GUILayoutUtility.GetRect( new GUIContent("", ""), KBaseStyle.heading, GUILayout.Height(30));
         if (interactive)
         {
-        if (rt.Contains(Event.current.mousePosition))
-        {
-            if (Event.current.type == EventType.MouseDown)
+            if (rt.Contains(Event.current.mousePosition))
             {
-                startPos = Event.current.mousePosition;
-                    startDragHeadin = value;
-                dragin = true;
+                if (Event.current.type == EventType.MouseDown)
+                {
+                    startPos = Event.current.mousePosition;
+                        startDragHeadin = value;
+
+                    dragin = true;
+                }
             }
         }
-        }
 
-        return drawContent(value, rt); 
+        return drawContent(value, rt);
     }
 
     public static Dictionary<string, HeadingSlider> sliders = new Dictionary<string, HeadingSlider>();
 
-    public static float onStaticGUI(string ui_code, string label, float value, bool interactive, int pixel_per_deg = 3)
+    public static float onGUI(string ui_code, float value, bool interactive, int pixel_per_deg = 3)
     {
         HeadingSlider slider;
         if (!sliders.ContainsKey(ui_code))
@@ -170,7 +175,7 @@ public class HeadingSlider
         else
             slider = sliders[ui_code];
 
-        return slider.onGUI(label, value);
+        return slider.on_GUI(value);
     }
 
     public static void onStaticUpdate()

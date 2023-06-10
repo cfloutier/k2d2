@@ -121,12 +121,11 @@ public class AttitudeController : ComplexControler
             return;
         }
 
-        UI_Tools.Title("// Attitude Pilot");
+        UI_Tools.Title("Attitude Pilot");
 
-        AttitudeSettings.elevation = UI_Tools.ElevationSlider("attitude", AttitudeSettings.elevation);
-        AttitudeSettings.heading = HeadingSlider.onStaticGUI("attitude.heading", "Heading", AttitudeSettings.heading, true);
-
+        AttitudeSettings.elevation = UI_Tools.ElevationSlider("attitude.elevation", AttitudeSettings.elevation);
+        AttitudeSettings.heading = UI_Tools.HeadingControl("attitude.heading", AttitudeSettings.heading);
         isRunning = UI_Tools.BigToggleButton(isRunning, "Start", "Stop");
     }
 
-}  
+}

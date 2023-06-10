@@ -17,11 +17,14 @@ internal class DoubleField
     public bool focus = false;
     bool valid = false;
 
+    public float width = 100;
+
     string format = "0.##";
 
-    public DoubleField(string entryName, double value, int precision)
+    public DoubleField(string entryName, double value, int precision, float width)
     {
         this.entryName = entryName;
+        this.width = width;
 
         format = "0.";
         for (int i = 0; i < precision ; i++)
@@ -80,7 +83,10 @@ internal class DoubleField
         }
 
         GUI.SetNextControlName(entryName);
-        current_text_Value = GUILayout.TextField(current_text_Value, GUILayout.Width(100));
+        current_text_Value = GUILayout.TextField(current_text_Value, KBaseStyle.field, GUILayout.Width(width));
+
+       // GUILayout.Label(current_text_Value);
+
 
         GUI.color = normal;
         return value;
@@ -180,19 +186,19 @@ public class UI_Fields
         return value;
     }
 
-    public static float FloatField(string entryName, float value, int precision = 2)
+    public static float FloatField(string entryName, float value, int precision = 2, float width = 100)
     {
-        return (float)DoubleField(entryName, value, precision);
+        return (float)DoubleField(entryName, value, precision, width);
     }
 
-    public static float FloatMinMaxField(string entryName, float value, float min, float max, int precision = 2)
+    public static float FloatMinMaxField(string entryName, float value, float min, float max, int precision = 2, float width = 100)
     {
-        value = (float)DoubleField(entryName, value, precision);
+        value = (float)DoubleField(entryName, value, precision, width);
         value = Mathf.Clamp(value, min, max);
         return value;
     }
 
-    public static double DoubleField(string entryName, double value, int precision = 2)
+    public static double DoubleField(string entryName, double value, int precision = 2, float width = 100)
     {
         DoubleField field = null;
 
@@ -201,7 +207,7 @@ public class UI_Fields
             field = fields_dict[entryName];
         else
         {
-            field = new DoubleField(entryName, value, precision);
+            field = new DoubleField(entryName, value, precision, width);
             fields_dict[entryName] = field;
         }
 

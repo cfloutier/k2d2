@@ -204,15 +204,29 @@ public class UI_Tools
         GUILayout.BeginHorizontal();
         Label("Elevation (°)");
         GUILayout.FlexibleSpace();
-        value = RepeatButton.OnGUI(ui_code+".elevation_minus", "--", value, -0.2f);
-        value = UI_Fields.FloatField(ui_code+".elevation_field", value);
+        value = RepeatButton.OnGUI(ui_code+".elevation_minus", " - ", value, -0.2f);
+        value = UI_Fields.FloatField(ui_code+".elevation_field", value, 1, 50);
+        value = RepeatButton.OnGUI(ui_code+".att.elevation_plus", " + ", value, 0.2f);
+        GUILayout.FlexibleSpace();
+        GUILayout.EndHorizontal();
+        value = FloatSlider(value, -90, 90);
 
-        value = RepeatButton.OnGUI(ui_code+".att.elevation_plus", "++", value, 0.2f);
+        return value;
+    }
+
+    public static float HeadingControl(string ui_code, float value, string tooltip = "")
+    {
+        GUILayout.BeginHorizontal();
+        Label("Heading (°)");
+        GUILayout.FlexibleSpace();
+        value = RepeatButton.OnGUI(ui_code+".heading_minus", " - ", value, -0.2f);
+        value = UI_Fields.FloatField(ui_code+".heading_field", value, 1, 50);
+
+        value = RepeatButton.OnGUI(ui_code+".heading_plus", " + ", value, 0.2f);
         GUILayout.FlexibleSpace();
         GUILayout.EndHorizontal();
 
-        GUI.SetNextControlName("attitude.elevationSlider");
-        value = FloatSlider(value, -90, 90);
+        value = HeadingSlider.onGUI(ui_code+".heading_slider", value, true );
 
         return value;
     }

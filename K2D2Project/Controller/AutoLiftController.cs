@@ -200,6 +200,8 @@ public class AutoLiftController : ComplexControler
 
     public override void onGUI()
     {
+        UI_Tools.Title("Lift Pilot");
+
         if (K2D2_Plugin.Instance.settings_visible)
         {
             K2D2Settings.onGUI();
@@ -213,7 +215,8 @@ public class AutoLiftController : ComplexControler
              return;
         }
 
-        lift_settings.heading = HeadingSlider.onStaticGUI("lift.heading", "Heading", lift_settings.heading, true);
+        lift_settings.heading = UI_Tools.HeadingControl("lift.heading", lift_settings.heading);
+
         lift_settings.start_altitude_km = UI_Fields.IntFieldLine("lift.start_altitude_km", "90° Alt", lift_settings.start_altitude_km, 0, Int32.MaxValue, "km");
         lift_settings.destination_Ap_km = UI_Fields.IntFieldLine("lift.destination_Ap_km", "Ap Altitude", lift_settings.destination_Ap_km, 0, Int32.MaxValue, "km");
 

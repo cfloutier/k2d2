@@ -31,17 +31,11 @@ public static class GeneralTools
     {
         Vector3d result = euler;
         if (result.x > 180)
-        {
             result.x -= 360;
-        }
         if (result.y > 180)
-        {
             result.y -= 360;
-        }
         if (result.z > 180)
-        {
             result.z -= 360;
-        }
 
         return result;
     }
