@@ -1,11 +1,41 @@
+# v0.9.2
+
+Fixes : typos and repeat buttons error.
+
+Reupload for ckan.
+
 # v0.9.1
 Improvements :
 
+== New UI library tools ==
+
+a huge work have been made there !
+
+* a new Heading selection control. It is an interactive horizontal compass.
+
+You can use it in Attitude ans Lift pages
+
+* New Fonts, and overall better font rendering and text alignment,
+* All Editor Field : the value is sent to the mech, only if enter key is pressed or focus is changed. It avoid sending a wrong value while typing it ( It could be dangerous during flight)
+  * Yellow : not validated yet
+  * Red : Invalid value, it will be replaced on enter.
+  * White : not focused
+
+* Use of repeat button to fine adjust on each control that would need it
+
+Features:
+
 * Drone new UI and options :
-  * Rool direction toward speed.
-  * Altitude and V-Speed are more flexibles
+  * You can choose between Altitude or V-Speed control.
+  * Values are more precises using repeat buttons, text field and a slider at the same time.
+  * Rool dorward direction toward current speed. It make it easier to control.
   * New UI Infos
 
+Try the drone pilot it is more precise than ever
+
+* Attitude Pilot :
+  * like the drone pilot use of repeat buttons, text field and a slider for the elevation.
+  * Added the Compass controler for the heading
 
 # v0.9.0
 Features :
@@ -17,7 +47,7 @@ Features :
 
 Improvements :
 
-* bew UI textures for Tabs && button
+* new UI textures for Tabs && button
 * new KTools Ui made for FlightPlan
   * Added Repeat Buttons for attitude selection
   * Added new version of editor fields : the value is validated only when Enter/Return is pressed. 

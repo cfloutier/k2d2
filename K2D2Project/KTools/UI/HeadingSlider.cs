@@ -48,73 +48,68 @@ public class HeadingSlider
     float drawContent(float value, Rect rt)
     {
         //  Rect rc = new Rect(deltapos.x, deltapos.y, rt.width, rt.height);
-       // if (Event.current.type == EventType.Repaint || Event.current.type == EventType.)
+        //if (Event.current.type == EventType.Repaint )
+        GUI.BeginClip(rt);
+
+        float xpos = 0;
+
+        float min_deg = Mathf.Ceil(xpos_to_deg(0, value, rt.width));
+        float max_deg = Mathf.Floor(xpos_to_deg(rt.width, value, rt.width));
+        float deg = min_deg;
+        GUI.color = Color.white;
+        while (deg < max_deg)
         {
-            GUI.BeginClip(rt);
+            xpos = deg_to_xpos(deg, value, rt.width);
+            float h = Height_1;
 
-            float xpos = 0;
-           
+            if (deg % 5 == 0)
+                h = Height_5;
 
-            float min_deg = Mathf.Ceil(xpos_to_deg(0, value, rt.width));
-            float max_deg = Mathf.Floor(xpos_to_deg(rt.width, value, rt.width));
-            float deg = min_deg;
-            GUI.color = Color.white;
-            while (deg < max_deg)
+            Rect rc = new Rect(xpos, 0, 1, h);
+            GUI.Label(rc, "", KBaseStyle.v_line);
+
+            float drawn_deg = fixDeg(deg);
+
+            if (drawn_deg % 45 == 0)
             {
-                xpos = deg_to_xpos(deg, value, rt.width);
-                float h = Height_1;
-
-                if (deg % 5 == 0)
-                    h = Height_5;
-
-                Rect rc = new Rect(xpos, 0, 1, h);
-                GUI.Label(rc, "", KBaseStyle.v_line);
-
-                float drawn_deg = fixDeg(deg);
-
-                if (drawn_deg % 45 == 0)
+                int index = (int)(drawn_deg / 45) + 8;
+                if (index >= 0 && index < directions.Length)
                 {
-                    int index = (int)(drawn_deg / 45) + 8;
-                    if (index >= 0 && index < directions.Length)
+                    rc = new Rect(xpos - 20, h - 2, 40, 20);
+                    if (interactive)
                     {
-                        rc = new Rect(xpos - 20, h - 2, 40, 20);
-                        if (interactive)
+                        if (GUI.Button(rc, directions[index], KBaseStyle.text_heading_big))
                         {
-                            if (GUI.Button(rc, directions[index], KBaseStyle.text_heading_big))
-                            {
-                                value = drawn_deg;
+                            value = drawn_deg;
 
-                                logger.LogInfo($"clic to {KBaseStyle.text_heading_big}");
-                            }
+                            logger.LogInfo($"clic to {KBaseStyle.text_heading_big}");
                         }
-                        else
-                        {
-                            GUI.Label(rc, directions[index], KBaseStyle.text_heading_big);
-                        }
-
                     }
                     else
-                        Debug.LogError("index = " + index);
-                }
-                else if (drawn_deg % 10 == 0)
-                {
-                    if ( !forbiden_values.Contains((int) drawn_deg))
                     {
-                        rc = new Rect(xpos - 15, h, 30, 20);
-                        GUI.Label(rc, drawn_deg.ToString(), KBaseStyle.text_heading_mini);
+                        GUI.Label(rc, directions[index], KBaseStyle.text_heading_big);
                     }
-                }
 
-                deg += 1;
+                }
+                else
+                    Debug.LogError("index = " + index);
+            }
+            else if (drawn_deg % 10 == 0)
+            {
+                if ( !forbiden_values.Contains((int) drawn_deg))
+                {
+                    rc = new Rect(xpos - 15, h, 30, 20);
+                    GUI.Label(rc, drawn_deg.ToString(), KBaseStyle.text_heading_mini);
+                }
             }
 
-
-            //GUI.Label(new Rect(0, 0, rt.width, rt.height), "", KBaseStyle.heading);
-            GUI.Button(new Rect(0, 0, rt.width, rt.height), "", KBaseStyle.heading);
-            GUI.Label(new Rect(rt.width / 2, 0, 1, rt.height), "", KBaseStyle.v_line);
-            GUI.EndClip();
-
+            deg += 1;
         }
+
+        GUI.Button(new Rect(0, 0, rt.width, rt.height), "", KBaseStyle.heading);
+        GUI.Label(new Rect(rt.width / 2, 0, 1, rt.height), "", KBaseStyle.v_line);
+        GUI.EndClip();
+        
         return value;
     }
 

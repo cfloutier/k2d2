@@ -8,12 +8,12 @@ public class RepeatButton
 {
     class ButtonInstance
     {
-        public ButtonInstance(string name)
+        public ButtonInstance(string ui_code)
         {
-            this.name = name;
+            this.ui_code = ui_code;
         }
 
-        public string name;
+        public string ui_code;
         public bool is_active = false;
         public float next_time;
         public float delta_time = 0;
@@ -22,12 +22,14 @@ public class RepeatButton
 
         public float OnGUI(string txt, float value, float delta)
         {
+            GUI.SetNextControlName(ui_code);
             bool is_On = GUILayout.RepeatButton(txt, KBaseStyle.small_button, GUILayout.Height(25));
 
             if (Event.current.type == EventType.Repaint)
             {
                 if (is_On)
                 {
+                    // GUI.FocusControl("");
                     if (!is_active)
                     {
                         is_active = true;
@@ -56,7 +58,7 @@ public class RepeatButton
     }
 
     static Dictionary<string, ButtonInstance> instances = new Dictionary<string, ButtonInstance>();
-    static float start_delta_time = 0.3f;
+    static float start_delta_time = 0.2f;
 
     public static float OnGUI(string instance_name, string txt, float value, float delta)
     {

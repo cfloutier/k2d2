@@ -102,7 +102,7 @@ public class DroneController : ComplexControler
 
     public ForwardDirection forward_dir = ForwardDirection.Free;
     public enum ForwardDirection { Free, Speed, Camera }
-    public static string[] forward_dir_label = { "Free", "H-Speed", "Camera"};
+    public static string[] forward_dir_label = { "Free", "H-Speed"};
 
     public DroneController()
     {
@@ -471,7 +471,6 @@ public class DroneController : ComplexControler
 
         if (vspeed_mode == VSpeedMode.Altitude)
         {
-
             UI_Tools.Console($"altitude : {altitude:n2}°");
             if (delta_altitude > 0)
                 UI_Tools.OK($"d.Alt  : {delta_altitude:n2} m");
@@ -516,8 +515,6 @@ public class DroneController : ComplexControler
         {
             UI_Tools.Console($"h_speed_heading  : {h_speed_heading:n2} °");
             UI_Tools.Console($"forward_heading  : {delta_forward_heading:n2} °");
-
-
             var angularVelocity = current_vessel.GetAngularSpeed().vector;
 
             UI_Tools.Console($"angularVelocity  : {  StrTool.Vector3ToString(angularVelocity)  } °");

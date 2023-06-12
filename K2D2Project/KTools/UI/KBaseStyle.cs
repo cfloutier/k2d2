@@ -27,6 +27,7 @@ public class KBaseStyle
 
         BuildLabels();
         BuildFrames();
+        BuildField();
 
         BuildSliders();
         BuildButtons();
@@ -41,7 +42,7 @@ public class KBaseStyle
         return true;
     }
 
-    public static GUIStyle error, warning, label, mid_text, console_text, phase_ok, phase_warning, phase_error, value_field;
+    public static GUIStyle error, warning, label, mid_text, console_text, phase_ok, phase_warning, phase_error;
 
     public static GUIStyle icons_label, title, slider_text;
     public static Font arial_font, arial_bold_font, caravan_font;
@@ -107,15 +108,9 @@ public class KBaseStyle
         title.fontSize = 20;
         title.margin = new RectOffset(5, 0, 2, 10);
 
-        var textField = skin.textField;
-        textField.padding = new RectOffset(5, 5, 0, 0);
-        //textField.margin = new RectOffset(0, 0, 0, 0);
-        textField.fixedHeight = 22;
-        //textField.fontSize = 5;
-
     }
 
-    public static GUIStyle separator, window, box, field;
+    public static GUIStyle separator, window, box;
     static void BuildFrames()
     {
         // Define the GUIStyle for the window
@@ -153,15 +148,6 @@ public class KBaseStyle
         skin.scrollView = box;
         // Define the GUIStyle for the editor field
 
-        field = new GUIStyle(GUI.skin.textField);
-        field.normal.background = box.normal.background;
-        setAllFromNormal(field);
-        field.border = new RectOffset(10, 10, 10, 10);
-        field.fontSize = 14;
-        field.fixedHeight = 25;
-        field.contentOffset = new Vector2(2,1);
-        GUI.skin.textField = field;
-
         // define the V scrollbar
         GUIStyle verticalScrollbar = new GUIStyle(GUI.skin.verticalScrollbar);
 
@@ -189,6 +175,34 @@ public class KBaseStyle
         separator.fixedHeight = 3;
         setAllFromNormal(separator);
     }
+
+
+    public static GUIStyle text_field, label_field;
+    static void BuildField()
+    {
+        text_field = new GUIStyle(GUI.skin.textField);
+        text_field.normal.background = box.normal.background;
+        setAllFromNormal(text_field);
+        text_field.border = new RectOffset(10, 10, 10, 10);
+        text_field.fontSize = 14;
+        text_field.fixedHeight = 25;
+        // text_field.contentOffset = new Vector2(2,1);
+        text_field.padding = new RectOffset(5, 5, 0, 0);
+        text_field.alignment = TextAnchor.MiddleLeft;
+
+        GUI.skin.textField = text_field;
+
+        label_field = new GUIStyle(label);
+        label_field.fixedHeight = 25;
+        label_field.alignment = TextAnchor.MiddleLeft;
+        label_field.margin = new RectOffset(0, 20, 5, 5);
+
+        // label_field.fixedWidth = 140;
+
+        // label_field.normal = button.normal;
+    }
+
+
 
     public static GUIStyle slider_line, slider_node, v_line;
 
@@ -332,12 +346,6 @@ public class KBaseStyle
         bigicon_button.fixedWidth = 50;
         bigicon_button.fixedHeight = 50;
         bigicon_button.fontStyle = FontStyle.Bold;
-
-
-        value_field = new GUIStyle(label);
-        value_field.alignment = TextAnchor.MiddleCenter;
-        value_field.normal = button.normal;
-
     }
 
     public static GUIStyle tab_normal, tab_active;

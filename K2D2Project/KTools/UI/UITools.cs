@@ -202,7 +202,10 @@ public class UI_Tools
     public static float ElevationSlider(string ui_code, float value, string tooltip = "")
     {
         GUILayout.BeginHorizontal();
-        Label("Elevation (°)");
+
+
+        GUILayout.Label("Elevation (°)", KBaseStyle.label_field);
+
         GUILayout.FlexibleSpace();
         value = RepeatButton.OnGUI(ui_code+".elevation_minus", " - ", value, -0.2f);
         value = UI_Fields.FloatField(ui_code+".elevation_field", value, 1, 50);
@@ -217,11 +220,9 @@ public class UI_Tools
     public static float HeadingControl(string ui_code, float value, string tooltip = "")
     {
         GUILayout.BeginHorizontal();
-        Label("Heading (°)");
-        GUILayout.FlexibleSpace();
+        GUILayout.Label("Heading (°)", KBaseStyle.label_field);
         value = RepeatButton.OnGUI(ui_code+".heading_minus", " - ", value, -0.2f);
         value = UI_Fields.FloatField(ui_code+".heading_field", value, 1, 50);
-
         value = RepeatButton.OnGUI(ui_code+".heading_plus", " + ", value, 0.2f);
         GUILayout.FlexibleSpace();
         GUILayout.EndHorizontal();
