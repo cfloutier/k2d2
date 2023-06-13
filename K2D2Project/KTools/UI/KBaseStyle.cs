@@ -144,6 +144,8 @@ public class KBaseStyle
         box.margin = new RectOffset(0, 0, 0, 0);
         box.padding = new RectOffset(10, 10, 10, 10);
         box.overflow = new RectOffset(0, 0, 0, 0);
+        box.contentOffset = new Vector2(0, 0);
+
         skin.box = box;
         skin.scrollView = box;
         // Define the GUIStyle for the editor field
