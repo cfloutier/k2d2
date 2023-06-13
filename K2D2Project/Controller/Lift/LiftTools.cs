@@ -33,6 +33,8 @@ public class AutoLiftSettings
         {
             // value = Mathf.Clamp(value, 0 , 1);
             KBaseSettings.sfile.SetInt("lift.start_altitude_km", value);
+            _mid_rotate_altitude_km = -1;
+            _end_rotate_altitude_km = -1;
         }
     }
 
@@ -43,6 +45,19 @@ public class AutoLiftSettings
         {
             value = Mathf.Clamp(value, 0, end_rotate_ratio);
             KBaseSettings.sfile.SetFloat("lift.mid_rotate_ratio", value);
+            _mid_rotate_altitude_km = -1;
+        }
+    }
+
+
+    float _mid_rotate_altitude_km = -1;
+    public float mid_rotate_altitude_km
+    {
+        get {
+            if (_mid_rotate_altitude_km == -1)
+                _mid_rotate_altitude_km = Mathf.Lerp(start_altitude_km, destination_Ap_km, mid_rotate_ratio);
+
+            return _mid_rotate_altitude_km;
         }
     }
 
@@ -53,6 +68,18 @@ public class AutoLiftSettings
         {
             value = Mathf.Clamp(value, mid_rotate_ratio, 1);
             KBaseSettings.sfile.SetFloat("lift.end_rotate_ratio", value);
+            _mid_rotate_altitude_km = -1;
+        }
+    }
+
+    float _end_rotate_altitude_km = -1;
+    public float end_rotate_altitude_km
+    {
+         get {
+            if (_end_rotate_altitude_km == -1)
+                _end_rotate_altitude_km = Mathf.Lerp(start_altitude_km, destination_Ap_km, end_rotate_ratio);
+
+            return _end_rotate_altitude_km;
         }
     }
 
@@ -62,6 +89,9 @@ public class AutoLiftSettings
         set
         {
             KBaseSettings.sfile.SetInt("lift.destination_Ap_km", value);
+            _end_rotate_altitude_km = -1;
+            _mid_rotate_altitude_km = -1;
+
         }
     }
 }
@@ -73,30 +103,23 @@ public class LiftAscentPath
         this.lift_settings = lift_settings;
     }
 
-    float mid_rotate_altitude_km;
-    float end_rotate_altitude_km;
-
     public ManualLogSource logger = BepInEx.Logging.Logger.CreateLogSource("K2D2.LiftAscentPath");
 
     public float compute_elevation(float altitude_km)
     {
-
-        mid_rotate_altitude_km = Mathf.Lerp(lift_settings.start_altitude_km, lift_settings.destination_Ap_km, lift_settings.mid_rotate_ratio);
-        end_rotate_altitude_km = Mathf.Lerp(lift_settings.start_altitude_km, lift_settings.destination_Ap_km, lift_settings.end_rotate_ratio);
-
         float elevation = 0;
         if (altitude_km < lift_settings.start_altitude_km)
         {
             elevation = 90;
         }
-        else if (altitude_km < mid_rotate_altitude_km)
+        else if (altitude_km < lift_settings.mid_rotate_altitude_km)
         {
-            var ratio = Mathf.InverseLerp(lift_settings.start_altitude_km, mid_rotate_altitude_km, altitude_km);
+            var ratio = Mathf.InverseLerp(lift_settings.start_altitude_km, lift_settings.mid_rotate_altitude_km, altitude_km);
             elevation = Mathf.Lerp(90, 45, ratio);
         }
         else
         {
-            var ratio = Mathf.InverseLerp(mid_rotate_altitude_km, end_rotate_altitude_km, (float)altitude_km);
+            var ratio = Mathf.InverseLerp(lift_settings.mid_rotate_altitude_km, lift_settings.end_rotate_altitude_km, (float)altitude_km);
             elevation = Mathf.Lerp(45, 1, ratio);
         }
 
@@ -125,7 +148,7 @@ public class LiftAscentPath
             r.xMax -= KBaseStyle.box.padding.right;
             r.yMax -= KBaseStyle.box.padding.bottom;
 
-            float scale = (float)((lift_settings.destination_Ap_km) / r.height);
+            float scale = (float)(lift_settings.destination_Ap_km / r.height);
 
             if (_pathTexture == null || _pathTexture.width !=(int) r.width || _pathTexture.height != (int)r.height)
             {
@@ -141,8 +164,6 @@ public class LiftAscentPath
             DrawnPath(r, scale, scale, Color.yellow);
         }
     }
-
-
 
     private void DrawnPath(Rect r, float scaleX, float scaleY, Color color)
     {
@@ -170,43 +191,55 @@ public class LiftAscentPath
         }
     }
 
-    public void UpdateAtmoTexture(Texture2D texture, CelestialBodyComponent mainBody, double maxAltitude, bool realAtmo = false)
+    private void DrawLines(Rect r, float scaleY)
+    {
+        var p1 = new Vector2(r.xMin, 0);
+        var p2 = new Vector2(r.xMax, 0);
+
+        p1.y = p2.y = lift_settings.start_altitude_km / scaleY;
+        Drawing.DrawLine(p1, p2, Color.blue, 2, true);
+
+        p1.y = p2.y = lift_settings.mid_rotate_altitude_km / scaleY;
+        Drawing.DrawLine(p1, p2, Color.blue, 2, true);
+
+        if (maxAtmosphereAltitude_km > 0)
+        {
+            p1.y = p2.y = maxAtmosphereAltitude_km / scaleY;
+            Drawing.DrawLine(p1, p2, Color.red, 2, true);
+        }
+    }
+
+    float maxAtmosphereAltitude_km = -1;
+
+    public void UpdateAtmoTexture(Texture2D texture, CelestialBodyComponent mainBody, double maxAltitude)
     {
         lastbody = mainBody;
         last_max_alt = maxAltitude;
 
         double scale = maxAltitude / texture.height; //meters per pixel
 
-        double maxAtmosphereAltitude = mainBody.atmosphereDepth / 1000;
+        if (mainBody.hasAtmosphere)
+            maxAtmosphereAltitude_km = (float) (mainBody.atmosphereDepth / 1000);
+        else
+            maxAtmosphereAltitude_km = -1;
+
         double pressureSeaLevel = mainBody.atmospherePressureSeaLevel;
 
         for (int y = 0; y < texture.height; y++)
         {
             double alt = scale * y;
-            double color_ratio;
 
-           // logger.LogInfo($"altitude = {alt}");
+            float atmo_ratio = (float)(mainBody.GetPressure(alt*1000) / pressureSeaLevel);
+            float altitude_atm_ratio = mainBody.hasAtmosphere ?  (float)(1.0 - alt / maxAtmosphereAltitude_km) : 0.0f;
 
-            if (realAtmo)
-            {
-                color_ratio = mainBody.GetPressure(alt*1000) / pressureSeaLevel;
-            }
-            else
-            {
-                color_ratio = 1.0 - alt / maxAtmosphereAltitude;
-            }
-
-            float v = (float)(mainBody.hasAtmosphere ? color_ratio : 0.0F);
-           // logger.LogInfo($"v value = {v}");
-            var c = Color.Lerp(Color.black, Color.cyan, v);
-            //var c = new Color(0.0F, 0.0F, v);
+            var c = Color.Lerp(Color.black, Color.cyan, altitude_atm_ratio) + new Color(atmo_ratio, atmo_ratio, atmo_ratio, 1);
 
             for (int x = 0; x < texture.width; x++)
             {
                 texture.SetPixel(x, y, c);
 
-                if (mainBody.hasAtmosphere && (int)(maxAtmosphereAltitude / scale) == y)
-                    texture.SetPixel(x, y, XKCDColors.LightGreyBlue);
+                // if (mainBody.hasAtmosphere && (int)(maxAtmosphereAltitude_km / scale) == y)
+                //     texture.SetPixel(x, y, XKCDColors.LightGreyBlue);
             }
         }
 
