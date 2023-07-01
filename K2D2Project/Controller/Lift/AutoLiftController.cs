@@ -123,7 +123,6 @@ public class AutoLiftController : ComplexControler
 
         applyDirection();
 
-
         if (ap_km > lift_settings.destination_Ap_km)
         {
             current_vessel.SetThrottle(0);
@@ -137,25 +136,27 @@ public class AutoLiftController : ComplexControler
 
         if (K2D2_Plugin.Instance.settings_visible)
         {
-            // K2D2Settings.onGUI();
+            lift_settings.destination_Ap_km = UI_Fields.IntFieldLine("lift.destination_Ap_km", "Ap Altitude", lift_settings.destination_Ap_km, 0, Int32.MaxValue, "km");
+
+            GUILayout.BeginHorizontal();
+            // GUILayout.Label("5° Alt");
+            GUILayout.Label($"5° Alt. : {lift_settings.end_rotate_altitude_km:n0} km", KBaseStyle.slider_text);
+            lift_settings.end_rotate_ratio = UI_Tools.FloatSlider(lift_settings.end_rotate_ratio, 0, 1);
+            GUILayout.EndHorizontal();
+
+            GUILayout.BeginHorizontal();
+            GUILayout.Label($"45° Alt. : {lift_settings.mid_rotate_altitude_km:n0} km", KBaseStyle.slider_text);
+            lift_settings.mid_rotate_ratio = UI_Tools.FloatSlider(lift_settings.mid_rotate_ratio, 0, 1);
+            GUILayout.EndHorizontal();
 
             lift_settings.start_altitude_km = UI_Fields.IntFieldLine("lift.start_altitude_km", "90° Altitude", lift_settings.start_altitude_km, 0, Int32.MaxValue, "km");
 
-            //GUILayout.Label($"45° Alt. : {mid_rotate_altitude_km:n0} km", KBaseStyle.slider_text);
-            lift_settings.mid_rotate_ratio = UI_Tools.FloatSlider(lift_settings.mid_rotate_ratio, 0, 1);
 
-            //GUILayout.Label($"5° Alt. : {end_rotate_altitude_km:n0} km", KBaseStyle.slider_text);
-            lift_settings.end_rotate_ratio = UI_Tools.FloatSlider(lift_settings.end_rotate_ratio, 0, 1);
-
-            lift_settings.destination_Ap_km = UI_Fields.IntFieldLine("lift.destination_Ap_km", "Ap Altitude", lift_settings.destination_Ap_km, 0, Int32.MaxValue, "km");
-
-
-            ascentPath.drawProfile();
+            ascentPath.drawProfile(current_altitude_km);
 
             lift_settings.heading = UI_Tools.HeadingControl("lift.heading", lift_settings.heading);
 
             GUILayout.BeginHorizontal();
-            
             if (UI_Tools.miniButton("Close Settings"))
             {
                 K2D2_Plugin.Instance.settings_visible = false;
@@ -166,7 +167,6 @@ public class AutoLiftController : ComplexControler
         else
         {
             GUILayout.BeginHorizontal();
-
             if (UI_Tools.miniButton("Open Settings"))
             {
                 K2D2_Plugin.Instance.settings_visible = true;
@@ -175,16 +175,13 @@ public class AutoLiftController : ComplexControler
             GUILayout.EndHorizontal();
         }
 
-       
-
-
         isRunning = UI_Tools.BigToggleButton(isRunning, "Start", "Stop");
 
-        if (isRunning)
+    //   if (isRunning)
         {
             UI_Tools.Console($"Altitude = {current_altitude_km:n2} km");
-            UI_Tools.Console($"Apoapsis Alt. = {ap_km:n2} km");
             UI_Tools.Console($"Inclination = {wanted_elevation:n2} °");
+            UI_Tools.Console($"Apoapsis Alt. = {ap_km:n2} km");
         }
     }
 }

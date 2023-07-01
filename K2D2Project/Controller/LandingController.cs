@@ -169,7 +169,7 @@ public class LandingController : ComplexControler
     {
         Instance = this;
         debug_mode_only = false;
-        name = "Landing";
+        name = "Land";
 
         sub_contollers.Add(burn_dV);
         sub_contollers.Add(current_executor);

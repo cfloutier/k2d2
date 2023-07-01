@@ -1,7 +1,14 @@
+# v0.9.3
+Fix :
+* rebuild with KSP2 v1.3.1
+
+Features:
+* Lift : added a full curve rendering of the ascent profile.
+
+Blue color represent the atmosphere height and white the atmosphere density. Green line is the current vessel's altitude, greys are controled altitudes and cyan the end of atm
+
 # v0.9.2
-
 Fixes : typos and repeat buttons error.
-
 Reupload for ckan.
 
 # v0.9.1

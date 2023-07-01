@@ -138,7 +138,7 @@ public class TabsUI
         }
         else
         {
-            result = DrawTabs(current_index, 350);
+            result = DrawTabs(current_index, 300);
         }
 
         result = GeneralTools.ClampInt(result, 0, filtered_pages.Count - 1);

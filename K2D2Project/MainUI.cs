@@ -43,11 +43,12 @@ public class MainUI
             tabs.pages.Add(AutoLiftController.Instance);
             tabs.pages.Add(AttitudeController.Instance);
             tabs.pages.Add(WarpController.Instance);
-        //    tabs.pages.Add(new FindSecrets());
+            // tabs.pages.Add(new FindSecrets());
+
             // waiting for mole
             // pages.Add(SimpleManeuverController.Instance);
             tabs.pages.Add(new OrbitInfos());
-          //  tabs.pages.Add(new K2D2.InfosPages.SASInfos());
+            tabs.pages.Add(new K2D2.InfosPages.SASInfos());
             tabs.pages.Add(new VesselInfos());
 
             tabs.Init();

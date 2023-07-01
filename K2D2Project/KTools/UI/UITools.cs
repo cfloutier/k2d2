@@ -298,7 +298,7 @@ public class UI_Tools
     public static Vector2 BeginScrollView(Vector2 scrollPos, int height)
     {
         return GUILayout.BeginScrollView(scrollPos, false, true,
-            GUILayout.MinWidth(250),
+            // GUILayout.MinWidth(250),
             GUILayout.Height(height));
     }
 

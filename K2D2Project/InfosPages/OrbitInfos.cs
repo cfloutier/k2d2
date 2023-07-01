@@ -8,13 +8,11 @@ namespace K2D2.InfosPages;
 
 class OrbitInfos : BaseController
 {
-
     public OrbitInfos()
     {
         debug_mode_only = true;
         name = "Orbit Infos";
     }
-
 
     public override void onGUI()
     {

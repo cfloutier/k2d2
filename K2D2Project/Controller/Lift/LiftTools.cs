@@ -134,7 +134,7 @@ public class LiftAscentPath
     public CelestialBodyComponent lastbody = null;
     public double last_max_alt;
 
-    public void drawProfile()
+    public void drawProfile(float current_altitude_km)
     {
         GUILayout.Box(_pathTexture, GUILayout.Height(200));
 
@@ -161,11 +161,12 @@ public class LiftAscentPath
                 UpdateAtmoTexture(_pathTexture, K2D2_Plugin.Instance.current_vessel.currentBody(), lift_settings.destination_Ap_km);
             }
 
-            DrawnPath(r, scale, scale, Color.yellow);
+            DrawPath(r, scale, scale, Color.yellow);
+            DrawLines(r, scale, current_altitude_km);
         }
     }
 
-    private void DrawnPath(Rect r, float scaleX, float scaleY, Color color)
+    private void DrawPath(Rect r, float scaleX, float scaleY, Color color)
     {
         float alt = 0;
         float downrange = 0;
@@ -191,21 +192,30 @@ public class LiftAscentPath
         }
     }
 
-    private void DrawLines(Rect r, float scaleY)
+    private void DrawLines(Rect r, float scaleY, float current_altitude_km)
     {
         var p1 = new Vector2(r.xMin, 0);
         var p2 = new Vector2(r.xMax, 0);
 
-        p1.y = p2.y = lift_settings.start_altitude_km / scaleY;
-        Drawing.DrawLine(p1, p2, Color.blue, 2, true);
+        p1.y = p2.y = r.yMax - lift_settings.start_altitude_km / scaleY;
+        Drawing.DrawLine(p1, p2, Color.gray, 2, true);
 
-        p1.y = p2.y = lift_settings.mid_rotate_altitude_km / scaleY;
-        Drawing.DrawLine(p1, p2, Color.blue, 2, true);
+        p1.y = p2.y = r.yMax - lift_settings.mid_rotate_altitude_km / scaleY;
+        Drawing.DrawLine(p1, p2, Color.gray, 2, true);
+
+        p1.y = p2.y = r.yMax - lift_settings.end_rotate_altitude_km / scaleY;
+        Drawing.DrawLine(p1, p2, Color.gray, 2, true);
 
         if (maxAtmosphereAltitude_km > 0)
         {
-            p1.y = p2.y = maxAtmosphereAltitude_km / scaleY;
-            Drawing.DrawLine(p1, p2, Color.red, 2, true);
+            p1.y = p2.y = r.yMax - maxAtmosphereAltitude_km / scaleY;
+            Drawing.DrawLine(p1, p2, Color.cyan, 2, true);
+        }
+
+        if (current_altitude_km > 0 && current_altitude_km < lift_settings.destination_Ap_km)
+        {
+            p1.y = p2.y = r.yMax - current_altitude_km / scaleY;
+            Drawing.DrawLine(p1, p2, Color.green, 2, true);
         }
     }
 
@@ -232,7 +242,7 @@ public class LiftAscentPath
             float atmo_ratio = (float)(mainBody.GetPressure(alt*1000) / pressureSeaLevel);
             float altitude_atm_ratio = mainBody.hasAtmosphere ?  (float)(1.0 - alt / maxAtmosphereAltitude_km) : 0.0f;
 
-            var c = Color.Lerp(Color.black, Color.cyan, altitude_atm_ratio) + new Color(atmo_ratio, atmo_ratio, atmo_ratio, 1);
+            var c = Color.Lerp(Color.black, Color.cyan, altitude_atm_ratio/2) + new Color(atmo_ratio, atmo_ratio, atmo_ratio, 1);
 
             for (int x = 0; x < texture.width; x++)
             {
