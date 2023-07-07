@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace K2D2.Controller;
 
-class BurnManeuvreSettings
+class BurnManeuverSettings
 {
 
     public static float burn_adjust
@@ -51,14 +51,14 @@ class BurnManeuvreSettings
     }
 }
 
-public class BurnManeuvre : ExecuteController
+public class BurnManeuver : ExecuteController
 {
-    public ManualLogSource logger = BepInEx.Logging.Logger.CreateLogSource("K2D2.BurnManeuvre");
+    public ManualLogSource logger = BepInEx.Logging.Logger.CreateLogSource("K2D2.BurnManeuver");
 
     BurndV burn_dV = new BurndV();
     KSPVessel current_vessel;
 
-    public BurnManeuvre()
+    public BurnManeuver()
     {
         current_vessel = K2D2_Plugin.Instance.current_vessel;
     }
@@ -137,7 +137,7 @@ public class BurnManeuvre : ExecuteController
             {
                 mode = Mode.Burning;
 
-                if (BurnManeuvreSettings.rotate_during_burn)
+                if (BurnManeuverSettings.rotate_during_burn)
                     SASTool.setAutoPilot(AutopilotMode.Maneuver);
                 else
                     SASTool.setAutoPilot(AutopilotMode.StabilityAssist);
@@ -172,7 +172,7 @@ public class BurnManeuvre : ExecuteController
 
             // var required_dv = maneuver.BurnRequiredDV;
             // remaining_dv = required_dv - burn_dV.burned_dV;
-            if (remaining_dv <= BurnManeuvreSettings.max_dv_error)
+            if (remaining_dv <= BurnManeuverSettings.max_dv_error)
             {
                 Finished();
                 return;
@@ -218,7 +218,7 @@ public class BurnManeuvre : ExecuteController
             return;
         }
 
-        needed_throttle = remaining_full_burn_time * BurnManeuvreSettings.burn_adjust;
+        needed_throttle = remaining_full_burn_time * BurnManeuverSettings.burn_adjust;
     }
 
     public override void onGUI()

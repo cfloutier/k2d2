@@ -280,13 +280,13 @@ public class K2D2_Plugin : BaseSpaceWarpPlugin
     {
         string status = "";
         var instance = AutoExecuteManeuver.Instance;
-        if (instance.current_maneuvre_node == null)
+        if (instance.current_maneuver_node == null)
         {
-            status = "No Maneuvre Node";
+            status = "No Maneuver Node";
         }
         else
         {
-            if (!instance.valid_maneuver) status = "Invalid Maneuvre Node";
+            if (!instance.valid_maneuver) status = "Invalid Maneuver Node";
             // else if (!AutoExecuteManeuver.Instance.canStart()) status = "No Future Maneuver Node";
             else if (instance.isRunning)
             {
@@ -303,7 +303,7 @@ public class K2D2_Plugin : BaseSpaceWarpPlugin
                 }
                 else if (instance.mode == AutoExecuteManeuver.Mode.Burn)
                 {
-                    if (Game.UniverseModel.UniversalTime < instance.current_maneuvre_node.Time)
+                    if (Game.UniverseModel.UniversalTime < instance.current_maneuver_node.Time)
                     {
                         status = $"Waiting to Burn: {instance.current_executor.status_line}";
                     }

@@ -33,7 +33,7 @@ public class TouchDown : ExecuteController
         Vector up_dir = current_vessel.VesselComponent.gravityForPos;
         Rotation vessel_rotation = current_vessel.GetRotation();
 
-        // convert rotation to maneuvre coordinates
+        // convert rotation to maneuver coordinates
 
         vessel_rotation = Rotation.Reframed(vessel_rotation, up_dir.coordinateSystem);
         Vector3d forward_direction = (vessel_rotation.localRotation * Vector3.down).normalized;
@@ -108,7 +108,7 @@ public class TouchDown : ExecuteController
 
         Rotation vessel_rotation = current_vessel.GetRotation();
 
-        // convert rotation to maneuvre coordinates
+        // convert rotation to maneuver coordinates
         vessel_rotation = Rotation.Reframed(vessel_rotation, retro_dir.coordinateSystem);
         Vector3d forward_direction = (vessel_rotation.localRotation * Vector3.up).normalized;
 

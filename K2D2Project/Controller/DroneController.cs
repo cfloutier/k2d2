@@ -170,7 +170,7 @@ public class DroneController : ComplexControler
         Vector up_dir = current_vessel.VesselComponent.gravityForPos;
         Rotation vessel_rotation = current_vessel.GetRotation();
 
-        // convert rotation to maneuvre coordinates
+        // convert rotation to maneuver coordinates
         vessel_rotation = Rotation.Reframed(vessel_rotation, up_dir.coordinateSystem);
         Vector3d down_direction = (vessel_rotation.localRotation * Vector3.down).normalized;
 
@@ -236,7 +236,7 @@ public class DroneController : ComplexControler
 
         Rotation vessel_rotation = current_vessel.GetRotation();
 
-        // convert rotation to maneuvre coordinates
+        // convert rotation to maneuver coordinates
         vessel_rotation = Rotation.Reframed(vessel_rotation, retro_dir.coordinateSystem);
         Vector3d forward_direction = (vessel_rotation.localRotation * Vector3.up).normalized;
 
@@ -337,7 +337,7 @@ public class DroneController : ComplexControler
 
         Rotation vessel_rotation = current_vessel.GetRotation();
 
-        // convert rotation to maneuvre coordinates
+        // convert rotation to maneuver coordinates
         vessel_rotation = Rotation.Reframed(vessel_rotation, Upcoords);
         Vector3d forward_dir = (vessel_rotation.localRotation * Vector3.forward).normalized;
 

@@ -157,7 +157,7 @@ Know bugs :
 # v0.3.0
 * [internal] added new classes to load and save settings easily.
 * Added Settings
-* Turn phase : started the sas to maneuvre mode in a proper way
+* Turn phase : started the sas to maneuver mode in a proper way
 * Time Warp Phase : Added Settings and a more precise safe duration before burn
 
 # v0.2.1

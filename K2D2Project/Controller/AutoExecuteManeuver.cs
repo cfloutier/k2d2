@@ -83,7 +83,7 @@ public class AutoExecuteManeuver : ComplexControler
 
     public static AutoExecuteManeuver Instance { get; set; }
 
-    public ManeuverNodeData current_maneuvre_node = null;
+    public ManeuverNodeData current_maneuver_node = null;
     ManeuverNodeData execute_node = null;
 
 
@@ -92,7 +92,7 @@ public class AutoExecuteManeuver : ComplexControler
     // Sub Pilots
     TurnTo turn;
     WarpTo warp;
-    BurnManeuvre burn;
+    BurnManeuver burn;
 
     //  ExecuteController current_pilot = null;
     KSPVessel current_vessel;
@@ -112,7 +112,7 @@ public class AutoExecuteManeuver : ComplexControler
 
         turn = new TurnTo();
         warp = new WarpTo();
-        burn = new BurnManeuvre();
+        burn = new BurnManeuver();
     }
 
     public void OnActiveVesselChanged(MessageCenterMessage msg)
@@ -152,7 +152,7 @@ public class AutoExecuteManeuver : ComplexControler
                 current_executor.setController(null);
                 break;
             case Mode.Turn:
-                execute_node = current_maneuvre_node;
+                execute_node = current_maneuver_node;
                 current_executor.setController(turn);
                 turn.StartManeuver(execute_node);
                 break;
@@ -176,10 +176,10 @@ public class AutoExecuteManeuver : ComplexControler
 
     public bool canStart()
     {
-        if (current_maneuvre_node == null)
+        if (current_maneuver_node == null)
             return false;
 
-        var dt = current_maneuvre_node.Time - GeneralTools.Game.UniverseModel.UniversalTime;
+        var dt = current_maneuver_node.Time - GeneralTools.Game.UniverseModel.UniversalTime;
         if (dt < 0)
         {
             return false;
@@ -217,15 +217,15 @@ public class AutoExecuteManeuver : ComplexControler
 
         if (!isRunning)
         {
-            if (current_maneuvre_node == null)
+            if (current_maneuver_node == null)
             {
-                UI_Tools.Label("No Maneuvre node.");
+                UI_Tools.Label("No Maneuver node.");
                 return;
             }
 
             if (!valid_maneuver)
             {
-                UI_Tools.Label("Invalid Maneuvre node.");
+                UI_Tools.Label("Invalid Maneuver node.");
                 UI_Tools.Console("Actually a KSP2 bug when loading scenaries. Please open map to fix it");
                 return;
             }
@@ -265,9 +265,9 @@ public class AutoExecuteManeuver : ComplexControler
 
     public bool checkManeuver()
     {
-        current_maneuvre_node = current_vessel.GetNextManeuveurNode();
+        current_maneuver_node = current_vessel.GetNextManeuveurNode();
         valid_maneuver = false;
-        if (current_maneuvre_node == null)
+        if (current_maneuver_node == null)
         {
             Stop();
             return false;
@@ -345,7 +345,7 @@ public class AutoExecuteManeuver : ComplexControler
             accordion.addChapter("Execute", execute_settings.settings_UI);
             accordion.addChapter("Turn", TurnToSettings.onGUI);
             accordion.addChapter("Warp", execute_settings.warp_ui);
-            accordion.addChapter("Burn", BurnManeuvreSettings.onGUI);
+            accordion.addChapter("Burn", BurnManeuverSettings.onGUI);
 
             accordion.singleChapter = true;
         }
@@ -360,15 +360,15 @@ public class AutoExecuteManeuver : ComplexControler
         if (isRunning)
             node = execute_node;
         else
-            node = current_maneuvre_node;
+            node = current_maneuver_node;
 
         if (node == null)
             return;
 
         var dt = GeneralTools.remainingStartTime(node);
         UI_Tools.Label($"Node in <b>{StrTool.DurationToString(dt)}</b>");
-        UI_Tools.Label($"dV {current_maneuvre_node.BurnRequiredDV:n2} m/s");
-        UI_Tools.Label($"Duration {StrTool.DurationToString(current_maneuvre_node.BurnDuration)}");
+        UI_Tools.Label($"dV {current_maneuver_node.BurnRequiredDV:n2} m/s");
+        UI_Tools.Label($"Duration {StrTool.DurationToString(current_maneuver_node.BurnDuration)}");
 
         if (K2D2Settings.debug_mode)
         {
