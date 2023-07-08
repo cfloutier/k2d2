@@ -29,7 +29,7 @@ public class AssetsLoader
 
     public static Font loadFont(string path)
     {
-        var font = AssetManager.GetAsset<Font>($"{K2D2_Plugin.mod_id}/fonts/assetbundlesources/{path}.ttf");
+        var font = AssetManager.GetAsset<Font>($"{K2D2_Plugin.mod_id}/k2d2/KtoolBundle/{path}.ttf");
 
          //   Check if the font is null
         if (font == null)
@@ -39,13 +39,26 @@ public class AssetsLoader
 
             // Print the full path of the resource
             Debug.Log("Full resource path: " + Application.dataPath + "/" + path);
-
-            // Print the type of resource that was expected
-            Debug.Log("Expected resource type: Font");
         }
 
         return font;
     }
 
 
+    public static GUISkin loadSkin(string path)
+    {
+        var skin = AssetManager.GetAsset<GUISkin>($"{K2D2_Plugin.mod_id}/k2d2/KtoolBundle/{path}.guiskin");
+
+         //   Check if the font is null
+        if (skin == null)
+        {
+            // Print an error message to the Console
+            Debug.LogError("Failed to load from path: " + path);
+
+            // Print the full path of the resource
+            Debug.Log("Full resource path: " + Application.dataPath + "/" + path);
+        }
+
+        return skin;
+    }
 }

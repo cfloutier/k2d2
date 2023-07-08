@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 3797590115
+CRC: 2576161934
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: a1f7d5c3ff64feddf916916dba463279
+    Hash: fc2b1437d2e4583e1e582ba1d480e313
   TypeTreeHash:
     serializedVersion: 2
     Hash: bf72de8b06938aa7913d599dc2f25361
@@ -27,7 +27,8 @@ SerializeReferenceClassIdentifiers:
 - AssemblyName: UnityEngine.IMGUIModule
   ClassName: UnityEngine.GUIStyle
 Assets:
-- Assets/AssetBundleSources/ARIAL.TTF
-- Assets/AssetBundleSources/ARIALBD.TTF
-- Assets/AssetBundleSources/Caravan.ttf
+- Assets/KtoolBundle/ARIAL.TTF
+- Assets/KtoolBundle/ARIALBD.TTF
+- Assets/KtoolBundle/k2d2_skin.guiskin
+- Assets/KtoolBundle/Caravan.ttf
 Dependencies: []
