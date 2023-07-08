@@ -24,7 +24,7 @@ namespace KTools.UI
             LoadIcons();
             BuildLabels();
             BuildFrames();
-            BuildSliders();
+            BuildLines();
             BuildButtons();
             BuildTabs();
             BuildFoldout();
@@ -54,9 +54,7 @@ namespace KTools.UI
 
         static void BuildLabels()
         {
-
             label = skin.label;
-
 
             icons_label = new GUIStyle(GUI.skin.GetStyle("Label"));
             icons_label.border = new RectOffset(0, 0, 0, 0);
@@ -117,30 +115,15 @@ namespace KTools.UI
             setAllFromNormal(separator);
         }
 
-        public static GUIStyle slider_line, slider_node, v_line;
+        public static GUIStyle  v_line;
 
-        static void BuildSliders()
+        static void BuildLines()
         {
-            slider_line = new GUIStyle(GUI.skin.horizontalSlider);
-            slider_line.normal.background = AssetsLoader.loadIcon("Slider");
-            setAllFromNormal(slider_line);
-
-            slider_line.border = new RectOffset(12, 14, 0, 0);
-            slider_line.fixedWidth = 0;
-            slider_line.fixedHeight = 21;
-            slider_line.margin = new RectOffset(0, 0, 2, 5);
-
-            slider_node = new GUIStyle(GUI.skin.horizontalSliderThumb);
-            slider_node.normal.background = AssetsLoader.loadIcon("SliderNode");
-            setAllFromNormal(slider_node);
-            slider_node.border = new RectOffset(0, 0, 0, 0);
-            slider_node.fixedWidth = 21;
-            slider_node.fixedHeight = 21;
-
             v_line = new GUIStyle(GUI.skin.box);
             v_line.normal.background = AssetsLoader.loadIcon("V_Line");
             setAllFromNormal(v_line);
             v_line.border = new RectOffset(0, 0, 0, 0);
+
 
         }
 
@@ -222,7 +205,6 @@ namespace KTools.UI
             repeat_button = new GUIStyle(small_button);
             repeat_button.fontSize = 16;
             repeat_button.margin = skin.textField.margin;
-
 
 
             big_button = new GUIStyle(button);

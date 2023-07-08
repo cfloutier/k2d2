@@ -202,19 +202,19 @@ namespace KTools.UI
             return new_value;
         }
 
-        public static float FloatField(string entryName, float value, int precision = 2, float width = 100)
+        public static float FloatField(string entryName, float value, int precision = 2, float width = 50)
         {
             return (float)DoubleField(entryName, value, precision, width);
         }
 
-        public static float FloatMinMaxField(string entryName, float value, float min, float max, int precision = 2, float width = 100)
+        public static float FloatMinMaxField(string entryName, float value, float min, float max, int precision = 2, float width = 50)
         {
             value = (float)DoubleField(entryName, value, precision, width);
             value = Mathf.Clamp(value, min, max);
             return value;
         }
 
-        public static double DoubleField(string entryName, double value, int precision = 2, float width = 100)
+        public static double DoubleField(string entryName, double value, int precision = 2, float width = 50)
         {
             DoubleField field = null;
 

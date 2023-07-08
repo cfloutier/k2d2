@@ -186,7 +186,7 @@ namespace KTools.UI
 
             GUILayout.Label(content, KBaseStyle.slider_text);
             GUILayout.BeginHorizontal();
-            value = (int)GUILayout.HorizontalSlider((int)value, min, max, KBaseStyle.slider_line, KBaseStyle.slider_node);
+            value = (int)GUILayout.HorizontalSlider((int)value, min, max);
             if (value < min) value = min;
             if (value > max) value = max;
 
@@ -198,20 +198,19 @@ namespace KTools.UI
             return value;
         }
 
-
         public static float ElevationSlider(string ui_code, float value, string tooltip = "")
         {
             GUILayout.BeginHorizontal();
-
-
             GUILayout.Label("Elevation (°)");
 
-            GUILayout.FlexibleSpace();
+            //GUILayout.FlexibleSpace();
             value = RepeatButton.OnGUI(ui_code + ".elevation_minus", " - ", value, -0.2f);
             value = UI_Fields.FloatField(ui_code + ".elevation_field", value, 1, 50);
             value = RepeatButton.OnGUI(ui_code + ".att.elevation_plus", " + ", value, 0.2f);
+
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
+
             value = FloatSlider(value, -90, 90);
 
             return value;
@@ -258,7 +257,7 @@ namespace KTools.UI
         {
             // simple float slider
             GUILayout.BeginHorizontal();
-            float new_value = GUILayout.HorizontalSlider(value, min, max, KBaseStyle.slider_line, KBaseStyle.slider_node);
+            float new_value = GUILayout.HorizontalSlider(value, min, max);
 
             value = new_value;
             if (!string.IsNullOrEmpty(tooltip))
