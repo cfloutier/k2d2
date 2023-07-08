@@ -14,7 +14,6 @@ class VesselInfos : BaseController
     }
 
 
-
     public override void onGUI()
     {
         if (K2D2_Plugin.Instance.settings_visible)

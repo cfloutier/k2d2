@@ -1,7 +1,7 @@
 using System.Globalization;
 using UnityEngine;
 
-namespace KTools.UI
+namespace KTools
 {
     /// <summary>
     /// A set of simple tools for colors that is missing in the main unity API

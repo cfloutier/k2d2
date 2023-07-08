@@ -29,4 +29,5 @@ copy "%KSP2_LOCATION%\KSP2_x64_Data\Managed\UnityEngine.IMGUIModule.dll" %DEST_D
 copy "%KSP2_LOCATION%\KSP2_x64_Data\Managed\UnityEngine.CoreModule.dll" %DEST_DIR%
 copy "%KSP2_LOCATION%\KSP2_x64_Data\Managed\UnityEngine.dll" %DEST_DIR%
 
+copy "%KSP2_LOCATION%\KSP2_x64_Data\Managed\ShapesRuntime.dll" %DEST_DIR%
 

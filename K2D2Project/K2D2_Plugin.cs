@@ -24,12 +24,15 @@ using K2D2.Models;
 using K2D2.sources.Models;
 using K2D2.KSPService;
 using K2D2.sources.KSPService;
+using K2D2.InfosPages;
+
 using Action = System.Action;
 // using KSP.Networking.MP;
 using KTools.UI;
 using KTools;
 
 using K2D2.UI;
+using KTools.Shapes;
 
 namespace K2D2;
 
@@ -129,6 +132,7 @@ public class K2D2_Plugin : BaseSpaceWarpPlugin
 
         // Setups
         _maneuverProvider = new ManeuverProvider(ref maneuverManager, logger);
+        new ShapeDrawer();
 
         // Add Controllers that inherit from BaseController here:
         controllerManager.AddController(new SimpleManeuverController(logger, ref _maneuverProvider));
@@ -139,14 +143,74 @@ public class K2D2_Plugin : BaseSpaceWarpPlugin
         controllerManager.AddController(new AutoLiftController());
         controllerManager.AddController(new CircleController());
         controllerManager.AddController(new WarpController());
+        controllerManager.AddController(new TestObjects());
 
         main_ui = new MainUI();
+
 
         Appbar.RegisterAppButton(
             "K2-D2",
             "BTN-K2D2Button",
             AssetManager.GetAsset<Texture2D>($"{SpaceWarpMetadata.ModID}/images/icon.png"),
             ToggleAppBarButton);
+    }
+
+    
+    public virtual void OnEnable()
+    {
+        Camera.onPreRender = (Camera.CameraCallback)System.Delegate.Combine(
+            Camera.onPreRender,
+            new Camera.CameraCallback(OnCameraPreRender)
+        );
+        Camera.onPostRender = (Camera.CameraCallback)System.Delegate.Combine(
+            Camera.onPostRender,
+            new Camera.CameraCallback(OnCameraPostRender)
+        );
+    }
+
+    public virtual void OnDisable()
+    {
+        Camera.onPreRender = (Camera.CameraCallback)System.Delegate.Remove(
+            Camera.onPreRender,
+            new Camera.CameraCallback(OnCameraPreRender)
+        );
+        Camera.onPostRender = (Camera.CameraCallback)System.Delegate.Remove(
+            Camera.onPostRender,
+            new Camera.CameraCallback(OnCameraPostRender)
+        );
+    }
+
+    private void OnCameraPreRender(Camera cam)
+    {
+        if (cam is null)
+        {
+            return;
+        }
+
+        if (cam.name != "FlightCameraPhysics_Main")
+        {
+            return;
+        }
+
+        if (ShapeDrawer.Instance == null)
+            return;
+
+        try
+        {
+            ShapeDrawer.Instance.DrawShapes(cam);
+        }
+        catch (Exception e)
+        {
+            Logger.LogError($"Error during drawing of hud : {e.GetType()} {e.Message}");
+        }
+    }
+
+    private void OnCameraPostRender(Camera cam)
+    {
+         if (ShapeDrawer.Instance == null)
+            return;
+
+        ShapeDrawer.OnPostRender(cam);
     }
 
     void Awake()
@@ -275,7 +339,7 @@ public class K2D2_Plugin : BaseSpaceWarpPlugin
         return AutoExecuteManeuver.Instance.isRunning;
     }
 
-    // Public API to get the status of K2D2
+    // Public API to get the status of K2D2 (used by FlightPlan)
     public string GetStatus()
     {
         string status = "";

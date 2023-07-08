@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using MoonSharp.Interpreter.Tree.Statements;
 using UnityEngine;
 
 namespace KTools.UI
@@ -31,6 +32,16 @@ namespace KTools.UI
             }
 
             return inputEnum.ToInt32(CultureInfo.InvariantCulture.NumberFormat);
+        }
+
+        public static TEnum EnumGrid<TEnum>(string label, TEnum value, int cols = 4) where TEnum : struct, Enum
+        {
+            int int_value = value.GetHashCode();
+            string[] labels = Enum.GetNames(typeof(TEnum));
+            UI_Tools.Label(label);
+            int result = GUILayout.SelectionGrid(int_value, labels, cols, KBaseStyle.tab_normal);
+
+            return (TEnum)Enum.ToObject(typeof(TEnum), result);
         }
 
         public static TEnum EnumGrid<TEnum>(string label, TEnum value, string[] labels) where TEnum : struct, Enum

@@ -21,6 +21,11 @@
             <Publicize>true</Publicize>
             <Private>false</Private>
         </Reference>
+        <Reference Include="ShapesRuntime">
+			<HintPath>..\external_dlls\ShapesRuntime.dll</HintPath>
+			<Publicize>true</Publicize>
+			<Private>false</Private>
+		</Reference>
     </ItemGroup>
     <ItemGroup>
         <PackageReference Include="BepInEx.Analyzers" Version="1.*" PrivateAssets="all" />
@@ -30,6 +35,9 @@
         <PackageReference Include="HarmonyX" Version="2.10.1" />
         <PackageReference Include="SpaceWarp" Version="1.1.1" />
         <PackageReference Include="UnityEngine.Modules" Version="2020.3.33" IncludeAssets="compile" />
+
+
+
     </ItemGroup>
     <ItemGroup>
       <Folder Include="Properties\" />

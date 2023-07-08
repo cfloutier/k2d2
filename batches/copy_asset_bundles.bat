@@ -10,6 +10,7 @@ set Dst_Bundles_Path=C:\dev\_ksp2\k2d2\K2D2\assets\bundles
 copy %Src_Bundles_Path%\k2d2.bundle %Dst_Bundles_Path%
 copy %Src_Bundles_Path%\k2d2.bundle.manifest %Dst_Bundles_Path%
 
-
+copy %Src_Bundles_Path%\objects.bundle %Dst_Bundles_Path%
+copy %Src_Bundles_Path%\objects.bundle.manifest %Dst_Bundles_Path%
 
 

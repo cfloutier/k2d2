@@ -2,7 +2,7 @@ using UnityEngine;
 using SpaceWarp.API.Assets;
 using K2D2;
 
-namespace KTools.UI;
+namespace KTools;
 
 public class AssetsLoader
 {
@@ -61,4 +61,22 @@ public class AssetsLoader
 
         return skin;
     }
+
+    public static GameObject loadPrefab(string path)
+    {
+        var obj = AssetManager.GetAsset<GameObject>($"{K2D2_Plugin.mod_id}/objects/KtoolBundle/{path}.prefab");
+
+         //   Check if the font is null
+        if (obj == null)
+        {
+            // Print an error message to the Console
+            Debug.LogError("Failed to load from path: " + path);
+
+            // Print the full path of the resource
+            Debug.Log("Full resource path: " + Application.dataPath + "/" + path);
+        }
+
+        return obj;
+    }
+
 }
