@@ -9,6 +9,7 @@ using UnityEngine;
 using KSP.Game;
 using KSP.Sim.ResourceSystem;
 using KSP.UI.Binding;
+using KSP.Messages;
 
 using BepInEx;
 using SpaceWarp;
@@ -25,6 +26,7 @@ using K2D2.sources.Models;
 using K2D2.KSPService;
 using K2D2.sources.KSPService;
 using K2D2.InfosPages;
+
 
 using Action = System.Action;
 // using KSP.Networking.MP;
@@ -133,6 +135,8 @@ public class K2D2_Plugin : BaseSpaceWarpPlugin
         // Setups
         _maneuverProvider = new ManeuverProvider(ref maneuverManager, logger);
         new ShapeDrawer();
+        RegisterDetectionOfHudNeed();
+        new TestObjects();
 
         // Add Controllers that inherit from BaseController here:
         controllerManager.AddController(new SimpleManeuverController(logger, ref _maneuverProvider));
@@ -143,10 +147,11 @@ public class K2D2_Plugin : BaseSpaceWarpPlugin
         controllerManager.AddController(new AutoLiftController());
         controllerManager.AddController(new CircleController());
         controllerManager.AddController(new WarpController());
-        controllerManager.AddController(new TestObjects());
+        controllerManager.AddController(new DockingTool());
+
+        // controllerManager.AddController();
 
         main_ui = new MainUI();
-
 
         Appbar.RegisterAppButton(
             "K2-D2",
@@ -155,7 +160,6 @@ public class K2D2_Plugin : BaseSpaceWarpPlugin
             ToggleAppBarButton);
     }
 
-    
     public virtual void OnEnable()
     {
         Camera.onPreRender = (Camera.CameraCallback)System.Delegate.Combine(
@@ -182,16 +186,6 @@ public class K2D2_Plugin : BaseSpaceWarpPlugin
 
     private void OnCameraPreRender(Camera cam)
     {
-        if (cam is null)
-        {
-            return;
-        }
-
-        if (cam.name != "FlightCameraPhysics_Main")
-        {
-            return;
-        }
-
         if (ShapeDrawer.Instance == null)
             return;
 
@@ -210,7 +204,7 @@ public class K2D2_Plugin : BaseSpaceWarpPlugin
          if (ShapeDrawer.Instance == null)
             return;
 
-        ShapeDrawer.OnPostRender(cam);
+        ShapeDrawer.Instance.OnPostRender(cam);
     }
 
     void Awake()
@@ -260,6 +254,23 @@ public class K2D2_Plugin : BaseSpaceWarpPlugin
         {
             controllerManager.LateUpdateControllers();
         }
+    }
+
+    private void RegisterDetectionOfHudNeed()
+    {
+        Game.Messages.Subscribe<GameStateChangedMessage>(msg =>
+        {
+            var message = (GameStateChangedMessage)msg;
+
+            if (message.CurrentState == GameState.FlightView)
+            {
+                ShapeDrawer.Instance.can_draw = true;
+            }
+            else if (message.PreviousState == GameState.FlightView)
+            {
+                ShapeDrawer.Instance.can_draw = false;
+            }
+        });
     }
 
     void OnGUI()

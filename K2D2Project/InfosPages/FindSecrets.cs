@@ -58,9 +58,8 @@ public class FindSecrets : BaseController
         }
 
         // Drawing.
-
         GameObject main_go = celestian[0];
-        main_go = main_go.transform.FindChild("objects").gameObject;
+        main_go = main_go.transform.Find("objects").gameObject;
 
         foreach(Transform child in main_go.transform)
         {

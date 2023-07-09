@@ -62,10 +62,6 @@ class TestObjects : ComplexControler
         K2D2_Plugin.logger.LogInfo(str);
     }
 
-    public override void Update()
-    {
-
-    }
 
     void onDrawShape()
     {
@@ -97,7 +93,7 @@ class TestObjects : ComplexControler
 
         var rot = Quaternion.LookRotation(direction);
 
-        Color color = Color.cyan;
+        Color color = Color.red;
         color.a = alpha;
 
         Draw.Torus(blendMode, ThicknessSpace.Meters, ThicknessSpace.Meters, localStart, rot, radius, thickness, color);
