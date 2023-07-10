@@ -1,21 +1,17 @@
 
 using K2D2.KSPService;
-using KTools;
 using KTools.UI;
 using BepInEx.Logging;
 using UnityEngine;
 
-
 using KSP.Sim.impl;
 using KSP.Game;
-using KSP.Sim.ResourceSystem;
-using KSP.UI.Binding;
-using UnityEngine.UI;
-using KSP.Iteration.UI.Binding;
-
-using KSP.Sim.impl;
+using KSP.Sim;
 
 namespace K2D2.Controller;
+
+using Shapes;
+
 
 
 public class DockingTool : ComplexControler
@@ -40,9 +36,6 @@ public class DockingTool : ComplexControler
 
 
     Vector2 scroll_pos = Vector2.one;
-
-
-
 
     public override void onGUI()
     {
@@ -101,6 +94,7 @@ public class DockingTool : ComplexControler
             {
                 if (UI_Tools.SmallButton(vessel.Name))
                 {
+                    current_vessel.VesselComponent.SetTargetByID(vessel.GlobalId);
                     current_vessel.VesselComponent.TargetObject = vessel.SimulationObject;
                     ui_mode = UI_Mode.Main;
                 }
@@ -114,7 +108,7 @@ public class DockingTool : ComplexControler
             if (UI_Tools.SmallButton("None"))
             {
                 ui_mode = UI_Mode.Main;
-                current_vessel.VesselComponent.TargetObject = null;
+                current_vessel.VesselComponent.ClearTarget();
             }
 
             if (UI_Tools.SmallButton("Cancel"))
@@ -129,7 +123,7 @@ public class DockingTool : ComplexControler
 
             foreach(var part in docks)
             {
-                UI_Tools.Console(part.Name + "(" + part.Type.Name);
+                UI_Tools.Console(part.Name + " - " + part.Type.Name);
             }
 
             if (UI_Tools.SmallButton("Cancel"))
@@ -155,14 +149,31 @@ public class DockingTool : ComplexControler
 
     public override void Update()
     {
+        // logger.LogInfo($"target is {current_vessel.VesselComponent.TargetObject}");
+
         if (last_target != current_vessel.VesselComponent.TargetObject)
         {
+
+
+            logger.LogInfo($"changed target is {current_vessel.VesselComponent.TargetObject}");
+
             last_target = current_vessel.VesselComponent.TargetObject;
 
-            if (last_target.IsVessel)
+            if (last_target == null)
             {
-                logger.LogInfo(last_target);
-
+                target_vessel = null;
+                target_name = "None";
+                docks.Clear();
+            }
+            else if (last_target.IsCelestialBody)
+            {
+                target_vessel = null;
+                target_name = last_target.Name;
+                docks.Clear();
+            }
+            else if (last_target.IsVessel)
+            {
+                // logger.LogInfo(last_target);
                 target_name = last_target.Name;
                 target_vessel = last_target.Vessel;
                 PartOwnerComponent owner = last_target.PartOwner;
@@ -187,13 +198,60 @@ public class DockingTool : ComplexControler
         }
     }
 
+    public void drawShapes()
+    {
+        if (ui_mode == UI_Mode.Select_Dock)
+        {
+            foreach(var part in docks)
+            {
+                draw_dockPort(part);
+            }
+        }
+    }
+
+
+
+
+    void draw_dockPort(PartComponent part)
+    {
+        var frame = part.transform.coordinateSystem;
+
+        float delta_pos = 1;
+        float length = 100;
+        float alpha = 5;
+
+        Position center = part.CenterOfMass;
+        Position start = center + part.transform.up * delta_pos;
+        Position end = start + part.transform.up * length;
+
+        var local_frame = current_vessel.VesselComponent.transform.coordinateSystem;
+
+        Vector3 localStart = local_frame.ToLocalPosition(start);
+        Vector3 localEnd = local_frame.ToLocalPosition(end);
+
+        Vector3 direction = localEnd - localStart;
+
+        var blendMode = ShapesBlendMode.Additive;
+
+        //Draw.Sphere(CenterOfMass, scale, Color.red);
+
+        var rot = Quaternion.LookRotation(direction.normalized);
+
+        Color color = Color.red;
+        color.a = alpha;
+
+        Draw.Torus(blendMode, ThicknessSpace.Meters, ThicknessSpace.Meters, localStart, rot, 10, 0.1f, color);
+        Draw.Line(blendMode, LineGeometry.Volumetric3D, LineEndCap.Round, ThicknessSpace.Meters, localStart, localEnd, color, color, 0.1f);
+    }
+
     void listDocks(PartOwnerComponent owner)
     {
         docks.Clear();
 
         foreach(var part in owner.Parts)
         {
-            docks.Add(part);
+            if (part.Name.ToLower().Contains("dock"))
+                docks.Add(part);
         }
     }
 }

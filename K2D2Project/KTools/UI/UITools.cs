@@ -191,6 +191,13 @@ namespace KTools.UI
             GUILayout.Label(txt, KBaseStyle.mid_text);
         }
 
+        public static float LabelSlider(string label, float value, float min, float max)
+        {
+            UI_Tools.Label($"{label} : {value}");
+            value = FloatSlider(value, 0, 10);
+            return value;
+        }
+
         public static int IntSlider(string txt, int value, int min, int max, string postfix = "", string tooltip = "")
         {
             string content = txt + $" : {value} " + postfix;

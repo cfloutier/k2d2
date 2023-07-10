@@ -44,7 +44,6 @@ namespace KTools.Shapes
                 return;
             }
 
-
             using (Draw.Command(cam, CameraEvent.AfterForwardAlpha))
             {
                 Draw.ResetMatrix();

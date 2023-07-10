@@ -149,6 +149,8 @@ public class K2D2_Plugin : BaseSpaceWarpPlugin
         controllerManager.AddController(new WarpController());
         controllerManager.AddController(new DockingTool());
 
+        ShapeDrawer.Instance.shapes.Add(DockingTool.Instance.drawShapes);
+
         // controllerManager.AddController();
 
         main_ui = new MainUI();

@@ -29,17 +29,11 @@ class TestObjects : ComplexControler
 
     float thickness = 0.1f;
 
-
     float alpha = 1;
 
     ShapesBlendMode blendMode = ShapesBlendMode.Opaque;
 
-    float SimpleSlider(string label, float value, float min, float max)
-    {
-        UI_Tools.Label($"{label} : {value}");
-        value = UI_Tools.FloatSlider(value, 0, 10);
-        return value;
-    }
+
 
     public override void onGUI()
     {
@@ -48,10 +42,10 @@ class TestObjects : ComplexControler
         visible = UI_Tools.BigToggleButton(visible, "show", "hide");
         if (visible)
         {
-            radius = SimpleSlider("scale", radius, 0, 10);
-            distance = SimpleSlider("distance", distance, 0, 10);
-            thickness = SimpleSlider("thickness", thickness, 0, 10);
-            alpha = SimpleSlider("alpha", alpha, 0, 1);
+            radius = UI_Tools.LabelSlider("scale", radius, 0, 10);
+            distance = UI_Tools.LabelSlider("distance", distance, 0, 10);
+            thickness = UI_Tools.LabelSlider("thickness", thickness, 0, 10);
+            alpha = UI_Tools.LabelSlider("alpha", alpha, 0, 1);
 
             blendMode = UI_Tools.EnumGrid<ShapesBlendMode>("blend", blendMode);
         }
