@@ -10,7 +10,10 @@ using KSP.Sim.impl;
 using KSP.Game;
 using KSP.Sim.ResourceSystem;
 using KSP.UI.Binding;
+using UnityEngine.UI;
+using KSP.Iteration.UI.Binding;
 
+using KSP.Sim.impl;
 
 namespace K2D2.Controller;
 
@@ -38,10 +41,11 @@ public class DockingTool : ComplexControler
 
     Vector2 scroll_pos = Vector2.one;
 
+
+
+
     public override void onGUI()
     {
-        
-
         if (K2D2_Plugin.Instance.settings_visible)
         {
             // default Settings UI
@@ -53,20 +57,20 @@ public class DockingTool : ComplexControler
         if (ui_mode == UI_Mode.Main)
         {
             UI_Tools.Title("Docking Tools");
-
-            var target = current_vessel.VesselVehicle.Target;
             GUILayout.BeginHorizontal();
 
             UI_Tools.Label("Target : ");
-            string name_bt = "Select";
-            if (target != null)
-            {
-                name_bt = target.Name;
-            }
 
-            if (UI_Tools.SmallButton(name_bt))
+            if (UI_Tools.SmallButton(target_name))
             {
                 ui_mode = UI_Mode.Select_Target;
+            }
+            if (target_vessel != null)
+            {
+                if (UI_Tools.SmallButton("Dock"))
+                {
+                    ui_mode = UI_Mode.Select_Dock;
+                }
             }
 
             GUILayout.EndHorizontal();
@@ -107,6 +111,27 @@ public class DockingTool : ComplexControler
             else
                 GUILayout.EndVertical();
 
+            if (UI_Tools.SmallButton("None"))
+            {
+                ui_mode = UI_Mode.Main;
+                current_vessel.VesselComponent.TargetObject = null;
+            }
+
+            if (UI_Tools.SmallButton("Cancel"))
+            {
+                ui_mode = UI_Mode.Main;
+            }
+        }
+        else if (ui_mode == UI_Mode.Select_Dock)
+        {
+            UI_Tools.Title("Select Dock");
+            UI_Tools.Console("vessel : " + target_vessel.Name);
+
+            foreach(var part in docks)
+            {
+                UI_Tools.Console(part.Name + "(" + part.Type.Name);
+            }
+
             if (UI_Tools.SmallButton("Cancel"))
             {
                 ui_mode = UI_Mode.Main;
@@ -121,10 +146,54 @@ public class DockingTool : ComplexControler
         Select_Dock,
     }
 
+    string target_name = "None";
+    VesselComponent target_vessel;
+    PartComponent target_part;
+    public SimulationObjectModel last_target;
+
+    public List<PartComponent> docks = new List<PartComponent>();
+
     public override void Update()
     {
+        if (last_target != current_vessel.VesselComponent.TargetObject)
+        {
+            last_target = current_vessel.VesselComponent.TargetObject;
 
+            if (last_target.IsVessel)
+            {
+                logger.LogInfo(last_target);
+
+                target_name = last_target.Name;
+                target_vessel = last_target.Vessel;
+                PartOwnerComponent owner = last_target.PartOwner;
+                listDocks(owner);
+            }
+            else if (last_target.IsPart)
+            {
+                target_part = last_target.Part;
+
+                PartOwnerComponent owner = target_part.PartOwner;
+                if (owner.SimulationObject.IsVessel)
+                {
+                    target_vessel = last_target.Vessel;
+                    target_name = target_vessel.Name +"." + last_target.Name;
+                }
+            }
+            else
+            {
+                target_vessel = null;
+                target_name = "None";
+            }
+        }
     }
 
+    void listDocks(PartOwnerComponent owner)
+    {
+        docks.Clear();
 
+        foreach(var part in owner.Parts)
+        {
+            docks.Add(part);
+        }
+    }
 }

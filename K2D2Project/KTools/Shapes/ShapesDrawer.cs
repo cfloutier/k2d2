@@ -30,7 +30,7 @@ namespace KTools.Shapes
                 return;
             }
 
-            K2D2_Plugin.logger.LogInfo("DrawShapes " + cam.name);
+            // K2D2_Plugin.logger.LogInfo("DrawShapes " + cam.name);
 
             if (cam.name != "FlightCameraPhysics_Main")
             {
