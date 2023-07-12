@@ -71,7 +71,7 @@ class TestObjects : ComplexControler
         var frame = vessel_component.transform.coordinateSystem;
         Vector3 CenterOfMass = frame.ToLocalPosition(vessel_component.CenterOfMass);
 
-        Log($"center of mass : { StrTool.Vector3ToString(CenterOfMass)}");
+        // Log($"center of mass : { StrTool.Vector3ToString(CenterOfMass)}");
 
 
         Position center = vessel_component.CenterOfMass;

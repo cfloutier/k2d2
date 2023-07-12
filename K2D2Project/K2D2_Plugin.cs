@@ -38,6 +38,22 @@ using KTools.Shapes;
 
 namespace K2D2;
 
+
+class L
+{
+    public static void Log(string txt)
+    {
+        K2D2_Plugin.logger.LogInfo(txt);
+    }
+
+    public static void Vector3(string label, Vector3 value)
+    {
+        K2D2_Plugin.logger.LogInfo(label + " : " + StrTool.Vector3ToString(value));
+    }
+
+}
+
+
 [BepInPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
 [BepInDependency(SpaceWarpPlugin.ModGuid, SpaceWarpPlugin.ModVer)]
 //[BepInPlugin(ModGuid, ModName, ModVer)]
@@ -147,9 +163,9 @@ public class K2D2_Plugin : BaseSpaceWarpPlugin
         controllerManager.AddController(new AutoLiftController());
         controllerManager.AddController(new CircleController());
         controllerManager.AddController(new WarpController());
-        controllerManager.AddController(new DockingTool());
+        controllerManager.AddController(new DockingAssist());
 
-        ShapeDrawer.Instance.shapes.Add(DockingTool.Instance.drawShapes);
+        ShapeDrawer.Instance.shapes.Add(DockingAssist.Instance.drawShapes);
 
         // controllerManager.AddController();
 

@@ -191,10 +191,13 @@ namespace KTools.UI
             GUILayout.Label(txt, KBaseStyle.mid_text);
         }
 
-        public static float LabelSlider(string label, float value, float min, float max)
+        public static float LabelSlider(string label, float value, float min, float max, float width_label = 150)
         {
-            UI_Tools.Label($"{label} : {value}");
-            value = FloatSlider(value, 0, 10);
+            GUILayout.BeginHorizontal();
+            GUILayout.Label($"{label} : {value:0.##}", GUILayout.Width(width_label));
+            value = FloatSlider(value, min, max);
+            GUILayout.EndHorizontal();
+
             return value;
         }
 

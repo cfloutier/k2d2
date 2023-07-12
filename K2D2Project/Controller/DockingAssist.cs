@@ -7,33 +7,37 @@ using UnityEngine;
 using KSP.Sim.impl;
 using KSP.Game;
 using KSP.Sim;
+using KSP;
+
+using K2D2.Controller.Docks;
 
 namespace K2D2.Controller;
 
+using JetBrains.Annotations;
+using KTools;
 using Shapes;
 
-
-
-public class DockingTool : ComplexControler
+public class DockingAssist : ComplexControler
 {
-    public static DockingTool Instance { get; set; }
+    public static DockingAssist Instance { get; set; }
     public ManualLogSource logger = BepInEx.Logging.Logger.CreateLogSource("K2D2.DockingTool");
-
 
     KSPVessel current_vessel;
 
-    public DockingTool()
+    public DockingAssist()
     {
         Instance = this;
         debug_mode_only = false;
         name = "Dock";
 
         current_vessel = K2D2_Plugin.Instance.current_vessel;
+
+        shape = new DockShape();
     }
 
+    DockShape shape;
 
     UI_Mode ui_mode = UI_Mode.Main;
-
 
     Vector2 scroll_pos = Vector2.one;
 
@@ -119,12 +123,19 @@ public class DockingTool : ComplexControler
         else if (ui_mode == UI_Mode.Select_Dock)
         {
             UI_Tools.Title("Select Dock");
+            if (target_vessel == null)
+            {
+                ui_mode = UI_Mode.Main;
+                return;
+            }
             UI_Tools.Console("vessel : " + target_vessel.Name);
 
-            foreach(var part in docks)
-            {
-                UI_Tools.Console(part.Name + " - " + part.Type.Name);
-            }
+            // foreach(var part in docks)
+            // {
+            //     UI_Tools.Console(part.Name + " - " + part.Type.Name);
+            // }
+
+            shape.draw_ui();
 
             if (UI_Tools.SmallButton("Cancel"))
             {
@@ -150,11 +161,11 @@ public class DockingTool : ComplexControler
     public override void Update()
     {
         // logger.LogInfo($"target is {current_vessel.VesselComponent.TargetObject}");
+        if (current_vessel.VesselComponent == null)
+            return;
 
         if (last_target != current_vessel.VesselComponent.TargetObject)
         {
-
-
             logger.LogInfo($"changed target is {current_vessel.VesselComponent.TargetObject}");
 
             last_target = current_vessel.VesselComponent.TargetObject;
@@ -176,8 +187,7 @@ public class DockingTool : ComplexControler
                 // logger.LogInfo(last_target);
                 target_name = last_target.Name;
                 target_vessel = last_target.Vessel;
-                PartOwnerComponent owner = last_target.PartOwner;
-                listDocks(owner);
+                docks = DockTools.ListDocks(target_vessel);
             }
             else if (last_target.IsPart)
             {
@@ -200,58 +210,145 @@ public class DockingTool : ComplexControler
 
     public void drawShapes()
     {
+        // logger.LogInfo("drawShapes");
         if (ui_mode == UI_Mode.Select_Dock)
         {
             foreach(var part in docks)
             {
-                draw_dockPort(part);
+                shape.draw_dockPort(part, current_vessel.VesselComponent);
             }
+
+            //shape.draw_dockPort(part, current_vessel.VesselComponent);
+
+            shape.DrawVesselCenter(current_vessel.VesselComponent);
         }
     }
+}
 
+public class ColorEditor
+{
+    public float h= 0;
+    public float s = 1;
+    public float v = 1;
 
-
-
-    void draw_dockPort(PartComponent part)
+    public void draw_ui(string label)
     {
-        var frame = part.transform.coordinateSystem;
+        GUILayout.Label(label, KBaseStyle.console_text);
+        h = UI_Tools.LabelSlider("Hue", h, 0, 1 );
+        s = UI_Tools.LabelSlider("Sat", s, 0, 1 );
+        v = UI_Tools.LabelSlider("Val", v, 0, 1 );
 
-        float delta_pos = 1;
-        float length = 100;
-        float alpha = 5;
+        UI_Tools.Console(ColorTools.formatColorHtml(color));
+    }
+
+    public Color color
+    {
+        get
+        {
+            return ColorTools.FromHSV(h, s ,v, 1);
+        }
+    }
+}
+
+class DockShape
+{
+    ShapesBlendMode blendMode = ShapesBlendMode.Additive;
+
+    float delta_pos = 1;
+    float length = 15;
+
+    float radius = 1;
+
+    float alpha = 3.5f;
+
+    float thickness_torus = 0.15f;
+    float thickness_line = 0.15f;
+
+    ColorEditor color_editor = new ColorEditor();
+
+    Color dock_color = ColorTools.parseColor("#CB5B00");
+    Color vessel_color = ColorTools.parseColor("#00FF34");
+
+    public void draw_ui()
+    {
+        delta_pos = UI_Tools.LabelSlider("delta_pos", delta_pos, -10, 10 );
+
+        length = UI_Tools.LabelSlider("length", length, 0, 100 );
+        radius = UI_Tools.LabelSlider("radius", radius, 0, 100 );
+
+        alpha = UI_Tools.LabelSlider("alpha", alpha, 0, 10 );
+        thickness_line = UI_Tools.LabelSlider("thickness_line", thickness_line, 0, 0.5f);
+
+        color_editor.draw_ui("Color");
+    }
+
+    public void draw_dockPort(PartComponent part, VesselComponent main_vessel)
+    {
+        // var frame = part.transform.coordinateSystem;
 
         Position center = part.CenterOfMass;
         Position start = center + part.transform.up * delta_pos;
         Position end = start + part.transform.up * length;
 
-        var local_frame = current_vessel.VesselComponent.transform.coordinateSystem;
+        var local_frame = main_vessel.transform.coordinateSystem;
 
         Vector3 localStart = local_frame.ToLocalPosition(start);
         Vector3 localEnd = local_frame.ToLocalPosition(end);
 
         Vector3 direction = localEnd - localStart;
 
-        var blendMode = ShapesBlendMode.Additive;
-
         //Draw.Sphere(CenterOfMass, scale, Color.red);
 
         var rot = Quaternion.LookRotation(direction.normalized);
 
-        Color color = Color.red;
+        Color color = dock_color;
         color.a = alpha;
 
-        Draw.Torus(blendMode, ThicknessSpace.Meters, ThicknessSpace.Meters, localStart, rot, 10, 0.1f, color);
-        Draw.Line(blendMode, LineGeometry.Volumetric3D, LineEndCap.Round, ThicknessSpace.Meters, localStart, localEnd, color, color, 0.1f);
+        float radius = (float) (part.PartData.PartSizeDiameter/2);;
+
+        Draw.Torus(blendMode, ThicknessSpace.Meters, ThicknessSpace.Meters, localStart, rot, radius, thickness_torus, color);
+        Draw.Line(blendMode, LineGeometry.Volumetric3D, LineEndCap.Round, ThicknessSpace.Meters, localStart, localEnd, color, color, thickness_line);
     }
 
-    void listDocks(PartOwnerComponent owner)
+    public void DrawVesselCenter(VesselComponent vessel_component)
     {
-        docks.Clear();
+        var frame = vessel_component.transform.coordinateSystem;
+        Vector3 CenterOfMass = frame.ToLocalPosition(vessel_component.CenterOfMass);
 
-        foreach(var part in owner.Parts)
-        {
-            if (part.Name.ToLower().Contains("dock"))
-                docks.Add(part);
-        }
+        // Log($"center of mass : { StrTool.Vector3ToString(CenterOfMass)}");
+
+        // float radius = 1;
+
+        float distance = 3;
+
+        // float thickness = 0.1f;
+
+        // float alpha = 1;
+
+       // ShapesBlendMode blendMode = ShapesBlendMode.Opaque;
+
+        Position center = vessel_component.CenterOfMass;
+        Position start = vessel_component.CenterOfMass + vessel_component.transform.up * distance;
+        Position end = start + vessel_component.transform.up * length;
+
+        Vector3 localStart = frame.ToLocalPosition(start);
+        Vector3 localEnd = frame.ToLocalPosition(end);
+
+        Vector3 direction = localEnd - localStart;
+
+        //Draw.Sphere(CenterOfMass, scale, Color.red);
+
+        var rot = Quaternion.LookRotation(direction);
+
+        Color color = color_editor.color;
+        color.a = alpha;
+
+        //L.Vector3("position vessel", localStart);
+
+        Draw.Torus(blendMode, ThicknessSpace.Meters, ThicknessSpace.Meters, localStart, rot, radius, thickness_torus, color);
+        Draw.Line(blendMode, LineGeometry.Volumetric3D, LineEndCap.Round, ThicknessSpace.Meters, localStart, localEnd, color, color, thickness_torus);
+
+        //SpatialShapes.DrawTorus(forwardPoint, direction, radius, thickness, Color.cyan);
     }
 }
+

@@ -37,7 +37,7 @@ namespace KTools.Shapes
                 return;
             }
 
-            K2D2_Plugin.logger.LogInfo("can_draw " + can_draw);
+            // K2D2_Plugin.logger.LogInfo("can_draw " + can_draw);
 
             if (!can_draw)
             {
