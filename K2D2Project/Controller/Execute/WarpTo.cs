@@ -1,39 +1,30 @@
-
-using System.Collections.Generic;
-using System.Linq;
-
-using UnityEngine;
-using KSP.Sim.impl;
-using KSP.Sim.Maneuver;
-
 using BepInEx.Logging;
-using System;
-
-using K2D2.UI;
-
+using KSP.Sim.Maneuver;
+using KTools;
+using KTools.UI;
+using UnityEngine;
 namespace K2D2.Controller;
-
 
 class WarpToSettings
 {
 
     public static float warp_speed
     {
-        get => Settings.sfile.GetFloat("warp.speed", 2);
+        get => KBaseSettings.sfile.GetFloat("warp.speed", 2);
         set
         {
             value = Mathf.Clamp(value, 0, 7);
-            Settings.sfile.SetFloat("warp.speed", value);
+            KBaseSettings.sfile.SetFloat("warp.speed", value);
         }
     }
 
     public static int warp_safe_duration
     {
-        get => Settings.sfile.GetInt("warp.safe_duration", 10);
+        get => KBaseSettings.sfile.GetInt("warp.safe_duration", 10);
         set
         {
             if (value < 5) value = 5;
-            Settings.sfile.SetInt("warp.safe_duration", value);
+            KBaseSettings.sfile.SetInt("warp.safe_duration", value);
         }
     }
 
@@ -42,7 +33,7 @@ class WarpToSettings
         warp_speed = UI_Tools.FloatSliderTxt("Warp Speed", warp_speed, 0, 7, "", "Warp adjust rate");
         UI_Tools.Right_Left_Text("Safe", "Quick");
 
-        warp_safe_duration = UI_Fields.IntField("warp_safe_duration", "Before Burn Time", warp_safe_duration, 5, int.MaxValue,
+        warp_safe_duration = UI_Fields.IntFieldLine("warp_safe_duration", "Before Burn Time", warp_safe_duration, 5, int.MaxValue, "s",
             "Nb seconds in x1 before next phase (min:5)");
     }
 }

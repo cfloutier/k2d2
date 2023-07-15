@@ -9,6 +9,7 @@ using UnityEngine;
 using KSP.Game;
 using KSP.Sim.ResourceSystem;
 using KSP.UI.Binding;
+using KSP.Messages;
 
 using BepInEx;
 using SpaceWarp;
@@ -24,12 +25,34 @@ using K2D2.Models;
 using K2D2.sources.Models;
 using K2D2.KSPService;
 using K2D2.sources.KSPService;
+using K2D2.InfosPages;
+
+
 using Action = System.Action;
 // using KSP.Networking.MP;
-using K2D2.UI;
+using KTools.UI;
+using KTools;
 
+using K2D2.UI;
+using KTools.Shapes;
 
 namespace K2D2;
+
+
+class L
+{
+    public static void Log(string txt)
+    {
+        K2D2_Plugin.logger.LogInfo(txt);
+    }
+
+    public static void Vector3(string label, Vector3 value)
+    {
+        K2D2_Plugin.logger.LogInfo(label + " : " + StrTool.Vector3ToString(value));
+    }
+
+}
+
 
 [BepInPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
 [BepInDependency(SpaceWarpPlugin.ModGuid, SpaceWarpPlugin.ModVer)]
@@ -63,10 +86,6 @@ public class K2D2_Plugin : BaseSpaceWarpPlugin
 
     private bool drawUI = false;
     private Rect windowRect = Rect.zero;
-
-    private PopUp _popUp = new PopUp();
-    private PopUpContent _popUpContent;
-
 
     private static GameState[] validScenes = new[] { GameState.FlightView, GameState.Map3DView };
 
@@ -118,7 +137,7 @@ public class K2D2_Plugin : BaseSpaceWarpPlugin
         }
         Instance = this;
 
-        Settings.Init(SettingsPath);
+        KBaseSettings.Init(SettingsPath);
         mod_id = SpaceWarpMetadata.ModID;
 
         loaded = true;
@@ -131,6 +150,9 @@ public class K2D2_Plugin : BaseSpaceWarpPlugin
 
         // Setups
         _maneuverProvider = new ManeuverProvider(ref maneuverManager, logger);
+        new ShapeDrawer();
+        RegisterDetectionOfHudNeed();
+        new TestObjects();
 
         // Add Controllers that inherit from BaseController here:
         controllerManager.AddController(new SimpleManeuverController(logger, ref _maneuverProvider));
@@ -141,10 +163,11 @@ public class K2D2_Plugin : BaseSpaceWarpPlugin
         controllerManager.AddController(new AutoLiftController());
         controllerManager.AddController(new CircleController());
         controllerManager.AddController(new WarpController());
+        controllerManager.AddController(new DockingAssist());
 
-        // Add PopUp Tabs here:
-        _popUpContent = new PopUpContent(ref _popUp);
-        _popUp.AddPopUpContents("Active Maneuvers", new Action(() => _popUpContent.DisplayManeuverList(ref maneuverManager)));
+        ShapeDrawer.Instance.shapes.Add(DockingAssist.Instance.drawShapes);
+
+        // controllerManager.AddController();
 
         main_ui = new MainUI();
 
@@ -155,6 +178,53 @@ public class K2D2_Plugin : BaseSpaceWarpPlugin
             ToggleAppBarButton);
     }
 
+    public virtual void OnEnable()
+    {
+        Camera.onPreRender = (Camera.CameraCallback)System.Delegate.Combine(
+            Camera.onPreRender,
+            new Camera.CameraCallback(OnCameraPreRender)
+        );
+        Camera.onPostRender = (Camera.CameraCallback)System.Delegate.Combine(
+            Camera.onPostRender,
+            new Camera.CameraCallback(OnCameraPostRender)
+        );
+    }
+
+    public virtual void OnDisable()
+    {
+        Camera.onPreRender = (Camera.CameraCallback)System.Delegate.Remove(
+            Camera.onPreRender,
+            new Camera.CameraCallback(OnCameraPreRender)
+        );
+        Camera.onPostRender = (Camera.CameraCallback)System.Delegate.Remove(
+            Camera.onPostRender,
+            new Camera.CameraCallback(OnCameraPostRender)
+        );
+    }
+
+    private void OnCameraPreRender(Camera cam)
+    {
+        if (ShapeDrawer.Instance == null)
+            return;
+
+        try
+        {
+            ShapeDrawer.Instance.DrawShapes(cam);
+        }
+        catch (Exception e)
+        {
+            Logger.LogError($"Error during drawing of hud : {e.GetType()} {e.Message}");
+        }
+    }
+
+    private void OnCameraPostRender(Camera cam)
+    {
+         if (ShapeDrawer.Instance == null)
+            return;
+
+        ShapeDrawer.Instance.OnPostRender(cam);
+    }
+
     void Awake()
     {
 
@@ -162,8 +232,8 @@ public class K2D2_Plugin : BaseSpaceWarpPlugin
 
     void save_rect_pos()
     {
-        Settings.window_x_pos = (int)windowRect.xMin;
-        Settings.window_y_pos = (int)windowRect.yMin;
+        KBaseSettings.window_x_pos = (int)windowRect.xMin;
+        KBaseSettings.window_y_pos = (int)windowRect.yMin;
     }
 
     void Update()
@@ -183,6 +253,8 @@ public class K2D2_Plugin : BaseSpaceWarpPlugin
 
             // Update Controllers
             controllerManager.UpdateControllers();
+
+            UI_Tools.OnUpdate();
         }
     }
 
@@ -202,6 +274,23 @@ public class K2D2_Plugin : BaseSpaceWarpPlugin
         }
     }
 
+    private void RegisterDetectionOfHudNeed()
+    {
+        Game.Messages.Subscribe<GameStateChangedMessage>(msg =>
+        {
+            var message = (GameStateChangedMessage)msg;
+
+            if (message.CurrentState == GameState.FlightView)
+            {
+                ShapeDrawer.Instance.can_draw = true;
+            }
+            else if (message.PreviousState == GameState.FlightView)
+            {
+                ShapeDrawer.Instance.can_draw = false;
+            }
+        });
+    }
+
     void OnGUI()
     {
         if (!ValidScene())
@@ -210,7 +299,7 @@ public class K2D2_Plugin : BaseSpaceWarpPlugin
         if (drawUI)
         {
             K2D2Styles.Init();
-            GUI.skin = GenericStyle.skin;
+            GUI.skin = KBaseStyle.skin;
 
             WindowTool.check_main_window_pos(ref windowRect);
 
@@ -218,19 +307,12 @@ public class K2D2_Plugin : BaseSpaceWarpPlugin
                 GUIUtility.GetControlID(FocusType.Passive),
                 windowRect,
                 FillWindow,
-                $"<color=#71DBDB>K2-D2</color>",
+                "   K2-D2",
                 GUILayout.Height(0),
                 GUILayout.Width(350));
 
             save_rect_pos();
-            // Draw the tool tip if needed
-            ToolTipsManager.DrawToolTips();
-            // check editor focus and un set Input
-            UI_Fields.CheckEditor();
-        }
-        if (_popUp.isPopupVisible)
-        {
-            _popUp.OnGUI();
+            UI_Tools.OnGUI();
         }
     }
 
@@ -247,21 +329,19 @@ public class K2D2_Plugin : BaseSpaceWarpPlugin
     private void FillWindow(int windowID)
     {
         TopButtons.Init(windowRect.width);
-        if (TopButtons.Button(GenericStyle.cross))
+        if (TopButtons.Button(KBaseStyle.cross))
             ToggleAppBarButton(false);
 
         // settings button
-        settings_visible = TopButtons.Toggle(settings_visible, GenericStyle.gear);
+        settings_visible = TopButtons.Toggle(settings_visible, KBaseStyle.gear);
 
         if (K2D2Settings.debug_mode)
         {
-            // if (GUI.Button(new Rect(windowRect.width - 81, 4, 25, 25), "P", GenericStyle.small_button))
-            //     _popUp.isPopupVisible = !_popUp.isPopupVisible;
             if (TopButtons.Button("D"))
                 K2D2Settings.debug_mode = false;
         }
 
-        GUI.Label(new Rect(9, 2, 29, 29), K2D2Styles.k2d2_big_icon, GenericStyle.icons_label);
+        GUI.Label(new Rect(9, 2, 29, 29), K2D2Styles.k2d2_big_icon, KBaseStyle.icons_label);
         GUILayout.BeginVertical();
 
         main_ui.onGUI();
@@ -278,18 +358,28 @@ public class K2D2_Plugin : BaseSpaceWarpPlugin
         AutoExecuteManeuver.Instance.Start();
     }
 
-    // Public API to get the status of K2D2
+    public void StopFlyNode()
+    {
+        AutoExecuteManeuver.Instance.Stop();
+    }
+
+    public bool IsFlyNodeRunning()
+    {
+        return AutoExecuteManeuver.Instance.isRunning;
+    }
+
+    // Public API to get the status of K2D2 (used by FlightPlan)
     public string GetStatus()
     {
         string status = "";
         var instance = AutoExecuteManeuver.Instance;
-        if (instance.current_maneuvre_node == null)
+        if (instance.current_maneuver_node == null)
         {
-            status = "No Maneuvre Node";
+            status = "No Maneuver Node";
         }
         else
         {
-            if (!instance.valid_maneuver) status = "Invalid Maneuvre Node";
+            if (!instance.valid_maneuver) status = "Invalid Maneuver Node";
             // else if (!AutoExecuteManeuver.Instance.canStart()) status = "No Future Maneuver Node";
             else if (instance.isRunning)
             {
@@ -306,7 +396,7 @@ public class K2D2_Plugin : BaseSpaceWarpPlugin
                 }
                 else if (instance.mode == AutoExecuteManeuver.Mode.Burn)
                 {
-                    if (Game.UniverseModel.UniversalTime < instance.current_maneuvre_node.Time)
+                    if (Game.UniverseModel.UniversalTime < instance.current_maneuver_node.Time)
                     {
                         status = $"Waiting to Burn: {instance.current_executor.status_line}";
                     }

@@ -1,13 +1,8 @@
-using System;
+
 using KSP.Sim;
 using KSP.Sim.impl;
-using KSP.Sim.Maneuver;
-using KSP.Sim.State;
-using KSP.Game;
 
-using System.Reflection;
-
-using K2D2.Tools;
+using KTools;
 
 namespace K2D2
 {

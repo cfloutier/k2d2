@@ -3,6 +3,7 @@
 using UnityEngine;
 
 using K2D2.UI;
+using KTools.UI;
 
 namespace K2D2;
 
@@ -80,9 +81,9 @@ public class PopUp
     private void FillPopup(int windowID)
     {
         // Print the icon
-        GUI.Label(new Rect(15, 2, 29, 29), K2D2Styles.k2d2_big_icon, GenericStyle.icons_label);
+        GUI.Label(new Rect(15, 2, 29, 29), K2D2Styles.k2d2_big_icon, KBaseStyle.icons_label);
 
-        if (GUI.Button(new Rect(PopupRect.width - 30, 4, 25, 25), "X", GenericStyle.small_button))
+        if (GUI.Button(new Rect(PopupRect.width - 30, 4, 25, 25), "X", KBaseStyle.small_button))
             TogglePopup(false);
 
         GUILayout.BeginHorizontal();

@@ -1,16 +1,9 @@
 ﻿using KSP.Game;
 using KSP.Sim;
 using KSP.Sim.impl;
-using KSP.Sim.State;
-using System;
-using BepInEx.Logging;
-using KSP.Api;
 using KSP.Sim.Maneuver;
-using KSP.Map;
-using KSP2FlightAssistant.KSPService;
-using KSP2FlightAssistant.MathLibrary;
+using KSP.Sim.State;
 using UnityEngine;
-using K2D2.Controller;
 
 namespace K2D2.KSPService
 {
@@ -39,7 +32,8 @@ namespace K2D2.KSPService
 
         public static KSPVessel current
         {
-            get{
+            get
+            {
                 return _current;
             }
         }
@@ -149,32 +143,55 @@ namespace K2D2.KSPService
 
         public void SetPitch(float pitch)
         {
-            flightCtrlState.pitch = pitch;
+            if (VesselVehicle == null) return;
+
+            pitch = Mathf.Clamp(  pitch, -1 , 1);
+
+            var update = new FlightCtrlStateIncremental
+            {
+                pitch = pitch
+            };
+
+            VesselVehicle.AtomicSet(update);
         }
 
         public void SetRoll(float roll)
         {
-            flightCtrlState.roll = roll;
+            if (VesselVehicle == null) return;
+
+            roll = Mathf.Clamp(  roll, -1 , 1);
+
+            var update = new FlightCtrlStateIncremental
+            {
+                roll = roll
+            };
+
+            VesselVehicle.AtomicSet(update);
         }
 
         public void SetYaw(float yaw)
         {
-            flightCtrlState.yaw = yaw;
-        }
+            if (VesselVehicle == null) return;
 
+            yaw = Mathf.Clamp(  yaw, -1 , 1);
+
+            var update = new FlightCtrlStateIncremental
+            {
+                yaw = yaw
+            };
+
+            VesselVehicle.AtomicSet(update);
+        }
 
         public void SetWheelSteer(float wheelSteer)
         {
             flightCtrlState.wheelSteer = wheelSteer;
         }
 
-
         public void SetWheelThrottle(float wheelThrottle)
         {
             flightCtrlState.wheelThrottle = wheelThrottle;
         }
-
-
         // Trims
 
         public void SetPitchTrim(float pitchTrim)

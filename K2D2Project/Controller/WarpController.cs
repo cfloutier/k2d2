@@ -1,18 +1,6 @@
-using System.Collections.Generic;
-using System.Linq;
-
-using UnityEngine;
-using BepInEx.Logging;
 using K2D2.KSPService;
-using KSP.Sim;
-using KSP.Sim.impl;
-
-using K2D2.Controller;
-using SpaceGraphicsToolkit;
-using VehiclePhysics;
-using System;
-
-using K2D2.UI;
+using KTools;
+using KTools.UI;
 
 namespace K2D2.Controller;
 
@@ -28,7 +16,7 @@ public class WarpController : ComplexControler
         current_vessel = K2D2_Plugin.Instance.current_vessel;
 
         Instance = this;
-        debug_mode_only = true;
+        debug_mode_only = false;
         name = "Warp";
         warp = new WarpTo();
     }
@@ -68,6 +56,7 @@ public class WarpController : ComplexControler
         if (!isRunning) return;
 
         warp.Update();
+
         if (warp.finished)
             isRunning = false;
     }
@@ -82,25 +71,36 @@ public class WarpController : ComplexControler
                 K2D2_Plugin.Instance.settings_visible = false;
             return;
         }
-        var orbit = current_vessel.VesselComponent.Orbit;
-        UI_Tools.Console($"timeToTransition1 : {StrTool.DurationToString( orbit.timeToTransition1 )}");
-        UI_Tools.Console($"timeToTransition2 : {StrTool.DurationToString( orbit.timeToTransition1 )}");
-        UI_Tools.Console($"PatchStartTransition : {orbit.PatchStartTransition }");
-        UI_Tools.Console($"PatchEndTransition : {orbit.PatchEndTransition }");
 
-        bool go = UI_Tools.ToggleButton(isRunning, "Warp to SOI Change", "Stop");
-        if (go != isRunning && go)
+        UI_Tools.Title("Warp to SOI");
+
+        if (isRunning)
         {
-            if (go)
-                warp.Start_Ut(orbit.timeToTransition1 + GeneralTools.Game.UniverseModel.UniversalTime + 60);
-
-            isRunning = go;
+            isRunning = UI_Tools.BigToggleButton(isRunning, "Warping", "Stop");
+            warp.onGUI();  
+            return;
         }
-      
+
+        var orbit = current_vessel.VesselComponent.Orbit;
+
+        if (orbit.PatchEndTransition == KSP.Sim.PatchTransitionType.Encounter ||
+            orbit.PatchEndTransition == KSP.Sim.PatchTransitionType.Escape)
+        {
+            UI_Tools.Console($"SOI Change in : {StrTool.DurationToString(orbit.timeToTransition1)}");
+
+            bool go = UI_Tools.BigToggleButton(isRunning, "Warp to SOI Change (+1 min)", "Stop");
+            if (isRunning != go)
+            {
+                if (go)
+                { 
+                    warp.Start_Ut(orbit.timeToTransition1 + GeneralTools.Game.UniverseModel.UniversalTime + 60);
+                    isRunning = true;
+                }
+
+            }
+        }
 
 
-      //  if (UI_Tools.BigButton("close"))
-       
 
     }
 

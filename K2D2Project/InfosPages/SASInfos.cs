@@ -1,9 +1,7 @@
 
 
-using UnityEngine;
-using KSP.Sim;
 using K2D2.Controller;
-using K2D2.UI;
+using KTools.UI;
 namespace K2D2.InfosPages;
 class SASInfos : BaseController
 {
@@ -35,9 +33,9 @@ class SASInfos : BaseController
         UI_Tools.Console($"sas.ReferenceFrame {sas.ReferenceFrame}");
         UI_Tools.Console($"sas.AutoTune {sas.AutoTune}");
         UI_Tools.Console($"sas.lockedMode {sas.lockedMode}");
-        UI_Tools.Console($"sas.LockedRotation {StrTool.VectorToString(sas.LockedRotation.eulerAngles)}");
+        UI_Tools.Console($"sas.LockedRotation {StrTool.Vector3ToString(sas.LockedRotation.eulerAngles)}");
 
-        UI_Tools.Console($"sas.TargetOrientation {StrTool.VectorToString(sas.TargetOrientation)}");
+        UI_Tools.Console($"sas.TargetOrientation {StrTool.Vector3ToString(sas.TargetOrientation)}");
         UI_Tools.Console($"sas.PidLockedPitch {sas.PidLockedPitch}");
         UI_Tools.Console($"sas.PidLockedRoll {sas.PidLockedRoll}");
         UI_Tools.Console($"sas.PidLockedYaw {sas.PidLockedYaw}");

@@ -5,6 +5,8 @@ using ManeuverProvider = K2D2.sources.KSPService.ManeuverProvider;
 
 #pragma warning disable CS0414
 
+using KTools;
+
 namespace K2D2.Controller;
 
 public class SimpleManeuverController : ButtonController

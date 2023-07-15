@@ -3,7 +3,7 @@ The KSP astromech
 
 A set of tools to Help Space Navigation.
 
-Simply execute the next maneuvre node for the moment.
+Simply execute the next maneuver node for the moment.
 The UI can be opened using `Alt-O` or using AppBar.
 
 There is no use of the SAS for the moment (very early version). The pilot, wait for a good pointing attitude, do auto-warp and then auto-burn.
@@ -36,7 +36,7 @@ Thanks first for downloading.
 
 * Big Thanks to [cheese3660](https://github.com/cheese3660)
 1. for [SpaceWarp](https://github.com/Halbann). the base of all KSP2 MODs we can make for now on
-2. and for [AutoBurn](https://github.com/cheese3660/AutoBurn) Very helpful code about how to start thrusts and how to get maneuvre node.
+2. and for [AutoBurn](https://github.com/cheese3660/AutoBurn) Very helpful code about how to start thrusts and how to get maneuver node.
 
 My method is totally based on his code.
 

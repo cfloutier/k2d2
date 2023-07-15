@@ -1,17 +1,10 @@
-
-using System.Collections.Generic;
-using System.Linq;
-
-using UnityEngine;
-using KSP.Sim.Maneuver;
-using KSP.Messages;
 using BepInEx.Logging;
-
-
 using K2D2.KSPService;
+using KSP.Messages;
 using KSP.Sim;
-
-using K2D2.UI;
+using KSP.Sim.Maneuver;
+using KTools;
+using KTools.UI;
 
 namespace K2D2.Controller;
 
@@ -19,21 +12,21 @@ public class ExecuteSettings
 {
     public bool show_node_infos
     {
-        get => Settings.sfile.GetBool("execute.show_node_infos", true);
+        get => KBaseSettings.sfile.GetBool("execute.show_node_infos", true);
         set
         {
             // value = Mathf.Clamp(value, 0 , 1);
-            Settings.sfile.SetBool("execute.show_node_infos", value);
+            KBaseSettings.sfile.SetBool("execute.show_node_infos", value);
         }
     }
 
     public bool auto_warp
     {
-        get => Settings.sfile.GetBool("execute.auto_warp", true);
+        get => KBaseSettings.sfile.GetBool("execute.auto_warp", true);
         set
         {
             // value = Mathf.Clamp(value, 0 , 1);
-            Settings.sfile.SetBool("execute.auto_warp", value);
+            KBaseSettings.sfile.SetBool("execute.auto_warp", value);
         }
     }
 
@@ -42,21 +35,21 @@ public class ExecuteSettings
     private static string[] StartMode_Labels = { "T0", "before", "mid-duration" };
     public StartMode start_mode
     {
-        get => Settings.sfile.GetEnum<StartMode>("execute.start_mode", StartMode.precise);
+        get => KBaseSettings.sfile.GetEnum<StartMode>("execute.start_mode", StartMode.precise);
         set
         {
             // value = Mathf.Clamp(value, 0 , 1);
-            Settings.sfile.SetEnum<StartMode>("execute.start_mode", value);
+            KBaseSettings.sfile.SetEnum<StartMode>("execute.start_mode", value);
         }
     }
 
     public float start_before
     {
-        get => Settings.sfile.GetFloat("execute.start_before", 1);
+        get => KBaseSettings.sfile.GetFloat("execute.start_before", 1);
         set
         {
             // value = Mathf.Clamp(value, 0 , 1);
-            Settings.sfile.SetFloat("execute.start_before", value);
+            KBaseSettings.sfile.SetFloat("execute.start_before", value);
         }
     }
 
@@ -90,7 +83,7 @@ public class AutoExecuteManeuver : ComplexControler
 
     public static AutoExecuteManeuver Instance { get; set; }
 
-    public ManeuverNodeData current_maneuvre_node = null;
+    public ManeuverNodeData current_maneuver_node = null;
     ManeuverNodeData execute_node = null;
 
 
@@ -99,7 +92,7 @@ public class AutoExecuteManeuver : ComplexControler
     // Sub Pilots
     TurnTo turn;
     WarpTo warp;
-    BurnManeuvre burn;
+    BurnManeuver burn;
 
     //  ExecuteController current_pilot = null;
     KSPVessel current_vessel;
@@ -119,7 +112,7 @@ public class AutoExecuteManeuver : ComplexControler
 
         turn = new TurnTo();
         warp = new WarpTo();
-        burn = new BurnManeuvre();
+        burn = new BurnManeuver();
     }
 
     public void OnActiveVesselChanged(MessageCenterMessage msg)
@@ -159,7 +152,7 @@ public class AutoExecuteManeuver : ComplexControler
                 current_executor.setController(null);
                 break;
             case Mode.Turn:
-                execute_node = current_maneuvre_node;
+                execute_node = current_maneuver_node;
                 current_executor.setController(turn);
                 turn.StartManeuver(execute_node);
                 break;
@@ -183,10 +176,10 @@ public class AutoExecuteManeuver : ComplexControler
 
     public bool canStart()
     {
-        if (current_maneuvre_node == null)
+        if (current_maneuver_node == null)
             return false;
 
-        var dt = current_maneuvre_node.Time - GeneralTools.Game.UniverseModel.UniversalTime;
+        var dt = current_maneuver_node.Time - GeneralTools.Game.UniverseModel.UniversalTime;
         if (dt < 0)
         {
             return false;
@@ -224,15 +217,15 @@ public class AutoExecuteManeuver : ComplexControler
 
         if (!isRunning)
         {
-            if (current_maneuvre_node == null)
+            if (current_maneuver_node == null)
             {
-                UI_Tools.Label("No Maneuvre node.");
+                UI_Tools.Label("No Maneuver node.");
                 return;
             }
 
             if (!valid_maneuver)
             {
-                UI_Tools.Label("Invalid Maneuvre node.");
+                UI_Tools.Label("Invalid Maneuver node.");
                 UI_Tools.Console("Actually a KSP2 bug when loading scenaries. Please open map to fix it");
                 return;
             }
@@ -249,7 +242,7 @@ public class AutoExecuteManeuver : ComplexControler
             return;
         }
 
-        isRunning = UI_Tools.ToggleButton(isRunning, "Run", "Stop");
+        isRunning = UI_Tools.BigToggleButton(isRunning, "Run", "Stop");
 
         current_executor.onGUI();
         if (!K2D2Settings.auto_next)
@@ -272,9 +265,9 @@ public class AutoExecuteManeuver : ComplexControler
 
     public bool checkManeuver()
     {
-        current_maneuvre_node = current_vessel.GetNextManeuveurNode();
+        current_maneuver_node = current_vessel.GetNextManeuveurNode();
         valid_maneuver = false;
-        if (current_maneuvre_node == null)
+        if (current_maneuver_node == null)
         {
             Stop();
             return false;
@@ -335,7 +328,7 @@ public class AutoExecuteManeuver : ComplexControler
     }
 
 
-    public SimpleAccordion accordion = new SimpleAccordion();
+    public FoldOut accordion = new FoldOut();
 
     void settingsUI()
     {
@@ -352,7 +345,7 @@ public class AutoExecuteManeuver : ComplexControler
             accordion.addChapter("Execute", execute_settings.settings_UI);
             accordion.addChapter("Turn", TurnToSettings.onGUI);
             accordion.addChapter("Warp", execute_settings.warp_ui);
-            accordion.addChapter("Burn", BurnManeuvreSettings.onGUI);
+            accordion.addChapter("Burn", BurnManeuverSettings.onGUI);
 
             accordion.singleChapter = true;
         }
@@ -367,15 +360,15 @@ public class AutoExecuteManeuver : ComplexControler
         if (isRunning)
             node = execute_node;
         else
-            node = current_maneuvre_node;
+            node = current_maneuver_node;
 
         if (node == null)
             return;
 
         var dt = GeneralTools.remainingStartTime(node);
         UI_Tools.Label($"Node in <b>{StrTool.DurationToString(dt)}</b>");
-        UI_Tools.Label($"dV {current_maneuvre_node.BurnRequiredDV:n2} m/s");
-        UI_Tools.Label($"Duration {StrTool.DurationToString(current_maneuvre_node.BurnDuration)}");
+        UI_Tools.Label($"dV {current_maneuver_node.BurnRequiredDV:n2} m/s");
+        UI_Tools.Label($"Duration {StrTool.DurationToString(current_maneuver_node.BurnDuration)}");
 
         if (K2D2Settings.debug_mode)
         {

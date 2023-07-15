@@ -1,42 +1,42 @@
 
 using BepInEx.Logging;
-using UnityEngine;
-using KSP.Sim;
 using K2D2.KSPService;
+using KSP.Sim;
 using KSP.Sim.Maneuver;
-
-using K2D2.UI;
+using KTools;
+using KTools.UI;
+using UnityEngine;
 
 namespace K2D2.Controller;
 
-class BurnManeuvreSettings
+class BurnManeuverSettings
 {
 
     public static float burn_adjust
     {
-        get => Settings.sfile.GetFloat("warp.burn_adjust", 1.5f);
+        get => KBaseSettings.sfile.GetFloat("warp.burn_adjust", 1.5f);
         set
         {             // value = Mathf.Clamp(0.1,)
-            Settings.sfile.SetFloat("warp.burn_adjust", value);
+            KBaseSettings.sfile.SetFloat("warp.burn_adjust", value);
         }
     }
 
     public static float max_dv_error
     {
-        get => Settings.sfile.GetFloat("warp.max_dv_error", 0.1f);
+        get => KBaseSettings.sfile.GetFloat("warp.max_dv_error", 0.1f);
         set
         {             // value = Mathf.Clamp(0.1,)
-            Settings.sfile.SetFloat("warp.max_dv_error", value);
+            KBaseSettings.sfile.SetFloat("warp.max_dv_error", value);
         }
     }
 
     static public bool rotate_during_burn
     {
-        get => Settings.sfile.GetBool("land.rotate_during_burn", false);
+        get => KBaseSettings.sfile.GetBool("land.rotate_during_burn", false);
         set
         {
             // value = Mathf.Clamp(value, 0 , 1);
-            Settings.sfile.SetBool("land.rotate_during_burn", value);
+            KBaseSettings.sfile.SetBool("land.rotate_during_burn", value);
         }
     }
 
@@ -51,14 +51,14 @@ class BurnManeuvreSettings
     }
 }
 
-public class BurnManeuvre : ExecuteController
+public class BurnManeuver : ExecuteController
 {
-    public ManualLogSource logger = BepInEx.Logging.Logger.CreateLogSource("K2D2.BurnManeuvre");
+    public ManualLogSource logger = BepInEx.Logging.Logger.CreateLogSource("K2D2.BurnManeuver");
 
     BurndV burn_dV = new BurndV();
     KSPVessel current_vessel;
 
-    public BurnManeuvre()
+    public BurnManeuver()
     {
         current_vessel = K2D2_Plugin.Instance.current_vessel;
     }
@@ -137,7 +137,7 @@ public class BurnManeuvre : ExecuteController
             {
                 mode = Mode.Burning;
 
-                if (BurnManeuvreSettings.rotate_during_burn)
+                if (BurnManeuverSettings.rotate_during_burn)
                     SASTool.setAutoPilot(AutopilotMode.Maneuver);
                 else
                     SASTool.setAutoPilot(AutopilotMode.StabilityAssist);
@@ -172,7 +172,7 @@ public class BurnManeuvre : ExecuteController
 
             // var required_dv = maneuver.BurnRequiredDV;
             // remaining_dv = required_dv - burn_dV.burned_dV;
-            if (remaining_dv <= BurnManeuvreSettings.max_dv_error)
+            if (remaining_dv <= BurnManeuverSettings.max_dv_error)
             {
                 Finished();
                 return;
@@ -218,7 +218,7 @@ public class BurnManeuvre : ExecuteController
             return;
         }
 
-        needed_throttle = remaining_full_burn_time * BurnManeuvreSettings.burn_adjust;
+        needed_throttle = remaining_full_burn_time * BurnManeuverSettings.burn_adjust;
     }
 
     public override void onGUI()

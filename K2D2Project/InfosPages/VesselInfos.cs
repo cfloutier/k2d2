@@ -1,10 +1,7 @@
 
 
-using UnityEngine;
-using KSP.Sim;
 using K2D2.Controller;
-
-using K2D2.UI;
+using KTools.UI;
 
 namespace K2D2.InfosPages;
 
@@ -15,7 +12,6 @@ class VesselInfos : BaseController
         debug_mode_only = true;
         name = "Vessel Infos";
     }
-
 
 
     public override void onGUI()

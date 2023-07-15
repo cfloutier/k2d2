@@ -1,16 +1,9 @@
-
-using System.Collections.Generic;
-
-using System.Linq;
-
-using UnityEngine;
-
-using KSP.Sim;
 using K2D2.KSPService;
+using KSP.Sim;
 using KSP.Sim.Maneuver;
-
-
-using K2D2.UI;
+using KTools;
+using KTools.UI;
+using UnityEngine;
 
 namespace K2D2.Controller;
 
@@ -19,21 +12,21 @@ class TurnToSettings
 
     public static float max_angle_maneuver
     {
-        get => Settings.sfile.GetFloat("turn.max_angle_maneuver", 0.3f);
+        get => KBaseSettings.sfile.GetFloat("turn.max_angle_maneuver", 0.3f);
         set
         {
             value = Mathf.Clamp(value, 0, 7);
-            Settings.sfile.SetFloat("turn.max_angle_maneuver", value);
+            KBaseSettings.sfile.SetFloat("turn.max_angle_maneuver", value);
         }
     }
 
     public static float max_angular_speed
     {
-        get => Settings.sfile.GetFloat("turn.max_angular_speed", 1f);
+        get => KBaseSettings.sfile.GetFloat("turn.max_angular_speed", 1f);
         set
         {
             value = Mathf.Clamp(value, 0, 7);
-            Settings.sfile.SetFloat("turn.max_angular_speed", value);
+            KBaseSettings.sfile.SetFloat("turn.max_angular_speed", value);
         }
     }
 
@@ -82,7 +75,7 @@ public class TurnTo : ExecuteController
 
             SASTool.setAutoPilot(AutopilotMode.Maneuver);
 
-            if (!checkManeuvreDirection())
+            if (!checkManeuverDirection())
                 return;
 
             if (!checkAngularRotation())
@@ -116,7 +109,7 @@ public class TurnTo : ExecuteController
         Vector retro_dir = telemetry.SurfaceMovementRetrograde;
         Rotation vessel_rotation = current_vessel.GetRotation();
 
-        // convert rotation to maneuvre coordinates
+        // convert rotation to maneuver coordinates
         vessel_rotation = Rotation.Reframed(vessel_rotation, retro_dir.coordinateSystem);
         Vector3d forward_direction = (vessel_rotation.localRotation * Vector3.up).normalized;
 
@@ -126,7 +119,7 @@ public class TurnTo : ExecuteController
         return angle < max_angle;
     }
 
-    public bool checkManeuvreDirection()
+    public bool checkManeuverDirection()
     {
         double max_angle = TurnToSettings.max_angle_maneuver;
 
@@ -134,14 +127,14 @@ public class TurnTo : ExecuteController
         if (!telemetry.HasManeuver)
             return false;
 
-        Vector maneuvre_dir = telemetry.ManeuverDirection;
+        Vector maneuver_dir = telemetry.ManeuverDirection;
         Rotation vessel_rotation = current_vessel.GetRotation();
 
-        // convert rotation to maneuvre coordinates
-        vessel_rotation = Rotation.Reframed(vessel_rotation, maneuvre_dir.coordinateSystem);
+        // convert rotation to maneuver coordinates
+        vessel_rotation = Rotation.Reframed(vessel_rotation, maneuver_dir.coordinateSystem);
         Vector3d forward_direction = (vessel_rotation.localRotation * Vector3.up).normalized;
 
-        angle = Vector3d.Angle(maneuvre_dir.vector, forward_direction);
+        angle = Vector3d.Angle(maneuver_dir.vector, forward_direction);
         status_line = $"Waiting for good sas direction\nAngle = {angle:n2}°";
 
         return angle < max_angle;
@@ -184,10 +177,10 @@ public class TurnTo : ExecuteController
             var angularVelocity = current_vessel.GetAngularSpeed().vector;
 
             // UI_Tools.Console($"angulor_vel_coord {angulor_vel_coord}");
-            Vector maneuvre_dir = telemetry.ManeuverDirection;
-            // UI_Tools.Console($"maneuvre_dir ref {maneuvre_dir.coordinateSystem}");
-            // UI_Tools.Console($"maneuvre_dir {StrTool.VectorToString(maneuvre_dir.vector)}");
-            UI_Tools.Console($"angularVelocity {StrTool.VectorToString(angularVelocity)}");
+            Vector maneuver_dir = telemetry.ManeuverDirection;
+            // UI_Tools.Console($"maneuver_dir ref {maneuver_dir.coordinateSystem}");
+            // UI_Tools.Console($"maneuver_dir {StrTool.VectorToString(maneuver_dir.vector)}");
+            UI_Tools.Console($"angularVelocity {StrTool.Vector3ToString(angularVelocity)}");
             // UI_Tools.Console($"angularVelocity {StrTool.VectorToString(angularVelocity)}");
             UI_Tools.Console($"autopilot {autopilot.AutopilotMode}");
         }

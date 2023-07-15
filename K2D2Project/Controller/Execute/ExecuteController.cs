@@ -1,20 +1,3 @@
-
-using System.Collections.Generic;
-using System.Linq;
-
-using UnityEngine;
-
-using KSP.Sim;
-using KSP.Sim.impl;
-using KSP.Sim.Maneuver;
-using KSP.Game;
-using KSP.Sim.ResourceSystem;
-
-
-
-using BepInEx.Logging;
-using KSP.ScriptInterop.impl.moonsharp;
-
 namespace K2D2.Controller
 {
 
@@ -55,7 +38,7 @@ namespace K2D2.Controller
         public override void LateUpdate() { if (sub_controler != null) sub_controler.LateUpdate(); }
         public override void FixedUpdate() { if (sub_controler != null) sub_controler.FixedUpdate(); }
 
-    } 
+    }
 
 
 

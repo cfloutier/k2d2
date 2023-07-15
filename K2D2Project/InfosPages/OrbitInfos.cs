@@ -2,20 +2,17 @@
 using K2D2.Controller;
 using KSP.Sim;
 using KSP.Sim.impl;
-
-using K2D2.UI;
-
+using KTools;
+using KTools.UI;
 namespace K2D2.InfosPages;
 
 class OrbitInfos : BaseController
 {
-
     public OrbitInfos()
     {
         debug_mode_only = true;
         name = "Orbit Infos";
     }
-
 
     public override void onGUI()
     {

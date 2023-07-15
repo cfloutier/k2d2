@@ -1,5 +1,4 @@
-﻿using System;
-using BepInEx.Logging;
+﻿using BepInEx.Logging;
 using K2D2.KSPService;
 using K2D2.sources.Models;
 

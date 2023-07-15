@@ -1,7 +1,74 @@
+# v0.9.3
+Fix :
+* rebuild with KSP2 v1.3.1
+
+Features:
+* Lift : added a full curve rendering of the ascent profile.
+
+Blue color represent the atmosphere height and white the atmosphere density. Green line is the current vessel's altitude, greys are controled altitudes and cyan the end of atm
+
+# v0.9.2
+Fixes : typos and repeat buttons error.
+Reupload for ckan.
+
+# v0.9.1
+Improvements :
+
+== New UI library tools ==
+
+a huge work have been made there !
+
+* a new Heading selection control. It is an interactive horizontal compass.
+
+You can use it in Attitude ans Lift pages
+
+* New Fonts, and overall better font rendering and text alignment,
+* All Editor Field : the value is sent to the mech, only if enter key is pressed or focus is changed. It avoid sending a wrong value while typing it ( It could be dangerous during flight)
+  * Yellow : not validated yet
+  * Red : Invalid value, it will be replaced on enter.
+  * White : not focused
+
+* Use of repeat button to fine adjust on each control that would need it
+
+Features:
+
+* Drone new UI and options :
+  * You can choose between Altitude or V-Speed control.
+  * Values are more precises using repeat buttons, text field and a slider at the same time.
+  * Rool dorward direction toward current speed. It make it easier to control.
+  * New UI Infos
+
+Try the drone pilot it is more precise than ever
+
+* Attitude Pilot :
+  * like the drone pilot use of repeat buttons, text field and a slider for the elevation.
+  * Added the Compass controler for the heading
+
+# v0.9.0
+Features :
+* Added function to the open api : StopFlyNode and IsFlyNodeRunning. giving the ability to stop node execution
+* Warp : added a little Warp to SOI Tool
+* Attitude : Enhanced the Attitude controller. Is is now not only in debug mode and have a more stable way to select the direction.
+  can be very useful for planes.
+* Lift : direction is back in main page
+
+Improvements :
+
+* new UI textures for Tabs && button
+* new KTools Ui made for FlightPlan
+  * Added Repeat Buttons for attitude selection
+  * Added new version of editor fields : the value is validated only when Enter/Return is pressed. 
+  the yellow color mean than it is not yet used. No more value changes on the fly cause it could crash the vessel if wrong input were typed.
+
+* Drone : a small Kill H-Speed tool for final precise landing.
+  + Altitude Control rather than V-Speed only
+
+Fixes :
+* many little fixes when loading scene (Less NPE)
+
 # v0.8.1
 Features :
 * Little open API that schlorat's [FlightPlan](https://spacedock.info/mod/3359/Flight%20Plan) will use in next version
-
 
 # v0.8.0
 Features :
@@ -90,7 +157,7 @@ Know bugs :
 # v0.3.0
 * [internal] added new classes to load and save settings easily.
 * Added Settings
-* Turn phase : started the sas to maneuvre mode in a proper way
+* Turn phase : started the sas to maneuver mode in a proper way
 * Time Warp Phase : Added Settings and a more precise safe duration before burn
 
 # v0.2.1

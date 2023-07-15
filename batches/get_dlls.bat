@@ -16,17 +16,18 @@ echo create local dir %DEST_DIR%
 if not exist %DEST_DIR% mkdir %DEST_DIR%
 
 echo ####################### Get assembly dll #######################
-copy %KSP2_LOCATION%\KSP2_x64_Data\Managed\Assembly-CSharp.dll %DEST_DIR%
+copy "%KSP2_LOCATION%\KSP2_x64_Data\Managed\Assembly-CSharp.dll" %DEST_DIR%
 
-copy %KSP2_LOCATION%\BepInEx\core\BepInEx.dll %DEST_DIR%
-copy %KSP2_LOCATION%\BepInEx\plugins\SpaceWarp\SpaceWarp.dll %DEST_DIR%
+copy "%KSP2_LOCATION%\BepInEx\core\BepInEx.dll" %DEST_DIR%
+copy "%KSP2_LOCATION%\BepInEx\plugins\SpaceWarp\SpaceWarp.dll" %DEST_DIR%
 
-copy %KSP2_LOCATION%\KSP2_x64_Data\Managed\Newtonsoft.Json.dll %DEST_DIR%
+copy "%KSP2_LOCATION%\KSP2_x64_Data\Managed\Newtonsoft.Json.dll" %DEST_DIR%
 
-copy %KSP2_LOCATION%\KSP2_x64_Data\Managed\UnityEngine.TextRenderingModule.dll %DEST_DIR%
-copy %KSP2_LOCATION%\KSP2_x64_Data\Managed\UnityEngine.InputLegacyModule.dll %DEST_DIR%
-copy %KSP2_LOCATION%\KSP2_x64_Data\Managed\UnityEngine.IMGUIModule.dll %DEST_DIR%
-copy %KSP2_LOCATION%\KSP2_x64_Data\Managed\UnityEngine.CoreModule.dll %DEST_DIR%
-copy %KSP2_LOCATION%\KSP2_x64_Data\Managed\UnityEngine.dll %DEST_DIR%
+copy "%KSP2_LOCATION%\KSP2_x64_Data\Managed\UnityEngine.TextRenderingModule.dll" %DEST_DIR%
+copy "%KSP2_LOCATION%\KSP2_x64_Data\Managed\UnityEngine.InputLegacyModule.dll" %DEST_DIR%
+copy "%KSP2_LOCATION%\KSP2_x64_Data\Managed\UnityEngine.IMGUIModule.dll" %DEST_DIR%
+copy "%KSP2_LOCATION%\KSP2_x64_Data\Managed\UnityEngine.CoreModule.dll" %DEST_DIR%
+copy "%KSP2_LOCATION%\KSP2_x64_Data\Managed\UnityEngine.dll" %DEST_DIR%
 
+copy "%KSP2_LOCATION%\KSP2_x64_Data\Managed\ShapesRuntime.dll" %DEST_DIR%
 
