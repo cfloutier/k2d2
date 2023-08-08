@@ -96,6 +96,11 @@ namespace KTools.UI
             return GUILayout.Button(txt, KBaseStyle.big_button, GUILayout.MinWidth(min_width_bt));
         }
 
+        public static bool Button(string txt)
+        {
+            return GUILayout.Button(txt, KBaseStyle.button);
+        }
+
         public static bool SmallButton(string txt)
         {
             return GUILayout.Button(txt, KBaseStyle.small_button);

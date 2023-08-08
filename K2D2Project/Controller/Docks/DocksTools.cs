@@ -1,8 +1,6 @@
+using KSP.Sim.impl;
 
 namespace K2D2.Controller.Docks;
-
-
-using KSP.Sim.impl;
 
 public class DockTools
 {
