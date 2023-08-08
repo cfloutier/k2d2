@@ -21,7 +21,7 @@ class DockShape
 
     //ColorEditor color_editor = new ColorEditor();
 
-    public void DrawDockPort(PartComponent part, VesselComponent main_vessel, Color color)
+    public void DrawPartComponent(PartComponent part, VesselComponent main_vessel, Color color)
     {
         // var frame = part.transform.coordinateSystem;
 
