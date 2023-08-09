@@ -10,7 +10,6 @@ using KSP.Sim;
 using KSP;
 using KSP.Sim.Definitions;
 
-
 using K2D2.Controller.Docks;
 using static VehiclePhysics.VPReplay;
 
@@ -20,6 +19,8 @@ using LibNoise.Modifiers;
 
 using System.Diagnostics.Tracing;
 using static K2D2.Controller.Docks.DockTools;
+using KTools.Shapes;
+using static KSP.Api.UIDataPropertyStrings.View.Vessel.Stages;
 
 namespace K2D2.Controller.Docks;
 
@@ -43,7 +44,34 @@ class DockingUI
         Select_Dock,
     }
 
-    public UI_Mode ui_mode = UI_Mode.Main;
+    public UI_Mode _ui_mode = UI_Mode.Main;
+    public UI_Mode ui_mode
+    {
+        get { return _ui_mode; }
+        set
+        {
+            switch (value)
+            {
+                case UI_Mode.Select_Control:
+                    buildControlList();
+                    break;
+                case UI_Mode.Select_Dock:
+                    pilot.listDocks();
+                    selected_component = pilot.target_part;
+                    break;
+                case UI_Mode.Select_Target:
+                    break;
+
+            }
+
+            _ui_mode = value;
+
+
+        }
+    }
+
+
+    public PartComponent selected_component = null;
 
 
     Vector2 scroll_pos = Vector2.zero;
@@ -76,7 +104,7 @@ class DockingUI
             return;
 
         control_parts = FindParts(pilot.current_vessel.VesselComponent, true, true);
-
+        selected_component = pilot.control_component;
     }
 
 
@@ -93,7 +121,6 @@ class DockingUI
         UI_Tools.Label($"Control from : ");
         if (UI_Tools.Button(pilot.control_component.Name))
         {
-            buildControlList();
             ui_mode = UI_Mode.Select_Control;
         }
 
@@ -115,21 +142,39 @@ class DockingUI
         foreach (NamedComponent part in control_parts.Parts)
         {
             //L.Log("*"+part.name);
-            if (UI_Tools.Button(part.name))
+
+            GUIStyle style = KBaseStyle.small_button;
+            if (part.component == selected_component)
             {
-                pilot.current_vessel.VesselComponent.SetControlOwner(part.component);
-                ui_mode = UI_Mode.Main;
+                GUILayout.Toggle(true, part.name, style);
+            }
+            else
+            {
+                if (GUILayout.Toggle(false, part.name, style))
+                {
+                    selected_component = part.component;
+                }
             }
         }
 
         endList(control_parts.Count);
 
         GUILayout.Space(10);
+        GUILayout.BeginHorizontal();
 
         if (UI_Tools.SmallButton("Cancel"))
         {
             ui_mode = UI_Mode.Main;
         }
+        if (UI_Tools.SmallButton("OK"))
+        {
+            if (selected_component != null)
+                pilot.current_vessel.VesselComponent.SetControlOwner(selected_component);
+
+            ui_mode = UI_Mode.Main;
+        }
+
+        GUILayout.EndHorizontal();
     }
 
     /// <summary>
@@ -163,39 +208,12 @@ class DockingUI
 
             if (UI_Tools.SmallButton(bt_label))
             {
-                pilot.listDocks();
+                
                 ui_mode = UI_Mode.Select_Dock;
             }
         }
 
         GUILayout.EndHorizontal();
-    }
-
-    void mainGUI()
-    {
-        UI_Tools.Title("Docking Tools");
-
-        controlLineUI();
-        targetLineUI();
-
-        settings.show_gizmos = UI_Tools.BigToggleButton(settings.show_gizmos, "Show A.R", "Hide A.R");
-
-        if (pilot.target_vessel != null)
-        {
-            if (UI_Tools.Button("Go go lazy"))
-            {
-                if (pilot.target_vessel.Guid == pilot.current_vessel.VesselComponent.Guid)
-                    return;
-
-                pilot.Game.SpaceSimulation.Lua.TeleportToRendezvous(
-                    pilot.current_vessel.VesselComponent.Guid,
-                    pilot.target_vessel.Guid,
-                    30,
-                    0, 0, 0, 0, 0);
-            }
-        }
-
-        // shapes_drawer.StyleGUI();
     }
 
     void selectTargetGUI()
@@ -263,9 +281,8 @@ class DockingUI
         foreach ( NamedComponent part in pilot.docks.Parts)
         {
             num += 1;
-            
             GUIStyle style = KBaseStyle.small_button;
-            if (part.component == pilot.target_part)
+            if (part.component == selected_component)
             {
                 GUILayout.Toggle(true, part.name, style );
             }
@@ -273,7 +290,7 @@ class DockingUI
             {
                 if (GUILayout.Toggle(false, part.name, style ))
                 {
-                    pilot.current_vessel.VesselComponent.SetTargetByID(part.component.GlobalId);
+                    selected_component = part.component;
                 }
             }
         }
@@ -284,11 +301,49 @@ class DockingUI
         endList(pilot.docks.Count);
 
         GUILayout.Space(10);
+        GUILayout.BeginHorizontal();
 
-        if (UI_Tools.Button("Ok"))
+        if (UI_Tools.Button("Cancel"))
         {
             ui_mode = UI_Mode.Main;
         }
+
+        if (UI_Tools.Button("Ok"))
+        {
+            if (selected_component != null)
+                pilot.current_vessel.VesselComponent.SetTargetByID(selected_component.GlobalId);
+
+            ui_mode = UI_Mode.Main;
+        }
+
+        GUILayout.EndHorizontal();
+    }
+
+    void mainGUI()
+    {
+        UI_Tools.Title("Docking Tools");
+
+        controlLineUI();
+        targetLineUI();
+
+        settings.show_gizmos = UI_Tools.BigToggleButton(settings.show_gizmos, "Show A.R", "Hide A.R");
+
+        if (pilot.target_vessel != null)
+        {
+            if (UI_Tools.Button("Go go lazy"))
+            {
+                if (pilot.target_vessel.Guid == pilot.current_vessel.VesselComponent.Guid)
+                    return;
+
+                pilot.Game.SpaceSimulation.Lua.TeleportToRendezvous(
+                    pilot.current_vessel.VesselComponent.Guid,
+                    pilot.target_vessel.Guid,
+                    30,
+                    0, 0, 0, 0, 0);
+            }
+        }
+
+        // shapes_drawer.StyleGUI();
     }
 
     public void onGUI()
@@ -301,22 +356,51 @@ class DockingUI
             return;
         }
 
-        if (ui_mode == UI_Mode.Main)
+        switch(ui_mode)
         {
-            mainGUI();
+            case UI_Mode.Main: mainGUI(); break;
+            case UI_Mode.Select_Control: selectControlGUI(); break;
+            case UI_Mode.Select_Target: selectTargetGUI(); break;
+            case UI_Mode.Select_Dock: selectDockGUI(); break;
         }
+    }
+
+    public bool drawShapes(DockShape shapes_drawer)
+    {
+        // logger.LogInfo("drawShapes");
         if (ui_mode == UI_Mode.Select_Control)
         {
-            selectControlGUI();
+            foreach (NamedComponent part in control_parts.Parts)
+            {
+                Color color = settings.unselected_color;
+                if (part.component == selected_component)
+                {
+                    color = settings.vessel_color;
+                }
+
+                shapes_drawer.DrawComponent(part.component, pilot.current_vessel.VesselComponent, color);
+            }
+
+            return true;
         }
-        else if (ui_mode == UI_Mode.Select_Target)
+        if (ui_mode == UI_Mode.Select_Dock)
         {
-            selectTargetGUI();
+            foreach (NamedComponent part in pilot.docks.Parts)
+            {
+                Color color = settings.unselected_color;
+                if (part.component == selected_component)
+                {
+                    color = settings.target_color;
+                }
+
+                shapes_drawer.DrawComponent(part.component, pilot.current_vessel.VesselComponent, color);
+            }
+
+            return true;
         }
-        else if (ui_mode == UI_Mode.Select_Dock)
-        {
-            selectDockGUI();
-        }
+
+
+        return false;
     }
 
 }

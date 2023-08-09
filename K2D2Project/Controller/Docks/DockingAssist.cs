@@ -59,6 +59,21 @@ public class DockingAssist : ComplexControler
     public override void onGUI()
     {
         dock_ui.onGUI();
+
+        var vessel = current_vessel.VesselComponent;
+        if (vessel == null)
+        {
+            return;
+        }
+        var target_vel = vessel.TargetVelocity;
+        UI_Tools.Label($"Target speedV {StrTool.Vector3ToString(target_vel.vector)} ");
+
+        if (target_part != null)
+        {
+            var diff = target_part.CenterOfMass - control_component.CenterOfMass;
+            UI_Tools.Label($"rel pos {StrTool.Vector3ToString(diff.vector)} ");
+            UI_Tools.Label($"dist {StrTool.DistanceToString(diff.magnitude)} ");
+        }
     }
 
     public void listDocks()
@@ -99,7 +114,6 @@ public class DockingAssist : ComplexControler
             {
                 // logger.LogInfo(last_target);
                 target_vessel = last_target.Vessel;
-                
             }
             else if (last_target.IsPart)
             {
@@ -125,31 +139,19 @@ public class DockingAssist : ComplexControler
 
     public void drawShapes()
     {
-        // logger.LogInfo("drawShapes");
-        if (dock_ui.ui_mode == DockingUI.UI_Mode.Select_Dock)
+        if (!dock_ui.drawShapes(shapes_drawer))
         {
-            foreach(NamedComponent part in docks.Parts)
+            if (settings.show_gizmos)
             {
-                Color color = settings.dock_color;
-                if (part.component == target_part)
+                // draw target
+                if (target_part != null)
                 {
-                    color = settings.selected_color;
+                    shapes_drawer.DrawComponent(target_part, current_vessel.VesselComponent, settings.target_color);
                 }
 
-                shapes_drawer.DrawPartComponent(part.component, current_vessel.VesselComponent, color);
+                // draw control
+                shapes_drawer.DrawComponent(control_component, current_vessel.VesselComponent, settings.vessel_color);
             }
-
-            //shape.draw_dockPort(part, current_vessel.VesselComponent);
-           // shapes_drawer.DrawVesselCenter(current_vessel.VesselComponent);
-        }
-        else if (settings.show_gizmos)
-        {
-            if (target_part != null)
-            {
-                shapes_drawer.DrawPartComponent(target_part, current_vessel.VesselComponent, settings.selected_color);
-            }
-
-            shapes_drawer.DrawPartComponent(control_component, current_vessel.VesselComponent, settings.vessel_color);
         }
     }
 }

@@ -1,6 +1,8 @@
 
 
 
+using KSP.Game.StartupFlow;
+using KSP.Map;
 using KTools;
 using KTools.UI;
 
@@ -46,16 +48,16 @@ public class DocksSettings
         }
     }
 
-    Color default_dock_color = ColorTools.parseColor("#CB5B00");
+    Color default_unselected_color = ColorTools.parseColor("#CB5B00");
     Color default_vessel_color = ColorTools.parseColor("#00B7FF");
-    Color default_selected_color = ColorTools.parseColor("#00FF34");
+    Color default_target_color = ColorTools.parseColor("#00FF34");
 
-    public Color dock_color
+    public Color unselected_color
     {
-        get => KBaseSettings.sfile.GetColor("drone.dock_color", default_dock_color);
+        get => KBaseSettings.sfile.GetColor("drone.unselected_color", default_unselected_color);
         set
         {
-            KBaseSettings.sfile.SetColor("drone.dock_color", value);
+            KBaseSettings.sfile.SetColor("drone.unselected_color", value);
         }
     }
 
@@ -68,23 +70,23 @@ public class DocksSettings
         }
     }
 
-    public Color selected_color
+    public Color target_color
     {
-        get => KBaseSettings.sfile.GetColor("drone.selected_color", default_selected_color);
+        get => KBaseSettings.sfile.GetColor("drone.target_color", default_target_color);
         set
         {
-            KBaseSettings.sfile.SetColor("drone.selected_color", value);
+            KBaseSettings.sfile.SetColor("drone.target_color", value);
         }
     }
 
-    public float pos_gizmo_dock = 1;
-    // {
-    //     get => KBaseSettings.sfile.GetFloat("drone.delta_pos", 1);
-    //     set
-    //     {
-    //         KBaseSettings.sfile.SetFloat("drone.delta_pos", value);
-    //     }
-    // }
+    public float pos_gizmo
+    {
+        get => KBaseSettings.sfile.GetFloat("drone.pos_gizmo_dock", 1);
+        set
+        {
+            KBaseSettings.sfile.SetFloat("drone.pos_gizmo_dock", value);
+        }
+    }
 
     public float length_line
     {
@@ -122,13 +124,33 @@ public class DocksSettings
         }
     }
 
+    public FoldOut accordion = new FoldOut();
+
+
+
+
     public void StyleGUI()
     {
+        if (accordion.Count == 0)
+        {
+            accordion.addChapter("Gizmos", gizmos_styleUI);
+            //accordion.addChapter("Warp", WarpUI);
+            //accordion.addChapter("Touch Down", TouchDown_UI);
+            accordion.singleChapter = true;
+        }
+
+        accordion.OnGui();
+    }
+
+
+    void gizmos_styleUI()
+    { 
         // pos_gizmo_dock = UI_Tools.LabelSlider("Position", pos_gizmo_dock, -10, 10 );
 
         length_line = UI_Tools.LabelSlider("Length Line", length_line, 0, 200 );
         // radius = UI_Tools.LabelSlider("radius", radius, 0, 100 );
 
+        pos_gizmo = UI_Tools.LabelSlider("position", pos_gizmo, 0, 10);
         sfx_blur = UI_Tools.LabelSlider("Sfx Blur", sfx_blur, 0, 10 );
 
         thickness_circle = UI_Tools.LabelSlider("Thickness Circle", thickness_circle, 0, 10);

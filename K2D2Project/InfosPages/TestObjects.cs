@@ -33,8 +33,6 @@ class TestObjects : ComplexControler
 
     ShapesBlendMode blendMode = ShapesBlendMode.Opaque;
 
-
-
     public override void onGUI()
     {
         UI_Tools.Label("test Objects");
