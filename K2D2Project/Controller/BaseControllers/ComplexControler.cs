@@ -9,7 +9,6 @@ namespace K2D2.Controller
     // a controller that have some sub controler
     public class ComplexControler : BaseController
     {
-
         public List<BaseController> sub_contollers = new List<BaseController>();
 
         public void setSingleSubController(ComplexControler single_sub)

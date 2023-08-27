@@ -208,7 +208,6 @@ class DockingUI
 
             if (UI_Tools.SmallButton(bt_label))
             {
-                
                 ui_mode = UI_Mode.Select_Dock;
             }
         }
@@ -319,15 +318,8 @@ class DockingUI
         GUILayout.EndHorizontal();
     }
 
-    void mainGUI()
+    void cheatUI()
     {
-        UI_Tools.Title("Docking Tools");
-
-        controlLineUI();
-        targetLineUI();
-
-        settings.show_gizmos = UI_Tools.BigToggleButton(settings.show_gizmos, "Show A.R", "Hide A.R");
-
         if (pilot.target_vessel != null)
         {
             if (UI_Tools.Button("Go go lazy"))
@@ -342,7 +334,33 @@ class DockingUI
                     0, 0, 0, 0, 0);
             }
         }
+    }
 
+
+    void mainGUI()
+    {
+        UI_Tools.Title("Docking Tools");
+
+        if (pilot.isRunning)
+        {
+            if (!UI_Tools.BigToggleButton(true, "Start", "Stop"))
+            {
+                pilot.isRunning = false;
+            }
+            return;
+        }
+
+        controlLineUI();
+        targetLineUI();
+
+        settings.show_gizmos = UI_Tools.SmallToggleButton(settings.show_gizmos, "Show A.R", "Hide A.R");
+
+        if (UI_Tools.BigToggleButton(false, "Kill Speed", "Stop"))
+        {
+            pilot.Mode = DockingAssist.PilotMode.KillSpeed;
+        }
+
+        cheatUI();
         // shapes_drawer.StyleGUI();
     }
 

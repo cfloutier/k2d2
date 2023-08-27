@@ -9,7 +9,6 @@ namespace K2D2.Controller;
 
 class TurnToSettings
 {
-
     public static float max_angle_maneuver
     {
         get => KBaseSettings.sfile.GetFloat("turn.max_angle_maneuver", 0.3f);
