@@ -17,7 +17,8 @@ public class TurnTo : ExecuteController
 
     KSPVessel current_vessel;
 
-    public double angle;
+    public float angle;
+    public float max_angle;
 
     public enum Mode
     {
@@ -27,9 +28,10 @@ public class TurnTo : ExecuteController
 
     public Mode mode = Mode.Off;
 
-    public void StartRetroSpeed()
+    public void StartRetroSpeed(float max_angle = 3)
     {
         mode = Mode.RetroSpeed;
+        this.max_angle = max_angle;
         Start();
     }
 
@@ -58,12 +60,15 @@ public class TurnTo : ExecuteController
 
         autopilot.SAS.SetTargetOrientation(direction, false);
 
+        finished = false;
+
         if (!checkRetroSpeed())
             return;
 
         if (!checkAngularRotation())
             return;
-        
+
+        finished = true;
     }
 
     public override void Update()
@@ -76,15 +81,13 @@ public class TurnTo : ExecuteController
 
     public bool checkRetroSpeed()
     {
-        double max_angle = 5;
-
         Vector retro_dir = current_vessel.VesselComponent.TargetVelocity;
         Rotation vessel_rotation = current_vessel.GetRotation();
 
         // convert rotation to speed coordinates system
         vessel_rotation = Rotation.Reframed(vessel_rotation, retro_dir.coordinateSystem);
 
-        Vector3d forward_direction = (vessel_rotation.localRotation * Vector3.up).normalized;
+        Vector3d forward_direction = (vessel_rotation.localRotation * Vector3.down).normalized;
 
         angle = (float)Vector3d.Angle(retro_dir.vector, forward_direction);
         status_line = $"Waiting for good sas direction\nAngle = {angle:n2}°";

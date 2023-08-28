@@ -5,28 +5,15 @@ using BepInEx.Logging;
 using UnityEngine;
 
 using KSP.Sim.impl;
-using KSP.Game;
 using KSP.Sim;
-using KSP;
-using KSP.Sim.Definitions;
-
-
 using K2D2.Controller.Docks;
-using static VehiclePhysics.VPReplay;
 
-using JetBrains.Annotations;
-using KSP.Iteration.UI.Binding;
-using LibNoise.Modifiers;
-
-using System.Diagnostics.Tracing;
 using static K2D2.Controller.Docks.DockTools;
-using AwesomeTechnologies.Utility;
-using static KSP.Api.UIDataPropertyStrings.View;
 using K2D2.Controller.Docks.Pilots;
 
 namespace K2D2.Controller;
 
-public class DockingAssist : ComplexControler
+public class DockingAssist : SingleExecuteController
 {
     public static DockingAssist Instance { get; set; }
     public ManualLogSource logger = BepInEx.Logging.Logger.CreateLogSource("K2D2.DockingTool");
@@ -39,7 +26,7 @@ public class DockingAssist : ComplexControler
     public int target_dock_num = -1;
     public SimulationObjectModel last_target;
 
-    public DockTools.ListPart docks = new DockTools.ListPart();
+    public ListPart docks = new ListPart();
     public DocksSettings settings = new DocksSettings();
 
 
@@ -62,21 +49,19 @@ public class DockingAssist : ComplexControler
             switch(_mode)
             {
                 case PilotMode.KillSpeed:
-                    current_pilot = kill_speed_pilot;
+                    setController(kill_speed_pilot);
                     break;
                 case PilotMode.Off:
-                    current_pilot = null;
+                    setController(null);
                     break;
             }
 
-            if (current_pilot != null)
-                current_pilot.Start();
+            if (sub_controler != null)
+                sub_controler.Start();
         }
     }
-
-    
+ 
     KillSpeed kill_speed_pilot = new KillSpeed(); 
-    ExecuteController current_pilot = null;
 
     public override bool isRunning
     {
@@ -124,8 +109,8 @@ public class DockingAssist : ComplexControler
             return;
         }
 
-        if (current_pilot != null)
-            current_pilot.onGUI();
+        if (sub_controler != null)
+            sub_controler.onGUI();
 
         var target_vel = vessel.TargetVelocity;
         UI_Tools.Label($"Target speedV {StrTool.Vector3ToString(target_vel.vector)} ");
@@ -142,7 +127,7 @@ public class DockingAssist : ComplexControler
 
     public void listDocks()
     {
-        docks = DockTools.FindParts(target_vessel, false, true);
+        docks = FindParts(target_vessel, false, true);
     }
 
     public override void Update()
@@ -154,9 +139,14 @@ public class DockingAssist : ComplexControler
             return;
         }
 
-
-        if (current_pilot != null)
-            current_pilot.Update();
+        if (sub_controler != null)
+        {
+            sub_controler.Update();
+            if (sub_controler.finished)
+            {
+                isRunning = false;
+            }
+        }
 
         control_component = current_vessel.VesselComponent.GetControlOwner();
 
