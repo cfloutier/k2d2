@@ -217,7 +217,7 @@ public class SettingsFile
     {
         if (!data.ContainsKey(name))
         {
-            SetParamVector3(name, defaultValue);
+            SetVector3(name, defaultValue);
             return defaultValue;
         }
 
@@ -226,7 +226,7 @@ public class SettingsFile
 
         if (ar.Length < 3)
         {
-            SetParamVector3(name, defaultValue);
+            SetVector3(name, defaultValue);
             return defaultValue;
         }
 
@@ -239,7 +239,7 @@ public class SettingsFile
         }
         catch
         {
-            SetParamVector3(name, defaultValue);
+            SetVector3(name, defaultValue);
             return defaultValue;
         }
 
@@ -250,7 +250,7 @@ public class SettingsFile
     /// Set the parameter using Vector3 value
     /// the value is saved at once
     /// </summary>
-    public void SetParamVector3(string name, Vector3 value)
+    public void SetVector3(string name, Vector3 value)
     {
         string text = value.x + ";" + value.y + ";" + value.z;
         SetString(name, text);
@@ -264,7 +264,7 @@ public class SettingsFile
     {
         if (!data.ContainsKey(name))
         {
-            SetParamVector3d(name, defaultValue);
+            SetVector3d(name, defaultValue);
             return defaultValue;
         }
 
@@ -273,7 +273,7 @@ public class SettingsFile
 
         if (ar.Length < 3)
         {
-            SetParamVector3d(name, defaultValue);
+            SetVector3d(name, defaultValue);
             return defaultValue;
         }
 
@@ -286,17 +286,37 @@ public class SettingsFile
         }
         catch
         {
-            SetParamVector3d(name, defaultValue);
+            SetVector3d(name, defaultValue);
             return defaultValue;
         }
 
         return result;
     }
 
-    public void SetParamVector3d(string name, Vector3d value)
+    public void SetVector3d(string name, Vector3d value)
     {
         string text = value.x + ";" + value.y + ";" + value.z;
         SetString(name, text);
     }
+
+    public Color GetColor(string name, Color defaultValue)
+    {
+        if (!data.ContainsKey(name))
+        {
+            SetColor(name, defaultValue);
+            return defaultValue;
+        }
+
+        string txt = data[name];
+        Color result = ColorTools.parseColor(txt);
+        return result;
+    }
+
+    public void SetColor(string name, Color value)
+    {
+        string text = ColorTools.formatColorHtml(value);
+        SetString(name, text);
+    }
+
 }
 
