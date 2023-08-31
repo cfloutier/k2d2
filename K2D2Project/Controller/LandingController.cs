@@ -342,12 +342,12 @@ public class LandingController : ComplexControler
     public bool compute_real_collision()
     {
         // start in 2 minutes
-        double start_time = GeneralTools.Game.UniverseModel.UniversalTime + 2 * 60;
+        double start_time = GeneralTools.Game.UniverseModel.UniverseTime + 2 * 60;
         bool collide = false;
 
         PatchedConicsOrbit orbit = current_vessel.VesselComponent.Orbit;
         var body = orbit.referenceBody;
-        double current_time_ut = GeneralTools.Game.UniverseModel.UniversalTime;
+        double current_time_ut = GeneralTools.Game.UniverseModel.UniverseTime;
         double deltaTime = 60; // seconds in the future
         int max_occurrences = 100;
         double time = start_time;
@@ -456,7 +456,7 @@ public class LandingController : ComplexControler
         }
         else if (mode == Mode.Waiting)
         {
-            var dt = startBurn_UT - GeneralTools.Game.UniverseModel.UniversalTime;
+            var dt = startBurn_UT - GeneralTools.Game.UniverseModel.UniverseTime;
             if (dt <= 0)
             {
                 nextMode();
@@ -513,9 +513,9 @@ public class LandingController : ComplexControler
 
             if (land_settings.verbose_infos)
             {
-                UI_Tools.Label($"Collision in {StrTool.DurationToString(adjusted_collision_UT - GeneralTools.Game.UniverseModel.UniversalTime)}");
+                UI_Tools.Label($"Collision in {StrTool.DurationToString(adjusted_collision_UT - GeneralTools.Game.UniverseModel.UniverseTime)}");
                 UI_Tools.Label($"speed collision {speed_collision:n2} m/s");
-                UI_Tools.Label($"start_burn in <b>{StrTool.DurationToString(startBurn_UT - GeneralTools.Game.UniverseModel.UniversalTime)}</b>");
+                UI_Tools.Label($"start_burn in <b>{StrTool.DurationToString(startBurn_UT - GeneralTools.Game.UniverseModel.UniverseTime)}</b>");
                 UI_Tools.Label($"burn_duration {burn_duration:n2} s");
             }
         }
@@ -582,7 +582,7 @@ public class LandingController : ComplexControler
                     UI_Tools.Warning("Rotating Warp");
                     break;
                 case Mode.Waiting:
-                    UI_Tools.OK($"Waiting : {StrTool.DurationToString(startBurn_UT - GeneralTools.Game.UniverseModel.UniversalTime)}");
+                    UI_Tools.OK($"Waiting : {StrTool.DurationToString(startBurn_UT - GeneralTools.Game.UniverseModel.UniverseTime)}");
                     break;
                 case Mode.Brake:
                     UI_Tools.Warning($"Brake !");

@@ -93,7 +93,7 @@ public class WarpController : ComplexControler
             {
                 if (go)
                 { 
-                    warp.Start_Ut(orbit.timeToTransition1 + GeneralTools.Game.UniverseModel.UniversalTime + 60);
+                    warp.Start_Ut(orbit.timeToTransition1 + GeneralTools.Game.UniverseModel.UniverseTime + 60);
                     isRunning = true;
                 }
 

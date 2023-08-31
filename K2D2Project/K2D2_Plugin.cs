@@ -396,7 +396,7 @@ public class K2D2_Plugin : BaseSpaceWarpPlugin
                 }
                 else if (instance.mode == AutoExecuteManeuver.Mode.Burn)
                 {
-                    if (Game.UniverseModel.UniversalTime < instance.current_maneuver_node.Time)
+                    if (Game.UniverseModel.UniverseTime < instance.current_maneuver_node.Time)
                     {
                         status = $"Waiting to Burn: {instance.current_executor.status_line}";
                     }

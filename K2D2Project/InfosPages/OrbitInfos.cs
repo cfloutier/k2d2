@@ -44,7 +44,7 @@ class OrbitInfos : BaseController
 
         if (orbit.PatchEndTransition == PatchTransitionType.Collision)
         {
-            var dt = GeneralTools.Game.UniverseModel.UniversalTime - orbit.collisionPointUT;
+            var dt = GeneralTools.Game.UniverseModel.UniverseTime - orbit.collisionPointUT;
             UI_Tools.Console($"collision in  {StrTool.DurationToString(dt)}");
         }
         else if (orbit.PatchEndTransition == PatchTransitionType.Escape)

@@ -68,7 +68,7 @@ namespace K2D2.KSPService
 
             Vector3d burnVector = ProgradeBurnVector(deltaV);
 
-            // ManeuverNodeController.NodeControl.CreateManeuverNodeAtUT(burnVector, GeneralTools.Game.UniverseModel.UniversalTime + orbit.TimeToAp ,0);
+            // ManeuverNodeController.NodeControl.CreateManeuverNodeAtUT(burnVector, GeneralTools.Game.UniverseModel.UniverseTime + orbit.TimeToAp ,0);
             CreateManeuverNode(burnVector, 180);
             return deltaV;
         }
@@ -101,7 +101,7 @@ namespace K2D2.KSPService
             double deltaV = periapsisVelocity - circularizedVelocity;
 
             Vector3d burnVector = RetrogradeBurnVector(deltaV);
-            // ManeuverNodeController.NodeControl.CreateManeuverNodeAtUT(burnVector, GeneralTools.Game.UniverseModel.UniversalTime + orbit.TimeToPe, 0);
+            // ManeuverNodeController.NodeControl.CreateManeuverNodeAtUT(burnVector, GeneralTools.Game.UniverseModel.UniverseTime + orbit.TimeToPe, 0);
             CreateManeuverNode(burnVector, 0);
             return deltaV;
         }

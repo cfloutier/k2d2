@@ -179,7 +179,7 @@ public class AutoExecuteManeuver : ComplexControler
         if (current_maneuver_node == null)
             return false;
 
-        var dt = current_maneuver_node.Time - GeneralTools.Game.UniverseModel.UniversalTime;
+        var dt = current_maneuver_node.Time - GeneralTools.Game.UniverseModel.UniverseTime;
         if (dt < 0)
         {
             return false;
