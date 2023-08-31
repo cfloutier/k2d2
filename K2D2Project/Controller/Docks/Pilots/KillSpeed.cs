@@ -14,13 +14,17 @@ namespace K2D2.Controller.Docks.Pilots;
 /// </summary>
 public class KillSpeed : ExecuteController
 {
-    TurnTo turnTo =  new TurnTo();
+   public KillSpeed(DockingTurnTo turnTo)
+   {
+        this.turnTo = turnTo;
+   }
+
     KSPVessel current_vessel;
     BurndV burn_dV = new BurndV();
+    DockingTurnTo turnTo = null;
 
     public override void Start()
     {
-
         current_vessel = K2D2_Plugin.Instance.current_vessel;
         finished = false;
         turnTo.StartRetroSpeed();
@@ -28,7 +32,7 @@ public class KillSpeed : ExecuteController
 
     public override void Update()
     {
-        turnTo.Update();
+        
         burn_dV.Update();
 
         finished = false;
@@ -36,10 +40,7 @@ public class KillSpeed : ExecuteController
         if (turnTo.finished)
         {
             // compute trust
-            
-            
             compute_Throttle();
-
         }
         else
             current_vessel.SetThrottle(0);
@@ -61,6 +62,7 @@ public class KillSpeed : ExecuteController
         {
             finished = true;
             current_vessel.SetThrottle(0);
+            turnTo.mode = DockingTurnTo.Mode.Off;
         }
         else
         {
@@ -72,9 +74,6 @@ public class KillSpeed : ExecuteController
     public override void onGUI()
     {
         UI_Tools.Warning("Kill Target Speed");
-
-
-
         turnTo.onGUI();
     }
 }

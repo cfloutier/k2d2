@@ -141,46 +141,204 @@ namespace K2D2.KSPService
         //     flightCtrlState.mainThrottle = throttle;
         // }
 
-        public void SetPitch(float pitch)
+
+        public float X
         {
-            if (VesselVehicle == null) return;
-
-            pitch = Mathf.Clamp(  pitch, -1 , 1);
-
-            var update = new FlightCtrlStateIncremental
+            get
             {
-                pitch = pitch
-            };
+                if (VesselVehicle == null) return 0;
+                return VesselVehicle.X;
+            }
+            set
+            {
+                if (VesselVehicle == null) return;
 
-            VesselVehicle.AtomicSet(update);
+                value = Mathf.Clamp(value, -1, 1);
+
+                var update = new FlightCtrlStateIncremental
+                {
+                    X = value
+                };
+
+                VesselVehicle.AtomicSet(update);
+            }
+        }
+        public float Y
+        {
+            get
+            {
+                if (VesselVehicle == null) return 0;
+                // Y is mapped to Z yes
+                return VesselVehicle.Z;
+            }
+            set
+            {
+                if (VesselVehicle == null) return;
+                value = Mathf.Clamp(value, -1, 1);
+
+                var update = new FlightCtrlStateIncremental
+                {
+                    Z = value
+                };
+
+                VesselVehicle.AtomicSet(update);
+            }
         }
 
-        public void SetRoll(float roll)
+        public float Z
         {
-            if (VesselVehicle == null) return;
-
-            roll = Mathf.Clamp(  roll, -1 , 1);
-
-            var update = new FlightCtrlStateIncremental
+            get
             {
-                roll = roll
-            };
+                if (VesselVehicle == null) return 0;
+                // Z is mapped to Y
+                return - VesselVehicle.Y;
+            }
+            set
+            {
+                if (VesselVehicle == null) return;
 
-            VesselVehicle.AtomicSet(update);
+                value = Mathf.Clamp(value, -1, 1);
+
+                var update = new FlightCtrlStateIncremental
+                {
+                    Y = value
+                };
+
+                VesselVehicle.AtomicSet(update);
+            }
         }
 
-        public void SetYaw(float yaw)
+        public float Pitch
         {
-            if (VesselVehicle == null) return;
-
-            yaw = Mathf.Clamp(  yaw, -1 , 1);
-
-            var update = new FlightCtrlStateIncremental
+            get
             {
-                yaw = yaw
-            };
+                if (VesselVehicle == null) return 0;
 
-            VesselVehicle.AtomicSet(update);
+                return VesselVehicle.pitch;
+            }
+            set
+            {
+                if (VesselVehicle == null) return;
+
+                value = Mathf.Clamp(value, -1, 1);
+
+                var update = new FlightCtrlStateIncremental
+                {
+                    pitch = value
+                };
+
+                VesselVehicle.AtomicSet(update);
+            }
+        }
+
+        public float Roll
+        {
+            get
+            {
+                if (VesselVehicle == null) return 0;
+                return VesselVehicle.roll;
+            }
+            set
+            {
+                if (VesselVehicle == null) return;
+
+                value = Mathf.Clamp(value, -1, 1);
+
+                var update = new FlightCtrlStateIncremental
+                {
+                    roll = value
+                };
+
+                VesselVehicle.AtomicSet(update);
+            }
+        }
+
+        public float Yaw
+        {
+            get
+            {
+                if (VesselVehicle == null) return 0;
+                return VesselVehicle.yaw;
+            }
+            set
+            {
+                if (VesselVehicle == null) return;
+
+                value = Mathf.Clamp(value, -1, 1);
+
+                var update = new FlightCtrlStateIncremental
+                {
+                    yaw = value
+                };
+
+                VesselVehicle.AtomicSet(update);
+            }
+        }
+
+        public float PitchTrim
+        {
+            get
+            {
+                if (VesselVehicle == null) return 0;
+                return VesselVehicle.pitchTrim;
+            }
+            set
+            {
+                if (VesselVehicle == null) return;
+
+                value = Mathf.Clamp(value, -1, 1);
+
+                var update = new FlightCtrlStateIncremental
+                {
+                    pitchTrim = value
+                };
+
+                VesselVehicle.AtomicSet(update);
+            }
+        }
+
+        public float RollTrim
+        {
+            get
+            {
+                if (VesselVehicle == null) return 0;
+                return VesselVehicle.rollTrim;
+            }
+            set
+            {
+                if (VesselVehicle == null) return;
+
+                value = Mathf.Clamp(value, -1, 1);
+
+                var update = new FlightCtrlStateIncremental
+                {
+                    rollTrim = value
+                };
+
+                VesselVehicle.AtomicSet(update);
+            }
+        }
+
+        public float YawTrim
+        {
+            get
+            {
+                if (VesselVehicle == null) return 0;
+                return VesselVehicle.yawTrim;
+            }
+            set
+            {
+                if (VesselVehicle == null) return;
+
+                value = Mathf.Clamp(value, -1, 1);
+
+                var update = new FlightCtrlStateIncremental
+                {
+                    yawTrim = value
+                };
+
+                VesselVehicle.AtomicSet(update);
+            }
         }
 
         public void SetWheelSteer(float wheelSteer)
@@ -192,23 +350,8 @@ namespace K2D2.KSPService
         {
             flightCtrlState.wheelThrottle = wheelThrottle;
         }
+
         // Trims
-
-        public void SetPitchTrim(float pitchTrim)
-        {
-            flightCtrlState.pitchTrim = pitchTrim;
-        }
-
-        public void SetYawTrim(float yawTrim)
-        {
-            flightCtrlState.yawTrim = yawTrim;
-        }
-
-        public void SetRollTrim(float rollTrim)
-        {
-            flightCtrlState.rollTrim = rollTrim;
-        }
-
         public void SetWheelSteerTrim(float wheelSteerTrim)
         {
             flightCtrlState.wheelSteerTrim = wheelSteerTrim;

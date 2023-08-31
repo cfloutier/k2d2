@@ -8,7 +8,7 @@ public static class GeneralTools
 {
     public static GameInstance Game => GameManager.Instance == null ? null : GameManager.Instance.Game;
 
-    public static double Current_UT => Game.UniverseModel.UniversalTime;
+    public static double Current_UT => Game.UniverseModel.UniverseTime;
 
     /// <summary>
     /// Converts a string to a double, if the string contains a number. Else returns -1
@@ -42,7 +42,7 @@ public static class GeneralTools
 
     public static double remainingStartTime(ManeuverNodeData node)
     {
-        var dt = node.Time - GeneralTools.Game.UniverseModel.UniversalTime;
+        var dt = node.Time - GeneralTools.Game.UniverseModel.UniverseTime;
         return dt;
     }
 

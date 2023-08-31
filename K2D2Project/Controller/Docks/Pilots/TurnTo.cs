@@ -11,7 +11,7 @@ namespace K2D2.Controller.Docks.Pilots;
 /// <summary>
 /// rotation used for docking
 /// </summary>
-public class TurnTo : ExecuteController
+public class DockingTurnTo : ExecuteController
 {
     Vector3 wanted_dir = Vector3.zero;
 
@@ -24,6 +24,7 @@ public class TurnTo : ExecuteController
     {
         Off,
         RetroSpeed,
+        TargetDock
     }
 
     public Mode mode = Mode.Off;
@@ -35,11 +36,17 @@ public class TurnTo : ExecuteController
         Start();
     }
 
-  
+    public void StartDockAlign(float max_angle = 1)
+    {
+        mode = Mode.TargetDock;
+        this.max_angle = max_angle;
+        Start();
+    }
+
     public override void Start()
     {
         current_vessel = K2D2_Plugin.Instance.current_vessel;
-         
+
         // reset time warp
         TimeWarpTools.SetRateIndex(0, false);
         var autopilot = current_vessel.Autopilot;
@@ -47,7 +54,7 @@ public class TurnTo : ExecuteController
         autopilot.SetMode(AutopilotMode.StabilityAssist);
     }
 
-    void CheckRetroSpeed()
+    void UpdateRetroSpeed()
     {
         var autopilot = current_vessel.Autopilot;
 
@@ -71,12 +78,44 @@ public class TurnTo : ExecuteController
         finished = true;
     }
 
+    void UpdateTargetDock()
+    {
+        var autopilot = current_vessel.Autopilot;
+
+        // force autopilot
+        autopilot.Enabled = true;
+        autopilot.SAS.lockedMode = false;
+
+
+        var target = current_vessel.VesselComponent.TargetObject;
+        if (target == null)
+        {
+            mode = Mode.Off;
+        }
+
+        Vector direction = current_vessel.VesselComponent.TargetObject.transform.up;
+        direction.vector = -direction.vector;
+
+        autopilot.SAS.SetTargetOrientation(direction, false);
+
+        finished = false;
+
+        if (!checkRetroSpeed())
+            return;
+
+        if (!checkAngularRotation())
+            return;
+
+        finished = true;
+    }
+
     public override void Update()
     {
-        switch(mode) 
+        switch(mode)
         {
-            case Mode.RetroSpeed: CheckRetroSpeed(); break;
-        }   
+            case Mode.RetroSpeed: UpdateRetroSpeed(); break;
+            case Mode.TargetDock: UpdateTargetDock(); break;
+        }
     }
 
     public bool checkRetroSpeed()

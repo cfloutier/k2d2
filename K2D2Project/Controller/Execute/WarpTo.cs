@@ -112,7 +112,7 @@ public class WarpTo : ExecuteController
         status_line = "";
 
         var ut_modified = UT - WarpToSettings.warp_safe_duration;
-        dt = ut_modified - GeneralTools.Game.UniverseModel.UniversalTime;
+        dt = ut_modified - GeneralTools.Game.UniverseModel.UniverseTime;
 
         if (dt < 0)
         {

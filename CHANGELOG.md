@@ -1,3 +1,7 @@
+# v0.9.4
+Fix :
+* rebuild with KSP2 v1.4.0
+
 # v0.9.3
 Fix :
 * rebuild with KSP2 v1.3.1

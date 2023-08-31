@@ -10,6 +10,7 @@ using K2D2.Controller.Docks;
 
 using static K2D2.Controller.Docks.DockTools;
 using K2D2.Controller.Docks.Pilots;
+using static KSP.Api.UIDataPropertyStrings.View;
 
 namespace K2D2.Controller;
 
@@ -33,7 +34,8 @@ public class DockingAssist : SingleExecuteController
     public enum PilotMode
     {
         Off,
-        KillSpeed
+        KillSpeed,
+        FinalApproach,
     }
 
     PilotMode _mode = PilotMode.Off;
@@ -50,18 +52,21 @@ public class DockingAssist : SingleExecuteController
             {
                 case PilotMode.KillSpeed:
                     setController(kill_speed_pilot);
+                    kill_speed_pilot.Start();
+                    break;
+                case PilotMode.FinalApproach:
+                    setController(final_approach_pilot);
+                    final_approach_pilot.StartPilot(target_part, control_component);
                     break;
                 case PilotMode.Off:
                     setController(null);
                     break;
             }
-
-            if (sub_controler != null)
-                sub_controler.Start();
         }
     }
- 
-    KillSpeed kill_speed_pilot = new KillSpeed(); 
+
+    KillSpeed kill_speed_pilot = null;
+    FinalApproach final_approach_pilot = null;
 
     public override bool isRunning
     {
@@ -82,7 +87,6 @@ public class DockingAssist : SingleExecuteController
         }
     }
 
-
     public DockingAssist()
     {
         Instance = this;
@@ -93,11 +97,15 @@ public class DockingAssist : SingleExecuteController
 
         shapes_drawer = new DockShape(settings);
         dock_ui = new DockingUI(this);
+        kill_speed_pilot = new KillSpeed(turnTo);
+        final_approach_pilot = new FinalApproach(turnTo);
     }
 
     DockShape shapes_drawer;
 
     DockingUI dock_ui;
+
+    public DockingTurnTo turnTo = new DockingTurnTo();
 
     public override void onGUI()
     {
@@ -112,17 +120,6 @@ public class DockingAssist : SingleExecuteController
         if (sub_controler != null)
             sub_controler.onGUI();
 
-        var target_vel = vessel.TargetVelocity;
-        UI_Tools.Label($"Target speedV {StrTool.Vector3ToString(target_vel.vector)} ");
-
-        if (target_part != null)
-        {
-            UI_Tools.Label($"vessel_to_target {StrTool.Vector3ToString(vessel_to_target)} ");
-            UI_Tools.Label($"target_to_vessel {StrTool.Vector3ToString(target_to_vessel)} ");
-
-            UI_Tools.Label($"rel pos {StrTool.Vector3ToString(diff_Position.vector)} ");
-            UI_Tools.Label($"dist {StrTool.DistanceToString(diff_Position.magnitude)} ");
-        }
     }
 
     public void listDocks()
@@ -132,6 +129,8 @@ public class DockingAssist : SingleExecuteController
 
     public override void Update()
     {
+        turnTo.Update();
+
         // logger.LogInfo($"target is {current_vessel.VesselComponent.TargetObject}");
         if (current_vessel.VesselComponent == null)
         {
@@ -153,7 +152,7 @@ public class DockingAssist : SingleExecuteController
         // update the dock list when target change
         if (last_target != current_vessel.VesselComponent.TargetObject)
         {
-            logger.LogInfo($"changed target is {current_vessel.VesselComponent.TargetObject}");
+            // logger.LogInfo($"changed target is {current_vessel.VesselComponent.TargetObject}");
 
             last_target = current_vessel.VesselComponent.TargetObject;
             target_part = null;
@@ -195,7 +194,14 @@ public class DockingAssist : SingleExecuteController
         }
 
         if (target_part != null)
-        {   
+        {
+            var vessel = current_vessel.VesselComponent;
+            if (vessel == null)
+            {
+                return;
+            }
+
+
             diff_Position = Position.Delta(target_part.CenterOfMass, control_component.CenterOfMass);
             var curent_vessel_frame = control_component.transform.coordinateSystem;
             var vessel_to_control = Matrix4x4D.TRS(
@@ -203,11 +209,15 @@ public class DockingAssist : SingleExecuteController
                 curent_vessel_frame.ToLocalRotation(control_component.transform.Rotation)).GetInverse();
 
             vessel_to_target = vessel_to_control.TransformPoint( curent_vessel_frame.ToLocalPosition(target_part.CenterOfMass) );
+
+            local_speed = vessel_to_control.TransformVector( curent_vessel_frame.ToLocalVector( vessel.TargetVelocity ) );
             target_to_vessel = vessel_to_control.TransformPoint( curent_vessel_frame.ToLocalPosition(control_component.CenterOfMass));
         }
     }
 
     public Vector diff_Position = new Vector();
+    public Vector3 local_speed = new Vector3();
+
     public Vector3 vessel_to_target = new Vector3();
     public Vector3 target_to_vessel = new Vector3();
 

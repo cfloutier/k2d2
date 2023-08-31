@@ -17,6 +17,7 @@ if not exist %DEST_DIR% mkdir %DEST_DIR%
 
 echo ####################### Get assembly dll #######################
 copy "%KSP2_LOCATION%\KSP2_x64_Data\Managed\Assembly-CSharp.dll" %DEST_DIR%
+copy "%KSP2_LOCATION%\KSP2_x64_Data\Managed\ShapesRuntime.dll" %DEST_DIR%
 
 copy "%KSP2_LOCATION%\BepInEx\core\BepInEx.dll" %DEST_DIR%
 copy "%KSP2_LOCATION%\BepInEx\plugins\SpaceWarp\SpaceWarp.dll" %DEST_DIR%

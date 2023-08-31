@@ -152,7 +152,7 @@ public class K2D2_Plugin : BaseSpaceWarpPlugin
         _maneuverProvider = new ManeuverProvider(ref maneuverManager, logger);
         new ShapeDrawer();
         RegisterDetectionOfHudNeed();
-        new TestObjects();
+        // new TestObjects();
 
         // Add Controllers that inherit from BaseController here:
         controllerManager.AddController(new SimpleManeuverController(logger, ref _maneuverProvider));
@@ -163,9 +163,9 @@ public class K2D2_Plugin : BaseSpaceWarpPlugin
         controllerManager.AddController(new AutoLiftController());
         controllerManager.AddController(new CircleController());
         controllerManager.AddController(new WarpController());
-        controllerManager.AddController(new DockingAssist());
+        // controllerManager.AddController(new DockingAssist());
 
-        ShapeDrawer.Instance.shapes.Add(DockingAssist.Instance.drawShapes);
+        // ShapeDrawer.Instance.shapes.Add(DockingAssist.Instance.drawShapes);
 
         // controllerManager.AddController();
 
@@ -396,7 +396,7 @@ public class K2D2_Plugin : BaseSpaceWarpPlugin
                 }
                 else if (instance.mode == AutoExecuteManeuver.Mode.Burn)
                 {
-                    if (Game.UniverseModel.UniversalTime < instance.current_maneuver_node.Time)
+                    if (Game.UniverseModel.UniverseTime < instance.current_maneuver_node.Time)
                     {
                         status = $"Waiting to Burn: {instance.current_executor.status_line}";
                     }

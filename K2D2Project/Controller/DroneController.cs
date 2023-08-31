@@ -314,8 +314,8 @@ public class DroneController : ComplexControler
 
             var roll = Mathf.Clamp(delta_angular_speed / 10, -1, 1);
 
-            logger.LogInfo("set roll" + roll);
-            current_vessel.SetRoll(roll);
+            //logger.LogInfo("set roll" + roll);
+            current_vessel.Roll = roll;
         }
     }
 

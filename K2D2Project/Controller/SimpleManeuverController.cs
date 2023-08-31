@@ -117,7 +117,7 @@ public class SimpleManeuverController : ButtonController
             {
 
 
-                double UT = timeHohmann + Game.UniverseModel.UniversalTime;
+                double UT = timeHohmann + Game.UniverseModel.UniverseTime;
                 logger.LogMessage("Hohmann Time: " + UT);
 
                 //double deltaV = _maneuver.ChangePeriapsis(Math.Abs(distanceHohmann));//_maneuver.HohmannTransfer(UT, distance);

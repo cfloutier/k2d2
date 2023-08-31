@@ -1,49 +1,56 @@
-# K2-D2
-The KSP astromech
+# K.2.D.2
+
+The Kerbal Space Programm astromech
 
 A set of tools to Help Space Navigation.
 
-Simply execute the next maneuver node for the moment.
+availables (progress mean coding progress before final version):
+
+- Execute the next maneuvre node for the moment and added auto circle to Ap and Pe. (progress 4/5)
+
+- Automatic landing (progress 2/5)
+
+- Lift : Automatic Ascent Profile (progress 2/5)
+
+- Drone : New Flying mode, Very Costly in dv (use Infinite Fuel) but really fun to use (progress 4 /5)
+
+- Attitude : point the vessel in the wanted direction, (plane autopilot)  (progress 3 /5)
+
+- Warp  : warp to SOI changes  (progress 1 /5)
+
 The UI can be opened using `Alt-O` or using AppBar.
 
-There is no use of the SAS for the moment (very early version). The pilot, wait for a good pointing attitude, do auto-warp and then auto-burn.
-
-All of those phases must be enhanced.
-It's working better than I can do by hand. But could me more precise. Especially the burning phase. There is always some small amount of dv Missing... It's based on Burn Duration of the Node and this is not perfect.
-
 ----------------
-Project is renamed from AutoExecuteNode.
-
-We are starting a collaboration with [Mole](https://github.com/Mole1803)
-
-Thanks to Opus (#Opus#7354) for the name of the Mod !
 
 # Installation
 
 Open the game folder by right-clicking on the game in your Steam library, selecting "Manage," and then clicking "Browse local files."
 
-Install the BepInEx mod loader:
-https://spacedock.info/mod/3255/BepInEx%20for%20KSP%202
+Install the Space Warp + BepinEx plugin. 
+https://spacedock.info/mod/3277/Space%20Warp%20+%20BepInEx
 
-Install the Space Warp plugin. You need both BepInEx AND Space Warp:
-https://spacedock.info/mod/3257/Space%20Warp
+Download K2-D2, open the zip file, and drag the included `BepInEx` folder into the game folder. (merge folders when asked)
 
-Download Auto Execute Node, open the zip file, and drag the included `BepInEx` folder into the game folder. (merge folders when asked)
 
 # Thanks to
 
 Thanks first for downloading.
 
+* Thanks to [Mole](https://github.com/Mole1803) for the hard work on Circularize ! 
+
+* Thanks to [schlosrat (he/him)](https://forum.kerbalspaceprogram.com/index.php?/profile/141963-schlosrat/) for testing and many help on code. Especially for the node creation.
+
+* Thanks to Opus (#Opus#7354) for the name of the Mod ! 
+
 * Big Thanks to [cheese3660](https://github.com/cheese3660)
 1. for [SpaceWarp](https://github.com/Halbann). the base of all KSP2 MODs we can make for now on
-2. and for [AutoBurn](https://github.com/cheese3660/AutoBurn) Very helpful code about how to start thrusts and how to get maneuver node.
-
-My method is totally based on his code.
+2. and for [AutoBurn](https://github.com/cheese3660/AutoBurn) Very helpful code about how to start thrusts and how to get maneuvre node.
 
 * my first steps was based on [LazyOrbit](https://github.com/Halbann/LazyOrbit)
 Thanks for this excellent first step ! a light code, simple and very well written.
 
-# License
+# Licenses
 
-K2-D2 is distributed under the CC BY-SA 4.0 license. Read about the license here before redistributing:
+* K2-D2 is distributed under the CC BY-SA 4.0 license. Read about the license here before redistributing:
 https://creativecommons.org/licenses/by-sa/4.0/
+* use the Caravan Font :  license: Freeware, Non-Commercial - https://www.fontspace.com/acorn-caravan-font-f40558

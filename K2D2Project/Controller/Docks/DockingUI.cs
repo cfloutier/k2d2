@@ -353,12 +353,40 @@ class DockingUI
         controlLineUI();
         targetLineUI();
 
+        GUILayout.BeginHorizontal();
+
         settings.show_gizmos = UI_Tools.SmallToggleButton(settings.show_gizmos, "Show A.R", "Hide A.R");
 
-        if (UI_Tools.BigToggleButton(false, "Kill Speed", "Stop"))
+        if (pilot.target_part != null)
+        {
+            bool is_active = pilot.turnTo.mode == Pilots.DockingTurnTo.Mode.TargetDock;
+
+            bool is_on = UI_Tools.SmallToggleButton(is_active, "Align Dock", "Stop Align Dock");
+            if (is_active != is_on)
+            {
+                if (is_on)
+                {
+                    pilot.turnTo.StartDockAlign();
+                }
+                else
+                {
+                    pilot.turnTo.mode = Pilots.DockingTurnTo.Mode.Off;
+                }
+            }
+        }
+
+        GUILayout.EndHorizontal();
+
+        if (UI_Tools.BigToggleButton(false, "Kill Speed", "-"))
         {
             pilot.Mode = DockingAssist.PilotMode.KillSpeed;
         }
+
+        if (UI_Tools.BigToggleButton(false, "Final Approach", "-"))
+        {
+            pilot.Mode = DockingAssist.PilotMode.FinalApproach;
+        }
+
 
         cheatUI();
         // shapes_drawer.StyleGUI();

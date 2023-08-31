@@ -126,7 +126,7 @@ public class BurnManeuver : ExecuteController
 
         if (mode == Mode.Waiting)
         {
-            start_dt = UT - GeneralTools.Game.UniverseModel.UniversalTime;
+            start_dt = UT - GeneralTools.Game.UniverseModel.UniverseTime;
             if (start_dt > 0)
             {
                 status_line = $"start in {StrTool.DurationToString(start_dt)}";
