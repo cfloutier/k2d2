@@ -34,8 +34,8 @@ public class DockingAssist : SingleExecuteController
     public enum PilotMode
     {
         Off,
-        KillSpeed,
-        FinalApproach,
+        MainThrustKillSpeed,
+        RCSFinalApproach,
     }
 
     PilotMode _mode = PilotMode.Off;
@@ -50,11 +50,11 @@ public class DockingAssist : SingleExecuteController
             _mode = value;
             switch(_mode)
             {
-                case PilotMode.KillSpeed:
+                case PilotMode.MainThrustKillSpeed:
                     setController(kill_speed_pilot);
                     kill_speed_pilot.Start();
                     break;
-                case PilotMode.FinalApproach:
+                case PilotMode.RCSFinalApproach:
                     setController(final_approach_pilot);
                     final_approach_pilot.StartPilot(target_part, control_component);
                     break;
@@ -65,7 +65,7 @@ public class DockingAssist : SingleExecuteController
         }
     }
 
-    KillSpeed kill_speed_pilot = null;
+    MainThrustKillSpeed kill_speed_pilot = null;
     FinalApproach final_approach_pilot = null;
 
     public override bool isRunning
@@ -97,8 +97,8 @@ public class DockingAssist : SingleExecuteController
 
         shapes_drawer = new DockShape(settings);
         dock_ui = new DockingUI(this);
-        kill_speed_pilot = new KillSpeed(turnTo);
-        final_approach_pilot = new FinalApproach(turnTo);
+        kill_speed_pilot = new MainThrustKillSpeed(turnTo);
+        final_approach_pilot = new FinalApproach(settings, turnTo);
     }
 
     DockShape shapes_drawer;
@@ -192,53 +192,33 @@ public class DockingAssist : SingleExecuteController
                 target_vessel = null;
             }
         }
-
-        if (target_part != null)
-        {
-            var vessel = current_vessel.VesselComponent;
-            if (vessel == null)
-            {
-                return;
-            }
-
-
-            diff_Position = Position.Delta(target_part.CenterOfMass, control_component.CenterOfMass);
-            var curent_vessel_frame = control_component.transform.coordinateSystem;
-            var vessel_to_control = Matrix4x4D.TRS(
-                curent_vessel_frame.ToLocalPosition(control_component.transform.Position),
-                curent_vessel_frame.ToLocalRotation(control_component.transform.Rotation)).GetInverse();
-
-            vessel_to_target = vessel_to_control.TransformPoint( curent_vessel_frame.ToLocalPosition(target_part.CenterOfMass) );
-
-            local_speed = vessel_to_control.TransformVector( curent_vessel_frame.ToLocalVector( vessel.TargetVelocity ) );
-            target_to_vessel = vessel_to_control.TransformPoint( curent_vessel_frame.ToLocalPosition(control_component.CenterOfMass));
-        }
     }
-
-    public Vector diff_Position = new Vector();
-    public Vector3 local_speed = new Vector3();
-
-    public Vector3 vessel_to_target = new Vector3();
-    public Vector3 target_to_vessel = new Vector3();
 
     public void drawShapes()
     {
-        if (!dock_ui.drawShapes(shapes_drawer))
-        {
+        if (dock_ui.drawShapes(shapes_drawer))
+            return;
 
-            var vessel = current_vessel.VesselComponent;
-            if (settings.show_gizmos)
+        var vessel = current_vessel.VesselComponent;
+        if (settings.show_gizmos)
+        {
+            if (target_part != null)
             {
                 // draw target
-                if (target_part != null)
-                {
-                    shapes_drawer.DrawComponent(target_part, vessel, settings.target_color);
-                    shapes_drawer.DrawSpeed(control_component, vessel, vessel.TargetVelocity, Color.red);
-                }
+                shapes_drawer.DrawComponent(target_part, vessel, settings.target_color, true, true);
 
-                // draw control
-                shapes_drawer.DrawComponent(control_component, vessel, settings.vessel_color);
+                // draw target speed
+                shapes_drawer.DrawSpeed(control_component, vessel, vessel.TargetVelocity, Color.red);
             }
+
+            // draw control
+            shapes_drawer.DrawComponent(control_component, vessel, settings.vessel_color, true, false);
+            shapes_drawer.drawAxis(control_component, vessel);
+        }
+
+        if (Mode == PilotMode.RCSFinalApproach)
+        {
+            final_approach_pilot.drawShapes(shapes_drawer);
         }
     }
 }

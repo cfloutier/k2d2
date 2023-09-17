@@ -65,11 +65,8 @@ class DockingUI
             }
 
             _ui_mode = value;
-
-
         }
     }
-
 
     public PartComponent selected_component = null;
 
@@ -337,24 +334,9 @@ class DockingUI
     }
 
 
-    void mainGUI()
+    public void MainOptionsLine()
     {
-        UI_Tools.Title("Docking Tools");
-
-        if (pilot.isRunning)
-        {
-            if (!UI_Tools.BigToggleButton(true, "Start", "Stop"))
-            {
-                pilot.isRunning = false;
-            }
-            return;
-        }
-
-        controlLineUI();
-        targetLineUI();
-
         GUILayout.BeginHorizontal();
-
         settings.show_gizmos = UI_Tools.SmallToggleButton(settings.show_gizmos, "Show A.R", "Hide A.R");
 
         if (pilot.target_part != null)
@@ -374,21 +356,44 @@ class DockingUI
                 }
             }
         }
-
         GUILayout.EndHorizontal();
+    }
 
-        if (UI_Tools.BigToggleButton(false, "Kill Speed", "-"))
+    void mainGUI()
+    {
+        UI_Tools.Title("Docking Tools");
+
+        if (pilot.isRunning)
         {
-            pilot.Mode = DockingAssist.PilotMode.KillSpeed;
+            MainOptionsLine();
+            if (!UI_Tools.BigToggleButton(true, "Start", "Stop"))
+            {
+                pilot.isRunning = false;
+            }
+            return;
         }
 
-        if (UI_Tools.BigToggleButton(false, "Final Approach", "-"))
+        controlLineUI();
+        targetLineUI();
+
+        MainOptionsLine();
+
+        if (pilot.target_part != null)
         {
-            pilot.Mode = DockingAssist.PilotMode.FinalApproach;
+            if (UI_Tools.BigToggleButton(false, "Main Thrust Brake", "-"))
+            {
+                pilot.Mode = DockingAssist.PilotMode.MainThrustKillSpeed;
+            }
+
+
+
+            if (UI_Tools.BigToggleButton(false, "RCS Final Approach", "-"))
+            {
+                pilot.Mode = DockingAssist.PilotMode.RCSFinalApproach;
+            }
         }
 
-
-        cheatUI();
+     //   cheatUI();
         // shapes_drawer.StyleGUI();
     }
 
@@ -424,7 +429,7 @@ class DockingUI
                     color = settings.vessel_color;
                 }
 
-                shapes_drawer.DrawComponent(part.component, pilot.current_vessel.VesselComponent, color);
+                shapes_drawer.DrawComponent(part.component, pilot.current_vessel.VesselComponent, color, true, true);
             }
 
             return true;
@@ -439,7 +444,7 @@ class DockingUI
                     color = settings.target_color;
                 }
 
-                shapes_drawer.DrawComponent(part.component, pilot.current_vessel.VesselComponent, color);
+                shapes_drawer.DrawComponent(part.component, pilot.current_vessel.VesselComponent, color, true, true);
             }
 
             return true;

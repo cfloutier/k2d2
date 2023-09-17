@@ -4,11 +4,30 @@ using KTools.UI;
 
 namespace K2D2.Controller;
 
+
+public class WarpControllerSettings
+{
+    public int delta_time
+    {
+        get => KBaseSettings.sfile.GetInt("drone.delta_time", -60);
+        set
+        {
+            KBaseSettings.sfile.SetInt("drone.delta_time", value);
+        }
+    }
+}
+
+
+
+
 public class WarpController : ComplexControler
 {
     public static WarpController Instance { get; set; }
 
     KSPVessel current_vessel;
+
+
+    WarpControllerSettings settings = new WarpControllerSettings();
 
     public WarpController()
     {
@@ -63,46 +82,48 @@ public class WarpController : ComplexControler
 
     public override void onGUI()
     {
-        if (K2D2_Plugin.Instance.settings_visible)
-        {
-            K2D2Settings.onGUI();
-            UI_Tools.Title("No Warp Settings");
-            if (UI_Tools.BigButton("close"))
-                K2D2_Plugin.Instance.settings_visible = false;
-            return;
-        }
-
         UI_Tools.Title("Warp to SOI");
+
+        // if (K2D2_Plugin.Instance.settings_visible)
+        // {
+        //     K2D2Settings.onGUI();
+
+            
+
+        //     if (UI_Tools.BigButton("close"))
+        //         K2D2_Plugin.Instance.settings_visible = false;
+
+        //     return;
+        // }
 
         if (isRunning)
         {
             isRunning = UI_Tools.BigToggleButton(isRunning, "Warping", "Stop");
-            warp.onGUI();  
+            warp.onGUI();
             return;
         }
 
-        var orbit = current_vessel.VesselComponent.Orbit;
+        settings.delta_time = UI_Tools.IntSlider("Delta time", (int)settings.delta_time, -120, 120, "s");
 
+        var orbit = current_vessel.VesselComponent.Orbit;
         if (orbit.PatchEndTransition == KSP.Sim.PatchTransitionType.Encounter ||
             orbit.PatchEndTransition == KSP.Sim.PatchTransitionType.Escape)
         {
-            UI_Tools.Console($"SOI Change in : {StrTool.DurationToString(orbit.timeToTransition1)}");
+            var end_duration = orbit.EndUT - GeneralTools.Game.UniverseModel.UniverseTime;
+            UI_Tools.Console($"Next transition is : {orbit.PatchEndTransition}");
+            UI_Tools.Console($"SOI Change in : {StrTool.DurationToString(end_duration)}");
 
-            bool go = UI_Tools.BigToggleButton(isRunning, "Warp to SOI Change (+1 min)", "Stop");
+            string txt_delta = settings.delta_time > 0 ? $"(+{settings.delta_time}s)" : $"({settings.delta_time}s)";
+
+            bool go = UI_Tools.BigToggleButton(isRunning, "Warp to SOI Change " + txt_delta, "Stop");
             if (isRunning != go)
             {
                 if (go)
-                { 
-                    warp.Start_Ut(orbit.timeToTransition1 + GeneralTools.Game.UniverseModel.UniverseTime + 60);
+                {
+                    warp.Start_Ut(orbit.EndUT + settings.delta_time);
                     isRunning = true;
                 }
-
             }
         }
-
-
-
     }
-
-
 }

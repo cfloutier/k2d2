@@ -126,6 +126,12 @@ namespace KTools.UI
             return GUILayout.Button(new GUIContent(txt, tooltip), KBaseStyle.small_button, GUILayout.Height(20));
         }
 
+
+        public static bool resetButton()
+        {
+            return GUILayout.Button("R", KBaseStyle.small_button, GUILayout.Height(20), GUILayout.Width(20));
+        }
+
         public static bool ToolTipButton(string tooltip)
         {
             return GUILayout.Button(new GUIContent("?", tooltip), KBaseStyle.small_button, GUILayout.Height(20), GUILayout.Width(20));

@@ -49,6 +49,7 @@ public class WarpTo : ExecuteController
     TurnTo turn_to = null;
 
     public bool check_direction = false;
+    public bool add_safe_duration = true;
 
     public float max_angle;
 
@@ -62,6 +63,7 @@ public class WarpTo : ExecuteController
         maneuver = node;
         this.UT = node.Time;
         this.check_direction = check_direction;
+        this.add_safe_duration = true;
 
         Start();
 
@@ -75,9 +77,12 @@ public class WarpTo : ExecuteController
     public void Start_Ut(double UT)
     {
         maneuver = null;
+
         this.UT = UT;
+        this.add_safe_duration = false;
         this.check_direction = false;
         this.max_angle = 0;
+
         Start();
     }
 
@@ -86,6 +91,7 @@ public class WarpTo : ExecuteController
         maneuver = null;
         this.UT = UT;
         this.check_direction = check_direction;
+        this.add_safe_duration = true;
         this.max_angle = max_angle;
 
         Start();
@@ -111,8 +117,15 @@ public class WarpTo : ExecuteController
 
         status_line = "";
 
-        var ut_modified = UT - WarpToSettings.warp_safe_duration;
-        dt = ut_modified - GeneralTools.Game.UniverseModel.UniverseTime;
+        if (add_safe_duration)
+        {
+            var ut_modified = UT - WarpToSettings.warp_safe_duration;
+            dt = ut_modified - GeneralTools.Game.UniverseModel.UniverseTime;
+        }
+        else
+        {
+            dt = UT - GeneralTools.Game.UniverseModel.UniverseTime;
+        }
 
         if (dt < 0)
         {

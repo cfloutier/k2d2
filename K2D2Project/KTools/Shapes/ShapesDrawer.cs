@@ -25,19 +25,19 @@ namespace KTools.Shapes
 
         public void DrawShapes(Camera cam)
         {
-            if (cam is null)
+            if (cam == null)
             {
                 return;
             }
 
-            // K2D2_Plugin.logger.LogInfo("DrawShapes " + cam.name);
+            //K2D2_Plugin.logger.LogInfo("DrawShapes " + cam.name);
 
             if (cam.name != "FlightCameraPhysics_Main")
             {
                 return;
             }
 
-            // K2D2_Plugin.logger.LogInfo("can_draw " + can_draw);
+            //K2D2_Plugin.logger.LogInfo("can_draw " + can_draw);
 
             if (!can_draw)
             {

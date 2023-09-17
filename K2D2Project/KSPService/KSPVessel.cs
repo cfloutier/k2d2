@@ -191,7 +191,7 @@ namespace K2D2.KSPService
             {
                 if (VesselVehicle == null) return 0;
                 // Z is mapped to Y
-                return - VesselVehicle.Y;
+                return -VesselVehicle.Y;
             }
             set
             {
@@ -201,7 +201,7 @@ namespace K2D2.KSPService
 
                 var update = new FlightCtrlStateIncremental
                 {
-                    Y = value
+                    Y = -value
                 };
 
                 VesselVehicle.AtomicSet(update);

@@ -151,7 +151,7 @@ public class K2D2_Plugin : BaseSpaceWarpPlugin
         // Setups
         _maneuverProvider = new ManeuverProvider(ref maneuverManager, logger);
         new ShapeDrawer();
-        RegisterDetectionOfHudNeed();
+        RegisterMessages();
         // new TestObjects();
 
         // Add Controllers that inherit from BaseController here:
@@ -163,9 +163,9 @@ public class K2D2_Plugin : BaseSpaceWarpPlugin
         controllerManager.AddController(new AutoLiftController());
         controllerManager.AddController(new CircleController());
         controllerManager.AddController(new WarpController());
-        // controllerManager.AddController(new DockingAssist());
+        controllerManager.AddController(new DockingAssist());
 
-        // ShapeDrawer.Instance.shapes.Add(DockingAssist.Instance.drawShapes);
+        ShapeDrawer.Instance.shapes.Add(DockingAssist.Instance.drawShapes);
 
         // controllerManager.AddController();
 
@@ -274,7 +274,7 @@ public class K2D2_Plugin : BaseSpaceWarpPlugin
         }
     }
 
-    private void RegisterDetectionOfHudNeed()
+    private void RegisterMessages()
     {
         Game.Messages.Subscribe<GameStateChangedMessage>(msg =>
         {
@@ -288,6 +288,12 @@ public class K2D2_Plugin : BaseSpaceWarpPlugin
             {
                 ShapeDrawer.Instance.can_draw = false;
             }
+        });
+
+        Game.Messages.Subscribe<VesselChangedMessage>(msg =>
+        {
+            var message = (VesselChangedMessage)msg;
+            ResetControllers();
         });
     }
 

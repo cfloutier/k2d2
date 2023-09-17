@@ -13,7 +13,6 @@ namespace K2D2.Controller.Docks.Pilots;
 /// </summary>
 public class DockingTurnTo : ExecuteController
 {
-    Vector3 wanted_dir = Vector3.zero;
 
     KSPVessel current_vessel;
 
@@ -78,6 +77,8 @@ public class DockingTurnTo : ExecuteController
         finished = true;
     }
 
+    Vector wanted_direction;
+
     void UpdateTargetDock()
     {
         var autopilot = current_vessel.Autopilot;
@@ -93,14 +94,14 @@ public class DockingTurnTo : ExecuteController
             mode = Mode.Off;
         }
 
-        Vector direction = current_vessel.VesselComponent.TargetObject.transform.up;
-        direction.vector = -direction.vector;
+        wanted_direction = current_vessel.VesselComponent.TargetObject.transform.up;
+        wanted_direction.vector = -wanted_direction.vector;
 
-        autopilot.SAS.SetTargetOrientation(direction, false);
+        autopilot.SAS.SetTargetOrientation(wanted_direction, false);
 
         finished = false;
 
-        if (!checkRetroSpeed())
+        if (!checkTargetDock())
             return;
 
         if (!checkAngularRotation())
@@ -120,15 +121,34 @@ public class DockingTurnTo : ExecuteController
 
     public bool checkRetroSpeed()
     {
+        var control_component = current_vessel.VesselComponent.GetControlOwner();
         Vector retro_dir = current_vessel.VesselComponent.TargetVelocity;
-        Rotation vessel_rotation = current_vessel.GetRotation();
+        Rotation control_rotation = control_component.transform.Rotation;
 
         // convert rotation to speed coordinates system
-        vessel_rotation = Rotation.Reframed(vessel_rotation, retro_dir.coordinateSystem);
+        control_rotation = Rotation.Reframed(control_rotation, retro_dir.coordinateSystem);
 
-        Vector3d forward_direction = (vessel_rotation.localRotation * Vector3.down).normalized;
+        Vector3d forward_direction = (control_rotation.localRotation * Vector3.down).normalized;
 
         angle = (float)Vector3d.Angle(retro_dir.vector, forward_direction);
+        status_line = $"Waiting for good sas direction\nAngle = {angle:n2}°";
+
+        return angle < max_angle;
+    }
+
+    public bool checkTargetDock()
+    {
+        var control_component = current_vessel.VesselComponent.GetControlOwner();
+
+        // Vector retro_dir = current_vessel.VesselComponent.TargetVelocity;
+        Rotation control_rotation = control_component.transform.Rotation;
+
+        // convert rotation to speed coordinates system
+        control_rotation = Rotation.Reframed(control_rotation, wanted_direction.coordinateSystem);
+
+        Vector3d forward_direction = (control_rotation.localRotation * Vector3.down).normalized;
+
+        angle = (float)Vector3d.Angle(wanted_direction.vector, forward_direction);
         status_line = $"Waiting for good sas direction\nAngle = {angle:n2}°";
 
         return angle < max_angle;
@@ -170,10 +190,8 @@ public class DockingTurnTo : ExecuteController
             // var angulor_vel_coord = VesselInfos.GetAngularSpeed().coordinateSystem;
             var angularVelocity = current_vessel.GetAngularSpeed().vector;
 
-            
             UI_Tools.Console($"angle {angle:n2} °");
             UI_Tools.Console($"angularVelocity {StrTool.Vector3ToString(angularVelocity)}");
-            
             UI_Tools.Console($"autopilot {autopilot.AutopilotMode}");
         }
     }

@@ -12,9 +12,9 @@ namespace K2D2.Controller.Docks.Pilots;
 /// <summary>
 /// rotation used for docking
 /// </summary>
-public class KillSpeed : ExecuteController
+public class MainThrustKillSpeed : ExecuteController
 {
-   public KillSpeed(DockingTurnTo turnTo)
+   public MainThrustKillSpeed(DockingTurnTo turnTo)
    {
         this.turnTo = turnTo;
    }
@@ -32,7 +32,6 @@ public class KillSpeed : ExecuteController
 
     public override void Update()
     {
-        
         burn_dV.Update();
 
         finished = false;
