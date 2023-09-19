@@ -375,7 +375,6 @@ class DockingUI
 
         controlLineUI();
         targetLineUI();
-
         MainOptionsLine();
 
         if (pilot.target_part != null)
@@ -384,8 +383,6 @@ class DockingUI
             {
                 pilot.Mode = DockingAssist.PilotMode.MainThrustKillSpeed;
             }
-
-
 
             if (UI_Tools.BigToggleButton(false, "RCS Final Approach", "-"))
             {
@@ -397,23 +394,29 @@ class DockingUI
         // shapes_drawer.StyleGUI();
     }
 
-    public void onGUI()
+    public bool onGUI()
     {
         if (K2D2_Plugin.Instance.settings_visible)
         {
             // default Settings UI
             K2D2Settings.onGUI();
             settings.StyleGUI();
-            return;
+            return false;
         }
 
         switch(ui_mode)
         {
-            case UI_Mode.Main: mainGUI(); break;
-            case UI_Mode.Select_Control: selectControlGUI(); break;
-            case UI_Mode.Select_Target: selectTargetGUI(); break;
-            case UI_Mode.Select_Dock: selectDockGUI(); break;
+            case UI_Mode.Main: mainGUI(); 
+                return true;
+            case UI_Mode.Select_Control: selectControlGUI(); 
+                return false;
+            case UI_Mode.Select_Target: selectTargetGUI(); 
+                return false;
+            case UI_Mode.Select_Dock: selectDockGUI();
+                return false;
         }
+
+        return false;
     }
 
     public bool drawShapes(DockShape shapes_drawer)

@@ -45,6 +45,8 @@ public class MainThrustKillSpeed : ExecuteController
             current_vessel.SetThrottle(0);
     }
 
+    float current_speed = 0;
+
     void compute_Throttle()
     {
         //float min_throttle = 0;
@@ -72,7 +74,16 @@ public class MainThrustKillSpeed : ExecuteController
 
     public override void onGUI()
     {
-        UI_Tools.Warning("Kill Target Speed");
-        turnTo.onGUI();
+        UI_Tools.Warning("Kill Target Speed using Main thrust");
+
+        if (!turnTo.finished)
+            turnTo.onGUI();
+        else
+        {
+            UI_Tools.Console("Slow down speed until lower than 2 m/s");
+            UI_Tools.Console($"Speed : {current_speed:n2}");
+        }
+
+        UI_Tools.Console("Please control the vessel using a pod\naligned with the main thrust");
     }
 }

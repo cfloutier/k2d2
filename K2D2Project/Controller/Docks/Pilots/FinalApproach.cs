@@ -132,7 +132,7 @@ public class FinalApproach : ExecuteController
 
         if (auto_forward)
         {
-            forward_wanted_speed = Mathf.Sign( vessel_to_target.y) * Mathf.Sqrt( Mathf.Abs(center_power/10 * vessel_to_target.y ));
+            forward_wanted_speed = Mathf.Sign( vessel_to_target.y) * Mathf.Sqrt( Mathf.Abs(center_power/20 * vessel_to_target.y ));
             forward_wanted_speed += 0.05f; // final touch speed !!
             forward_wanted_speed = Mathf.Clamp(forward_wanted_speed, -max_speed, max_speed);
             current_vessel.Y = (forward_wanted_speed - local_speed.y) * settings.pilot_power;

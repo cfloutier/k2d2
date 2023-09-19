@@ -147,7 +147,7 @@ public class DocksSettings
 
         accordion.OnGui();
 
-
+        pilot_power = UI_Tools.FloatSliderTxt("Pilot Power", pilot_power, 0, 5);
     }
 
 
@@ -166,7 +166,7 @@ public class DocksSettings
 
         //color_editor.draw_ui("Color");
 
-        pilot_power = UI_Tools.FloatSliderTxt("Pilot Power", pilot_power, 0, 5);
+        
     }
 
 }

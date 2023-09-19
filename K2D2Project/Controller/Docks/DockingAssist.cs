@@ -87,6 +87,11 @@ public class DockingAssist : SingleExecuteController
         }
     }
 
+    public override void onReset()
+    {
+        isRunning = false;
+    }
+
     public DockingAssist()
     {
         Instance = this;
@@ -109,7 +114,8 @@ public class DockingAssist : SingleExecuteController
 
     public override void onGUI()
     {
-        dock_ui.onGUI();
+        if (!dock_ui.onGUI())
+            return;
 
         var vessel = current_vessel.VesselComponent;
         if (vessel == null)
