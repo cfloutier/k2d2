@@ -67,7 +67,6 @@ public class BurndV : BaseController
 
     public void Compute_Thrust()
     {
-
         if (current_vessel.VesselComponent == null) return;
         VesselDeltaVComponent delta_v = current_vessel.VesselComponent.VesselDeltaV;
         if (delta_v == null) return;
@@ -100,7 +99,7 @@ public class BurndV : BaseController
             UI_Tools.Error("NO VesselDeltaVComponent");
             return;
         }
-        List<DeltaVEngineInfo> engineInfos = delta_v.EngineInfo;
+        //List<DeltaVEngineInfo> engineInfos = delta_v.EngineInfo;
 
         var vehicle = current_vessel.VesselVehicle;
         if (vehicle == null) return;

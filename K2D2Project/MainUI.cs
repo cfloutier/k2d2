@@ -43,7 +43,7 @@ public class MainUI
             tabs.pages.Add(AutoLiftController.Instance);
             tabs.pages.Add(AttitudeController.Instance);
             tabs.pages.Add(WarpController.Instance);
-            tabs.pages.Add(TestObjects.Instance);
+            // tabs.pages.Add(TestObjects.Instance);
             tabs.pages.Add(DockingAssist.Instance);
 
             // tabs.pages.Add(new FindSecrets());

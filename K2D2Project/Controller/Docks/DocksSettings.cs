@@ -54,92 +54,100 @@ public class DocksSettings
 
     public Color unselected_color
     {
-        get => KBaseSettings.sfile.GetColor("drone.unselected_color", default_unselected_color);
+        get => KBaseSettings.sfile.GetColor("docks.unselected_color", default_unselected_color);
         set
         {
-            KBaseSettings.sfile.SetColor("drone.unselected_color", value);
+            KBaseSettings.sfile.SetColor("docks.unselected_color", value);
         }
     }
 
     public Color vessel_color
     {
-        get => KBaseSettings.sfile.GetColor("drone.vessel_color", default_vessel_color);
+        get => KBaseSettings.sfile.GetColor("docks.vessel_color", default_vessel_color);
         set
         {
-            KBaseSettings.sfile.SetColor("drone.vessel_color", value);
+            KBaseSettings.sfile.SetColor("docks.vessel_color", value);
         }
     }
 
     public Color target_color
     {
-        get => KBaseSettings.sfile.GetColor("drone.target_color", default_target_color);
+        get => KBaseSettings.sfile.GetColor("docks.target_color", default_target_color);
         set
         {
-            KBaseSettings.sfile.SetColor("drone.target_color", value);
+            KBaseSettings.sfile.SetColor("docks.target_color", value);
         }
     }
 
-    public float pos_gizmo
+    public float pos_grid
     {
-        get => KBaseSettings.sfile.GetFloat("drone.pos_gizmo_dock", 1);
+        get => KBaseSettings.sfile.GetFloat("docks.pos_grid", 1);
         set
         {
-            KBaseSettings.sfile.SetFloat("drone.pos_gizmo_dock", value);
+            KBaseSettings.sfile.SetFloat("docks.pos_grid", value);
         }
     }
 
     public float length_line
     {
-        get => KBaseSettings.sfile.GetFloat("drone.length_line", 30);
+        get => KBaseSettings.sfile.GetFloat("docks.length_line", 1);
         set
         {
-            KBaseSettings.sfile.SetFloat("drone.length_line", value);
+            KBaseSettings.sfile.SetFloat("docks.length_line", value);
         }
     }
 
     public float sfx_blur
     {
-        get => KBaseSettings.sfile.GetFloat("drone.sfx_blur", 3.5f);
+        get => KBaseSettings.sfile.GetFloat("docks.sfx_blur", 1f);
         set
         {
-            KBaseSettings.sfile.SetFloat("drone.sfx_blur", value);
+            KBaseSettings.sfile.SetFloat("docks.sfx_blur", value);
         }
     }
 
     public float thickness_circle
     {
-        get => KBaseSettings.sfile.GetFloat("drone.thickness_circle", 2f);
+        get => KBaseSettings.sfile.GetFloat("docks.thickness_circle", 2f);
         set
         {
-            KBaseSettings.sfile.SetFloat("drone.thickness_circle", value);
+            KBaseSettings.sfile.SetFloat("docks.thickness_circle", value);
         }
     }
 
     public float thickness_line
     {
-        get => KBaseSettings.sfile.GetFloat("drone.thickness_line", 1f);
+        get => KBaseSettings.sfile.GetFloat("docks.thickness_line", 1f);
         set
         {
-            KBaseSettings.sfile.SetFloat("drone.thickness_line", value);
+            KBaseSettings.sfile.SetFloat("docks.thickness_line", value);
+        }
+    }
+
+    public float pilot_power
+    {
+        get => KBaseSettings.sfile.GetFloat("docks.pilot_power", 1f);
+        set
+        {
+            KBaseSettings.sfile.SetFloat("docks.pilot_power", value);
         }
     }
 
     public FoldOut accordion = new FoldOut();
-
-
-
 
     public void StyleGUI()
     {
         if (accordion.Count == 0)
         {
             accordion.addChapter("Gizmos", gizmos_styleUI);
-            //accordion.addChapter("Warp", WarpUI);
+            // accordion.addChapter("Pilot", pilot);
             //accordion.addChapter("Touch Down", TouchDown_UI);
             accordion.singleChapter = true;
         }
 
         accordion.OnGui();
+
+        pilot_power = UI_Tools.FloatSliderTxt("Pilot Power", pilot_power, 0, 5);
     }
 
 
@@ -147,16 +155,18 @@ public class DocksSettings
     { 
         // pos_gizmo_dock = UI_Tools.LabelSlider("Position", pos_gizmo_dock, -10, 10 );
 
-        length_line = UI_Tools.LabelSlider("Length Line", length_line, 0, 200 );
+        length_line = UI_Tools.LabelSlider("Length Line", length_line, 0, 10 );
         // radius = UI_Tools.LabelSlider("radius", radius, 0, 100 );
 
-        pos_gizmo = UI_Tools.LabelSlider("position", pos_gizmo, 0, 10);
+        pos_grid = UI_Tools.LabelSlider("grid forward pos", pos_grid, 0, 10);
         sfx_blur = UI_Tools.LabelSlider("Sfx Blur", sfx_blur, 0, 10 );
 
         thickness_circle = UI_Tools.LabelSlider("Thickness Circle", thickness_circle, 0, 10);
         thickness_line = UI_Tools.LabelSlider("Thickness line", thickness_line, 0, 10);
 
         //color_editor.draw_ui("Color");
+
+        
     }
 
 }

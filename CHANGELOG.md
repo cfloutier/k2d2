@@ -1,3 +1,24 @@
+
+
+
+# v0.10.0
+
+Docking Assistant :
+1. added like "Duna Colonist's HUD" arrows and line to 
+  * see all docks part and help choosing the right one (in your vessel and in target)
+  * see your speed !
+  * see the align dock position
+2. added a tool to kill the speed using the main thrust. It is usefull for the last kilometers
+3. added a tool to kill speed using rcs : usefull furing the final approach
+4. added a full auto docking pilot. This one really need further work but it's quite working using my small vessel. 
+
+Fix :
+* fixed the soi change time in the Warp to Pilot
+
+# v0.9.4
+Fix :
+* rebuild with KSP2 v1.4.0
+
 # v0.9.3
 Fix :
 * rebuild with KSP2 v1.3.1

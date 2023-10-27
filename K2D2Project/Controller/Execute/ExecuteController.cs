@@ -8,7 +8,7 @@ namespace K2D2.Controller
             sub_controler = controler;
         }
 
-        ExecuteController sub_controler;
+        public ExecuteController sub_controler;
 
 
         public bool finished

@@ -65,11 +65,8 @@ class DockingUI
             }
 
             _ui_mode = value;
-
-
         }
     }
-
 
     public PartComponent selected_component = null;
 
@@ -337,12 +334,38 @@ class DockingUI
     }
 
 
+    public void MainOptionsLine()
+    {
+        GUILayout.BeginHorizontal();
+        settings.show_gizmos = UI_Tools.SmallToggleButton(settings.show_gizmos, "Show A.R", "Hide A.R");
+
+        if (pilot.target_part != null)
+        {
+            bool is_active = pilot.turnTo.mode == Pilots.DockingTurnTo.Mode.TargetDock;
+
+            bool is_on = UI_Tools.SmallToggleButton(is_active, "Align Dock", "Stop Align Dock");
+            if (is_active != is_on)
+            {
+                if (is_on)
+                {
+                    pilot.turnTo.StartDockAlign();
+                }
+                else
+                {
+                    pilot.turnTo.mode = Pilots.DockingTurnTo.Mode.Off;
+                }
+            }
+        }
+        GUILayout.EndHorizontal();
+    }
+
     void mainGUI()
     {
         UI_Tools.Title("Docking Tools");
 
         if (pilot.isRunning)
         {
+            MainOptionsLine();
             if (!UI_Tools.BigToggleButton(true, "Start", "Stop"))
             {
                 pilot.isRunning = false;
@@ -352,35 +375,48 @@ class DockingUI
 
         controlLineUI();
         targetLineUI();
+        MainOptionsLine();
 
-        settings.show_gizmos = UI_Tools.SmallToggleButton(settings.show_gizmos, "Show A.R", "Hide A.R");
-
-        if (UI_Tools.BigToggleButton(false, "Kill Speed", "Stop"))
+        if (pilot.target_part != null)
         {
-            pilot.Mode = DockingAssist.PilotMode.KillSpeed;
+            if (UI_Tools.BigToggleButton(false, "Main Thrust Brake", "-"))
+            {
+                pilot.Mode = DockingAssist.PilotMode.MainThrustKillSpeed;
+            }
+
+            if (UI_Tools.BigToggleButton(false, "RCS Final Approach", "-"))
+            {
+                pilot.Mode = DockingAssist.PilotMode.RCSFinalApproach;
+            }
         }
 
-        cheatUI();
+     //   cheatUI();
         // shapes_drawer.StyleGUI();
     }
 
-    public void onGUI()
+    public bool onGUI()
     {
         if (K2D2_Plugin.Instance.settings_visible)
         {
             // default Settings UI
             K2D2Settings.onGUI();
             settings.StyleGUI();
-            return;
+            return false;
         }
 
         switch(ui_mode)
         {
-            case UI_Mode.Main: mainGUI(); break;
-            case UI_Mode.Select_Control: selectControlGUI(); break;
-            case UI_Mode.Select_Target: selectTargetGUI(); break;
-            case UI_Mode.Select_Dock: selectDockGUI(); break;
+            case UI_Mode.Main: mainGUI(); 
+                return true;
+            case UI_Mode.Select_Control: selectControlGUI(); 
+                return false;
+            case UI_Mode.Select_Target: selectTargetGUI(); 
+                return false;
+            case UI_Mode.Select_Dock: selectDockGUI();
+                return false;
         }
+
+        return false;
     }
 
     public bool drawShapes(DockShape shapes_drawer)
@@ -396,7 +432,7 @@ class DockingUI
                     color = settings.vessel_color;
                 }
 
-                shapes_drawer.DrawComponent(part.component, pilot.current_vessel.VesselComponent, color);
+                shapes_drawer.DrawComponent(part.component, pilot.current_vessel.VesselComponent, color, true, true);
             }
 
             return true;
@@ -411,7 +447,7 @@ class DockingUI
                     color = settings.target_color;
                 }
 
-                shapes_drawer.DrawComponent(part.component, pilot.current_vessel.VesselComponent, color);
+                shapes_drawer.DrawComponent(part.component, pilot.current_vessel.VesselComponent, color, true, true);
             }
 
             return true;

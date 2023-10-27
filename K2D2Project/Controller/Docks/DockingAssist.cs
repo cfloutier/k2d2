@@ -5,28 +5,16 @@ using BepInEx.Logging;
 using UnityEngine;
 
 using KSP.Sim.impl;
-using KSP.Game;
 using KSP.Sim;
-using KSP;
-using KSP.Sim.Definitions;
-
-
 using K2D2.Controller.Docks;
-using static VehiclePhysics.VPReplay;
 
-using JetBrains.Annotations;
-using KSP.Iteration.UI.Binding;
-using LibNoise.Modifiers;
-
-using System.Diagnostics.Tracing;
 using static K2D2.Controller.Docks.DockTools;
-using AwesomeTechnologies.Utility;
-using static KSP.Api.UIDataPropertyStrings.View;
 using K2D2.Controller.Docks.Pilots;
+using static KSP.Api.UIDataPropertyStrings.View;
 
 namespace K2D2.Controller;
 
-public class DockingAssist : ComplexControler
+public class DockingAssist : SingleExecuteController
 {
     public static DockingAssist Instance { get; set; }
     public ManualLogSource logger = BepInEx.Logging.Logger.CreateLogSource("K2D2.DockingTool");
@@ -39,14 +27,15 @@ public class DockingAssist : ComplexControler
     public int target_dock_num = -1;
     public SimulationObjectModel last_target;
 
-    public DockTools.ListPart docks = new DockTools.ListPart();
+    public ListPart docks = new ListPart();
     public DocksSettings settings = new DocksSettings();
 
 
     public enum PilotMode
     {
         Off,
-        KillSpeed
+        MainThrustKillSpeed,
+        RCSFinalApproach,
     }
 
     PilotMode _mode = PilotMode.Off;
@@ -61,22 +50,23 @@ public class DockingAssist : ComplexControler
             _mode = value;
             switch(_mode)
             {
-                case PilotMode.KillSpeed:
-                    current_pilot = kill_speed_pilot;
+                case PilotMode.MainThrustKillSpeed:
+                    setController(kill_speed_pilot);
+                    kill_speed_pilot.Start();
+                    break;
+                case PilotMode.RCSFinalApproach:
+                    setController(final_approach_pilot);
+                    final_approach_pilot.StartPilot(target_part, control_component);
                     break;
                 case PilotMode.Off:
-                    current_pilot = null;
+                    setController(null);
                     break;
             }
-
-            if (current_pilot != null)
-                current_pilot.Start();
         }
     }
 
-    
-    KillSpeed kill_speed_pilot = new KillSpeed(); 
-    ExecuteController current_pilot = null;
+    MainThrustKillSpeed kill_speed_pilot = null;
+    FinalApproach final_approach_pilot = null;
 
     public override bool isRunning
     {
@@ -97,6 +87,10 @@ public class DockingAssist : ComplexControler
         }
     }
 
+    public override void onReset()
+    {
+        isRunning = false;
+    }
 
     public DockingAssist()
     {
@@ -108,15 +102,20 @@ public class DockingAssist : ComplexControler
 
         shapes_drawer = new DockShape(settings);
         dock_ui = new DockingUI(this);
+        kill_speed_pilot = new MainThrustKillSpeed(turnTo);
+        final_approach_pilot = new FinalApproach(settings, turnTo);
     }
 
     DockShape shapes_drawer;
 
     DockingUI dock_ui;
 
+    public DockingTurnTo turnTo = new DockingTurnTo();
+
     public override void onGUI()
     {
-        dock_ui.onGUI();
+        if (!dock_ui.onGUI())
+            return;
 
         var vessel = current_vessel.VesselComponent;
         if (vessel == null)
@@ -124,29 +123,20 @@ public class DockingAssist : ComplexControler
             return;
         }
 
-        if (current_pilot != null)
-            current_pilot.onGUI();
+        if (sub_controler != null)
+            sub_controler.onGUI();
 
-        var target_vel = vessel.TargetVelocity;
-        UI_Tools.Label($"Target speedV {StrTool.Vector3ToString(target_vel.vector)} ");
-
-        if (target_part != null)
-        {
-            UI_Tools.Label($"vessel_to_target {StrTool.Vector3ToString(vessel_to_target)} ");
-            UI_Tools.Label($"target_to_vessel {StrTool.Vector3ToString(target_to_vessel)} ");
-
-            UI_Tools.Label($"rel pos {StrTool.Vector3ToString(diff_Position.vector)} ");
-            UI_Tools.Label($"dist {StrTool.DistanceToString(diff_Position.magnitude)} ");
-        }
     }
 
     public void listDocks()
     {
-        docks = DockTools.FindParts(target_vessel, false, true);
+        docks = FindParts(target_vessel, false, true);
     }
 
     public override void Update()
     {
+        turnTo.Update();
+
         // logger.LogInfo($"target is {current_vessel.VesselComponent.TargetObject}");
         if (current_vessel.VesselComponent == null)
         {
@@ -154,16 +144,21 @@ public class DockingAssist : ComplexControler
             return;
         }
 
-
-        if (current_pilot != null)
-            current_pilot.Update();
+        if (sub_controler != null)
+        {
+            sub_controler.Update();
+            if (sub_controler.finished)
+            {
+                isRunning = false;
+            }
+        }
 
         control_component = current_vessel.VesselComponent.GetControlOwner();
 
         // update the dock list when target change
         if (last_target != current_vessel.VesselComponent.TargetObject)
         {
-            logger.LogInfo($"changed target is {current_vessel.VesselComponent.TargetObject}");
+            // logger.LogInfo($"changed target is {current_vessel.VesselComponent.TargetObject}");
 
             last_target = current_vessel.VesselComponent.TargetObject;
             target_part = null;
@@ -203,42 +198,33 @@ public class DockingAssist : ComplexControler
                 target_vessel = null;
             }
         }
-
-        if (target_part != null)
-        {   
-            diff_Position = Position.Delta(target_part.CenterOfMass, control_component.CenterOfMass);
-            var curent_vessel_frame = control_component.transform.coordinateSystem;
-            var vessel_to_control = Matrix4x4D.TRS(
-                curent_vessel_frame.ToLocalPosition(control_component.transform.Position),
-                curent_vessel_frame.ToLocalRotation(control_component.transform.Rotation)).GetInverse();
-
-            vessel_to_target = vessel_to_control.TransformPoint( curent_vessel_frame.ToLocalPosition(target_part.CenterOfMass) );
-            target_to_vessel = vessel_to_control.TransformPoint( curent_vessel_frame.ToLocalPosition(control_component.CenterOfMass));
-        }
     }
-
-    public Vector diff_Position = new Vector();
-    public Vector3 vessel_to_target = new Vector3();
-    public Vector3 target_to_vessel = new Vector3();
 
     public void drawShapes()
     {
-        if (!dock_ui.drawShapes(shapes_drawer))
-        {
+        if (dock_ui.drawShapes(shapes_drawer))
+            return;
 
-            var vessel = current_vessel.VesselComponent;
-            if (settings.show_gizmos)
+        var vessel = current_vessel.VesselComponent;
+        if (settings.show_gizmos)
+        {
+            if (target_part != null)
             {
                 // draw target
-                if (target_part != null)
-                {
-                    shapes_drawer.DrawComponent(target_part, vessel, settings.target_color);
-                    shapes_drawer.DrawSpeed(control_component, vessel, vessel.TargetVelocity, Color.red);
-                }
+                shapes_drawer.DrawComponent(target_part, vessel, settings.target_color, true, true);
 
-                // draw control
-                shapes_drawer.DrawComponent(control_component, vessel, settings.vessel_color);
+                // draw target speed
+                shapes_drawer.DrawSpeed(control_component, vessel, vessel.TargetVelocity, Color.red);
             }
+
+            // draw control
+            shapes_drawer.DrawComponent(control_component, vessel, settings.vessel_color, true, false);
+            shapes_drawer.drawAxis(control_component, vessel);
+        }
+
+        if (Mode == PilotMode.RCSFinalApproach)
+        {
+            final_approach_pilot.drawShapes(shapes_drawer);
         }
     }
 }
