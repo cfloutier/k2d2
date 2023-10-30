@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <TargetFramework>netstandard2.0</TargetFramework>
+        <TargetFramework>netstandard2.1</TargetFramework>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <LangVersion>latest</LangVersion>
         <ImplicitUsings>true</ImplicitUsings>
         <AssemblyName>com.github.cfloutier.k2d2</AssemblyName>
         <Product>K2-D2</Product>
         <Description>The KSP astromech, Keybind is ALT+O</Description>
-        <Version>0.10.0</Version>
+        <Version>0.10.1</Version>
         <RestoreAdditionalProjectSources>
             https://nuget.spacewarp.org/v3/index.json
         </RestoreAdditionalProjectSources>
@@ -16,31 +16,18 @@
         <ModId Condition="'$(ModId)'==''">K2D2</ModId>
     </PropertyGroup>
     <ItemGroup>
-        <Reference Include="Assembly-CSharp">
-            <HintPath>..\external_dlls\Assembly-CSharp.dll</HintPath>
-            <Publicize>true</Publicize>
-            <Private>false</Private>
-        </Reference>
-        <Reference Include="ShapesRuntime">
-			<HintPath>..\external_dlls\ShapesRuntime.dll</HintPath>
-			<Publicize>true</Publicize>
-			<Private>false</Private>
-		</Reference>
-    </ItemGroup>
-    <ItemGroup>
         <PackageReference Include="BepInEx.Analyzers" Version="1.*" PrivateAssets="all" />
         <PackageReference Include="BepInEx.AssemblyPublicizer.MSBuild" Version="0.4.0" PrivateAssets="all" />
         <PackageReference Include="BepInEx.Core" Version="5.*" />
         <PackageReference Include="BepInEx.PluginInfoProps" Version="2.*" />
         <PackageReference Include="HarmonyX" Version="2.10.1" />
-        <PackageReference Include="SpaceWarp" Version="1.1.1" />
-        <PackageReference Include="UnityEngine.Modules" Version="2020.3.33" IncludeAssets="compile" />
-
-
-
+        <PackageReference Include="SpaceWarp" Version="1.5.2" />
+        <PackageReference Include="UnityEngine.Modules" Version="2022.3.5" IncludeAssets="compile" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
+        <PackageReference Include="KerbalSpaceProgram2.GameLibs" Version="0.1.5" PrivateAssets="all" />
     </ItemGroup>
     <ItemGroup>
-      <Folder Include="Properties\" />
+        <Folder Include="Properties\" />
     </ItemGroup>
     <Target Name="PostBuild" AfterTargets="PostBuildEvent">
         <Exec Command="REM copy dll, pdb images infos ands readme to the Debug or Release Dir&#xD;&#xA;&#xD;&#xA;ECHO off&#xD;&#xA;SET DEST_DIR=$(ProjectDir)..\$(ConfigurationName)&#xD;&#xA;&#xD;&#xA;if not exist &quot;%25DEST_DIR%25&quot; rmdir /s /q &quot;%25DEST_DIR%25&quot;&#xD;&#xA;if not exist &quot;%25DEST_DIR%25&quot; mkdir &quot;%25DEST_DIR%25&quot;&#xD;&#xA;&#xD;&#xA;echo d | xcopy /y /s &quot;$(ProjectDir)..\$(ModId)\&quot; &quot;%25DEST_DIR%25\BepInEx\plugins\$(ModId)\&quot;&#xD;&#xA;echo f | xcopy /y &quot;$(ProjectDir)..\icon.png&quot; &quot;%25DEST_DIR%25\BepInEx\plugins\$(ModId)\assets\images\icon.png&quot;&#xD;&#xA;echo f | xcopy /y &quot;$(TargetPath)&quot; &quot;%25DEST_DIR%25\BepInEx\plugins\$(ModId)\$(ModId).dll&quot;&#xD;&#xA;if $(ConfigurationName) == Debug echo f | xcopy /y &quot;$(TargetDir)$(TargetName).pdb&quot; &quot;%25DEST_DIR%25\BepInEx\plugins\$(ModId)\$(ModId).pdb&quot;&#xD;&#xA;xcopy /y &quot;$(ProjectDir)..\LICENSE.md&quot; &quot;%25DEST_DIR%25\BepInEx\plugins\$(ModId)\&quot;&#xD;&#xA;echo f | xcopy /y &quot;$(ProjectDir)..\README.md&quot; &quot;%25DEST_DIR%25\BepInEx\plugins\$(ModId)\README.txt&quot;&#xD;&#xA;&#xD;&#xA;cd $(ProjectDir)..\batches&#xD;&#xA;call post_build.bat $(ConfigurationName) $(ModId)" />

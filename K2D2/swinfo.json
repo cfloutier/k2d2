@@ -4,17 +4,17 @@
     "name": "K2-D2",
     "description": "The KSP astromech",
     "source": "https://github.com/schlosrat/k2d2",
-    "version": "0.10.0",
+    "version": "0.10.1",
     "version_check": "",
     "dependencies": [{
         "id": "SpaceWarp",
         "version": {
-            "min": "1.1.1",
+            "min": "1.5.2",
             "max": "*"
         }
     }],
     "ksp2_version": {
-        "min": "0.1.3",
+        "min": "0.1.5",
         "max": "*"
     }
 }
