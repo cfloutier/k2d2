@@ -238,3 +238,5 @@ local_dev_options.bat
 
 # Riderfiles
 .idea/
+
+ksp_location.bat
