@@ -1,8 +1,7 @@
-
-
+# v0.10.1
+* fixes by @schlosrat to mtach patch kerbal 2 v1.5.0 (thanks)
 
 # v0.10.0
-
 Docking Assistant :
 1. added like "Duna Colonist's HUD" arrows and line to 
   * see all docks part and help choosing the right one (in your vessel and in target)
