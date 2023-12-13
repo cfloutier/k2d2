@@ -307,13 +307,20 @@ public class K2D2_Plugin : BaseSpaceWarpPlugin
             K2D2Styles.Init();
             GUI.skin = KBaseStyle.skin;
 
+            // TODO : 
+            // Change xpos and ypos during ui_size changes to avoid moving 
+            // use the ratio to fit max xpos and ypos depending on Screen width
+
             WindowTool.check_main_window_pos(ref windowRect);
+
+            float ratio = K2D2Settings.ui_size;
+            GUI.matrix = Matrix4x4.TRS (new Vector3(0, 0, 0), Quaternion.identity, new Vector3 (ratio, ratio, 1));
 
             windowRect = GUILayout.Window(
                 GUIUtility.GetControlID(FocusType.Passive),
                 windowRect,
                 FillWindow,
-                "   K2-D2",
+                "   K2-D2 ???",
                 GUILayout.Height(0),
                 GUILayout.Width(350));
 

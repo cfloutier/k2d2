@@ -1,3 +1,11 @@
+# v0.11 (next)
+
+* [x] add a resize option using Matrix trick
+* [ ] correct the lift ui settings
+
+----------
+* [ ] autostage during at least "node ex" and "lift" 
+
 # v0.10.1
 * fixes by @schlosrat to mtach patch kerbal 2 v1.5.0 (thanks)
 

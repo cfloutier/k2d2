@@ -9,13 +9,15 @@ call local_dev_options.bat
 
 echo ####################### Copy to target Ksp dir #######################
 set DEST_PATH="%KSP2_LOCATION%\BepInEx\plugins\%PROJECT_NAME%\"
+
+
 echo dest path is : %DEST_PATH%
 
 @REM rd /s/q %DEST_PATH%
 if not exist %DEST_PATH% mkdir %DEST_PATH%
 
 @REM dir %SOURCE_DIR%
-@REM dir %DEST_PATH%
+@REM dir %DEST_PATH% 
 
 xcopy /Y /s /d %SOURCE_DIR% %DEST_PATH%
 

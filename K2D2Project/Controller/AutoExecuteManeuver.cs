@@ -63,12 +63,10 @@ public class ExecuteSettings
         {
             start_before = UI_Tools.FloatSliderTxt("Start before T0", start_before, 0, 10, "s");
         }
-
     }
 
     public void warp_ui()
     {
-
         auto_warp = UI_Tools.Toggle(auto_warp, "Auto Warp", "warp time before burn");
         if (auto_warp)
             WarpToSettings.onGUI();

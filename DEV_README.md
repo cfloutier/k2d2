@@ -37,7 +37,6 @@ the Build use a single post process intruction that call the batches/post_build.
 
 this will call the make_zip.bat, it prepares the release version in the output/be creating a zip at the root of the 
 
-
 # Build
 
 I build using VisualStudio 2022. But It could be fine with older version

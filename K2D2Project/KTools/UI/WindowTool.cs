@@ -1,33 +1,70 @@
+using K2D2;
 using UnityEngine;
 
 namespace KTools.UI
 {
     public class WindowTool
     {
+
+        static float last_ui_size = -1;
         /// <summary>
         ///  checks if the window is in screen
         /// </summary>
         /// <param name="window_frame"></param>
         public static void check_window_pos(ref Rect window_frame)
         {
-            if (window_frame.xMax > Screen.width)
+            float ui_size = K2D2Settings.ui_size;
+
+            if (last_ui_size == -1)
+                last_ui_size = ui_size;
+
+            if (last_ui_size != ui_size)
             {
-                var dx = Screen.width - window_frame.xMax;
-                window_frame.x += dx;
+                float last_x_pos = window_frame.x * last_ui_size;
+                float new_x_pos = window_frame.x * ui_size;
+                float delta_x = last_x_pos - new_x_pos;
+                window_frame.x = window_frame.x + delta_x;
+
+                float last_y_pos = window_frame.y * last_ui_size;
+                float new_y_pos = window_frame.y * ui_size;
+                float delta_y = last_y_pos - new_y_pos;
+                window_frame.y = window_frame.y + delta_y;
+
+                last_ui_size = ui_size;
             }
-            if (window_frame.yMax > Screen.height)
+
+
+
+            Rect scaled = new Rect(window_frame.x * ui_size,
+                                    window_frame.y * ui_size, 
+                                    window_frame.width * ui_size, 
+                                    window_frame.height * ui_size);
+
+
+            
+            if (scaled.xMax > Screen.width)
             {
-                var dy = Screen.height - window_frame.yMax;
-                window_frame.y += dy;
+                var dx = Screen.width - scaled.xMax;
+                scaled.x += dx;
             }
-            if (window_frame.xMin < 0)
+            if (scaled.yMax > Screen.height)
             {
-                window_frame.x = 0;
+                var dy = Screen.height - scaled.yMax;
+                scaled.y += dy;
             }
-            if (window_frame.yMin < 0)
+            if (scaled.xMin < 0)
             {
-                window_frame.y = 0;
+                scaled.x = 0;
             }
+            if (scaled.yMin < 0)
+            {
+                scaled.y = 0;
+            }
+
+            window_frame.x = scaled.x/ ui_size;
+            window_frame.y = scaled.y / ui_size;
+            window_frame.width = scaled.width / ui_size;
+            window_frame.height = scaled.height / ui_size;
         }
 
         /// <summary>
