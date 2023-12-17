@@ -1,9 +1,7 @@
 # v0.11 (next)
 
-* [x] add a resize option using Matrix trick
-* [ ] correct the lift ui settings
-
-----------
+* [x] added a resize option using Matrix trick
+---------
 * [ ] autostage during at least "node ex" and "lift" 
 
 # v0.10.1

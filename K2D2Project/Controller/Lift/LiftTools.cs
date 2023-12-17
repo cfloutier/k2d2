@@ -142,11 +142,11 @@ public class LiftAscentPath
         {
             Rect r = GUILayoutUtility.GetLastRect();
 
-            r.xMin += KBaseStyle.box.padding.left;
-            r.yMin += KBaseStyle.box.padding.top;
+            r.xMin += KBaseStyle.box.padding.left ; 
+            r.yMin += KBaseStyle.box.padding.top ;
 
-            r.xMax -= KBaseStyle.box.padding.right;
-            r.yMax -= KBaseStyle.box.padding.bottom;
+            r.xMax -= KBaseStyle.box.padding.right ;
+            r.yMax -= KBaseStyle.box.padding.bottom ;
 
             float scale = (float)(lift_settings.destination_Ap_km / r.height);
 
@@ -194,8 +194,8 @@ public class LiftAscentPath
 
     private void DrawLines(Rect r, float scaleY, float current_altitude_km)
     {
-        var p1 = new Vector2(r.xMin, 0);
-        var p2 = new Vector2(r.xMax, 0);
+        var p1 = new Vector2(r.xMin , 0);
+        var p2 = new Vector2(r.xMax , 0);
 
         p1.y = p2.y = r.yMax - lift_settings.start_altitude_km / scaleY;
         Drawing.DrawLine(p1, p2, Color.gray, 2, true);

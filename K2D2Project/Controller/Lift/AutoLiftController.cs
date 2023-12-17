@@ -98,6 +98,7 @@ public class AutoLiftController : ComplexControler
 
     float current_altitude_km = 0;
     float ap_km = 0;
+    bool show_profile = false;
 
     void computeValues()
     {
@@ -130,11 +131,18 @@ public class AutoLiftController : ComplexControler
         }
     }
 
+
+
     public override void onGUI()
     {
         UI_Tools.Title("Lift Pilot");
 
         if (K2D2_Plugin.Instance.settings_visible)
+        {
+            K2D2Settings.onGUI();
+        }
+
+        if (show_profile)
         {
             lift_settings.destination_Ap_km = UI_Fields.IntFieldLine("lift.destination_Ap_km", "Ap Altitude", lift_settings.destination_Ap_km, 0, Int32.MaxValue, "km");
 
@@ -157,9 +165,9 @@ public class AutoLiftController : ComplexControler
             lift_settings.heading = UI_Tools.HeadingControl("lift.heading", lift_settings.heading);
 
             GUILayout.BeginHorizontal();
-            if (UI_Tools.miniButton("Close Settings"))
+            if (UI_Tools.miniButton("Hide"))
             {
-                K2D2_Plugin.Instance.settings_visible = false;
+                show_profile = false;
             }
 
             GUILayout.EndHorizontal();
@@ -167,9 +175,9 @@ public class AutoLiftController : ComplexControler
         else
         {
             GUILayout.BeginHorizontal();
-            if (UI_Tools.miniButton("Open Settings"))
+            if (UI_Tools.miniButton("Show Profile"))
             {
-                K2D2_Plugin.Instance.settings_visible = true;
+                show_profile = true;
             }
 
             GUILayout.EndHorizontal();

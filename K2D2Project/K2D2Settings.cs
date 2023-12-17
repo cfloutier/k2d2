@@ -43,24 +43,34 @@ public class K2D2Settings
     public static void onGUI()
     {
         GUILayout.BeginHorizontal();
+ 
+        // VERSION
+        UI_Tools.Console($"K2D2 v{K2D2_Plugin.ModVer}");
+        GUILayout.FlexibleSpace();
+        K2D2Settings.debug_mode = UI_Tools.miniToggle(K2D2Settings.debug_mode, "DBG MODE", "Debug mode open\nWIP features and verbose informations.");
+        GUILayout.EndHorizontal();
+
+        GUILayout.BeginHorizontal();
+        UI_Tools.Label("UI Size");
+        // does not work with decimals
+        //if (UI_Tools.SmallButton("0.75"))
+        //    ui_size = 0.75f;
+        if (UI_Tools.SmallButton("x1"))
+            ui_size = 1f;
+        //if (UI_Tools.SmallButton("1.5"))
+        //    ui_size = 1.5f;
+        if (UI_Tools.SmallButton("x2"))
+            ui_size = 2f;
+        if (UI_Tools.SmallButton("x4"))
+            ui_size = 4f;
+        GUILayout.EndHorizontal();
+
         if (UI_Tools.miniButton("Close Settings"))
         {
             K2D2_Plugin.Instance.settings_visible = false;
         }
 
-        GUILayout.FlexibleSpace();
-        // VERSION
-        UI_Tools.Console($"v{K2D2_Plugin.ModVer}");
-        GUILayout.FlexibleSpace();
-        K2D2Settings.debug_mode = UI_Tools.miniToggle(K2D2Settings.debug_mode, "DBG MODE", "Debug mode open\nWIP features and verbose informations.");
-        GUILayout.EndHorizontal();
         UI_Tools.Separator();
-
-        GUILayout.BeginHorizontal();
-        UI_Tools.Label("UI Size x");
-        ui_size = UI_Fields.FloatMinMaxField("ui_size", ui_size, 0.5f, 4, 2, 50);
-        GUILayout.FlexibleSpace();
-        GUILayout.EndHorizontal();
     }
 }
 
