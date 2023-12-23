@@ -1,3 +1,4 @@
+using K2D2.Controller;
 using KTools;
 using UnityEngine;
 namespace KTools.UI;
@@ -152,7 +153,9 @@ public class TabsUI
         }
 
         KBaseSettings.main_tab_index = result;
-
-        current_page.onGUI();
+        if (StagingController.Instance.is_staging)
+            StagingController.Instance.stagingUI();
+        else
+            current_page.onGUI();
     }
 }

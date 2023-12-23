@@ -95,8 +95,6 @@ public class AutoExecuteManeuver : ComplexController
 
     public SingleExecuteController current_executor = new SingleExecuteController();
 
-    StagingController stagingController = new StagingController();
-
     public AutoExecuteManeuver()
     {
         Instance = this;
@@ -241,12 +239,6 @@ public class AutoExecuteManeuver : ComplexController
         }
 
         isRunning = UI_Tools.BigToggleButton(isRunning, "Run", "Stop");
-        stagingController.onGUI();
-        // if (stagingController.is_staging)
-        // {
-        //     stagingController.onGUI();
-        //     return;
-        // }
 
         current_executor.onGUI();
         if (!K2D2Settings.auto_next)
@@ -347,7 +339,7 @@ public class AutoExecuteManeuver : ComplexController
 
         if (accordion.Count == 0)
         {
-            accordion.addChapter("Staging", StagingSettings.settings_UI);
+            // accordion.addChapter("Staging", StagingSettings.settings_UI);
             accordion.addChapter("Execute", execute_settings.settings_UI);
             accordion.addChapter("Turn", TurnToSettings.onGUI);
             accordion.addChapter("Warp", execute_settings.warp_ui);

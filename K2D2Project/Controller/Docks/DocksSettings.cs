@@ -41,7 +41,9 @@ public class DocksSettings
 {
     public bool show_gizmos
     {
-        get => KBaseSettings.sfile.GetBool("docks.show_gizmos", false);
+        // disabled 
+        get => false;
+        //KBaseSettings.sfile.GetBool("docks.show_gizmos", false);
         set
         {
             KBaseSettings.sfile.SetBool("docks.show_gizmos", value);

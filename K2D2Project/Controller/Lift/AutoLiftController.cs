@@ -15,7 +15,6 @@ public class AutoLiftController : ComplexController
     LiftAscentPath ascentPath = null;
 
     KSPVessel current_vessel;
-    StagingController stagingController = new StagingController();
 
     float wanted_elevation;
 
@@ -118,10 +117,7 @@ public class AutoLiftController : ComplexController
         // if (!isRunning && !ui_visible) return;
         if (current_vessel == null) return;
 
-        stagingController.CheckStaging();
-
-
-        if (ui_visible)
+        if (isRunning || ui_visible)
             computeValues();
         
         if (!isRunning)
@@ -145,11 +141,8 @@ public class AutoLiftController : ComplexController
         if (K2D2_Plugin.Instance.settings_visible)
         {
             K2D2Settings.onGUI();
-            StagingSettings.settings_UI();
             return;
         }
-
-        stagingController.onGUI();
 
         if (show_profile)
         {

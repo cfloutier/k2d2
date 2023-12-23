@@ -44,7 +44,9 @@ public class MainUI
             tabs.pages.Add(AttitudeController.Instance);
             tabs.pages.Add(WarpController.Instance);
             // tabs.pages.Add(TestObjects.Instance);
-            tabs.pages.Add(DockingAssist.Instance);
+            // Disablled (waiting to be fixed)
+            // tabs.pages.Add(DockingAssist.Instance);
+            tabs.pages.Add(StagingController.Instance);
 
             // tabs.pages.Add(new FindSecrets());
 

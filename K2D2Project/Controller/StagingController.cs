@@ -54,8 +54,15 @@ public class StagingSettings
 /// </summary>
 public class StagingController : BaseController
 {
-    public static K2D2_Plugin Instance { get; private set; }
+    public static StagingController Instance { get; private set; }
 
+    public StagingController()  
+    {
+        Instance = this;
+        debug_mode_only = false;
+        name = "Staging";
+    } 
+    
     public ManualLogSource logger = BepInEx.Logging.Logger.CreateLogSource("K2D2.StagingController");
 
     public bool is_staging = false;
@@ -92,7 +99,7 @@ public class StagingController : BaseController
     {
         var current_vessel = KSPVessel.current;
 
-        logger.LogMessage("CalculateVesselStageFuel");
+        // logger.LogMessage("CalculateVesselStageFuel");
 
         Full_Stage_Percentage = -1.0;
         Min_Stage_Percentage = -1.0;
@@ -165,19 +172,23 @@ public class StagingController : BaseController
             }
             Full_Stage_Percentage *= 100.0;
             Min_Stage_Percentage *= 100.0; 
-            logger.LogMessage($"CalculateVesselStageFuel {Min_Stage_Percentage:n2}%");
+            // logger.LogMessage($"CalculateVesselStageFuel {Min_Stage_Percentage:n2}%");
         }
     }
 
 
     public bool CheckStaging()
     {
-        // return true if staging in progress
-        if (!StagingSettings.auto_staging)
-            return false;
-
+        // always compute 
         CalculateVesselStageFuel();
 
+        // return true if staging in progress
+        if (!StagingSettings.auto_staging)
+        {
+            is_staging = false;
+            return false;
+        }
+           
         if (is_staging)
         {
            // check time
@@ -206,25 +217,49 @@ public class StagingController : BaseController
     }
 
     public override void onGUI()
-    {
-        //if (!is_staging)
-        //    return;
-
-        // UI_Tools.Title("--- Staging ---");
-
-        // var StageFuelPercentage
-        UI_Tools.Console($"Total : {Full_Stage_Percentage:n2}%");
-        UI_Tools.Console($"Min : {Min_Stage_Percentage:n2}%");
-        if (Min_Stage_Percentage == 0)
+    {  
+        if (K2D2_Plugin.Instance.settings_visible)
         {
-            UI_Tools.Warning($"Stage NOW !");
+            K2D2Settings.onGUI();
+            StagingSettings.settings_UI();
+            return;
         }
+
+        UI_Tools.Title("Staging");
+
+        if (StagingSettings.auto_staging)
+            UI_Tools.Label($"Auto Staging is On. (timer: {StagingSettings.freeze_duration}s) ");
+
+        if (Full_Stage_Percentage < 0)
+        {
+            UI_Tools.Console($"No Active Stage.");
+        }
+        else
+        {
+            // var StageFuelPercentage
+            UI_Tools.Console($"Total Fuel remaning : {Full_Stage_Percentage:n2}%");
+            UI_Tools.Console($"Next Empty Tank : {Min_Stage_Percentage:n2}%");
+            if (Min_Stage_Percentage == 0)
+            {
+                UI_Tools.Warning($"Stage NOW !");
+            }
+        }
+    }
+
+    public void stagingUI()
+    {
+        if (!is_staging)
+            return;
+
+        UI_Tools.Title("Staging in progress");
 
         if (end_time > 0 )
         {   
             var remaining = end_time - current_time; 
             UI_Tools.Console($"Timer : {remaining:n2} s");
         }
+
+        return;
     }
 
 

@@ -1,8 +1,14 @@
-# v0.11 (next)
+# v0.11
 
-* [x] added a resize option using Matrix trick
----------
-* [ ] autostage during at least "node ex" and "lift" 
+* Rebuild with KSP v0.2
+* Added a resize option using Matrix trick. It can be blurry but it's a quick solution for large screen.
+* Added Autostaging tool ! 
+  The little S button in the toolbar can switch it on/off quickly.
+  The Stagin tab is only used for information on next stage. I'll try to add a little timer.
+  Will Active Next Stage when at least one tank is empty in the current stage.
+  Added a delay to avoid rotation during Lift pilot. 1-2 seconds are good values. 
+  It can avoid a crash if a tank hit the vessel during staging.
+  AutoStage is a global feature, meaning it is active even if no K2D2 pilot is running. Use it with causion then
 
 # v0.10.1
 * fixes by @schlosrat to mtach patch kerbal 2 v1.5.0 (thanks)

@@ -61,12 +61,9 @@ public class K2D2_Plugin : BaseSpaceWarpPlugin
 {
     public static K2D2_Plugin Instance { get; private set; }
 
-
     public const string ModGuid = MyPluginInfo.PLUGIN_GUID;
     public const string ModName = MyPluginInfo.PLUGIN_NAME;
     public const string ModVer = MyPluginInfo.PLUGIN_VERSION;
-
-
     #region Fields
 
     // Main.
@@ -154,6 +151,9 @@ public class K2D2_Plugin : BaseSpaceWarpPlugin
         RegisterMessages();
         // new TestObjects();
 
+        // create staging 
+        new StagingController();
+
         // Add Controllers that inherit from BaseController here:
         controllerManager.AddController(new SimpleManeuverController(logger, ref _maneuverProvider));
         controllerManager.AddController(new AutoExecuteManeuver());
@@ -166,8 +166,6 @@ public class K2D2_Plugin : BaseSpaceWarpPlugin
         controllerManager.AddController(new DockingAssist());
 
         ShapeDrawer.Instance.shapes.Add(DockingAssist.Instance.drawShapes);
-
-        // controllerManager.AddController();
 
         main_ui = new MainUI();
 
@@ -250,9 +248,13 @@ public class K2D2_Plugin : BaseSpaceWarpPlugin
             // Update Models
             current_vessel.Update();
             _maneuverProvider.Update();
+            StagingController.Instance.Update();
 
-            // Update Controllers
-            controllerManager.UpdateControllers();
+            if (!StagingController.Instance.is_staging)
+            {
+                // Update Controllers only if staging is not in progress
+                controllerManager.UpdateControllers();
+            }   
 
             UI_Tools.OnUpdate();
         }
@@ -320,7 +322,7 @@ public class K2D2_Plugin : BaseSpaceWarpPlugin
                 GUIUtility.GetControlID(FocusType.Passive),
                 windowRect,
                 FillWindow,
-                "   K2-D2 ???",
+                "   K2-D2",
                 GUILayout.Height(0),
                 GUILayout.Width(350));
 
