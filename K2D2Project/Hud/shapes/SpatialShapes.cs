@@ -7,32 +7,38 @@ internal class SpatialShapes
 {
     public static void DrawLine(Vector3 start, Vector3 end, Color color, float thickness, DashStyle dashStyle = null)
     {
-        var blendMode = ShapesBlendMode.Opaque;
-        var geometry = LineGeometry.Volumetric3D;
-        var endCaps = LineEndCap.Square;
-        var thicknessSpace = ThicknessSpace.Meters;
+        Draw.BlendMode = ShapesBlendMode.Opaque;
+        Draw.LineGeometry = LineGeometry.Volumetric3D;;
+        Draw.LineEndCaps = LineEndCap.Square;
+        Draw.LineThicknessSpace = ThicknessSpace.Meters;
+        if (dashStyle != null)
+            Draw.LineDashStyle = dashStyle;
+        else
+            Draw.LineDashStyle = DashStyle.DefaultDashStyleLine;
+        Draw.LineDashStyle = dashStyle;
 
-        Draw.Line(blendMode, geometry, endCaps, thicknessSpace, start, end, color, color, thickness, dashStyle);
+        Draw.Line(start, end, thickness, color);
     }
 
     public static void DrawCone(Vector3d pos, Vector3d normal, float radius, float length, Color color)
     {
-        var blendMode = ShapesBlendMode.Opaque;
-        var sizeSpace = ThicknessSpace.Meters;
+        Draw.BlendMode = ShapesBlendMode.Opaque;
+        Draw.ConeSizeSpace = ThicknessSpace.Meters;
+
         var rot = Quaternion.LookRotation(normal);
         var fillCap = true;
 
-        Draw.Cone(blendMode, sizeSpace, pos, rot, radius, length, fillCap, color);
+        Draw.Cone(pos, rot, radius, length, fillCap, color);
     }
 
     public static void DrawTorus(Vector3d pos, Vector3d normal, float radius, float thickness, Color color) 
     {
-        var blendMode = ShapesBlendMode.Opaque;
-        var spaceRadius = ThicknessSpace.Meters;
-        var spaceThickness = ThicknessSpace.Meters;
         var rot = Quaternion.LookRotation(normal);
+        Draw.BlendMode = ShapesBlendMode.Opaque;
+        Draw.TorusRadiusSpace = ThicknessSpace.Meters;
+        Draw.TorusThicknessSpace = ThicknessSpace.Meters;
         
-        Draw.Torus(blendMode, spaceRadius, spaceThickness, pos, rot, radius, thickness, color);
+        Draw.Torus( pos, rot, radius, thickness, color);
     }
 
     // XX can not draw a partial Torus only a partial Disc

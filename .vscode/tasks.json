@@ -9,7 +9,8 @@
             "type": "shell",
             "args": [
                 "build",
-                "-c", "Release",
+                "-c",
+                "Release",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -28,7 +29,8 @@
             "type": "shell",
             "args": [
                 "build",
-                "-c", "Debug",
+                "-c",
+                "Debug",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],

@@ -71,11 +71,9 @@ public class ExecuteSettings
         if (auto_warp)
             WarpToSettings.onGUI();
     }
-
 }
 
-
-public class AutoExecuteManeuver : ComplexControler
+public class AutoExecuteManeuver : ComplexController
 {
     public ManualLogSource logger = BepInEx.Logging.Logger.CreateLogSource("K2D2.LandingController");
 
@@ -96,6 +94,8 @@ public class AutoExecuteManeuver : ComplexControler
     KSPVessel current_vessel;
 
     public SingleExecuteController current_executor = new SingleExecuteController();
+
+    StagingController stagingController = new StagingController();
 
     public AutoExecuteManeuver()
     {
@@ -241,6 +241,12 @@ public class AutoExecuteManeuver : ComplexControler
         }
 
         isRunning = UI_Tools.BigToggleButton(isRunning, "Run", "Stop");
+        stagingController.onGUI();
+        // if (stagingController.is_staging)
+        // {
+        //     stagingController.onGUI();
+        //     return;
+        // }
 
         current_executor.onGUI();
         if (!K2D2Settings.auto_next)
@@ -297,9 +303,10 @@ public class AutoExecuteManeuver : ComplexControler
     {
         checkManeuver();
         base.Update();
-
+        
         if (isRunning)
         {
+            //stagingController.CheckStaging();
             double UT = 0;
             switch (execute_settings.start_mode)
             {
@@ -340,6 +347,7 @@ public class AutoExecuteManeuver : ComplexControler
 
         if (accordion.Count == 0)
         {
+            accordion.addChapter("Staging", StagingSettings.settings_UI);
             accordion.addChapter("Execute", execute_settings.settings_UI);
             accordion.addChapter("Turn", TurnToSettings.onGUI);
             accordion.addChapter("Warp", execute_settings.warp_ui);

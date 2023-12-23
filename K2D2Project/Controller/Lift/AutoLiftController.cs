@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace K2D2.Controller;
 
-public class AutoLiftController : ComplexControler
+public class AutoLiftController : ComplexController
 {
     public static AutoLiftController Instance { get; set; }
 
@@ -15,6 +15,7 @@ public class AutoLiftController : ComplexControler
     LiftAscentPath ascentPath = null;
 
     KSPVessel current_vessel;
+    StagingController stagingController = new StagingController();
 
     float wanted_elevation;
 
@@ -114,11 +115,15 @@ public class AutoLiftController : ComplexControler
 
     public override void Update()
     {
-        if (!isRunning && !ui_visible) return;
+        // if (!isRunning && !ui_visible) return;
         if (current_vessel == null) return;
 
-        computeValues();
+        stagingController.CheckStaging();
 
+
+        if (ui_visible)
+            computeValues();
+        
         if (!isRunning)
             return;
 
@@ -140,7 +145,11 @@ public class AutoLiftController : ComplexControler
         if (K2D2_Plugin.Instance.settings_visible)
         {
             K2D2Settings.onGUI();
+            StagingSettings.settings_UI();
+            return;
         }
+
+        stagingController.onGUI();
 
         if (show_profile)
         {

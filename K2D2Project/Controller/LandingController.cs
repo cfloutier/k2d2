@@ -147,7 +147,7 @@ public class LandingSettings
     }
 }
 
-public class LandingController : ComplexControler
+public class LandingController : ComplexController
 {
     public ManualLogSource logger = BepInEx.Logging.Logger.CreateLogSource("K2D2.LandingController");
 

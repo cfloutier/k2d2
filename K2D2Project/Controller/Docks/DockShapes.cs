@@ -10,6 +10,7 @@ using K2D2.Controller.Docks;
 using KSP.Iteration.UI.Binding;
 using static KSP.Api.UIDataPropertyStrings.View.Vessel.Stages;
 using RTG;
+using UnityEngine.Rendering;
 
 public class DockShape
 {
@@ -44,10 +45,16 @@ public class DockShape
 
         float radius = (float) (part.PartData.PartSizeDiameter/2);;
 
+        Draw.BlendMode = blendMode;
+        Draw.LineThicknessSpace = ThicknessSpace.Pixels;
+        Draw.RingThicknessSpace = ThicknessSpace.Meters;
+        Draw.LineGeometry = LineGeometry.Volumetric3D;
+        Draw.LineEndCaps = LineEndCap.Round;
+        
         if (torus)
-            Draw.Torus(blendMode, ThicknessSpace.Meters, ThicknessSpace.Pixels, localStart, rot, radius, settings.thickness_circle, color);
+            Draw.Torus( localStart, rot, radius, settings.thickness_circle, color);
         if (line)
-            Draw.Line(blendMode, LineGeometry.Volumetric3D, LineEndCap.Round, ThicknessSpace.Pixels, localStart, localEnd, color, color, settings.thickness_line);
+            Draw.Line(  localStart, localEnd, settings.thickness_line, color);
     }
 
     public void drawAxis(PartComponent part, VesselComponent main_vessel)
@@ -65,8 +72,16 @@ public class DockShape
 
         var rot = Quaternion.LookRotation(Y_Dir);
 
+        Draw.BlendMode = blendMode;
+        Draw.LineThicknessSpace = ThicknessSpace.Pixels;
+        Draw.RingThicknessSpace = ThicknessSpace.Meters;
+        Draw.LineGeometry = LineGeometry.Volumetric3D;
+        Draw.LineEndCaps = LineEndCap.Round;
+
+
+        
         // center
-        Draw.Torus(blendMode, ThicknessSpace.Pixels, ThicknessSpace.Pixels, localStart, rot, 10, settings.thickness_line / 0.8f, Color.white);
+        Draw.Torus( localStart, rot, 10, settings.thickness_line / 0.8f, Color.white);
 
         DrawLocalArrow(localStart, localStart + Y_Dir* settings.length_line, Color.yellow);
         DrawLocalArrow(localStart, localStart + X_Dir* settings.length_line, Color.blue);
@@ -77,10 +92,8 @@ public class DockShape
     {
         Quaternion localDirection = Quaternion.LookRotation(localEnd - localStart);
 
-        Draw.Line(blendMode, LineGeometry.Volumetric3D, LineEndCap.Round, ThicknessSpace.Pixels,
-                localStart, localEnd, color, color, settings.thickness_line);
-        Draw.Cone(blendMode, ThicknessSpace.Pixels,
-                localEnd, localDirection, settings.thickness_line*3, settings.thickness_line * 3, true, color);
+        Draw.Line(localStart, localEnd, settings.thickness_line, color);
+        Draw.Cone(localEnd, localDirection, settings.thickness_line*3, settings.thickness_line * 3, true, color);
     }
 
 
@@ -120,13 +133,16 @@ public class DockShape
     {
         var local_frame = main_vessel.transform.coordinateSystem;
 
+        Draw.BlendMode = blendMode;
+        Draw.LineThicknessSpace = ThicknessSpace.Pixels;
+        Draw.LineGeometry = LineGeometry.Volumetric3D;
+        Draw.LineEndCaps = LineEndCap.Round;
 
         Vector3 localStart = local_frame.ToLocalPosition(start);
         Vector3 localEnd = local_frame.ToLocalPosition(end);
         color.a = settings.sfx_blur;
 
-        Draw.Line(blendMode, LineGeometry.Volumetric3D, LineEndCap.Round, ThicknessSpace.Pixels,
-                localStart, localEnd, color, color, settings.thickness_line);
+        Draw.Line(localStart, localEnd, settings.thickness_line, color);
     }
 
 

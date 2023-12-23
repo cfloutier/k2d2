@@ -34,7 +34,7 @@ class AttitudeSettings
     }
 }
 
-public class AttitudeController : ComplexControler
+public class AttitudeController : ComplexController
 {
     public static AttitudeController Instance { get; set; }
 

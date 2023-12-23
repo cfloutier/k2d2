@@ -18,6 +18,8 @@ availables (progress mean coding progress before final version):
 
 - Warp  : warp to SOI changes  (progress 1 /5)
 
+- Dock : Auto dock (progress 2/5)
+
 The UI can be opened using `Alt-O` or using AppBar.
 
 ----------------

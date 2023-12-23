@@ -347,6 +347,7 @@ public class K2D2_Plugin : BaseSpaceWarpPlugin
 
         // settings button
         settings_visible = TopButtons.Toggle(settings_visible, KBaseStyle.gear);
+        StagingSettings.auto_staging = TopButtons.Toggle(StagingSettings.auto_staging, "S");
 
         if (K2D2Settings.debug_mode)
         {

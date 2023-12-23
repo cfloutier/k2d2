@@ -83,7 +83,7 @@ public class DroneSettings
     }
 }
 
-public class DroneController : ComplexControler
+public class DroneController : ComplexController
 {
     public static DroneController Instance { get; set; }
 

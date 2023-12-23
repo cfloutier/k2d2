@@ -61,7 +61,7 @@ namespace KTools.Shapes
                 return;
             }
 
-            DrawCommand.OnPostRenderBuiltInRP(cam);
+            // DrawCommand.OnPostRenderBuiltInRP(cam);
         }
 
         public bool can_draw = false;

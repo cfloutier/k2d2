@@ -15,6 +15,9 @@
         <RootNamespace>K2D2</RootNamespace>
         <ModId Condition="'$(ModId)'==''">K2D2</ModId>
     </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+      <DebugType>none</DebugType>
+    </PropertyGroup>
     <ItemGroup>
         <PackageReference Include="BepInEx.Analyzers" Version="1.*" PrivateAssets="all" />
         <PackageReference Include="BepInEx.AssemblyPublicizer.MSBuild" Version="0.4.0" PrivateAssets="all" />
@@ -24,7 +27,7 @@
         <PackageReference Include="SpaceWarp" Version="1.5.2" />
         <PackageReference Include="UnityEngine.Modules" Version="2022.3.5" IncludeAssets="compile" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
-        <PackageReference Include="KerbalSpaceProgram2.GameLibs" Version="0.1.5" PrivateAssets="all" />
+        <PackageReference Include="KerbalSpaceProgram2.GameLibs" Version="0.2.0" PrivateAssets="all" />
     </ItemGroup>
     <ItemGroup>
         <Folder Include="Properties\" />

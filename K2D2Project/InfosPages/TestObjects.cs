@@ -9,7 +9,7 @@ using KSP.Sim;
 
 namespace K2D2.InfosPages;
 
-class TestObjects : ComplexControler
+class TestObjects : ComplexController
 {
     public static TestObjects Instance { get; set; }
 
@@ -88,8 +88,15 @@ class TestObjects : ComplexControler
         Color color = Color.red;
         color.a = alpha;
 
-        Draw.Torus(blendMode, ThicknessSpace.Meters, ThicknessSpace.Meters, localStart, rot, radius, thickness, color);
-        Draw.Line(blendMode, LineGeometry.Volumetric3D, LineEndCap.Round, ThicknessSpace.Meters, localStart, localEnd, color, color, thickness);
+        Draw.BlendMode = blendMode;
+        Draw.TorusRadiusSpace = ThicknessSpace.Meters;
+        Draw.TorusThicknessSpace = ThicknessSpace.Meters;
+        Draw.LineGeometry = LineGeometry.Volumetric3D;
+        Draw.LineEndCaps = LineEndCap.Round;
+        Draw.LineThicknessSpace = ThicknessSpace.Meters;
+
+        Draw.Torus(localStart, rot, radius, thickness, color);
+        Draw.Line(localStart, localEnd, thickness, color);
 
         //SpatialShapes.DrawTorus(forwardPoint, direction, radius, thickness, Color.cyan);
     }

@@ -7,11 +7,11 @@ using KSP.Messages;
 namespace K2D2.Controller
 {
     // a controller that have some sub controler
-    public class ComplexControler : BaseController
+    public class ComplexController : BaseController
     {
         public List<BaseController> sub_contollers = new List<BaseController>();
 
-        public void setSingleSubController(ComplexControler single_sub)
+        public void setSingleSubController(ComplexController single_sub)
         {
             sub_contollers.Clear();
             if (single_sub != null)

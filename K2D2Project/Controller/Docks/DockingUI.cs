@@ -236,7 +236,7 @@ class DockingUI
             if (UI_Tools.Button(vessel.Name))
             {
                 pilot.current_vessel.VesselComponent.SetTargetByID(vessel.GlobalId);
-                pilot.current_vessel.VesselComponent.TargetObject = vessel.SimulationObject;
+                //pilot.current_vessel.VesselComponent.TargetObject = vessel.SimulationObject;
                 ui_mode = UI_Mode.Main;
             }
         }
