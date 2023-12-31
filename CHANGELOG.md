@@ -9,6 +9,8 @@
   Added a delay to avoid rotation during Lift pilot. 1-2 seconds are good values. 
   It can avoid a crash if a tank hit the vessel during staging.
   AutoStage is a global feature, meaning it is active even if no K2D2 pilot is running. Use it with causion then
+* Dock has been removed because of rendering issues of the "Augmented Reallity" lines
+
 
 # v0.10.1
 * fixes by @schlosrat to mtach patch kerbal 2 v1.5.0 (thanks)
