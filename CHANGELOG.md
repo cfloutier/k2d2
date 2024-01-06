@@ -1,3 +1,9 @@
+# v0.11.3
+
+* AutoStaging is off by default
+
+
+
 # v0.11.2
 
 * Correction of the Staging tool : working with asparagus models. (I hope)

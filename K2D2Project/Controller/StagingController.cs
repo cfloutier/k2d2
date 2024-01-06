@@ -18,7 +18,7 @@ public class StagingSettings
 {
     public static bool auto_staging
     {
-        get => KBaseSettings.sfile.GetBool("staging.auto_staging", true);
+        get => KBaseSettings.sfile.GetBool("staging.auto_staging", false);
         set
         {
             KBaseSettings.sfile.SetBool("staging.auto_staging", value);
