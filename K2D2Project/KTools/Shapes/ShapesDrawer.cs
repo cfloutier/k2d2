@@ -7,6 +7,7 @@ using UnityEngine.Rendering;
 using KSP.Game;
 using KSP.Messages;
 using K2D2;
+using System.Diagnostics.Tracing;
 
 namespace KTools.Shapes
 {
@@ -60,6 +61,8 @@ namespace KTools.Shapes
             {
                 return;
             }
+
+            ReflexionTool.callFunction( typeof(DrawCommand), null, "OnPostRenderBuiltInRP", [cam]);
 
             // DrawCommand.OnPostRenderBuiltInRP(cam);
         }

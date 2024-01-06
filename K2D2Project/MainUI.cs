@@ -9,8 +9,6 @@ using KTools.UI;
 
 namespace K2D2;
 
-
-
 public class MainUI
 {
     public ManualLogSource logger = BepInEx.Logging.Logger.CreateLogSource("K2D2.MainUI");
@@ -42,10 +40,10 @@ public class MainUI
 
             tabs.pages.Add(AutoLiftController.Instance);
             tabs.pages.Add(AttitudeController.Instance);
-            tabs.pages.Add(WarpController.Instance);
+            // tabs.pages.Add(WarpController.Instance);
             // tabs.pages.Add(TestObjects.Instance);
-            // Disablled (waiting to be fixed)
-            // tabs.pages.Add(DockingAssist.Instance);
+
+            tabs.pages.Add(DockingAssist.Instance);
             tabs.pages.Add(StagingController.Instance);
 
             // tabs.pages.Add(new FindSecrets());

@@ -7,6 +7,17 @@ namespace K2D2.Controller;
 
 class WarpToSettings
 {
+    // compute max warp index depending on remaining time
+    public static int compute_wanted_warp_index(double time_left)
+    {
+        if (time_left < 0)
+            return 0;
+
+        double time_ratio = 1 + time_left / (10 - warp_speed);
+
+        // adding 1 because x1 during the warp mode is a lame
+        return TimeWarpTools.ratioToIndex((float)time_ratio);
+    }
 
     public static float warp_speed
     {
@@ -153,7 +164,7 @@ public class WarpTo : ExecuteController
             }
         }
 
-        wanted_warp_index = compute_wanted_warp_index(dt);
+        wanted_warp_index = WarpToSettings.compute_wanted_warp_index(dt);
         // minimum is x4
         if (wanted_warp_index < 2)
             wanted_warp_index = 2;
@@ -180,17 +191,6 @@ public class WarpTo : ExecuteController
         }
     }
 
-
-    int compute_wanted_warp_index(double dt)
-    {
-        if (dt < 0)
-            return 0;
-
-        double time_ratio = 1 + dt / (10 - WarpToSettings.warp_speed);
-
-        // adding 1 because x1 during the warp mode is a lame
-        return TimeWarpTools.ratioToIndex((float)time_ratio);
-    }
 
     public override void onGUI()
     {

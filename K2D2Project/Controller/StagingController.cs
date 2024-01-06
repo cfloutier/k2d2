@@ -11,6 +11,7 @@ using KSP.Sim;
 using KSP.Sim.ResourceSystem;
 namespace K2D2.Controller;
 
+using System.ComponentModel;
 using UnityEngine;
 
 public class StagingSettings
@@ -102,7 +103,7 @@ public class StagingController : BaseController
         // logger.LogMessage("CalculateVesselStageFuel");
 
         Full_Stage_Percentage = -1.0;
-        Min_Stage_Percentage = -1.0;
+        Min_Stage_Percentage = 1.0;
 
         // not staging, check fuel
         vessel_component = current_vessel.VesselComponent;
@@ -131,26 +132,33 @@ public class StagingController : BaseController
             }
             for (int i = 0; i < containedResourceData.Count; i++)
             {
+
+                double StoredUnits = (module.IsPropellantStarved ? 0.0 : Math.Abs(containedResourceData[i].StoredUnits));
+                double CapacityUnits = containedResourceData[i].CapacityUnits;
+
+
                 if (!fuelCapacity.ContainsKey(containedResourceData[i].ResourceID))
                 {
                     ContainedResourceData value = default(ContainedResourceData);
-                    value.CapacityUnits = containedResourceData[i].CapacityUnits;
-                    value.StoredUnits = (module.IsPropellantStarved ? 0.0 : Math.Abs(containedResourceData[i].StoredUnits));
+                    value.CapacityUnits = CapacityUnits;
+                    value.StoredUnits = StoredUnits;
                     fuelCapacity.Add(containedResourceData[i].ResourceID, value);
                 }
                 else
                 {
                     ContainedResourceData value2 = fuelCapacity[containedResourceData[i].ResourceID];
-                    value2.CapacityUnits += containedResourceData[i].CapacityUnits;
-                    value2.StoredUnits += (module.IsPropellantStarved ? 0.0 : Math.Abs(containedResourceData[i].StoredUnits));
+                    value2.CapacityUnits += CapacityUnits;
+                    value2.StoredUnits += StoredUnits;
                     fuelCapacity[containedResourceData[i].ResourceID] = value2;
                 }
+
+                double container_percent = StoredUnits / CapacityUnits;
+                Min_Stage_Percentage = Math.Min(Min_Stage_Percentage, container_percent);
             }
         }
         if (fuelCapacity.Count > 0)
         {
             Full_Stage_Percentage = 0.0;
-            Min_Stage_Percentage = 1;
             double num = 0.0;
             double num2 = 0.0;
 
@@ -171,8 +179,8 @@ public class StagingController : BaseController
                 Full_Stage_Percentage = num2 / num;
             }
             Full_Stage_Percentage *= 100.0;
-            Min_Stage_Percentage *= 100.0; 
-            // logger.LogMessage($"CalculateVesselStageFuel {Min_Stage_Percentage:n2}%");
+            Min_Stage_Percentage *= 100.0;
+           
         }
     }
 

@@ -1,7 +1,13 @@
 reminder for next version : 
 
-* Check why asparagus does not work for autostaging
+
 * Dock back without AR
 * no x1 during node execution (optionnal feature)
-* add a set of options for each tab
+
+* Check why asparagus does not work for autostaging
+
+---------------------
+
+* call Flight Pan to create final node 
+* add a set of options to disable each tab on demand
 

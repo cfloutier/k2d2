@@ -8,7 +8,7 @@
         <AssemblyName>com.github.cfloutier.k2d2</AssemblyName>
         <Product>K2-D2</Product>
         <Description>The KSP astromech, Keybind is ALT+O</Description>
-        <Version>0.11.0</Version>
+        <Version>0.11.2</Version>
         <RestoreAdditionalProjectSources>
             https://nuget.spacewarp.org/v3/index.json
         </RestoreAdditionalProjectSources>

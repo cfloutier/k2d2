@@ -119,8 +119,6 @@ public class BurnManeuver : ExecuteController
     {
         if (maneuver == null) return;
 
-        TimeWarpTools.SetRateIndex(0, false);
-
         if (finished)
             return;
 
@@ -155,6 +153,14 @@ public class BurnManeuver : ExecuteController
             double ut = 0;
 
             Vector velocity_after_maneuver = current_vessel.VesselComponent.Orbiter.ManeuverPlanSolver.GetVelocityAfterFirstManeuver(out ut);
+
+            double dt = ut - GeneralTools.Game.UniverseModel.UniverseTime;
+
+            // allow time warp up to what the auto warp can do.
+            int max_warp_index = WarpToSettings.compute_wanted_warp_index(dt);
+            if (max_warp_index < TimeWarpTools.CurrentRateIndex)
+                TimeWarpTools.SetRateIndex(max_warp_index, false);
+
             var current_vel = current_vessel.VesselComponent.Orbit.GetOrbitalVelocityAtUTZup(ut);
             var delta_speed_vector = velocity_after_maneuver.vector - current_vel;
             sign = Math.Sign(Vector3d.Dot(initial_dir, delta_speed_vector));

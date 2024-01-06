@@ -1,4 +1,13 @@
-# v0.11
+# v0.11.2
+
+* Correction of the Staging tool : working with asparagus models. (I hope)
+* Docking pilot is back without the A.R
+* Time Warp is now allowed during node burn execution. 
+K2D2 is just following the same rules as "Warp Before Node execution". A Max time warp is computed and applied. 
+* fixed an issue when switching to Space Center (errors in logs, thanks to @munix)
+* Warp Tabs has been removed (needed to be fixed)
+
+# v0.11.1
 
 * Rebuild with KSP v0.2
 * Added a resize option using Matrix trick. It can be blurry but it's a quick solution for large screen.
@@ -11,10 +20,8 @@
   AutoStage is a global feature, meaning it is active even if no K2D2 pilot is running. Use it with causion then
 * Dock has been removed because of rendering issues of the "Augmented Reallity" lines
 
-
 # v0.10.1
-* fixes by @schlosrat to mtach patch kerbal 2 v1.5.0 (thanks)
-
+* fixes by @schlosrat to match patch kerbal 2 v1.5.0 (thanks)
 # v0.10.0
 Docking Assistant :
 1. added like "Duna Colonist's HUD" arrows and line to 

@@ -43,7 +43,7 @@ namespace K2D2.KSPService
             _current = this;
             VesselComponent = GetActiveSimVessel();
             VesselVehicle = GetActiveSimVehicle();
-            if (Game.ViewController == null) return;
+            if (Game == null || Game.ViewController == null) return;
             VesselDataProvider = this.Game.ViewController.DataProvider.VesselDataProvider;
             telemetryDataProvider = this.Game.ViewController.DataProvider.TelemetryDataProvider;
         }

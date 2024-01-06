@@ -162,7 +162,7 @@ public class K2D2_Plugin : BaseSpaceWarpPlugin
         controllerManager.AddController(new AttitudeController());
         controllerManager.AddController(new AutoLiftController());
         controllerManager.AddController(new CircleController());
-        controllerManager.AddController(new WarpController());
+        // controllerManager.AddController(new WarpController());
         controllerManager.AddController(new DockingAssist());
 
         ShapeDrawer.Instance.shapes.Add(DockingAssist.Instance.drawShapes);
@@ -239,14 +239,15 @@ public class K2D2_Plugin : BaseSpaceWarpPlugin
         main_ui?.Update();
 
         Debug.developerConsoleVisible = false;
+        // Update Models (even on non valid scenes)
+        current_vessel.Update();
+
         if (ValidScene())
         {
             // Debug.developerConsoleVisible = false;
             if (Input.GetKey(KeyCode.LeftAlt) && Input.GetKeyDown(KeyCode.O))
                 ToggleAppBarButton(!drawUI);
 
-            // Update Models
-            current_vessel.Update();
             _maneuverProvider.Update();
             StagingController.Instance.Update();
 

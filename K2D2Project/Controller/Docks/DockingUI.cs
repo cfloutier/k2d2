@@ -337,7 +337,7 @@ class DockingUI
     public void MainOptionsLine()
     {
         GUILayout.BeginHorizontal();
-        settings.show_gizmos = UI_Tools.SmallToggleButton(settings.show_gizmos, "Show A.R", "Hide A.R");
+        // settings.show_gizmos = UI_Tools.SmallToggleButton(settings.show_gizmos, "Show A.R", "Hide A.R");
 
         if (pilot.target_part != null)
         {

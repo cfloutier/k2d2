@@ -61,9 +61,9 @@ the .net framework is Standard 2.1. Thanks to @schlosrat that hep me having a si
 
 # Debug
 
-To debug I use the tutorial : https://gist.github.com/gotmachine/d973adcb9ae413386291170fa346d043
+To debug I've wrote a tutorial : https://gist.github.com/cfloutier/f84b580d61d4eecdacd5e8e822de0871
 
-I'd like to write an addapted version of this here
+
 
 
 
