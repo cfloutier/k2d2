@@ -7,6 +7,8 @@ using UnityEngine;
 
 namespace K2D2.Controller;
 
+
+
 public class AutoLiftController : ComplexController
 {
     public static AutoLiftController Instance { get; set; }
@@ -132,8 +134,6 @@ public class AutoLiftController : ComplexController
         }
     }
 
-
-
     public override void onGUI()
     {
         UI_Tools.Title("Lift Pilot");
@@ -187,7 +187,7 @@ public class AutoLiftController : ComplexController
 
         isRunning = UI_Tools.BigToggleButton(isRunning, "Start", "Stop");
 
-    //   if (isRunning)
+        if (isRunning)
         {
             UI_Tools.Console($"Altitude = {current_altitude_km:n2} km");
             UI_Tools.Console($"Inclination = {wanted_elevation:n2} °");
