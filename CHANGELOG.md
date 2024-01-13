@@ -1,8 +1,8 @@
 # v0.11.3
 
 * AutoStaging is off by default
-
-
+* fixed an issue when switching to Tracking Station (errors in logs, thanks to @munix)
+* fine adjust Ap during ascent profile (Lift-Off)
 
 # v0.11.2
 

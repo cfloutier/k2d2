@@ -30,6 +30,21 @@ namespace K2D2.Controller
             }
         }
 
+        bool _enabled = true;
+
+        // is the pilot enabled : for instance it can be hidden because not available yet 
+        public bool Enabled
+        {
+            get
+            {
+                return _enabled;
+            }
+            set
+            {
+                _enabled = value;
+            }
+        }
+
         public bool need_update
         {
             get { return ui_visible || isRunning; }
@@ -45,6 +60,9 @@ namespace K2D2.Controller
         public bool isActive
         {
             get {
+
+                if (!Enabled)
+                    return false;
                
                 if (debug_mode_only && !K2D2Settings.debug_mode)
                     return false;

@@ -58,7 +58,8 @@ namespace K2D2.KSPService
         {
             if (Game == null) return null;
             if (Game.ViewController == null) return null;
-            return Game.ViewController.GetActiveSimVessel();
+            if (!Game.ViewController.TryGetActiveSimVessel(out var vessel)) return null;
+            return vessel as VesselComponent;
         }
 
         public VesselVehicle GetActiveSimVehicle()
@@ -80,6 +81,7 @@ namespace K2D2.KSPService
 
         public void SetThrottle(float throttle)
         {
+            // WARNING can only be called from Update not FixedUpdate
             if (VesselVehicle == null) return;
 
             throttle = Mathf.Clamp01(throttle);
@@ -434,7 +436,7 @@ namespace K2D2.KSPService
         /// </summary>
         public double GetYaw()
         {
-            return Game.ViewController.GetActiveSimVessel().flightCtrlState.yaw;
+            return VesselComponent.flightCtrlState.yaw;
         }
 
 
@@ -443,7 +445,7 @@ namespace K2D2.KSPService
         /// </summary>
         public double GetPitch()
         {
-            return Game.ViewController.GetActiveSimVessel().flightCtrlState.pitch;
+            return VesselComponent.flightCtrlState.pitch;
         }
 
         /// <summary>
@@ -451,7 +453,7 @@ namespace K2D2.KSPService
         /// </summary>
         public double GetRoll()
         {
-            return Game.ViewController.GetActiveSimVessel().flightCtrlState.roll;
+            return VesselComponent.flightCtrlState.roll;
         }
 
         /// <summary>
@@ -459,7 +461,7 @@ namespace K2D2.KSPService
         /// </summary>
         public double GetThrottle()
         {
-            return Game.ViewController.GetActiveSimVessel().flightCtrlState.mainThrottle;
+            return VesselComponent.flightCtrlState.mainThrottle;
         }
 
         /// <summary>
@@ -467,7 +469,7 @@ namespace K2D2.KSPService
         /// </summary>
         public double GetWheelSteer()
         {
-            return Game.ViewController.GetActiveSimVessel().flightCtrlState.wheelSteer;
+            return VesselComponent.flightCtrlState.wheelSteer;
         }
 
         /// <summary>
@@ -475,7 +477,7 @@ namespace K2D2.KSPService
         /// </summary>
         public double GetWheelThrottle()
         {
-            return Game.ViewController.GetActiveSimVessel().flightCtrlState.wheelThrottle;
+            return VesselComponent.flightCtrlState.wheelThrottle;
         }
 
         /// <summary>
@@ -483,7 +485,7 @@ namespace K2D2.KSPService
         /// </summary>
         public double GetPitchTrim()
         {
-            return Game.ViewController.GetActiveSimVessel().flightCtrlState.pitchTrim;
+            return VesselComponent.flightCtrlState.pitchTrim;
         }
 
         /// <summary>
@@ -491,7 +493,7 @@ namespace K2D2.KSPService
         /// </summary>
         public double GetYawTrim()
         {
-            return Game.ViewController.GetActiveSimVessel().flightCtrlState.yawTrim;
+            return VesselComponent.flightCtrlState.yawTrim;
         }
 
         /// <summary>
@@ -499,7 +501,7 @@ namespace K2D2.KSPService
         /// </summary>
         public double GetRollTrim()
         {
-            return Game.ViewController.GetActiveSimVessel().flightCtrlState.rollTrim;
+            return VesselComponent.flightCtrlState.rollTrim;
         }
 
         /// <summary>
@@ -507,7 +509,7 @@ namespace K2D2.KSPService
         /// </summary>
         public double GetWheelSteerTrim()
         {
-            return Game.ViewController.GetActiveSimVessel().flightCtrlState.wheelSteerTrim;
+            return VesselComponent.flightCtrlState.wheelSteerTrim;
         }
 
         /// <summary>
@@ -515,7 +517,7 @@ namespace K2D2.KSPService
         /// </summary>
         public double GetInputPitch()
         {
-            return Game.ViewController.GetActiveSimVessel().flightCtrlState.inputPitch;
+            return VesselComponent.flightCtrlState.inputPitch;
         }
 
         /// <summary>
@@ -523,7 +525,7 @@ namespace K2D2.KSPService
         /// </summary>
         public double GetInputRoll()
         {
-            return Game.ViewController.GetActiveSimVessel().flightCtrlState.inputRoll;
+            return VesselComponent.flightCtrlState.inputRoll;
         }
 
         /// <summary>
@@ -531,7 +533,7 @@ namespace K2D2.KSPService
         /// </summary>
         public double GetInputYaw()
         {
-            return Game.ViewController.GetActiveSimVessel().flightCtrlState.inputYaw;
+            return VesselComponent.flightCtrlState.inputYaw;
         }
 
 

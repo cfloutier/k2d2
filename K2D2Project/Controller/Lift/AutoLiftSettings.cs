@@ -39,7 +39,6 @@ public class AutoLiftSettings
         }
     }
 
-
     float _mid_rotate_altitude_km = -1;
     public float mid_rotate_altitude_km
     {
@@ -82,6 +81,15 @@ public class AutoLiftSettings
             _end_rotate_altitude_km = -1;
             _mid_rotate_altitude_km = -1;
 
+        }
+    }
+
+    public float max_throttle
+    {
+        get => KBaseSettings.sfile.GetFloat("lift.max_throttle", 1);
+        set
+        {
+            KBaseSettings.sfile.SetFloat("lift.max_throttle", value);
         }
     }
 }

@@ -62,6 +62,7 @@ public class StagingController : BaseController
         Instance = this;
         debug_mode_only = false;
         name = "Staging";
+        K2D2PilotsMgr.Instance.RegisterPilot("Staging", this);
     } 
     
     public ManualLogSource logger = BepInEx.Logging.Logger.CreateLogSource("K2D2.StagingController");

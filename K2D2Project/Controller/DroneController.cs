@@ -108,6 +108,7 @@ public class DroneController : ComplexController
     {
         debug_mode_only = false;
         name = "Drone";
+        K2D2PilotsMgr.Instance.RegisterPilot("Drone", this);
 
         sub_contollers.Add(burn_dV);
         current_vessel = K2D2_Plugin.Instance.current_vessel;

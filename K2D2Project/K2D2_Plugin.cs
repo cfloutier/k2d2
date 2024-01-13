@@ -110,7 +110,7 @@ public class K2D2_Plugin : BaseSpaceWarpPlugin
     }
 
     // Controllers
-    MainUI main_ui;
+    K2D2MainUI main_ui;
 
     public bool settings_visible = false;
 
@@ -133,7 +133,7 @@ public class K2D2_Plugin : BaseSpaceWarpPlugin
             Destroy(this);
         }
         Instance = this;
-
+        new K2D2PilotsMgr();
         KBaseSettings.Init(SettingsPath);
         mod_id = SpaceWarpMetadata.ModID;
 
@@ -143,7 +143,7 @@ public class K2D2_Plugin : BaseSpaceWarpPlugin
         gameObject.hideFlags = HideFlags.HideAndDontSave;
         DontDestroyOnLoad(gameObject);
 
-        logger.LogMessage("building AutoExecuteManeuver");
+        //logger.LogMessage("building AutoExecuteManeuver");
 
         // Setups
         _maneuverProvider = new ManeuverProvider(ref maneuverManager, logger);
@@ -167,7 +167,7 @@ public class K2D2_Plugin : BaseSpaceWarpPlugin
 
         ShapeDrawer.Instance.shapes.Add(DockingAssist.Instance.drawShapes);
 
-        main_ui = new MainUI();
+        main_ui = new K2D2MainUI();
 
         Appbar.RegisterAppButton(
             "K2-D2",
@@ -220,7 +220,7 @@ public class K2D2_Plugin : BaseSpaceWarpPlugin
          if (ShapeDrawer.Instance == null)
             return;
 
-        ShapeDrawer.Instance.OnPostRender(cam);
+        // ShapeDrawer.Instance.OnPostRender(cam);
     }
 
     void Awake()
@@ -367,6 +367,27 @@ public class K2D2_Plugin : BaseSpaceWarpPlugin
         GUI.DragWindow(new Rect(0, 0, 10000, 500));
 
         ToolTipsManager.setToolTip(GUI.tooltip);
+    }
+
+    // Public API to enable or disable a Pilot / Page
+    public bool isPilotEnabled(string pilotName)
+    {
+       return K2D2PilotsMgr.Instance.isPilotEnabled(pilotName);
+    }
+
+    public void EnableAllPilots(bool enabled)
+    {
+        K2D2PilotsMgr.Instance.EnableAllPilots(enabled);
+    }
+
+    public void EnablePilot(string pilotName, bool enabled)
+    {
+        K2D2PilotsMgr.Instance.EnablePilot(pilotName, enabled);
+    }
+
+    public List<string> GetPilotsNames()
+    {
+        return K2D2PilotsMgr.Instance.GetPilotsNames();
     }
 
     // Public API to perform a precision node execution using K2-D2

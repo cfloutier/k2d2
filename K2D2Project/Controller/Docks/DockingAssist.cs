@@ -78,6 +78,7 @@ public class DockingAssist : SingleExecuteController
 
             if (!value)
             {
+                current_vessel = K2D2_Plugin.Instance.current_vessel;
                 // stop
                 if (current_vessel != null)
                     current_vessel.SetThrottle(0);
@@ -97,6 +98,7 @@ public class DockingAssist : SingleExecuteController
         Instance = this;
         debug_mode_only = false;
         name = "Dock";
+        K2D2PilotsMgr.Instance.RegisterPilot("Dock", this);
 
         current_vessel = K2D2_Plugin.Instance.current_vessel;
 

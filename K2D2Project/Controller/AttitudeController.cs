@@ -48,6 +48,7 @@ public class AttitudeController : ComplexController
         Instance = this;
         debug_mode_only = false;
         name = "Att.";
+        K2D2PilotsMgr.Instance.RegisterPilot("Attitude", this);
     }
 
     public override void onReset()

@@ -100,6 +100,7 @@ public class AutoExecuteManeuver : ComplexController
         Instance = this;
         debug_mode_only = false;
         name = "Node";
+        K2D2PilotsMgr.Instance.RegisterPilot("Node", this);
 
         sub_contollers.Add(current_executor);
         current_vessel = K2D2_Plugin.Instance.current_vessel;

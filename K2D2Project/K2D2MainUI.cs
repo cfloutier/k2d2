@@ -9,7 +9,7 @@ using KTools.UI;
 
 namespace K2D2;
 
-public class MainUI
+public class K2D2MainUI
 {
     public ManualLogSource logger = BepInEx.Logging.Logger.CreateLogSource("K2D2.MainUI");
 
@@ -17,7 +17,7 @@ public class MainUI
 
     TabsUI tabs = new TabsUI();
 
-    public MainUI()
+    public K2D2MainUI()
     {
 
     }
@@ -46,6 +46,8 @@ public class MainUI
             tabs.pages.Add(DockingAssist.Instance);
             tabs.pages.Add(StagingController.Instance);
 
+            tabs.pages.Add(new TestDisablePage());
+
             // tabs.pages.Add(new FindSecrets());
 
             // waiting for mole
@@ -53,6 +55,8 @@ public class MainUI
             tabs.pages.Add(new OrbitInfos());
             tabs.pages.Add(new K2D2.InfosPages.SASInfos());
             tabs.pages.Add(new VesselInfos());
+
+
 
             tabs.Init();
 

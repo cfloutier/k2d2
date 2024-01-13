@@ -1,16 +1,30 @@
 using K2D2.KSPService;
+using KSP.Messages.PropertyWatchers;
 using KSP.Sim;
 using KSP.Sim.impl;
 using KTools;
 using KTools.UI;
+using Steamworks;
 using UnityEngine;
 
 namespace K2D2.Controller;
 
 
 
+
+
 public class AutoLiftController : ComplexController
 {
+    public enum LiftStatus
+    {
+        Off,
+        Ascent,
+        Adjust,
+        Coastline,
+        Circulirize
+    }
+
+
     public static AutoLiftController Instance { get; set; }
 
     AutoLiftSettings lift_settings = null;
@@ -31,6 +45,7 @@ public class AutoLiftController : ComplexController
         Instance = this;
         debug_mode_only = false;
         name = "Lift";
+        K2D2PilotsMgr.Instance.RegisterPilot("Lift", this);
     }
 
     public override void onReset()
@@ -38,30 +53,60 @@ public class AutoLiftController : ComplexController
         isRunning = false;
     }
 
-    bool _active = false;
-    public override bool isRunning
+    LiftStatus _status = LiftStatus.Off;
+    LiftStatus status
     {
-        get { return _active; }
+        get { return _status; }
         set
         {
-            if (value == _active)
+            if (_status == value)
+                return;
+            _status = value;
+            switch (value)
+            {
+                case LiftStatus.Off:
+                    {
+                        // stop
+                        if (current_vessel != null)
+                            current_vessel.SetThrottle(0);
+                    }
+                    break;
+                case LiftStatus.Ascent:
+                    {
+
+                        SASTool.setAutoPilot(AutopilotMode.StabilityAssist);
+                        last_ap_km = 0;
+                        ap_km = 0;
+                        delta_ap_per_second = 0;
+                        wanted_elevation = -90;
+                    }
+                    break;
+                case LiftStatus.Adjust:
+                    break;
+                case LiftStatus.Coastline:
+                    current_vessel.SetThrottle(0);
+                    break;
+            }
+        }
+    }
+
+
+    public override bool isRunning
+    {
+        get { return _status != LiftStatus.Off; }
+        set
+        {
+            if (value == isRunning)
                 return;
 
             if (!value)
             {
-                // stop
-                // var current_vessel = K2D2_Plugin.Instance.current_vessel;
-                // if (current_vessel != null)
-                //     current_vessel.SetThrottle(0);
-
-                _active = false;
+                status = LiftStatus.Off;
             }
             else
             {
                 // reset controller to desactivate other controllers.
                 K2D2_Plugin.ResetControllers();
-                _active = true;
-
                 OnStartController();
             }
         }
@@ -69,12 +114,7 @@ public class AutoLiftController : ComplexController
 
     void OnStartController()
     {
-        var autopilot = current_vessel.Autopilot;
-
-        SASTool.setAutoPilot(AutopilotMode.StabilityAssist);
-
-        wanted_elevation = -90;
-        current_vessel.SetThrottle(1);
+        status = LiftStatus.Ascent;
     }
 
     Vector3d direction = Vector3d.zero;
@@ -82,6 +122,9 @@ public class AutoLiftController : ComplexController
     public void applyDirection()
     {
         var autopilot = current_vessel.Autopilot;
+
+        if (autopilot == null)
+            return;
 
         // force autopilot
         autopilot.Enabled = true;
@@ -100,6 +143,8 @@ public class AutoLiftController : ComplexController
 
     float current_altitude_km = 0;
     float ap_km = 0;
+    float last_ap_km = 0;
+    float delta_ap_per_second;
     bool show_profile = false;
 
     void computeValues()
@@ -111,6 +156,28 @@ public class AutoLiftController : ComplexController
         ap_km = (float)(orbit.Apoapsis - orbit.referenceBody.radius) / 1000;
         current_altitude_km = (float)(current_vessel.GetSeaAltitude() / 1000);
 
+        if (last_ap_km == 0)
+        {
+            last_ap_km = ap_km;
+        }
+        else
+        {
+            float delta_ap = ap_km - last_ap_km;
+            last_ap_km = ap_km;
+            if (status == LiftStatus.Ascent)
+            {
+                // compute delta_ap_per_second only on ascent
+                float throttle = (float)current_vessel.GetThrottle();
+                if (throttle > 0.1f && Time.deltaTime != 0)
+                {
+                    float new_delta_ap_per_second = delta_ap / (Time.deltaTime * throttle);
+                    delta_ap_per_second = Mathf.Lerp(delta_ap_per_second, new_delta_ap_per_second, 0.1f);
+                }
+                else
+                    delta_ap_per_second = 0;
+            }
+        }
+
         wanted_elevation = ascentPath.compute_elevation(current_altitude_km);
     }
 
@@ -121,18 +188,54 @@ public class AutoLiftController : ComplexController
 
         if (isRunning || ui_visible)
             computeValues();
-        
+
         if (!isRunning)
             return;
 
-        applyDirection();
-
-        if (ap_km > lift_settings.destination_Ap_km)
+        switch (status)
         {
-            current_vessel.SetThrottle(0);
-            isRunning = false;
+            case LiftStatus.Adjust:
+            case LiftStatus.Ascent:
+                {
+                    applyDirection();
+                    float remaining_Ap = lift_settings.destination_Ap_km - ap_km;
+                    if (remaining_Ap <= lift_settings.destination_Ap_km*0.001f) // we stop at 0.1% of dest AP
+                    {          
+                        status = LiftStatus.Coastline;
+                        return;
+                    }
+                    else
+                    {
+                        if (delta_ap_per_second <= 0)
+                        {
+                            wanted_throttle = lift_settings.max_throttle;
+                        }
+                        else
+                        {
+                            wanted_throttle = remaining_Ap / delta_ap_per_second;
+                            if (wanted_throttle > lift_settings.max_throttle)
+                                wanted_throttle = lift_settings.max_throttle;
+                            else
+                            {
+                                status = LiftStatus.Adjust;
+                            }
+                                
+                        }
+
+                        if (status == LiftStatus.Adjust)
+                            wanted_throttle = wanted_throttle / 2;
+
+                        current_vessel.SetThrottle(wanted_throttle);
+                    }
+                }
+                break;
         }
+
+
+
     }
+
+    float wanted_throttle = 0;
 
     public override void onGUI()
     {
@@ -160,8 +263,6 @@ public class AutoLiftController : ComplexController
             GUILayout.EndHorizontal();
 
             lift_settings.start_altitude_km = UI_Fields.IntFieldLine("lift.start_altitude_km", "90° Altitude", lift_settings.start_altitude_km, 0, Int32.MaxValue, "km");
-
-
             ascentPath.drawProfile(current_altitude_km);
 
             lift_settings.heading = UI_Tools.HeadingControl("lift.heading", lift_settings.heading);
@@ -185,13 +286,20 @@ public class AutoLiftController : ComplexController
             GUILayout.EndHorizontal();
         }
 
+        lift_settings.max_throttle = UI_Tools.FloatSliderTxt("Max Throttle", lift_settings.max_throttle, 0, 1);
+
         isRunning = UI_Tools.BigToggleButton(isRunning, "Start", "Stop");
 
         if (isRunning)
         {
+            UI_Tools.Label($"Status : {status}");
             UI_Tools.Console($"Altitude = {current_altitude_km:n2} km");
             UI_Tools.Console($"Inclination = {wanted_elevation:n2} °");
             UI_Tools.Console($"Apoapsis Alt. = {ap_km:n2} km");
+            UI_Tools.Console($"Last delta ap. = {delta_ap_per_second:n2} km/s");
+            UI_Tools.Console($"wanted_throttle. = {wanted_throttle:n2}");
+
+
         }
     }
 }

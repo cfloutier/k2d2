@@ -32,3 +32,6 @@ copy "%KSP2_LOCATION%\KSP2_x64_Data\Managed\UnityEngine.dll" %DEST_DIR%
 
 copy "%KSP2_LOCATION%\KSP2_x64_Data\Managed\ShapesRuntime.dll" %DEST_DIR%
 
+echo ############## try to get other moids dll ########################
+copy "%KSP2_LOCATION%\BepInEx\plugins\maneuver_node_controller\maneuver_node_controller.dll"  %DEST_DIR%
+copy "%KSP2_LOCATION%\BepInEx\plugins\flight_plan\flight_plan.dll"  %DEST_DIR%

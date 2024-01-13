@@ -73,7 +73,7 @@ public class LandingSettings
 
     public float touch_down_speed
     {
-        get => KBaseSettings.sfile.GetFloat("land.touch_down_speed", 4);
+        get => KBaseSettings.sfile.GetFloat("land.touch_down_speed", 2.5f);
         set
         {
             value = Mathf.Clamp(value, 0, 100);
@@ -170,6 +170,7 @@ public class LandingController : ComplexController
         Instance = this;
         debug_mode_only = false;
         name = "Land";
+        K2D2PilotsMgr.Instance.RegisterPilot("Land", this);
 
         sub_contollers.Add(burn_dV);
         sub_contollers.Add(current_executor);

@@ -28,6 +28,8 @@ public class SimpleManeuverController : ButtonController
     {
         debug_mode_only = true;
         name = "Simple Maneuver Controller";
+        //K2D2PilotsMgr.Instance.RegisterPilot("Circulirize", this);
+
 
         _maneuverProvider = maneuverProvider;
         Instance = this;
