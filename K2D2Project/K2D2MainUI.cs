@@ -46,8 +46,8 @@ public class K2D2MainUI
             tabs.pages.Add(DockingAssist.Instance);
             tabs.pages.Add(StagingController.Instance);
 
-            tabs.pages.Add(new TestDisablePage());
-
+            // tabs.pages.Add(new TestDisablePage());
+            tabs.pages.Add(new TestFlightPlan());
             // tabs.pages.Add(new FindSecrets());
 
             // waiting for mole

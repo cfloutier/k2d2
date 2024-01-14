@@ -242,6 +242,12 @@ public class K2D2_Plugin : BaseSpaceWarpPlugin
         // Update Models (even on non valid scenes)
         current_vessel.Update();
 
+        if (K2D2OtherModsInterface.instance == null)
+        {
+            var other_mods = new K2D2OtherModsInterface();
+            other_mods.CheckModsVersions();
+        }
+
         if (ValidScene())
         {
             // Debug.developerConsoleVisible = false;

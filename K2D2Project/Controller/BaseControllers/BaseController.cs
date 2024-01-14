@@ -57,7 +57,7 @@ namespace K2D2.Controller
             set { }
         }
 
-        public bool isActive
+        public virtual bool isActive
         {
             get {
 

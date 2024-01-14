@@ -19,9 +19,9 @@ public class AutoLiftController : ComplexController
     {
         Off,
         Ascent,
+        Coasting,
         Adjust,
-        Coastline,
-        Circulirize
+        Circularize
     }
 
 
@@ -73,7 +73,6 @@ public class AutoLiftController : ComplexController
                     break;
                 case LiftStatus.Ascent:
                     {
-
                         SASTool.setAutoPilot(AutopilotMode.StabilityAssist);
                         last_ap_km = 0;
                         ap_km = 0;
@@ -81,14 +80,64 @@ public class AutoLiftController : ComplexController
                         wanted_elevation = -90;
                     }
                     break;
-                case LiftStatus.Adjust:
-                    break;
-                case LiftStatus.Coastline:
+                case LiftStatus.Coasting:
                     current_vessel.SetThrottle(0);
+                    turn_to = new TurnTo();
+                    turn_to.StartProGrade(SpeedDisplayMode.Surface);
+                    TimeWarpTools.SetRateIndex(0, false);
+                    break;
+                case LiftStatus.Adjust:
+                    current_vessel.SetThrottle(0);
+                    TimeWarpTools.SetRateIndex(0, false);
+                    break;
+                case LiftStatus.Circularize:
+                    {
+                        TimeWarpTools.SetRateIndex(0, false);
+                        if (K2D2OtherModsInterface.fpLoaded)
+                        {
+                            createCircleNode();
+                        }
+                        else
+                        {
+                            EndLiftPilot(true, "Please install FlightPlan for the final Step...");
+                        }
+                    }
                     break;
             }
         }
     }
+
+
+    void createCircleNode()
+    {
+        var current_time = GeneralTools.Game.UniverseModel.UniverseTime;
+
+        var current_vessel = K2D2_Plugin.Instance.current_vessel;
+        if (current_vessel == null)
+        {
+            EndLiftPilot(false, "error : no vessel");
+            return;
+        }
+
+        PatchedConicsOrbit orbit = current_vessel.VesselComponent.Orbit;
+        if (orbit == null)
+        {
+            EndLiftPilot(false, "error : no orbit");
+            return;
+        }
+
+        if (K2D2OtherModsInterface.instance.Circularize(current_time + orbit.TimeToAp, 0))
+        {
+            K2D2_Plugin.Instance.FlyNode();
+            EndLiftPilot(true, "Launched With FlightPlan !");
+        }
+        else
+        {
+            EndLiftPilot(false, "Error Creating Node");
+        }
+        return;
+    }
+
 
 
     public override bool isRunning
@@ -181,6 +230,25 @@ public class AutoLiftController : ComplexController
         wanted_elevation = ascentPath.compute_elevation(current_altitude_km);
     }
 
+    // used during coasting
+    double densityAtm = 0;
+    double duration_to_atm = 0;
+
+    TurnTo turn_to = null;
+
+    bool result_ok = false;
+    string end_status;
+
+    void EndLiftPilot(bool result_ok, string end_status)
+    {
+        this.result_ok = result_ok;
+        this.end_status = end_status;
+        status = LiftStatus.Off;
+    }
+
+
+    public WarpTo warp_to = new WarpTo();
+
     public override void Update()
     {
         // if (!isRunning && !ui_visible) return;
@@ -194,14 +262,78 @@ public class AutoLiftController : ComplexController
 
         switch (status)
         {
+            case LiftStatus.Coasting:
+                {
+                    CelestialBodyComponent mainBody = K2D2_Plugin.Instance.current_vessel.currentBody();
+                    var maxAtmosphereAltitude_km = (float)(mainBody.atmosphereDepth / 1000);
+                    if (lift_settings.destination_Ap_km < maxAtmosphereAltitude_km)
+                    {
+                        EndLiftPilot(false, "Warning Ap is under Atm. limit");
+                        return;
+                    }
+
+                    var altitude = (float)current_vessel.GetApproxAltitude() / 1000;
+                    densityAtm = mainBody.GetPressure(altitude * 1000);
+
+                    // compute time to reaching altitude.
+                    float V_Speed = (float)current_vessel.VesselVehicle.VerticalSpeed;
+                    var delta_alt = maxAtmosphereAltitude_km - altitude;
+
+                    if (delta_alt < 0)
+                    {
+                        // reached 
+                        status = LiftStatus.Adjust;
+                        return;
+                    }
+
+                    // warp until end
+                    duration_to_atm = delta_alt / V_Speed;
+                    var wanted_warp_index = WarpToSettings.compute_wanted_warp_index(duration_to_atm);
+                    TimeWarpTools.SetRateIndex(wanted_warp_index+1, false);
+                }
+                break;
             case LiftStatus.Adjust:
+                {
+                    float remaining_Ap = lift_settings.destination_Ap_km - ap_km;
+                    if (remaining_Ap <= lift_settings.destination_Ap_km * 0.001f) // we stop at 0.1% of dest AP
+                    {
+                        status = LiftStatus.Circularize;
+                        return;
+                    }
+
+                    SASTool.setAutoPilot(AutopilotMode.Prograde);
+
+                    turn_to.Update();
+                    if (!turn_to.finished)
+                    {
+                        // adjust direction
+                        current_vessel.SetThrottle(0);
+                        return;
+                    }
+
+                    if (delta_ap_per_second == 0)
+                    {
+                        // set default ap per second to high value to get a smooth adjust
+                        delta_ap_per_second = 10;
+                    }
+
+                    wanted_throttle = remaining_Ap / delta_ap_per_second;
+                    wanted_throttle = wanted_throttle / 2;
+
+                    if (wanted_throttle > lift_settings.max_throttle)
+                        wanted_throttle = lift_settings.max_throttle;
+
+                    current_vessel.SetThrottle(wanted_throttle);
+                }
+                break;
             case LiftStatus.Ascent:
                 {
+
                     applyDirection();
                     float remaining_Ap = lift_settings.destination_Ap_km - ap_km;
-                    if (remaining_Ap <= lift_settings.destination_Ap_km*0.001f) // we stop at 0.1% of dest AP
-                    {          
-                        status = LiftStatus.Coastline;
+                    if (remaining_Ap <= lift_settings.destination_Ap_km * 0.01f) // we stop at 0.1% of dest AP
+                    {
+                        status = LiftStatus.Coasting;
                         return;
                     }
                     else
@@ -215,24 +347,13 @@ public class AutoLiftController : ComplexController
                             wanted_throttle = remaining_Ap / delta_ap_per_second;
                             if (wanted_throttle > lift_settings.max_throttle)
                                 wanted_throttle = lift_settings.max_throttle;
-                            else
-                            {
-                                status = LiftStatus.Adjust;
-                            }
-                                
                         }
-
-                        if (status == LiftStatus.Adjust)
-                            wanted_throttle = wanted_throttle / 2;
 
                         current_vessel.SetThrottle(wanted_throttle);
                     }
                 }
                 break;
         }
-
-
-
     }
 
     float wanted_throttle = 0;
@@ -292,14 +413,58 @@ public class AutoLiftController : ComplexController
 
         if (isRunning)
         {
-            UI_Tools.Label($"Status : {status}");
-            UI_Tools.Console($"Altitude = {current_altitude_km:n2} km");
-            UI_Tools.Console($"Inclination = {wanted_elevation:n2} °");
-            UI_Tools.Console($"Apoapsis Alt. = {ap_km:n2} km");
-            UI_Tools.Console($"Last delta ap. = {delta_ap_per_second:n2} km/s");
-            UI_Tools.Console($"wanted_throttle. = {wanted_throttle:n2}");
+            UI_Tools.Warning($"Status : {status}");
 
+            switch (status)
+            {
+                case LiftStatus.Ascent:
+                    UI_Tools.Console($"Altitude = {current_altitude_km:n2} km");
+                    UI_Tools.Console($"Apoapsis Alt. = {ap_km:n2} km");
 
+                    UI_Tools.Console($"Inclination = {wanted_elevation:n2} °");
+
+                    UI_Tools.Console($"Last delta ap. = {delta_ap_per_second:n2} km/s");
+                    UI_Tools.Console($"wanted_throttle. = {wanted_throttle:n2}");
+                    break;
+                case LiftStatus.Adjust:
+                    UI_Tools.Console($"Altitude = {current_altitude_km:n2} km");
+                    UI_Tools.Console($"Apoapsis Alt. = {ap_km:n2} km");
+
+                    if (!turn_to.finished)
+                    {
+                        UI_Tools.Console(turn_to.status_line);
+                        return;
+                    }
+                    UI_Tools.Console($"wanted_throttle. = {wanted_throttle:n2}");
+                    break;
+                case LiftStatus.Coasting:
+                    UI_Tools.Console($"Altitude = {current_altitude_km:n2} km");
+                    UI_Tools.Console($"Atm Density = {densityAtm:n2}");
+                    UI_Tools.Console($"End warp : {StrTool.DurationToString(duration_to_atm)} x{TimeWarpTools.CurrentRate}");
+                    break;
+                case LiftStatus.Circularize:
+                    UI_Tools.Console("--------------");
+                    if (UI_Tools.Button("Final !"))
+                    {
+                        createCircleNode();
+                    }
+
+                    break;
+            }
+        }
+        else
+        {
+            if (!string.IsNullOrEmpty(end_status))
+            {
+                if (result_ok)
+                {
+                    UI_Tools.OK(end_status);
+                }
+                else
+                {
+                    UI_Tools.Warning(end_status);
+                }
+            }
         }
     }
 }

@@ -149,6 +149,15 @@ public class AutoExecuteManeuver : ComplexController
                 current_executor.setController(null);
                 break;
             case Mode.Turn:
+                if (current_maneuver_node == null)
+                    checkManeuver();
+
+                if (current_maneuver_node == null)
+                {
+                    isRunning = false;
+                    return;
+                }
+
                 execute_node = current_maneuver_node;
                 current_executor.setController(turn);
                 turn.StartManeuver(execute_node);
@@ -299,6 +308,12 @@ public class AutoExecuteManeuver : ComplexController
         
         if (isRunning)
         {
+            if (execute_node == null)
+                execute_node = current_maneuver_node;
+
+            if (execute_node == null)
+                return;
+
             //stagingController.CheckStaging();
             double UT = 0;
             switch (execute_settings.start_mode)
@@ -408,6 +423,8 @@ public class AutoExecuteManeuver : ComplexController
             }
         }
     }
+
+   
 
     public void Start()
     {

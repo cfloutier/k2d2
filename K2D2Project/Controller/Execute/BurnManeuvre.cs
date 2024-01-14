@@ -158,6 +158,9 @@ public class BurnManeuver : ExecuteController
 
             // allow time warp up to what the auto warp can do.
             int max_warp_index = WarpToSettings.compute_wanted_warp_index(dt);
+            if (max_warp_index == 1)
+                max_warp_index = 0; // no x2 speed
+
             if (max_warp_index < TimeWarpTools.CurrentRateIndex)
                 TimeWarpTools.SetRateIndex(max_warp_index, false);
 

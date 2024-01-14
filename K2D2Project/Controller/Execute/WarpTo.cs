@@ -1,8 +1,10 @@
 using BepInEx.Logging;
+using KSP.Sim;
 using KSP.Sim.Maneuver;
 using KTools;
 using KTools.UI;
 using UnityEngine;
+
 namespace K2D2.Controller;
 
 class WarpToSettings
@@ -110,7 +112,7 @@ public class WarpTo : ExecuteController
         if (check_direction)
         {
             turn_to = new TurnTo();
-            turn_to.StartSurfaceRetroGrade();
+            turn_to.StartRetroGrade(SpeedDisplayMode.Surface);
         }
     }
 

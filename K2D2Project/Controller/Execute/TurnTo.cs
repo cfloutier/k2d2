@@ -39,6 +39,15 @@ class TurnToSettings
 
 public class TurnTo : ExecuteController
 {
+    public enum Mode
+    {
+        Maneuver,
+        Retrograde,
+        Prograde
+    }
+
+    public SpeedDisplayMode speedMode = SpeedDisplayMode.Surface;
+
     ManeuverNodeData maneuver = null;
     Vector3 wanted_dir = Vector3.zero;
 
@@ -46,16 +55,32 @@ public class TurnTo : ExecuteController
 
     public double angle;
 
+    public Mode mode = Mode.Maneuver;
+
     public void StartManeuver(ManeuverNodeData node)
     {
+        
+        mode = Mode.Maneuver;
         maneuver = node;
         Start();
     }
 
 
-    public void StartSurfaceRetroGrade()
+    public void StartRetroGrade(SpeedDisplayMode speedMode = SpeedDisplayMode.Surface)
     {
+        this.speedMode = speedMode;
         maneuver = null;
+
+        mode = Mode.Retrograde;
+        Start();
+    }
+
+    public void StartProGrade(SpeedDisplayMode speedMode = SpeedDisplayMode.Surface)
+    {
+        this.speedMode = speedMode;
+        maneuver = null;
+
+        mode = Mode.Prograde;
         Start();
     }
 
@@ -68,39 +93,78 @@ public class TurnTo : ExecuteController
 
     public override void Update()
     {
-        if (maneuver != null)
+        switch (mode)
         {
-            finished = false;
+            case Mode.Maneuver:
+                {
+                    finished = false;
 
-            SASTool.setAutoPilot(AutopilotMode.Maneuver);
+                    SASTool.setAutoPilot(AutopilotMode.Maneuver);
 
-            if (!checkManeuverDirection())
-                return;
+                    if (!checkManeuverDirection())
+                        return;
 
-            if (!checkAngularRotation())
-                return;
+                    if (!checkAngularRotation())
+                        return;
 
-            status_line = "Ready !";
-            finished = true;
-        }
-        else
-        {
-            // SURFACE RETROGRADE MODE
-            current_vessel.SetSpeedMode(KSP.Sim.SpeedDisplayMode.Surface);
-            SASTool.setAutoPilot(AutopilotMode.Retrograde);
+                    status_line = "Ready !";
+                    finished = true;
+                }
+                break;
+            case Mode.Retrograde:
+                {
+                    // SURFACE RETROGRADE MODE
+                    current_vessel.SetSpeedMode(speedMode);
+                    SASTool.setAutoPilot(AutopilotMode.Retrograde);
 
-            if (!checkRetroGradeDirection())
-                return;
+                    if (!checkRetroGradeDirection())
+                        return;
 
-            if (!checkAngularRotation())
-                return;
+                    if (!checkAngularRotation())
+                        return;
 
-            status_line = "Ready !";
-            finished = true;
+                    status_line = "Ready !";
+                    finished = true;
+                }
+                break;
+            case Mode.Prograde:
+                {
+                    // SURFACE RETROGRADE MODE
+                    current_vessel.SetSpeedMode(speedMode);
+                    SASTool.setAutoPilot(AutopilotMode.Prograde);
+
+                    if (!checkProGradeDirection())
+                        return;
+
+                    if (!checkAngularRotation())
+                        return;
+
+                    status_line = "Ready !";
+                    finished = true;
+                }
+                break;
         }
     }
 
-    public bool checkRetroGradeDirection()
+    bool checkProGradeDirection()
+    {
+        double max_angle = 5;
+
+        var telemetry = SASTool.getTelemetry();
+        Vector prograde_dir = telemetry.SurfaceMovementPrograde;
+        Rotation vessel_rotation = current_vessel.GetRotation();
+
+        // convert rotation to maneuver coordinates
+        vessel_rotation = Rotation.Reframed(vessel_rotation, prograde_dir.coordinateSystem);
+        Vector3d forward_direction = (vessel_rotation.localRotation * Vector3.up).normalized;
+
+        angle = (float)Vector3d.Angle(prograde_dir.vector, forward_direction);
+        status_line = $"Waiting for good sas direction\nAngle = {angle:n2}°";
+
+        return angle < max_angle;
+    }
+
+    bool checkRetroGradeDirection()
     {
         double max_angle = 5;
 
@@ -118,7 +182,7 @@ public class TurnTo : ExecuteController
         return angle < max_angle;
     }
 
-    public bool checkManeuverDirection()
+    bool checkManeuverDirection()
     {
         double max_angle = TurnToSettings.max_angle_maneuver;
 
@@ -139,7 +203,7 @@ public class TurnTo : ExecuteController
         return angle < max_angle;
     }
 
-    public bool checkAngularRotation()
+    bool checkAngularRotation()
     {
         double max_angular_speed = TurnToSettings.max_angular_speed;
         var angular_rotation_pc = current_vessel.GetAngularSpeed().vector;

@@ -14,7 +14,6 @@ class TestDisablePage : BaseController
 
     public override void onGUI()
     {
-
         K2D2_Plugin plugin = K2D2_Plugin.Instance;
         var pilots_names = plugin.GetPilotsNames();
         foreach(var pilot_name in pilots_names)
@@ -35,9 +34,5 @@ class TestDisablePage : BaseController
             plugin.EnableAllPilots(true);
 
         GUILayout.EndHorizontal();
-
-
-       
-       
     }
 }

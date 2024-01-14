@@ -49,7 +49,7 @@ class K2D2PilotsMgr
 
     internal void RegisterPilot(string pilotName, BaseController controller)
     {
-        if (!pilots.ContainsKey(pilotName)) 
+        if (pilots.ContainsKey(pilotName)) 
         { 
             K2D2_Plugin.logger.LogWarning($"Registering another pilot named {pilotName}");
             return;
