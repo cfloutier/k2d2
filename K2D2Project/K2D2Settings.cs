@@ -40,10 +40,35 @@ public class K2D2Settings
         }
     }
 
+    public static K2D2SettingsUI ui = null;
+
     public static void onGUI()
     {
+        if (ui == null)
+            ui = new K2D2SettingsUI();
+
+        ui.onGUI();
+    }
+
+    
+    public static void CloseUI()
+    {
+        if (UI_Tools.miniButton("Close Settings"))
+        {
+            K2D2_Plugin.Instance.settings_visible = false;
+        }
+    } 
+
+}
+
+
+public class K2D2SettingsUI
+{
+    public FoldOut accordion = new FoldOut();
+
+    void mainUI()
+    {
         GUILayout.BeginHorizontal();
- 
         // VERSION
         UI_Tools.Console($"K2D2 v{K2D2_Plugin.ModVer}");
         GUILayout.FlexibleSpace();
@@ -56,21 +81,27 @@ public class K2D2Settings
         //if (UI_Tools.SmallButton("0.75"))
         //    ui_size = 0.75f;
         if (UI_Tools.SmallButton("x1"))
-            ui_size = 1f;
+            K2D2Settings.ui_size = 1f;
         //if (UI_Tools.SmallButton("1.5"))
         //    ui_size = 1.5f;
         if (UI_Tools.SmallButton("x2"))
-            ui_size = 2f;
+            K2D2Settings.ui_size = 2f;
         if (UI_Tools.SmallButton("x4"))
-            ui_size = 4f;
+            K2D2Settings.ui_size = 4f;
         GUILayout.EndHorizontal();
+    }
 
-        if (UI_Tools.miniButton("Close Settings"))
+    public void onGUI()
+    {
+        if (accordion.Count == 0)
         {
-            K2D2_Plugin.Instance.settings_visible = false;
+            accordion.addChapter("Main Settings", mainUI);
+            accordion.singleChapter = true;
         }
+
+        accordion.OnGUI();
+
 
         UI_Tools.Separator();
     }
 }
-

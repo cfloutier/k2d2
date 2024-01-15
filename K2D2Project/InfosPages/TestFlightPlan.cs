@@ -34,6 +34,29 @@ class TestFlightPlan : BaseController
         return false;
     }
 
+    PatchedConicsOrbit getOrbit()
+    {
+        var current_vessel = K2D2_Plugin.Instance.current_vessel;
+        if (current_vessel == null)
+        {
+            // UI_Tools.Error("no vessel");
+            return null;
+        }
+
+        if (current_vessel.VesselComponent == null)
+        {
+            //UI_Tools.Error("no vessel component");
+            return null;
+        }
+
+        PatchedConicsOrbit orbit = current_vessel.VesselComponent.Orbit;
+        return orbit; 
+       
+
+        
+        
+    }
+    
 
     public override void onGUI()
     {
@@ -46,15 +69,7 @@ class TestFlightPlan : BaseController
         }
 
         UI_Tools.Console("Flight Plan is available !");
-
-        var current_vessel = K2D2_Plugin.Instance.current_vessel;
-        if (current_vessel == null)
-        {
-            UI_Tools.Error("no vessel");
-            return;
-        }
-
-        PatchedConicsOrbit orbit = current_vessel.VesselComponent.Orbit;
+        var orbit = getOrbit();
         if (orbit == null)
         {
             UI_Tools.Error("no orbit");

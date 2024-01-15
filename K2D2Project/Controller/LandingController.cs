@@ -136,7 +136,7 @@ public class LandingSettings
             accordion.singleChapter = true;
         }
 
-        accordion.OnGui();
+        accordion.OnGUI();
     }
 
     public float compute_limit_speed(float altitude)

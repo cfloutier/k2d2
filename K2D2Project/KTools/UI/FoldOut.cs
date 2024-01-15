@@ -25,7 +25,7 @@ namespace KTools.UI
         public List<Chapter> chapters = new List<Chapter>();
         public bool singleChapter = false;
 
-        public void OnGui()
+        public void OnGUI()
         {
             GUILayout.BeginVertical();
 

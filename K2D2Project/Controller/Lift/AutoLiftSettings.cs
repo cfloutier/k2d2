@@ -2,6 +2,8 @@
 
 using KTools;
 namespace K2D2.Controller;
+
+using KTools.UI;
 using UnityEngine;
 
 public class AutoLiftSettings
@@ -91,5 +93,70 @@ public class AutoLiftSettings
         {
             KBaseSettings.sfile.SetFloat("lift.max_throttle", value);
         }
+    }
+
+    public float end_ascent_pc
+    {
+        get => KBaseSettings.sfile.GetFloat("lift.end_ascent_pc", 0.1f);
+        set
+        {
+            KBaseSettings.sfile.SetFloat("lift.end_ascent_pc", value);
+        }
+    }
+
+    public float end_ascent_altitude
+    {
+         get => destination_Ap_km * end_ascent_pc/100;
+    }
+
+    public bool coasting_warp
+    {
+        get => KBaseSettings.sfile.GetBool("lift.coasting_warp", true);
+        set
+        {
+            KBaseSettings.sfile.SetBool("lift.coasting_warp", value);
+        }
+    }
+
+    public bool adjust
+    {
+        get => KBaseSettings.sfile.GetBool("lift.adjust", true);
+        set
+        {
+            KBaseSettings.sfile.SetBool("lift.adjust", value);
+        }
+    }
+
+    public float end_adjust_pc
+    {
+        get => KBaseSettings.sfile.GetFloat("lift.end_adjust_pc", 0.01f);
+        set
+        {
+            if (value > end_ascent_pc)
+                value = end_ascent_pc;
+
+            KBaseSettings.sfile.SetFloat("lift.end_adjust_pc", value);
+        }
+    }
+    public float end_adjust_altitude
+    {
+         get => destination_Ap_km * end_adjust_pc/100;
+    }
+
+    public void onGUI()
+    {
+        UI_Tools.Title("Lift Settings");
+
+        UI_Tools.Label("Ascent Precision");
+        end_ascent_pc = UI_Tools.FloatSliderTxt("Ap Alt Error ", end_ascent_pc, 0.001f, 1, "%", "Speed when touching ground");
+
+        coasting_warp = UI_Tools.Toggle(coasting_warp, "Coasting Warp", "Auto Warp while waiting for leaving Atm.");
+
+        adjust = UI_Tools.Toggle(adjust, "Fine Adjust", "Precisely adjust AP");
+
+        UI_Tools.Label("Adjust Precision");
+        end_adjust_pc = UI_Tools.FloatSliderTxt("Ap Alt Error ", end_adjust_pc, 0.001f, 1, "%", "Speed when touching ground");
+
+
     }
 }

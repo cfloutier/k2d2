@@ -364,7 +364,7 @@ public class AutoExecuteManeuver : ComplexController
             accordion.singleChapter = true;
         }
 
-        accordion.OnGui();
+        accordion.OnGUI();
     }
 
     void node_infos()

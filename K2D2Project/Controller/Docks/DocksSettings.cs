@@ -147,7 +147,7 @@ public class DocksSettings
             accordion.singleChapter = true;
         }
 
-        accordion.OnGui();
+        accordion.OnGUI();
 
         pilot_power = UI_Tools.FloatSliderTxt("Pilot Power", pilot_power, 0, 5);
     }

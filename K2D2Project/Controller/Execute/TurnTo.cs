@@ -146,12 +146,20 @@ public class TurnTo : ExecuteController
         }
     }
 
+
+
+
     bool checkProGradeDirection()
     {
         double max_angle = 5;
 
         var telemetry = SASTool.getTelemetry();
-        Vector prograde_dir = telemetry.SurfaceMovementPrograde;
+        Vector prograde_dir;
+        if (speedMode == SpeedDisplayMode.Orbit)
+            prograde_dir = telemetry.OrbitMovementPrograde;
+        else
+            prograde_dir = telemetry.SurfaceMovementPrograde;
+
         Rotation vessel_rotation = current_vessel.GetRotation();
 
         // convert rotation to maneuver coordinates
@@ -169,7 +177,11 @@ public class TurnTo : ExecuteController
         double max_angle = 5;
 
         var telemetry = SASTool.getTelemetry();
-        Vector retro_dir = telemetry.SurfaceMovementRetrograde;
+        Vector retro_dir;
+        if (speedMode == SpeedDisplayMode.Orbit)
+            retro_dir = telemetry.OrbitMovementRetrograde;
+        else
+            retro_dir = telemetry.SurfaceMovementRetrograde;
         Rotation vessel_rotation = current_vessel.GetRotation();
 
         // convert rotation to maneuver coordinates

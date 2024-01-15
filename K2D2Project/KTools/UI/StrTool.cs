@@ -14,18 +14,29 @@ namespace KTools.UI
                 prefix = "- ";
             }
 
+            // more than one day
             if (secs > 21600) // 3600 * 6 = 21 600
             {
                 int days = (int)(secs / 21600);
                 secs = secs - days * 21600;
                 prefix += $"{days}d ";
             }
+            else if (secs < 60)
+            {
+                int seconds = (int) Math.Floor(secs);
+                int milliseconds = (int) (secs - seconds)*1000; 
 
+                var result = prefix + string.Format("{0:D2}:{1:D2}",
+                    seconds,
+                    milliseconds);
+
+                return result;
+            }
 
             try
             {
                 TimeSpan t = TimeSpan.FromSeconds(secs);
-                var result = prefix + string.Format("{0:D2}:{1:D2}:{2:D2}:{3:D3}",
+                var result = prefix + string.Format("{0:D2}:{1:D2}:{2:D2}.{3:D2}",
                 t.Hours,
                 t.Minutes,
                 t.Seconds,
@@ -36,6 +47,10 @@ namespace KTools.UI
             {
                 return prefix + $"{secs:n2} s";
             }
+
+
+
+            
         }
 
         public const double AstronomicalUnit = 149597870700;

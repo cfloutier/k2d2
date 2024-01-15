@@ -2,7 +2,21 @@
 
 * AutoStaging is off by default
 * fixed an issue when switching to Tracking Station (errors in logs, thanks to @munix)
-* fine adjust Ap during ascent profile (Lift-Off)
+* Main Settings (UI size and Mod version) is more compact (fold out)
+
+== Lift-Off ==
+
+Many upgrades Here : 
+
+* Ascent : You can configure the precision of the first Main Step.
+* Costing : auto Warp when waiting for the end of Atmosphere.
+* Fine adjust Ap : finally adjust if needed the AP
+
+== Flight Plan integration ==
+
+* Added a link with FlightPlan Mod. Lift-Off can be easily ended with a final Node. Thanks to @schlosrat
+
+If've added buttons at the end of Lift-Off to help adjust the final Node.
 
 # v0.11.2
 
