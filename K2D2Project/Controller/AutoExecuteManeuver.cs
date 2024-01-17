@@ -5,6 +5,7 @@ using KSP.Sim;
 using KSP.Sim.Maneuver;
 using KTools;
 using KTools.UI;
+using K2D2.InfosPages;
 
 namespace K2D2.Controller;
 
@@ -75,13 +76,12 @@ public class ExecuteSettings
 
 public class AutoExecuteManeuver : ComplexController
 {
-    public ManualLogSource logger = BepInEx.Logging.Logger.CreateLogSource("K2D2.LandingController");
+    public ManualLogSource logger = BepInEx.Logging.Logger.CreateLogSource("K2D2.AutoExecuteManeuver");
 
     public static AutoExecuteManeuver Instance { get; set; }
 
     public ManeuverNodeData current_maneuver_node = null;
     ManeuverNodeData execute_node = null;
-
 
     ExecuteSettings execute_settings = new ExecuteSettings();
 
@@ -211,6 +211,9 @@ public class AutoExecuteManeuver : ComplexController
         setMode(next);
     }
 
+
+
+
     public override void onGUI()
     {
         if (K2D2_Plugin.Instance.settings_visible)
@@ -225,7 +228,14 @@ public class AutoExecuteManeuver : ComplexController
         {
             if (current_maneuver_node == null)
             {
+
+
+
+
+
                 UI_Tools.Label("No Maneuver node.");
+
+                TestFlightPlan.FPToolsUI();
                 return;
             }
 

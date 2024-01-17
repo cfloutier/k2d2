@@ -60,7 +60,7 @@ public class Adjust : ExecuteController
         ascent.computeValues(false);
 
         float remaining_Ap = lift_settings.destination_Ap_km - ascent.ap_km;
-        if (remaining_Ap <= lift_settings.end_adjust_altitude) // we stop at 0.1% of dest AP
+        if (remaining_Ap <= lift_settings.end_adjust_error) // we stop at 0.1% of dest AP
         {
             finished = true;
             return;

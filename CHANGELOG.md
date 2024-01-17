@@ -1,4 +1,4 @@
-# v0.11.3
+# v0.12
 
 * AutoStaging is off by default
 * fixed an issue when switching to Tracking Station (errors in logs, thanks to @munix)
@@ -11,12 +11,36 @@ Many upgrades Here :
 * Ascent : You can configure the precision of the first Main Step.
 * Costing : auto Warp when waiting for the end of Atmosphere.
 * Fine adjust Ap : finally adjust if needed the AP
+* Pause at the end of the ascent to help customise the final Node 
+
+each feature can be toggled on/off in the settings
 
 == Flight Plan integration ==
 
-* Added a link with FlightPlan Mod. Lift-Off can be easily ended with a final Node. Thanks to @schlosrat
+* Added a link with FlightPlan Mod. Lift-Off can be ended with a final Cirulirize Node. Thanks to @schlosrat
 
-If've added buttons at the end of Lift-Off to help adjust the final Node.
+If've added buttons at the end of Lift-Off to create adjust the final Node.
+- 30 s : create a node in 30s. Can be useful if the orbit in very vertical.
+- Ap : create a node at AP. For clear orbit
+
+Unfortunatly I've not yet suceed in creating and executing a really precise final node for the moment.
+I'll try to enhance this in furture releases. 
+
+I've also met in various situation errors when creating nodes. that's why the final state of orbit is not fully automated. please check the created node before executing it.
+
+* added circulirize buttons in the node manager when there is no current node
+
+== API ==
+
+added functions to disable pilots from another mod. it can be used to adjust available nodes in the exploration mode. 
+
+here is the full api available in the K2D2_Plugin
+```
+public bool isPilotEnabled(string pilotName)
+public void EnableAllPilots(bool enabled)
+public void EnablePilot(string pilotName, bool enabled)
+public List<string> GetPilotsNames()
+```
 
 # v0.11.2
 

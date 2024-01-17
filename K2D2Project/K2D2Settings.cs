@@ -53,10 +53,14 @@ public class K2D2Settings
     
     public static void CloseUI()
     {
+        UI_Tools.Separator();
+        GUILayout.BeginHorizontal();
+        GUILayout.FlexibleSpace();
         if (UI_Tools.miniButton("Close Settings"))
         {
             K2D2_Plugin.Instance.settings_visible = false;
         }
+        GUILayout.EndHorizontal();
     } 
 
 }

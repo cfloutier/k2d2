@@ -23,14 +23,7 @@ namespace KTools.UI
             }
             else if (secs < 60)
             {
-                int seconds = (int) Math.Floor(secs);
-                int milliseconds = (int) (secs - seconds)*1000; 
-
-                var result = prefix + string.Format("{0:D2}:{1:D2}",
-                    seconds,
-                    milliseconds);
-
-                return result;
+                return $"{secs:n2} s";
             }
 
             try
@@ -46,11 +39,7 @@ namespace KTools.UI
             catch (System.Exception)
             {
                 return prefix + $"{secs:n2} s";
-            }
-
-
-
-            
+            }    
         }
 
         public const double AstronomicalUnit = 149597870700;
@@ -66,15 +55,15 @@ namespace KTools.UI
             }
             if (meters > (Parsec / 10))
             {
-                return $"{sign}{(meters / Parsec):n2} pc";
+                return $"{sign}{meters / Parsec:n2} pc";
             }
             if (meters > (AstronomicalUnit / 10))
             {
-                return $"{sign}{(meters / AstronomicalUnit):n2} AU";
+                return $"{sign}{meters / AstronomicalUnit:n2} AU";
             }
             if (meters > (997))
             {
-                return $"{sign}{(meters / 1000):n2} km";
+                return $"{sign}{meters / 1000:n2} km";
             }
             if (meters < 1)
             {

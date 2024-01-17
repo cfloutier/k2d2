@@ -1,5 +1,6 @@
 using KSP.Sim.impl;
 using KSP.Game;
+using KTools;
 
 namespace K2D2
 {
@@ -50,11 +51,18 @@ namespace K2D2
             return levels.Length - 1;
         }
 
+
+
         public static void SetRateIndex(int rate_index, bool instant)
         {
             if (time_warp == null) return;
             if (rate_index != time_warp.CurrentRateIndex)
                 time_warp.SetRateIndex(rate_index, instant);
+        }
+
+        public static void SetIsPaused(bool paused)
+        {
+            GeneralTools.Game.UniverseModel.SetTimePaused(paused);
         }
     }
 

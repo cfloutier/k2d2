@@ -47,7 +47,7 @@ public class K2D2MainUI
             tabs.pages.Add(StagingController.Instance);
 
             // tabs.pages.Add(new TestDisablePage());
-            tabs.pages.Add(new TestFlightPlan());
+            // tabs.pages.Add(new TestFlightPlan());
             // tabs.pages.Add(new FindSecrets());
 
             // waiting for mole
@@ -55,8 +55,6 @@ public class K2D2MainUI
             tabs.pages.Add(new OrbitInfos());
             tabs.pages.Add(new K2D2.InfosPages.SASInfos());
             tabs.pages.Add(new VesselInfos());
-
-
 
             tabs.Init();
 

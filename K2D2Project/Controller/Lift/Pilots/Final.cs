@@ -3,6 +3,9 @@ using K2D2.KSPService;
 using KSP.Sim.impl;
 using KTools.UI;
 using KTools;
+using KSP.Sim.Maneuver;
+using UnityEngine;
+
 
 namespace K2D2.Controller.Lift.Pilots;
 
@@ -24,9 +27,7 @@ public class FinalCircularize : ExecuteController
         this.lift_settings = lift_settings;
     }
 
-    double wait_for = 10;
-    double time_to_wait = -1;
-    double remaining = -1;
+    string status_msg = "";
 
     public override void Start()
     {
@@ -35,69 +36,124 @@ public class FinalCircularize : ExecuteController
         TimeWarpTools.SetRateIndex(0, false);
         current_vessel.SetThrottle(0);
 
-        if (K2D2OtherModsInterface.fpLoaded)
-        {
-            time_to_wait = GeneralTools.Current_UT + wait_for;
-            remaining = wait_for;
-        }
-        else
-        {
-            time_to_wait = -1;
+        if (lift_settings.pause_on_final)
+            TimeWarpTools.SetIsPaused(true);
 
+        if (!K2D2OtherModsInterface.fpLoaded)
+        {        
             lift.EndLiftPilot(true, "Please install FlightPlan for the final Step...");
         }
+
+        status_msg = "";
     }
 
-    void createCircleNode()
+    PatchedConicsOrbit getOrbit()
     {
-        var current_time = GeneralTools.Game.UniverseModel.UniverseTime;
-
         if (current_vessel == null)
         {
-            lift.EndLiftPilot(false, "error : no vessel");
-            return;
+            status_msg = "error : no vessel";
+            return null;
         }
 
         PatchedConicsOrbit orbit = current_vessel.VesselComponent.Orbit;
         if (orbit == null)
         {
-            lift.EndLiftPilot(false, "error : no orbit");
-            return;
+            status_msg = "error : no orbit";
+            return null;
         }
 
-        if (K2D2OtherModsInterface.instance.Circularize(current_time + orbit.TimeToAp, 0))
-        {
-            K2D2_Plugin.Instance.FlyNode();
-            lift.EndLiftPilot(true, "Launched With FlightPlan !");
+        return orbit;
+    }
+
+    void createApNode()
+    {
+        var current_time = GeneralTools.Game.UniverseModel.UniverseTime;
+
+        var orbit = getOrbit();
+        if (orbit == null)
+            return;
+
+        lift.logger.LogMessage($"Circularize TimeToAp = {orbit.TimeToAp}");
+        if (!K2D2OtherModsInterface.instance.Circularize(current_time + orbit.TimeToAp, 0))
+        {    
+            status_msg = "Error Creating Node";
         }
-        else
-        {
-            lift.EndLiftPilot(false, "Error Creating Node");
-        }
+        
         return;
     }
 
+    void createNowNode()
+    {
+        var current_time = GeneralTools.Game.UniverseModel.UniverseTime;
+        if (!K2D2OtherModsInterface.instance.Circularize(current_time + 30, 0))
+        {    
+            status_msg = "Error Creating Node";
+        }
+        
+        return;
+    }
+    
+
+
     public override void onGUI()
     {
-        UI_Tools.Console("--------------");
+        // if (UI_Tools.BigButton("Pause"))
+        // {
+        //     TimeWarpTools.SetIsPaused(true);
+        // }
+            
 
-        if (remaining >= 0)
-            UI_Tools.Console($"Waiting : {StrTool.DurationToString(remaining)}");
+        GUILayout.BeginHorizontal();
 
-
-        if (UI_Tools.Button("Final !"))
+        if (UI_Tools.Button("Create Node at AP"))
         {
-            createCircleNode();
+            removeAllNodes();
+            createApNode();
         }
+
+        if (UI_Tools.Button("Create Node Now"))
+        {
+            removeAllNodes();
+            createNowNode();
+        }
+
+        GUILayout.EndHorizontal();
+
+        if (AutoExecuteManeuver.Instance.current_maneuver_node != null)
+        {
+            if (UI_Tools.Button("Execute"))
+            {
+                TimeWarpTools.SetIsPaused(false);
+                AutoExecuteManeuver.Instance.Start();
+            }
+        }
+
+        if (!string.IsNullOrEmpty(status_msg))
+        {
+            UI_Tools.Warning(status_msg);
+        }
+    }
+
+    void removeAllNodes()
+    {
+        ManeuverPlanComponent maneuvers_component = current_vessel?.VesselComponent?.SimulationObject.FindComponent<ManeuverPlanComponent>();
+        if (maneuvers_component == null)
+        {
+            lift.logger.LogWarning("no ManeuverPlanComponent");
+            return;
+        }
+        List<ManeuverNodeData> nodes = maneuvers_component.GetNodes();
+        if (nodes == null)
+        {
+            lift.logger.LogWarning("no ManeuverPlanComponent");
+            return;
+        }
+            
+        maneuvers_component.RemoveNodes(nodes);
     }
 
     public override void Update()
     {
-        if (time_to_wait < 0)
-            return;
-
-        remaining = time_to_wait - GeneralTools.Current_UT;
-        // if (remaining < 0)
-        //     createCircleNode();
+       
     }
 }

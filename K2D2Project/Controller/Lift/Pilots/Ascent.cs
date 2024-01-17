@@ -114,7 +114,7 @@ public class Ascent : ExecuteController
         applyDirection();
         finished = false;
         float remaining_Ap = lift_settings.destination_Ap_km - ap_km;
-        if (remaining_Ap <= lift_settings.end_ascent_altitude)
+        if (remaining_Ap <= lift_settings.end_ascent_error)
         {
             finished = true;
             return;

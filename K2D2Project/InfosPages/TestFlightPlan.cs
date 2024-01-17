@@ -24,17 +24,17 @@ class TestFlightPlan : BaseController
         }
     }
 
-    bool Circularize(double burnUT, double burnOffsetFactor = -0.5)
+    public static bool Circularize(double burnUT, double burnOffsetFactor = -0.5)
     {
         if (K2D2OtherModsInterface.instance.Circularize(burnUT, burnOffsetFactor))
         {
-            K2D2_Plugin.Instance.FlyNode();
+          
             return true;
         }
         return false;
     }
 
-    PatchedConicsOrbit getOrbit()
+    public static PatchedConicsOrbit getOrbit()
     {
         var current_vessel = K2D2_Plugin.Instance.current_vessel;
         if (current_vessel == null)
@@ -51,20 +51,20 @@ class TestFlightPlan : BaseController
 
         PatchedConicsOrbit orbit = current_vessel.VesselComponent.Orbit;
         return orbit; 
-       
-
-        
-        
     }
-    
 
     public override void onGUI()
+    {
+        FPToolsUI();
+    }
+
+    public static void FPToolsUI()
     {
         var fpLoaded = K2D2OtherModsInterface.fpLoaded;
 
         if (!fpLoaded)
         {
-            UI_Tools.Warning("Flight Plan not detected, please install this fantastic Mod");
+            UI_Tools.Warning("Flight Plan not detected, install this fantastic Mod to create Nodes");
             return;
         }
 

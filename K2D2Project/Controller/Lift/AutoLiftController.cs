@@ -7,6 +7,7 @@ using KTools;
 using KTools.UI;
 using Steamworks;
 using UnityEngine;
+using BepInEx.Logging;
 
 namespace K2D2.Controller;
 
@@ -21,6 +22,7 @@ public class AutoLiftController : ComplexController
         Circularize
     }
 
+    public ManualLogSource logger = BepInEx.Logging.Logger.CreateLogSource("K2D2.Lift");
 
     public static AutoLiftController Instance { get; set; }
 
@@ -40,7 +42,6 @@ public class AutoLiftController : ComplexController
     FinalCircularize final_circularize;
 
     ExecuteController current_subpilot = null;
-
 
     public AutoLiftController()
     {
@@ -103,9 +104,6 @@ public class AutoLiftController : ComplexController
                 current_subpilot.Start();
         }
     }
-
-
-
 
     public override bool isRunning
     {
@@ -209,7 +207,7 @@ public class AutoLiftController : ComplexController
             lift_settings.heading = UI_Tools.HeadingControl("lift.heading", lift_settings.heading);
 
             GUILayout.BeginHorizontal();
-            if (UI_Tools.miniButton("Hide"))
+            if (UI_Tools.miniButton("Hide profile"))
             {
                 show_profile = false;
             }

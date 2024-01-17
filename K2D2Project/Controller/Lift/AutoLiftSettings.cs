@@ -104,7 +104,7 @@ public class AutoLiftSettings
         }
     }
 
-    public float end_ascent_altitude
+    public float end_ascent_error
     {
          get => destination_Ap_km * end_ascent_pc/100;
     }
@@ -138,25 +138,39 @@ public class AutoLiftSettings
             KBaseSettings.sfile.SetFloat("lift.end_adjust_pc", value);
         }
     }
-    public float end_adjust_altitude
+    public float end_adjust_error
     {
          get => destination_Ap_km * end_adjust_pc/100;
     }
+
+    public bool pause_on_final
+    {
+        get => KBaseSettings.sfile.GetBool("lift.pause_on_final", true);
+        set
+        {
+            KBaseSettings.sfile.SetBool("lift.pause_on_final", value);
+        }
+    }
+
+
 
     public void onGUI()
     {
         UI_Tools.Title("Lift Settings");
 
-        UI_Tools.Label("Ascent Precision");
-        end_ascent_pc = UI_Tools.FloatSliderTxt("Ap Alt Error ", end_ascent_pc, 0.001f, 1, "%", "Speed when touching ground");
+        UI_Tools.Label($"End Ascent Alt. : {destination_Ap_km - end_ascent_error:n2} km");
+        end_ascent_pc = UI_Tools.FloatSliderTxt("Ap Alt Error ", end_ascent_pc, 0.001f, 0.5f, "%");
 
         coasting_warp = UI_Tools.Toggle(coasting_warp, "Coasting Warp", "Auto Warp while waiting for leaving Atm.");
 
         adjust = UI_Tools.Toggle(adjust, "Fine Adjust", "Precisely adjust AP");
 
-        UI_Tools.Label("Adjust Precision");
-        end_adjust_pc = UI_Tools.FloatSliderTxt("Ap Alt Error ", end_adjust_pc, 0.001f, 1, "%", "Speed when touching ground");
+        if (adjust)
+        {
+            UI_Tools.Label($"End Adjust Alt : {destination_Ap_km - end_adjust_error:n2} km");
+            end_adjust_pc = UI_Tools.FloatSliderTxt("Ap Alt Error ", end_adjust_pc, 0.001f, 0.5f, "%");
+        }
 
-
+        pause_on_final = UI_Tools.Toggle(pause_on_final, "Pause on Final", "Pause when creating final node");
     }
 }
