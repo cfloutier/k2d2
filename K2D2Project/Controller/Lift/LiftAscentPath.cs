@@ -16,7 +16,7 @@ namespace K2D2.Controller;
 
 public class LiftAscentPath
 {
-    public LiftAscentPath(AutoLiftSettings lift_settings)
+    public LiftAscentPath(LiftSettings lift_settings)
     {
         this.lift_settings = lift_settings;
     }
@@ -45,7 +45,7 @@ public class LiftAscentPath
     }
 
 
-    AutoLiftSettings lift_settings;
+    LiftSettings lift_settings;
 
 
     private Texture2D  _pathTexture = new Texture2D(1,1);

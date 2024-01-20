@@ -14,13 +14,13 @@ namespace K2D2.Controller.Lift.Pilots;
 /// </summary>
 public class FinalCircularize : ExecuteController
 {
-    AutoLiftSettings lift_settings = null;
+    LiftSettings lift_settings = null;
 
     KSPVessel current_vessel;
 
-    AutoLiftController lift;
+    LiftController lift;
 
-    public FinalCircularize(AutoLiftController lift, AutoLiftSettings lift_settings)
+    public FinalCircularize(LiftController lift, LiftSettings lift_settings)
     {
         current_vessel = K2D2_Plugin.Instance.current_vessel;
         this.lift = lift;
@@ -119,12 +119,12 @@ public class FinalCircularize : ExecuteController
 
         GUILayout.EndHorizontal();
 
-        if (AutoExecuteManeuver.Instance.current_maneuver_node != null)
+        if (NodeExecute.Instance.current_maneuver_node != null)
         {
             if (UI_Tools.Button("Execute"))
             {
-                TimeWarpTools.SetIsPaused(false);
-                AutoExecuteManeuver.Instance.Start();
+                
+                NodeExecute.Instance.Start();
             }
         }
 

@@ -13,13 +13,13 @@ namespace K2D2.Controller.Lift.Pilots;
 /// </summary>
 public class Coasting : ExecuteController
 {
-    AutoLiftSettings lift_settings = null;
+    LiftSettings lift_settings = null;
 
     KSPVessel current_vessel;
 
-    AutoLiftController lift;
+    LiftController lift;
 
-    public Coasting(AutoLiftController lift, AutoLiftSettings lift_settings)
+    public Coasting(LiftController lift, LiftSettings lift_settings)
     {
         current_vessel = K2D2_Plugin.Instance.current_vessel;
         this.lift = lift;

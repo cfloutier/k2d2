@@ -154,6 +154,9 @@ public class TurnTo : ExecuteController
         double max_angle = 5;
 
         var telemetry = SASTool.getTelemetry();
+        if (telemetry == null)
+            return false;
+            
         Vector prograde_dir;
         if (speedMode == SpeedDisplayMode.Orbit)
             prograde_dir = telemetry.OrbitMovementPrograde;

@@ -1,3 +1,13 @@
+# v0.12.1
+
+* Fix in Node Tab. in rare case the Node was not detected properly.
+* Fixed an issue with staging when loading a scene during a stage change.
+* Node execution
+  - The game is Unpaused on Start
+  - added a button to pause the game just after execution of a node. 
+* Lift : added a heading correction. it will try to adapt the heading depending on the current speed direction.
+The final orbit should be in the proper plane ! 
+
 # v0.12
 
 * AutoStaging is off by default

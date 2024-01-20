@@ -12,7 +12,7 @@ set Create_zip=True
 set Close_KSP2=True
 
 @REM Open KSP after build
-set Open_KSP2=True
+set Open_KSP2=False
 
 @REM Copy to Other Mods repos
 set PostBuildCopy=..\FlightPlan\FlightPlanProject\external_dlls;..\ManeuverNodeController\ManeuverNodeControllerProject\external_dlls

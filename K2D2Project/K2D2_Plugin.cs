@@ -92,7 +92,6 @@ public class K2D2_Plugin : BaseSpaceWarpPlugin
     {
         if (GeneralTools.Game == null) return false;
 
-
         var state = GeneralTools.Game.GlobalGameState.GetState();
         bool is_valid = validScenes.Contains(state);
         if (!is_valid)
@@ -106,7 +105,8 @@ public class K2D2_Plugin : BaseSpaceWarpPlugin
     public static void ResetControllers()
     {
         if (!loaded) return;
-        Instance.controllerManager.onReset();
+        StagingController.Instance.onReset();
+        Instance.controllerManager.onReset(); 
     }
 
     // Controllers
@@ -143,7 +143,7 @@ public class K2D2_Plugin : BaseSpaceWarpPlugin
         gameObject.hideFlags = HideFlags.HideAndDontSave;
         DontDestroyOnLoad(gameObject);
 
-        //logger.LogMessage("building AutoExecuteManeuver");
+        //logger.LogMessage("building NodeExecute");
 
         // Setups
         _maneuverProvider = new ManeuverProvider(ref maneuverManager, logger);
@@ -156,14 +156,15 @@ public class K2D2_Plugin : BaseSpaceWarpPlugin
 
         // Add Controllers that inherit from BaseController here:
         controllerManager.AddController(new SimpleManeuverController(logger, ref _maneuverProvider));
-        controllerManager.AddController(new AutoExecuteManeuver());
+        controllerManager.AddController(new NodeExecute());
         controllerManager.AddController(new LandingController());
         controllerManager.AddController(new DroneController());
         controllerManager.AddController(new AttitudeController());
-        controllerManager.AddController(new AutoLiftController());
+        controllerManager.AddController(new LiftController());
         controllerManager.AddController(new CircleController());
         // controllerManager.AddController(new WarpController());
         controllerManager.AddController(new DockingAssist());
+
 
         ShapeDrawer.Instance.shapes.Add(DockingAssist.Instance.drawShapes);
 
@@ -399,24 +400,24 @@ public class K2D2_Plugin : BaseSpaceWarpPlugin
     // Public API to perform a precision node execution using K2-D2
     public void FlyNode()
     {
-        AutoExecuteManeuver.Instance.Start();
+        NodeExecute.Instance.Start();
     }
 
     public void StopFlyNode()
     {
-        AutoExecuteManeuver.Instance.Stop();
+        NodeExecute.Instance.Stop();
     }
 
     public bool IsFlyNodeRunning()
     {
-        return AutoExecuteManeuver.Instance.isRunning;
+        return NodeExecute.Instance.isRunning;
     }
 
     // Public API to get the status of K2D2 (used by FlightPlan)
     public string GetStatus()
     {
         string status = "";
-        var instance = AutoExecuteManeuver.Instance;
+        var instance = NodeExecute.Instance;
         if (instance.current_maneuver_node == null)
         {
             status = "No Maneuver Node";
@@ -424,21 +425,21 @@ public class K2D2_Plugin : BaseSpaceWarpPlugin
         else
         {
             if (!instance.valid_maneuver) status = "Invalid Maneuver Node";
-            // else if (!AutoExecuteManeuver.Instance.canStart()) status = "No Future Maneuver Node";
+            // else if (!NodeExecute.Instance.canStart()) status = "No Future Maneuver Node";
             else if (instance.isRunning)
             {
-                if (instance.mode == AutoExecuteManeuver.Mode.Off) status = "Off";
-                else if (instance.mode == AutoExecuteManeuver.Mode.Turn)
+                if (instance.mode == NodeExecute.Mode.Off) status = "Off";
+                else if (instance.mode == NodeExecute.Mode.Turn)
                 {
                     status = $"Turning: {instance.current_executor.status_line}";
                     // report angle deviation?
                 }
-                else if (instance.mode == AutoExecuteManeuver.Mode.Warp)
+                else if (instance.mode == NodeExecute.Mode.Warp)
                 {
                     status = $"Warping: {instance.current_executor.status_line}";
                     // report time to node?
                 }
-                else if (instance.mode == AutoExecuteManeuver.Mode.Burn)
+                else if (instance.mode == NodeExecute.Mode.Burn)
                 {
                     if (Game.UniverseModel.UniverseTime < instance.current_maneuver_node.Time)
                     {

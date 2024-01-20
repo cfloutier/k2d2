@@ -6,7 +6,7 @@ namespace K2D2.Controller;
 using KTools.UI;
 using UnityEngine;
 
-public class AutoLiftSettings
+public class LiftSettings
 {
     public float heading
     {
@@ -152,11 +152,20 @@ public class AutoLiftSettings
         }
     }
 
-
+    public bool heading_correction
+    {
+        get => KBaseSettings.sfile.GetBool("lift.heading_correction", true);
+        set
+        {
+            KBaseSettings.sfile.SetBool("lift.heading_correction", value);
+        }
+    }
 
     public void onGUI()
     {
         UI_Tools.Title("Lift Settings");
+
+        heading_correction = UI_Tools.Toggle(heading_correction, "Heading Correction", "Correct the Speed direction to fit wanted heading");
 
         UI_Tools.Label($"End Ascent Alt. : {destination_Ap_km - end_ascent_error:n2} km");
         end_ascent_pc = UI_Tools.FloatSliderTxt("Ap Alt Error ", end_ascent_pc, 0.001f, 0.5f, "%");
@@ -170,6 +179,8 @@ public class AutoLiftSettings
             UI_Tools.Label($"End Adjust Alt : {destination_Ap_km - end_adjust_error:n2} km");
             end_adjust_pc = UI_Tools.FloatSliderTxt("Ap Alt Error ", end_adjust_pc, 0.001f, 0.5f, "%");
         }
+
+
 
         pause_on_final = UI_Tools.Toggle(pause_on_final, "Pause on Final", "Pause when creating final node");
     }

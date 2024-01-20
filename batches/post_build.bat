@@ -23,7 +23,7 @@ if "%Create_zip%"=="True" (
 call copy_to_ksp.bat %ConfigurationName% %Project_name%
 
 if "%Open_KSP2%"=="True" (
-    "%KSP2_LOCATION%\KSP2_x64.exe"
+   "%KSP2_LOCATION%\KSP2_x64.exe"
 )
 
 @REM copy to dependencies dll

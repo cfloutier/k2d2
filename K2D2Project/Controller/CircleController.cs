@@ -37,11 +37,11 @@ class CircleController : BaseController
             maneuver_creator.CircularizeOrbitPeriapsis();
         }
 
-        if (AutoExecuteManeuver.Instance.canStart())
+        if (NodeExecute.Instance.canStart())
         {
             if (UI_Tools.SmallButton("Execute"))
             {
-                AutoExecuteManeuver.Instance.Start();
+                NodeExecute.Instance.Start();
             }
         }
     }

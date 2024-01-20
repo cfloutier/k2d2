@@ -272,6 +272,12 @@ public class StagingController : BaseController
     }
 
 
+    public override void onReset()
+    {
+        is_staging = false;
+    }
+
+
 
 
 

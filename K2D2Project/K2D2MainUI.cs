@@ -32,13 +32,13 @@ public class K2D2MainUI
     {
         if (!init_done)
         {
-            tabs.pages.Add(AutoExecuteManeuver.Instance);
+            tabs.pages.Add(NodeExecute.Instance);
           //  tabs.pages.Add(CircleController.Instance);
 
             tabs.pages.Add(LandingController.Instance);
             tabs.pages.Add(DroneController.Instance);
 
-            tabs.pages.Add(AutoLiftController.Instance);
+            tabs.pages.Add(LiftController.Instance);
             tabs.pages.Add(AttitudeController.Instance);
             // tabs.pages.Add(WarpController.Instance);
             // tabs.pages.Add(TestObjects.Instance);

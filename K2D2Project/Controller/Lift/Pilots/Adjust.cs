@@ -13,7 +13,7 @@ namespace K2D2.Controller.Lift.Pilots;
 /// </summary>
 public class Adjust : ExecuteController
 {
-    AutoLiftSettings lift_settings = null;
+    LiftSettings lift_settings = null;
     Ascent ascent = null;
 
     TurnTo turn_to = null;
@@ -21,7 +21,7 @@ public class Adjust : ExecuteController
 
     float wanted_throttle = 0;
 
-    public Adjust(AutoLiftSettings lift_settings, Ascent ascent)
+    public Adjust(LiftSettings lift_settings, Ascent ascent)
     {
         current_vessel = K2D2_Plugin.Instance.current_vessel;
         this.lift_settings = lift_settings;

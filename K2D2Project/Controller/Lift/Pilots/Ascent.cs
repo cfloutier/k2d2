@@ -2,7 +2,7 @@
 using K2D2.KSPService;
 using KSP.Sim;
 using KSP.Sim.impl;
-
+using KTools;
 using KTools.UI;
 using UnityEngine;
 
@@ -13,15 +13,15 @@ namespace K2D2.Controller.Lift.Pilots;
 /// </summary>
 public class Ascent : ExecuteController
 {
-    AutoLiftSettings lift_settings = null;
+    LiftSettings settings = null;
     LiftAscentPath ascent_path = null;
 
     KSPVessel current_vessel;
 
-    public Ascent(AutoLiftSettings lift_settings, LiftAscentPath ascent_path)
+    public Ascent(LiftSettings lift_settings, LiftAscentPath ascent_path)
     {
         current_vessel = K2D2_Plugin.Instance.current_vessel;
-        this.lift_settings = lift_settings;
+        this.settings = lift_settings;
         this.ascent_path = ascent_path;
     }
 
@@ -32,6 +32,9 @@ public class Ascent : ExecuteController
     float wanted_elevation;
 
     float wanted_throttle = 0;
+
+    float heading_correction = 0;
+    float h_speed_heading = 0;
 
     public override void Start()
     {
@@ -91,30 +94,70 @@ public class Ascent : ExecuteController
         var telemetry = SASTool.getTelemetry();
         var up = telemetry.HorizonUp;
 
-        Vector3d direction = QuaternionD.Euler(-wanted_elevation, lift_settings.heading, 0) * Vector3d.forward;
+        if (settings.heading_correction)
+        {
+            computeSpeedHeading();
+        }
+        else
+            heading_correction = 0;
+
+
+        Vector3d direction = QuaternionD.Euler(-wanted_elevation, settings.heading + heading_correction, 0) * Vector3d.forward;
+
+
+
         Vector direction_vector = new Vector(up.coordinateSystem, direction);
 
         autopilot.SAS.lockedMode = false;
         autopilot.SAS.SetTargetOrientation(direction_vector, false);
     }
 
+    void computeSpeedHeading()
+    {
+        // use Up local coordinate as reference frame
+        var Upcoords = current_vessel.VesselVehicle.Up.coordinateSystem;
+        var SurfaceVelocity = Vector.Reframed(current_vessel.VesselVehicle.SurfaceVelocity, Upcoords).vector;
+        var North = Vector.Reframed(current_vessel.VesselVehicle.North, Upcoords).vector;
+        var Up = current_vessel.VesselVehicle.Up.vector;
+
+        var UpSpeed = Up.normalized * Vector3d.Dot(SurfaceVelocity, Up);
+        var LocalHSpeed = SurfaceVelocity - UpSpeed;
+
+       
+        h_speed_heading = (float)-Vector3d.SignedAngle(LocalHSpeed.normalized, North, Up);
+
+
+
+        heading_correction = GeneralTools.diffAngle(settings.heading, h_speed_heading);
+
+        if (heading_correction > 45)
+            heading_correction = 45;
+        else if (heading_correction < -45)
+            heading_correction = -45;
+    }
+
     public override void onGUI()
     {
+        UI_Tools.Label($"Apoapsis Alt. = {ap_km:n2} km");
+        UI_Tools.Console($"Last delta ap. = {delta_ap_per_second:n2} km/s");
         UI_Tools.Console($"Altitude = {current_altitude_km:n2} km");
-        UI_Tools.Console($"Apoapsis Alt. = {ap_km:n2} km");
 
         UI_Tools.Console($"Inclination = {wanted_elevation:n2} °");
-
-        UI_Tools.Console($"Last delta ap. = {delta_ap_per_second:n2} km/s");
         UI_Tools.Console($"wanted_throttle. = {wanted_throttle:n2}");
+
+        if (settings.heading_correction)
+        {
+            UI_Tools.Console($"h_speed_heading. = {h_speed_heading:n2}°");
+            UI_Tools.Console($"heading_correction. = {heading_correction:n2}°");        
+        }
     }
 
     public override void Update()
     {
         applyDirection();
         finished = false;
-        float remaining_Ap = lift_settings.destination_Ap_km - ap_km;
-        if (remaining_Ap <= lift_settings.end_ascent_error)
+        float remaining_Ap = settings.destination_Ap_km - ap_km;
+        if (remaining_Ap <= settings.end_ascent_error)
         {
             finished = true;
             return;
@@ -123,13 +166,13 @@ public class Ascent : ExecuteController
         {
             if (delta_ap_per_second <= 0)
             {
-                wanted_throttle = lift_settings.max_throttle;
+                wanted_throttle = settings.max_throttle;
             }
             else
             {
                 wanted_throttle = remaining_Ap / delta_ap_per_second;
-                if (wanted_throttle > lift_settings.max_throttle)
-                    wanted_throttle = lift_settings.max_throttle;
+                if (wanted_throttle > settings.max_throttle)
+                    wanted_throttle = settings.max_throttle;
             }
 
             current_vessel.SetThrottle(wanted_throttle);

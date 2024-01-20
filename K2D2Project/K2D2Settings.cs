@@ -14,12 +14,6 @@ public class K2D2Settings
         set { KBaseSettings.sfile.SetBool("debug_mode", value); }
     }
 
-    public static bool auto_next
-    {
-        get => KBaseSettings.sfile.GetBool("auto_next", true);
-        set { KBaseSettings.sfile.SetBool("auto_next", value); }
-    }
-
     public static float ui_size
     {
         get

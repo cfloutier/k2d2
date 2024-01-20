@@ -46,6 +46,15 @@ public static class GeneralTools
         return dt;
     }
 
+    public static float diffAngle(float angle_1, float angle_2)
+    {
+        float diff = angle_1 - angle_2;
+        if (diff > 180) diff -= 360;
+        if (diff < -180) diff += 360;
+        return diff;
+    }
+
+
     public static Guid createGuid()
     {
         return Guid.NewGuid();

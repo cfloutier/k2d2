@@ -11,7 +11,7 @@ using BepInEx.Logging;
 
 namespace K2D2.Controller;
 
-public class AutoLiftController : ComplexController
+public class LiftController : ComplexController
 {
     public enum LiftStatus
     {
@@ -24,9 +24,9 @@ public class AutoLiftController : ComplexController
 
     public ManualLogSource logger = BepInEx.Logging.Logger.CreateLogSource("K2D2.Lift");
 
-    public static AutoLiftController Instance { get; set; }
+    public static LiftController Instance { get; set; }
 
-    AutoLiftSettings lift_settings = null;
+    LiftSettings lift_settings = null;
     LiftAscentPath ascent_path = null;
 
     KSPVessel current_vessel;
@@ -43,11 +43,11 @@ public class AutoLiftController : ComplexController
 
     ExecuteController current_subpilot = null;
 
-    public AutoLiftController()
+    public LiftController()
     {
         current_vessel = K2D2_Plugin.Instance.current_vessel;
 
-        lift_settings = new AutoLiftSettings();
+        lift_settings = new LiftSettings();
         ascent_path = new LiftAscentPath(lift_settings);
 
         ascent = new Ascent(lift_settings, ascent_path);

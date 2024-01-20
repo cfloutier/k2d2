@@ -81,6 +81,7 @@ namespace K2D2.KSPService
 
         public void SetThrottle(float throttle)
         {
+            VesselVehicle = GetActiveSimVehicle();
             // WARNING can only be called from Update not FixedUpdate
             if (VesselVehicle == null) return;
 
@@ -126,7 +127,6 @@ namespace K2D2.KSPService
             solver = VesselComponent?.Orbiter?.ManeuverPlanSolver;
             return solver;
         }
-
 
         public void SetSpeedMode(SpeedDisplayMode mode)
         {
