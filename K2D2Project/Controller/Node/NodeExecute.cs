@@ -16,7 +16,7 @@ public class NodeExecute : ComplexController
 
     public static NodeExecute Instance { get; set; }
 
-    public ManeuverNodeData current_maneuver_node = null;
+    public ManeuverNodeData next_maneuver_node = null;
     ManeuverNodeData execute_node = null;
 
     NodeExecuteSettings execute_settings = new NodeExecuteSettings();
@@ -80,12 +80,12 @@ public class NodeExecute : ComplexController
 
         if (mode != Mode.Off)
         {
-            if (current_maneuver_node == null)
+            if (next_maneuver_node == null)
                 checkManeuver();
 
-            if (current_maneuver_node == null)
+            if (next_maneuver_node == null)
             {
-                isRunning = false;
+                Stop();
                 return;
             }
         }
@@ -96,7 +96,8 @@ public class NodeExecute : ComplexController
                 current_executor.setController(null);
                 break;
             case Mode.Turn:
-                execute_node = current_maneuver_node;
+                // start
+                execute_node = next_maneuver_node;
                 current_executor.setController(turn);
                 turn.StartManeuver(execute_node);
                 break;
@@ -121,10 +122,10 @@ public class NodeExecute : ComplexController
 
     public bool canStart()
     {
-        if (current_maneuver_node == null)
+        if (next_maneuver_node == null)
             return false;
 
-        var dt = GeneralTools.remainingStartTime(current_maneuver_node);
+        var dt = GeneralTools.remainingStartTime(next_maneuver_node);
         if (dt < 0)
         {
             return false;
@@ -164,7 +165,7 @@ public class NodeExecute : ComplexController
 
         if (!isRunning)
         {
-            if (current_maneuver_node == null)
+            if (next_maneuver_node == null)
             {
                 UI_Tools.Label("No Maneuver node.");
                 TestFlightPlan.FPToolsUI();
@@ -190,11 +191,7 @@ public class NodeExecute : ComplexController
             return;
         }
 
-        
-
-
         GUILayout.BeginHorizontal();
-
         isRunning = UI_Tools.BigToggleButton(isRunning, "Run", "Stop");
 
         execute_settings.pause_on_end = GUILayout.Toggle(execute_settings.pause_on_end, 
@@ -209,9 +206,9 @@ public class NodeExecute : ComplexController
 
     public bool checkManeuver()
     {
-        current_maneuver_node = current_vessel.GetNextManeuveurNode();
+        next_maneuver_node = current_vessel.GetNextManeuveurNode();
         valid_maneuver = false;
-        if (current_maneuver_node == null)
+        if (next_maneuver_node == null)
         {
             Stop();
             return false;
@@ -247,10 +244,10 @@ public class NodeExecute : ComplexController
         if (isRunning)
         {
             if (execute_node == null)
-                execute_node = current_maneuver_node;
-
-            if (execute_node == null)
+            {
+                Stop();
                 return;
+            }
 
             //stagingController.CheckStaging();
             double UT = 0;
@@ -303,7 +300,7 @@ public class NodeExecute : ComplexController
         if (isRunning)
             node = execute_node;
         else
-            node = current_maneuver_node;
+            node = next_maneuver_node;
 
         if (node == null)
             return;

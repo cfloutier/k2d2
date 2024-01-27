@@ -418,7 +418,7 @@ public class K2D2_Plugin : BaseSpaceWarpPlugin
     {
         string status = "";
         var instance = NodeExecute.Instance;
-        if (instance.current_maneuver_node == null)
+        if (instance.next_maneuver_node == null)
         {
             status = "No Maneuver Node";
         }
@@ -441,7 +441,7 @@ public class K2D2_Plugin : BaseSpaceWarpPlugin
                 }
                 else if (instance.mode == NodeExecute.Mode.Burn)
                 {
-                    if (Game.UniverseModel.UniverseTime < instance.current_maneuver_node.Time)
+                    if (Game.UniverseModel.UniverseTime < instance.next_maneuver_node.Time)
                     {
                         status = $"Waiting to Burn: {instance.current_executor.status_line}";
                     }

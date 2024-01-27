@@ -119,7 +119,7 @@ public class FinalCircularize : ExecuteController
 
         GUILayout.EndHorizontal();
 
-        if (NodeExecute.Instance.current_maneuver_node != null)
+        if (NodeExecute.Instance.next_maneuver_node != null)
         {
             if (UI_Tools.Button("Execute"))
             {
