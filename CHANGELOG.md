@@ -1,3 +1,10 @@
+# v0.12.3
+* Rebuild with KSP v0.2.1.0 
+
+# v0.12.2 - Small fixes update : 
+* Fix : Corrected a weird behavior in Node Execute Pilot when deleting a node during burn.
+* Node ex : corrected the pause button UI. 
+
 # v0.12.1
 
 * Fix in Node Tab. in rare case the Node was not detected properly.

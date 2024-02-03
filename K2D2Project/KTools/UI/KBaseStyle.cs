@@ -56,11 +56,13 @@ namespace KTools.UI
         {
             label = skin.label;
 
-            icons_label = new GUIStyle(GUI.skin.GetStyle("Label"));
-            icons_label.border = new RectOffset(0, 0, 0, 0);
-            icons_label.padding = new RectOffset(0, 0, 0, 0);
-            icons_label.margin = new RectOffset(0, 0, 0, 0);
-            icons_label.overflow = new RectOffset(0, 0, 0, 0);
+            icons_label = new GUIStyle(GUI.skin.GetStyle("Label"))
+            {
+                border = new RectOffset(0, 0, 0, 0),
+                padding = new RectOffset(0, 0, 0, 0),
+                margin = new RectOffset(0, 0, 0, 0),
+                overflow = new RectOffset(0, 0, 0, 0)
+            };
 
             error = new GUIStyle(GUI.skin.GetStyle("Label"));
             warning = new GUIStyle(GUI.skin.GetStyle("Label"));
@@ -100,11 +102,16 @@ namespace KTools.UI
             title.fontSize = 20;
         }
 
-        public static GUIStyle separator, window, box;
+        public static GUIStyle separator, window, box, tooltip;
         static void BuildFrames()
         {
             window = skin.window;
             box = skin.box;
+
+            tooltip = new GUIStyle(box)
+            {
+                padding = new RectOffset(10, 5, 5, 5)
+            };
 
             // separator
             separator = new GUIStyle(box);
@@ -123,8 +130,6 @@ namespace KTools.UI
             v_line.normal.background = AssetsLoader.loadIcon("V_Line");
             setAllFromNormal(v_line);
             v_line.border = new RectOffset(0, 0, 0, 0);
-
-
         }
 
         public static GUIStyle heading, text_heading_mini, text_heading_big;
@@ -136,14 +141,18 @@ namespace KTools.UI
             setAllFromNormal(heading);
             heading.margin = new RectOffset(0, 0, 5, 5);
 
-            text_heading_mini = new GUIStyle(console_text);
-            text_heading_mini.alignment = TextAnchor.UpperCenter;
+            text_heading_mini = new GUIStyle(console_text)
+            {
+                alignment = TextAnchor.UpperCenter
+            };
             text_heading_mini.normal.textColor = Color.white;
             text_heading_mini.fontSize = 10;
             setAllFromNormal(text_heading_mini);
 
-            text_heading_big = new GUIStyle(small_button);
-            text_heading_big.padding = new RectOffset();
+            text_heading_big = new GUIStyle(small_button)
+            {
+                padding = new RectOffset()
+            };
             text_heading_big.normal.background = AssetsLoader.loadIcon("Empty");
             text_heading_big.fontSize = 16;
             text_heading_big.font = arial_bold_font;
@@ -151,7 +160,7 @@ namespace KTools.UI
 
 
         // icons
-        public static Texture2D gear, icon, mnc_icon, cross;
+        public static Texture2D gear, icon, mnc_icon, cross, pause;
 
         static void LoadIcons()
         {
@@ -160,6 +169,7 @@ namespace KTools.UI
             icon = AssetsLoader.loadIcon("icon");
             // mnc_icon = AssetsLoader.loadIcon("mnc_new_icon_50");
             cross = AssetsLoader.loadIcon("Cross");
+            pause = AssetsLoader.loadIcon("Pause");
         }
 
         public static GUIStyle progress_bar_empty, progress_bar_full;
@@ -180,7 +190,7 @@ namespace KTools.UI
         }
 
 
-        public static GUIStyle bigicon_button, icon_button, small_button, big_button, button, repeat_button;
+        public static GUIStyle bigicon_button, icon_button, small_button, big_button, big_button_warning, button, repeat_button;
 
         static void BuildButtons()
         {
@@ -202,13 +212,22 @@ namespace KTools.UI
             small_button.alignment = TextAnchor.MiddleCenter;
             small_button.fontSize = 14;
 
-            repeat_button = new GUIStyle(small_button);
-            repeat_button.fontSize = 16;
-            repeat_button.margin = skin.textField.margin;
+            repeat_button = new GUIStyle(small_button)
+            {
+                fontSize = 16,
+                margin = skin.textField.margin
+            };
 
-
-            big_button = new GUIStyle(button);
-            big_button.font = arial_bold_font;
+            big_button = new GUIStyle(button)
+            {
+                font = arial_bold_font,
+                fixedHeight = 40,
+                border = new RectOffset(5, 5, 5, 5),
+                padding = new RectOffset(8, 8, 12, 12),
+                overflow = new RectOffset(0, 0, 0, 0),
+                // big_button.fontSize = 20;
+                alignment = TextAnchor.MiddleCenter
+            };
 
             big_button.normal.background = AssetsLoader.loadIcon("BigButton_Normal");
             big_button.normal.textColor = ColorTools.parseColor("#FFFFFF");
@@ -217,42 +236,47 @@ namespace KTools.UI
             big_button.hover.background = AssetsLoader.loadIcon("BigButton_Hover");
             big_button.active.background = AssetsLoader.loadIcon("BigButton_Active");
             big_button.onNormal = big_button.active;
-
             setFromOn(big_button);
-
-            big_button.border = new RectOffset(5, 5, 5, 5);
-            big_button.padding = new RectOffset(8, 8, 12, 12);
-            big_button.overflow = new RectOffset(0, 0, 0, 0);
-            // big_button.fontSize = 20;
-            big_button.alignment = TextAnchor.MiddleCenter;
-
+  
+            big_button_warning = new GUIStyle(big_button);
+            big_button_warning.active.background = AssetsLoader.loadIcon("BigButton_Warning");
+            big_button_warning.onNormal = big_button_warning.active;
+            setFromOn(big_button_warning);
+            
             // Small Button
-            icon_button = new GUIStyle(small_button);
-            icon_button.padding = new RectOffset(4, 4, 4, 4);
+            icon_button = new GUIStyle(small_button)
+            {
+                padding = new RectOffset(4, 4, 4, 4)
+            };
 
-            bigicon_button = new GUIStyle(icon_button);
-            bigicon_button.fixedWidth = 50;
-            bigicon_button.fixedHeight = 50;
-            bigicon_button.fontStyle = FontStyle.Bold;
+            bigicon_button = new GUIStyle(icon_button)
+            {
+                fixedWidth = 50,
+                fixedHeight = 50,
+                fontStyle = FontStyle.Bold
+            };
 
 
-            value_field = new GUIStyle(label);
-            value_field.alignment = TextAnchor.MiddleCenter;
-            value_field.normal = button.normal;
+            value_field = new GUIStyle(label)
+            {
+                alignment = TextAnchor.MiddleCenter,
+                normal = button.normal
+            };
 
         }
 
         public static GUIStyle tab_normal, tab_active;
         static void BuildTabs()
         {
-            tab_normal = new GUIStyle(button);
-
-            tab_normal.border = new RectOffset(5, 5, 5, 5);
-            tab_normal.padding = new RectOffset(10, 10, 5, 5);
-            tab_normal.overflow = new RectOffset(0, 0, 0, 0);
-            // big_button.fontSize = 20;
-            tab_normal.alignment = TextAnchor.MiddleCenter;
-            tab_normal.stretchWidth = true;
+            tab_normal = new GUIStyle(button)
+            {
+                border = new RectOffset(5, 5, 5, 5),
+                padding = new RectOffset(10, 10, 5, 5),
+                overflow = new RectOffset(0, 0, 0, 0),
+                // big_button.fontSize = 20;
+                alignment = TextAnchor.MiddleCenter,
+                stretchWidth = true
+            };
 
             tab_normal.normal.background = AssetsLoader.loadIcon("Tab_Normal");
             setAllFromNormal(tab_normal);
@@ -279,10 +303,12 @@ namespace KTools.UI
         static void BuildFoldout()
         {
 
-            foldout_close = new GUIStyle(button);
-            foldout_close.fixedHeight = 30;
-            foldout_close.padding = new RectOffset(23, 2, 2, 2);
-            foldout_close.border = new RectOffset(23, 7, 27, 3);
+            foldout_close = new GUIStyle(button)
+            {
+                fixedHeight = 30,
+                padding = new RectOffset(23, 2, 2, 2),
+                border = new RectOffset(23, 7, 27, 3)
+            };
 
             foldout_close.normal.background = AssetsLoader.loadIcon("Chapter_Off_Normal");
             foldout_close.normal.textColor = ColorTools.parseColor("#D4D4D4");

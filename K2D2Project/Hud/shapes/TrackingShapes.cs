@@ -84,9 +84,10 @@ internal class TrackingShapes
         var dashSize = major ? _radius / 20 : _radius / 50;
         var dashSpace = _radius / 7 - dashSize;
         var dashOffset = invert ? 0 : 0.5f;
-        var dashStyle = new DashStyle(dashSize, dashSpace, dashOffset);
-
-        dashStyle.space = DashSpace.Meters;
+        var dashStyle = new DashStyle(dashSize, dashSpace, dashOffset)
+        {
+            space = DashSpace.Meters
+        };
 
         SpatialShapes.DrawLine(start, end, color, thickness, dashStyle);
     }

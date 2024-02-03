@@ -67,14 +67,9 @@ namespace KTools.UI
             int min_width_bt = 150;
 
             var txt = is_on ? txt_stop : txt_run;
-            // GUILayout.BeginHorizontal();
-            // GUILayout.FlexibleSpace();
             is_on = GUILayout.Toggle(is_on, txt, KBaseStyle.big_button, GUILayout.MinWidth(min_width_bt));
-            // GUILayout.FlexibleSpace();
-            // GUILayout.EndHorizontal();
             return is_on;
         }
-
 
         public static bool SmallToggleButton(bool is_on, string txt_run, string txt_stop)
         {

@@ -1,15 +1,19 @@
 reminder for next version : 
 
-* [ ] Staging only use stage with a rocket attached...
-* [ ] Lift : setup roll
-* [x] Lift : adjust attitude to correct errors in heading
-* [ ] Fix the Node ex bug when deleting it while run
+* [x] Fix the Node ex bug when deleting it while run
+* [x] Look of the Pause Button in Node ex
+
+
+
+* [ ] Lift : setup TWR
 
 -------------
-
+* [ ] Staging : only use stage with a rocket attached...
+-------------
+* [ ] Lift : setup roll
+-------------
 * [ ] Land : Force retro SAS on start up
 * [ ] Land : Adjust the 10° max direction (set in settings)  
-
 -------------
 
 

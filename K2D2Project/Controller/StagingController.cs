@@ -120,12 +120,29 @@ public class StagingController : BaseController
         {
             return;
         }
+
+        // var all_connection = vessel_component.SimulationObject.PartOwner.VirtualConnections;
+        // List<VirtualConnection> fuel_lines = new List<VirtualConnection>();
+        // foreach(var connection in all_connection)
+        // {
+        //     if (connection.relationshipType == PartRelationshipType.FuelLine)
+        //         fuel_lines.Add(connection);
+        // }
+
+        // var flow_graph = vessel_component.SimulationObject.PartOwner.FlowGraph;
+
+
+        // List all parts
         foreach (PartComponent part in vessel_component.SimulationObject.PartOwner.Parts)
         {
+
+            // stop on any ignited engine
             if (part == null || !part.TryGetModule<PartComponentModule_Engine>(out var module) || !module.EngineIgnited)
             {
                 continue;
             }
+
+            // list all containers
             List<ContainedResourceData> containedResourceData = module.GetContainedResourceData();
             if (containedResourceData == null)
             {
@@ -133,10 +150,8 @@ public class StagingController : BaseController
             }
             for (int i = 0; i < containedResourceData.Count; i++)
             {
-
-                double StoredUnits = (module.IsPropellantStarved ? 0.0 : Math.Abs(containedResourceData[i].StoredUnits));
+                double StoredUnits = module.IsPropellantStarved ? 0.0 : Math.Abs(containedResourceData[i].StoredUnits);
                 double CapacityUnits = containedResourceData[i].CapacityUnits;
-
 
                 if (!fuelCapacity.ContainsKey(containedResourceData[i].ResourceID))
                 {

@@ -68,28 +68,25 @@ public class NodeExecute : ComplexController
         if (mode == this.mode)
             return;
 
-        logger.LogInfo("setMode " + mode);
-
-        
+        logger.LogInfo("setMode " + mode);  
         if (mode == Mode.Off)
         {
             TimeWarpTools.SetRateIndex(0, false);
             current_executor.setController(null);
+            this.mode = mode;
             return;
         }
 
-        if (mode != Mode.Off)
-        {
-            if (next_maneuver_node == null)
-                checkManeuver();
+        if (next_maneuver_node == null)
+            checkManeuver();
 
-            if (next_maneuver_node == null)
-            {
-                Stop();
-                return;
-            }
+        if (next_maneuver_node == null)
+        {
+            Stop();
+            return;
         }
 
+        this.mode = mode;
         switch (mode)
         {
             case Mode.Off:
@@ -116,7 +113,6 @@ public class NodeExecute : ComplexController
                 break;
         }
 
-        this.mode = mode;
         logger.LogInfo("setMode " + mode);
     }
 
@@ -163,6 +159,8 @@ public class NodeExecute : ComplexController
             return;
         }
 
+        // UI_Tools.Console($"mode : {mode}");
+
         if (!isRunning)
         {
             if (next_maneuver_node == null)
@@ -195,8 +193,8 @@ public class NodeExecute : ComplexController
         isRunning = UI_Tools.BigToggleButton(isRunning, "Run", "Stop");
 
         execute_settings.pause_on_end = GUILayout.Toggle(execute_settings.pause_on_end, 
-                                new GUIContent("Pause", "Pause when the Node is executed"),
-                                 KBaseStyle.big_button, GUILayout.Width(80));
+                                new GUIContent(KBaseStyle.pause, "Auto-Pause when the Node is executed"),
+                                 KBaseStyle.big_button_warning, GUILayout.Width(40));
 
         GUILayout.EndHorizontal();
         current_executor.onGUI();
@@ -240,7 +238,10 @@ public class NodeExecute : ComplexController
     {
         checkManeuver();
         base.Update();
-        
+
+         if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.O))
+            isRunning = !isRunning;
+
         if (isRunning)
         {
             if (execute_node == null)
@@ -266,6 +267,10 @@ public class NodeExecute : ComplexController
 
             warp.UT = UT;
             burn.UT = UT;
+        }
+        else
+        {
+           
         }
        
         if (current_executor.finished)
@@ -295,7 +300,7 @@ public class NodeExecute : ComplexController
 
     void node_infos()
     {
-        UI_Tools.Title("// Node Infos");
+        UI_Tools.Title("Node Infos");
         ManeuverNodeData node = null;
         if (isRunning)
             node = execute_node;
@@ -320,31 +325,29 @@ public class NodeExecute : ComplexController
         }
     }
 
-    bool _active = false;
+
     public override bool isRunning
     {
-        get { return _active; }
+        get { return mode != Mode.Off; }
         set
         {
-            if (value == _active)
+            if (isRunning == value)
                 return;
-
+            
             if (!value)
             {
                 // stop
                 if (current_vessel != null)
                     current_vessel.SetThrottle(0);
 
-                setMode(Mode.Off);
-                _active = false;
+                setMode(Mode.Off);          
             }
             else
             {
                 // reset controller to desactivate other controllers.
                 K2D2_Plugin.ResetControllers();
                 TimeWarpTools.SetIsPaused(false);
-                _active = true;
-
+                
                 setMode(Mode.Turn);
             }
         }
@@ -352,8 +355,7 @@ public class NodeExecute : ComplexController
 
     public void Start()
     {
-        isRunning = true;
-        
+        isRunning = true;       
     }
 
     public void Stop()

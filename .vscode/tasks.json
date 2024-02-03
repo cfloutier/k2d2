@@ -48,10 +48,7 @@
             "command": "./k2d2.sln",
             "type": "shell",
             "args": [],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
+            "group": "build",
             "presentation": {
                 "reveal": "silent"
             },

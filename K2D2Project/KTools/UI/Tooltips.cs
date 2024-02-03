@@ -1,3 +1,4 @@
+using K2D2.UI;
 using UnityEngine;
 
 namespace KTools.UI
@@ -45,11 +46,11 @@ namespace KTools.UI
             if (Time.time > show_time)
             {
                 float minWidth, maxWidth;
-                GUI.skin.button.CalcMinMaxWidth(new GUIContent(draw_tool_tip), out minWidth, out maxWidth);
-                var tooltip_pos = new Rect(Input.mousePosition.x + offset.x, Screen.height - Input.mousePosition.y + offset.y, maxWidth, 10);
+                KBaseStyle.tooltip.CalcMinMaxWidth(new GUIContent(draw_tool_tip), out minWidth, out maxWidth);
+                var tooltip_pos = new Rect(Input.mousePosition.x + offset.x, Screen.height - Input.mousePosition.y + offset.y, minWidth, 10);
                 WindowTool.check_window_pos(ref tooltip_pos);
 
-                GUILayout.Window(3, tooltip_pos, WindowFunction, "", GUI.skin.button);
+                GUILayout.Window(3, tooltip_pos, WindowFunction, "", KBaseStyle.tooltip);
             }
         }
 
