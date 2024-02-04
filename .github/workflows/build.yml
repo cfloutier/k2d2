@@ -1,0 +1,30 @@
+name: Build
+
+on:
+  push:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - name: Build the solution
+        run: dotnet build "K2D2.sln" -c Release
+
+      - name: Find zip
+        id: find-zip
+        run: |
+          echo "zip=$(ls -1 dist/K2D2-*.zip | head -n 1)" >> $GITHUB_ENV
+          echo "artifact_name=K2D2Release" >> $GITHUB_ENV
+
+      - name: Upload zip artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ env.artifact_name }}
+          path: ${{ env.zip }}
+

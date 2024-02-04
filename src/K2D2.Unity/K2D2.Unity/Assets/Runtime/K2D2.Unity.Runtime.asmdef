@@ -1,0 +1,14 @@
+{
+    "name": "K2D2.Unity.Runtime",
+    "rootNamespace": "K2D2.Unity.Runtime",
+    "references": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

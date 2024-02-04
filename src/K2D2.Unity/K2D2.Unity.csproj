@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+    <!-- Project settings -->
+    <PropertyGroup>
+        <ImplicitUsings>false</ImplicitUsings>
+        <LangVersion>9</LangVersion>
+        <RootNamespace>K2D2.Unity</RootNamespace>
+    </PropertyGroup>
+    <!-- Files to compile -->
+    <ItemGroup>
+        <Compile Remove="K2D2.Unity/**"/>
+        <Compile Include="K2D2.Unity/Assets/Runtime/**/*.cs"/>
+    </ItemGroup>
+    <!-- Package references -->
+    <ItemGroup>
+        <PackageReference Include="JetBrains.Annotations" Version="2022.3.1" PrivateAssets="all"/>
+        <PackageReference Include="UnityEngine.Modules" Version="2022.3.5" PrivateAssets="all"/>
+    </ItemGroup>
+</Project>
+
