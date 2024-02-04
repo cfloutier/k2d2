@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>netstandard2.1</TargetFramework>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <LangVersion>latest</LangVersion>
+        <ImplicitUsings>true</ImplicitUsings>
+        <AssemblyName>com.github.cfloutier.k2d2</AssemblyName>
+        <Product>K2-D2</Product>
+        <Description>The KSP astromech, Keybind is ALT+O</Description>
+        <Version>0.12.3</Version>
+        <RestoreAdditionalProjectSources>
+            https://nuget.spacewarp.org/v3/index.json
+        </RestoreAdditionalProjectSources>
+        <RootNamespace>K2D2</RootNamespace>
+        <ModId Condition="'$(ModId)'==''">K2D2</ModId>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+      <DebugType>none</DebugType>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="BepInEx.Analyzers" Version="1.*" PrivateAssets="all" />
+        <PackageReference Include="BepInEx.AssemblyPublicizer.MSBuild" Version="0.4.0" PrivateAssets="all" />
+        <PackageReference Include="BepInEx.Core" Version="5.*" />
+        <PackageReference Include="BepInEx.PluginInfoProps" Version="2.*" />
+        <PackageReference Include="HarmonyX" Version="2.10.1" />
+        <PackageReference Include="SpaceWarp" Version="1.5.2" />
+        <PackageReference Include="UnityEngine.Modules" Version="2022.3.5" IncludeAssets="compile" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
+        <PackageReference Include="KerbalSpaceProgram2.GameLibs" Version="0.2.0" PrivateAssets="all" />
+    </ItemGroup>
+    <ItemGroup>
+        <Folder Include="Properties\" />
+    </ItemGroup>
+    <ItemGroup>
+		<Reference Include="maneuver_node_controller">
+			<HintPath>..\external_dlls\maneuver_node_controller.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
+		<Reference Include="flight_plan">
+			<HintPath>..\external_dlls\flight_plan.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
+	</ItemGroup>
+    <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+        <Exec Command="cd $(ProjectDir)..\batches&#xD;&#xA;call post_build.bat $(ConfigurationName) $(ModId)" />
+    </Target>
+</Project>

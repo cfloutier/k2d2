@@ -1,0 +1,6 @@
+VisualElement {
+}
+
+#CloseButtonIcon {
+    background-color: rgba(255, 0, 0, 0.45);
+}

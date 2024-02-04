@@ -44,6 +44,26 @@
             "problemMatcher": "$msCompile"
         },
         {
+            "label": "Deploy and run",
+            "command": "dotnet",
+            "type": "shell",
+            "args": [
+                "build",
+                "-c",
+                "DeployAndRun",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "reveal": "silent"
+            },
+            "problemMatcher": "$msCompile"
+        },
+        {
             "label": "open VisualStudio",
             "command": "./k2d2.sln",
             "type": "shell",

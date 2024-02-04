@@ -46,6 +46,11 @@
               SourceFiles="@(PluginPDBs)"
               DestinationFolder="$(SolutionDir)/dist/$(ConfigurationName)/BepInEx/plugins/$(ProjectName)"/>
 
+        <!-- Close game Before Deploy -->
+        <Message Text="Closing kerbal" Condition="$(ConfigurationName) == Deploy Or $(ConfigurationName) == DeployAndRun"/>
+        <Exec Condition="$(ConfigurationName) == Deploy Or $(ConfigurationName) == DeployAndRun"
+              Command="$(PowerShellExecutable) -Command &quot;&amp; {Push-Location '$(SolutionDir)/scripts'; close_ksp2.bat; Pop-Location}&quot;"/> 
+
         <!-- Compressing build directory for release -->
         <Message Text="Compressing built plugin folder" Condition="$(ConfigurationName) == Release"/>
         <Delete Condition="$(ConfigurationName) == Release"

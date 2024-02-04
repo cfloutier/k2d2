@@ -1,0 +1,252 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/ManeuverNodeControllerTheme.uss?fileID=7433441132597879392&amp;guid=73a250367c28bac49a63dab4cfd06f0e&amp;type=3#ManeuverNodeControllerTheme" />
+    <Style src="project://database/Assets/UI/NewUSSFile.uss?fileID=7433441132597879392&amp;guid=e3d4527792ecd3749be8283acc3ae3c3&amp;type=3#NewUSSFile" />
+    <ui:VisualElement name="GUIFrame">
+        <ui:VisualElement name="TitleContainer" class="row row-justified">
+            <ui:VisualElement name="ModIcon" class="header-item" />
+            <ui:Label text="MANEUVER NODE CONTROLLER" name="Title" />
+            <ui:Button name="CloseButton" tooltip="Close Window" class="header-item">
+                <ui:VisualElement name="CloseButtonIcon" />
+            </ui:Button>
+        </ui:VisualElement>
+        <ui:VisualElement class="horizontal-line row row-justified" />
+        <ui:VisualElement name="NoNodesGroup">
+            <ui:Label text="The active vessel has no maneuver nodes." name="NoNodesLabel" class="unity-label-invalid" />
+            <ui:VisualElement name="AddNode">
+                <ui:Button text="Add First Node" name="AddFirstNodeButton" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="HasNodesGroup">
+            <ui:VisualElement name="NavigateNodes" class="row row-justified">
+                <ui:Button name="DecreaseNodeIndexButton" tooltip="Select the previous node" class="fixed-button icon-left" />
+                <ui:VisualElement name="NodeIndexDisplay" class="row">
+                    <ui:Label text="Node" name="Label" />
+                    <ui:Label text="N" name="NodeIndexValue" />
+                    <ui:Label text="of" name="Label" />
+                    <ui:Label text="M" name="NodeMaxIndexValue" />
+                </ui:VisualElement>
+                <ui:Button name="IncreaseNodeIndexButton" tooltip="Select the next node" class="fixed-button icon-right" />
+            </ui:VisualElement>
+            <ui:VisualElement name="AddDelete" class="row row-justified">
+                <ui:Button text="Del Node" name="DelNodeButton" tooltip="Delete this node and all following" />
+                <ui:Button text="Check Node" name="CheckNodeButton" />
+                <ui:Button text="Add Node" name="AddNodeButton" tooltip="Add a maneuver node to this trajectory" />
+            </ui:VisualElement>
+            <ui:VisualElement name="TotalManeuverDv" class="row row-justified">
+                <ui:Label text="Total Maneuver ∆v:" name="Label" />
+                <ui:VisualElement name="ValueAndUnits" class="row">
+                    <ui:Label text="0.00" name="TotalDvValue" class="value-label" />
+                    <ui:Label text="m/s" name="Units" class="units-label" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="DvRemaining" class="row row-justified">
+                <ui:Label text="∆v Remaining:" name="Label" />
+                <ui:VisualElement name="ValueAndUnits" class="row">
+                    <ui:Label text="0.00" name="DvRemainingValue" class="value-label" />
+                    <ui:Label text="m/s" name="Units" class="units-label" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="BurnTime" class="row row-justified row-space">
+                <ui:VisualElement name="StartTime" class="row">
+                    <ui:Label text="Start:" name="Label" />
+                    <ui:Label text="y d HH:MM:ss.ss" name="StartTimeValue" class="value-label" />
+                </ui:VisualElement>
+                <ui:VisualElement name="BurnDuration" class="row">
+                    <ui:Label text="Duration:" name="Label" />
+                    <ui:Label text="HH:MM:ss.ss" name="DurationValue" class="value-label" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="SmallStepDv" class="row row-justified">
+                <ui:TextField picking-mode="Ignore" label="Small Step ∆v:" value="0" text="5.00" name="SmallStepDvInput" />
+                <ui:Label text="m/s" name="Units" class="units-label" />
+                <ui:Button text="÷10" name="SmallStepDvIncrementDownButton" class="fixed-button" />
+                <ui:Button text="×10" name="SmallStepDvIncrementUpButton" class="fixed-button" />
+            </ui:VisualElement>
+            <ui:VisualElement name="LargeStepDv" class="row row-justified row-space">
+                <ui:TextField picking-mode="Ignore" label="Large Step ∆v:" value="0" text="25.00" name="LargeStepDvInput" />
+                <ui:Label text="m/s" name="Units" class="units-label" />
+                <ui:Button text="÷10" name="LargeStepDvIncrementDownButton" class="fixed-button" />
+                <ui:Button text="×10" name="LargeStepDvIncrementUpButton" class="fixed-button" />
+            </ui:VisualElement>
+            <ui:VisualElement name="ProgradeAdjust" class="row row-justified">
+                <ui:Label text="Prograde:" name="ProgradeLabel" class="prograde direction-label" />
+                <ui:VisualElement class="row adjust-bar">
+                    <ui:VisualElement name="DecreaseButtons" class="row">
+                        <ui:RepeatButton name="LargeProgradeDecreaseButton" tooltip="Subtract Large Step ∆v" class="unity-button fixed-button icon-left-left" />
+                        <ui:RepeatButton name="SmallProgradeDecreaseButton" tooltip="Subtract Small Step ∆v" class="unity-button fixed-button icon-left" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="ProgradeDv" class="row deltav-row">
+                        <ui:VisualElement name="ValueAndUnits" class="row">
+                            <ui:TextField picking-mode="Ignore" value="10000000.00" name="ProgradeDvInput" />
+                            <ui:Label text="m/s" name="Units" class="units-label" />
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                    <ui:VisualElement name="IncreaseSetButtons" class="row">
+                        <ui:RepeatButton name="SmallProgradeIncreaseButton" tooltip="Add Small Step ∆v" class="unity-button fixed-button icon-right" />
+                        <ui:RepeatButton name="LargeProgradeIncreaseButton" tooltip="Add Large Step ∆v" class="unity-button fixed-button icon-right-right" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="NormalAdjust" class="row row-justified">
+                <ui:Label text="Normal:" name="NormalLabel" class="normal direction-label" />
+                <ui:VisualElement class="row adjust-bar">
+                    <ui:VisualElement name="DecreaseButtons" class="row">
+                        <ui:RepeatButton name="LargeNormalDecreaseButton" tooltip="Subtract Large Step ∆v" class="unity-button fixed-button icon-left-left" />
+                        <ui:RepeatButton name="SmallNormalDecreaseButton" tooltip="Subtract Small Step ∆v" class="unity-button fixed-button icon-left" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="NormalDv" class="deltav-row row">
+                        <ui:VisualElement name="ValueAndUnits" class="row">
+                            <ui:TextField picking-mode="Ignore" value="0.00" name="NormalDvInput" />
+                            <ui:Label text="m/s" name="Units" class="units-label" />
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                    <ui:VisualElement name="IncreaseSetButtons" class="row">
+                        <ui:RepeatButton name="SmallNormalIncreaseButton" tooltip="Add Small Step ∆v" class="unity-button fixed-button icon-right" />
+                        <ui:RepeatButton name="LargeNormalIncreaseButton" tooltip="Add Large Step ∆v" class="unity-button fixed-button icon-right-right" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="RadialAdjust" class="row row-justified row-space">
+                <ui:Label text="Radial:" name="RadialLabel" class="radial direction-label" />
+                <ui:VisualElement class="row adjust-bar">
+                    <ui:VisualElement name="DecreaseButtons" class="row">
+                        <ui:RepeatButton name="LargeRadialDecreaseButton" tooltip="Subtract Large Step ∆v" class="unity-button fixed-button icon-left-left" />
+                        <ui:RepeatButton name="SmallRadialDecreaseButton" tooltip="Subtract Small Step ∆v" class="unity-button fixed-button icon-left" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="RadialDv" class="deltav-row row">
+                        <ui:VisualElement name="ValueAndUnits" class="row">
+                            <ui:TextField picking-mode="Ignore" value="0.00" name="RadialDvInput" />
+                            <ui:Label text="m/s" name="Units" class="units-label" />
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                    <ui:VisualElement name="IncreaseSetButtons" class="row">
+                        <ui:RepeatButton name="SmallRadialIncreaseButton" tooltip="Add Small Step ∆v" class="unity-button fixed-button icon-right" />
+                        <ui:RepeatButton name="LargeRadialIncreaseButton" tooltip="Add Large Step ∆v" class="unity-button fixed-button icon-right-right" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="SnapTo" class="row row-space">
+                <ui:Label text="Snap To:" name="SnapToLabel" style="padding-left: 1px;" />
+                <ui:Button text="Ap" name="SnapToApButton" class="fixed-button-wide" />
+                <ui:Button text="Pe" name="SnapToPeButton" class="fixed-button-wide" />
+                <ui:Button text="ANe" name="SnapToANeButton" class="fixed-button-wide" />
+                <ui:Button text="DNe" name="SnapToDNeButton" class="fixed-button-wide" />
+                <ui:Button text="ANt" name="SnapToANtButton" class="fixed-button-wide" />
+                <ui:Button text="DNt" name="SnapToDNtButton" class="fixed-button-wide" />
+            </ui:VisualElement>
+            <ui:VisualElement name="SmallTimeStep" class="row row-justified">
+                <ui:TextField picking-mode="Ignore" label="Small Time Step:" value="0" text="5.00" name="SmallTimeStepInput" class="text-input" />
+                <ui:Label text="s" name="Units" class="units-label" />
+                <ui:Button text="÷10" name="SmallTimeStepIncrementDownButton" class="fixed-button" />
+                <ui:Button text="×10" name="SmallTimeStepIncrementUpButton" class="fixed-button" />
+            </ui:VisualElement>
+            <ui:VisualElement name="LargeTimeStep" class="row-space row row-justified">
+                <ui:TextField picking-mode="Ignore" label="Large Time Step:" value="0" text="25.00" name="LargeTimeStepInput" class="text-input" />
+                <ui:Label text="s" name="Units" class="units-label" />
+                <ui:Button text="÷10" name="LargeTimeStepIncrementDownButton" class="fixed-button" />
+                <ui:Button text="×10" name="LargeTimeStepIncrementUpButton" class="fixed-button" />
+            </ui:VisualElement>
+            <ui:VisualElement name="TimeAdjust" class="row row-justified">
+                <ui:VisualElement name="DecreaseButtons" class="row">
+                    <ui:RepeatButton name="LargeTimeDecreaseButton" tooltip="Subtract Large Time Step" class="fixed-button unity-button icon-left-left" />
+                    <ui:RepeatButton name="SmallTimeDecreaseButton" tooltip="Subtract Small Time Step" class="fixed-button unity-button icon-left" />
+                </ui:VisualElement>
+                <ui:Label text="Time" name="Label" />
+                <ui:VisualElement name="IncreaseButtons" class="row">
+                    <ui:RepeatButton name="SmallTimeIncreaseButton" tooltip="Add Small Time Step" class="fixed-button unity-button icon-right" />
+                    <ui:RepeatButton name="LargeTimeIncreaseButton" tooltip="Add Large Time Step" class="fixed-button unity-button icon-right-right" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="OrbitAdjust" class="row row-justified row-space">
+                <ui:RepeatButton text="-" name="DecreaseOrbitButton" tooltip="Shift node back one orbit" class="fixed-button unity-button orbit-button" />
+                <ui:Label text="+/- Orbital Period" name="Label" />
+                <ui:RepeatButton text="+" name="IncreaseOrbitButton" tooltip="Shift node forward one orbit" class="fixed-button unity-button orbit-button" />
+            </ui:VisualElement>
+            <ui:VisualElement name="ManeuverNodeTime" class="row row-justified row-space">
+                <ui:Label text="Maneuver Node in:" name="Label" class="row-element" />
+                <ui:VisualElement name="ValueAndUnits" class="row">
+                    <ui:Label text="0" name="NodeTimeValue" class="value-label" />
+                    <ui:Label text="orbits" name="OrbitsLabel" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:Foldout name="PreviousNextFoldout" text="Orbit details" value="false">
+                <ui:VisualElement name="PreviousNextGroup" class="row">
+                    <ui:VisualElement name="PreviousGroup" class="column-half">
+                        <ui:Label text="Previous Orbit" />
+                        <ui:VisualElement name="PreviousAp" class="row">
+                            <ui:Label text="Ap:" class="orbit-label" />
+                            <ui:Label text="279.654 km" name="PreviousApValue" class="value-label orbit-value" />
+                        </ui:VisualElement>
+                        <ui:VisualElement name="PreviousPe" class="row">
+                            <ui:Label text="Pe:" class="orbit-label" />
+                            <ui:Label text="120.331 km" name="PreviousPeValue" class="value-label orbit-value" />
+                        </ui:VisualElement>
+                        <ui:VisualElement name="PreviousInc" class="row">
+                            <ui:Label text="Inc:" class="orbit-label" />
+                            <ui:Label text="0.000" name="PreviousIncValue" class="value-label orbit-value" />
+                        </ui:VisualElement>
+                        <ui:VisualElement name="PreviousEcc" class="row">
+                            <ui:Label text="Ecc:" class="orbit-label" />
+                            <ui:Label text="0.100" name="PreviousEccValue" class="value-label orbit-value" />
+                        </ui:VisualElement>
+                        <ui:VisualElement name="PreviousLAN" class="row">
+                            <ui:Label text="LAN:" class="orbit-label" />
+                            <ui:Label text="335.907" name="PreviousLANValue" class="value-label orbit-value" />
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                    <ui:VisualElement name="NextGroup" class="column-half">
+                        <ui:Label text="Next Orbit" />
+                        <ui:VisualElement name="NextAp" class="row">
+                            <ui:Label text="Ap:" class="orbit-label" />
+                            <ui:Label text="279.653 km" name="NextApValue" class="value-label orbit-value" />
+                        </ui:VisualElement>
+                        <ui:VisualElement name="NextPe" class="row">
+                            <ui:Label text="Pe:" class="orbit-label" />
+                            <ui:Label text="120.324 km" name="NextPeValue" class="value-label orbit-value" />
+                        </ui:VisualElement>
+                        <ui:VisualElement name="NextInc" class="row">
+                            <ui:Label text="Inc:" enable-rich-text="false" class="orbit-label" />
+                            <ui:Label text="0.000" name="NextIncValue" class="value-label orbit-value" />
+                        </ui:VisualElement>
+                        <ui:VisualElement name="NextEcc" class="row">
+                            <ui:Label text="Ecc:" class="orbit-label" />
+                            <ui:Label text="0.100" name="NextEccValue" class="value-label orbit-value" />
+                        </ui:VisualElement>
+                        <ui:VisualElement name="NextLAN" class="row">
+                            <ui:Label text="LAN:" class="orbit-label" />
+                            <ui:Label text="335.907" name="NextLANValue" class="value-label orbit-value" />
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:Foldout>
+            <ui:Foldout name="EncounterFoldout" text="Post Node Event Lookahead" value="false">
+                <ui:VisualElement name="EncounterGroup" class="row">
+                    <ui:VisualElement name="EncounterBodies">
+                        <ui:Label text="Mun" name="EncounterBody1" class="value-label" />
+                        <ui:Label text="Mun" name="EncounterBody2" class="value-label" />
+                        <ui:Label text="Mun" name="EncounterBody3" class="value-label" />
+                        <ui:Label text="Kerbin" name="EncounterBody4" class="value-label" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="EncounterDetails">
+                        <ui:VisualElement name="Event1" class="row">
+                            <ui:Label text="SOI Entry @" name="EncounterType1" />
+                            <ui:Label text="HH:mm:ss.sss" name="EncounterInfo1" />
+                        </ui:VisualElement>
+                        <ui:VisualElement name="Event2" class="row">
+                            <ui:Label text="Fly By @" name="EncounterType2" />
+                            <ui:Label text="32.7 km" name="EncounterInfo2" />
+                        </ui:VisualElement>
+                        <ui:VisualElement name="Event3" class="row">
+                            <ui:Label text="SOI Exit @" name="EncounterType3" />
+                            <ui:Label text="HH:mm:ss.sss" name="EncounterInfo3" />
+                        </ui:VisualElement>
+                        <ui:VisualElement name="Event4" class="row">
+                            <ui:Label text="SOI Exit @" name="EncounterType4" />
+                            <ui:Label text="HH:mm:ss.sss" name="EncounterInfo4" />
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:Foldout>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
