@@ -1,6 +1,6 @@
 :root {
-    --mnc-font-regular: url('project://database/Assets/Fonts/LiberationSans-Regular%20SDF.asset?fileID=11400000&guid=1aa6f9b14a5b16b42ab66d521ba3157c&type=2#LiberationSans-Regular SDF');
-    --mnc-font-title: url('project://database/Assets/Fonts/Orbitron-Black%20SDF.asset?fileID=11400000&guid=5239ed64b02a55342a920e51ecef2971&type=2#Orbitron-Black SDF');
+    --mnc-font-regular: url('project://database/Assets/From_MNC/Fonts/LiberationSans-Regular%20SDF.asset?fileID=11400000&guid=1aa6f9b14a5b16b42ab66d521ba3157c&type=2#LiberationSans-Regular SDF');
+    --mnc-font-title: url('project://database/Assets/From_MNC/Fonts/Orbitron-Black%20SDF.asset?fileID=11400000&guid=5239ed64b02a55342a920e51ecef2971&type=2#Orbitron-Black SDF');
     --mnc-color-background: rgb(0, 0, 0);
     --mnc-color-text: rgb(216, 218, 221);
     --mnc-color-border: rgb(76, 79, 188);
@@ -33,7 +33,7 @@
     letter-spacing: var(--mnc-spacing);
     word-spacing: var(--mnc-spacing);
     width: 350px;
-    min-height: 350px;
+    min-height: auto;
     background-color: var(--mnc-color-background);
     -unity-background-image-tint-color: var(--mnc-color-background);
     border-radius: 12px;
@@ -278,22 +278,22 @@
 }
 
 .icon-left {
-    background-image: url('project://database/Assets/Images/left.png?fileID=2800000&guid=bc797017f1e6e3b46a40b781660fef27&type=3#left');
+    background-image: url('project://database/Assets/From_MNC/Images/left.png?fileID=2800000&guid=bc797017f1e6e3b46a40b781660fef27&type=3#left');
     -unity-background-scale-mode: scale-to-fit;
 }
 
 .icon-left-left {
-    background-image: url('project://database/Assets/Images/left_left.png?fileID=2800000&guid=2505cefe4cd6da14fa6b6ee370d69886&type=3#left_left');
+    background-image: url('project://database/Assets/From_MNC/Images/left_left.png?fileID=2800000&guid=2505cefe4cd6da14fa6b6ee370d69886&type=3#left_left');
     -unity-background-scale-mode: scale-to-fit;
 }
 
 .icon-right {
-    background-image: url('project://database/Assets/Images/right.png?fileID=2800000&guid=11322ba9af6bf8f48af03048abdb09c8&type=3#right');
+    background-image: url('project://database/Assets/From_MNC/Images/right.png?fileID=2800000&guid=11322ba9af6bf8f48af03048abdb09c8&type=3#right');
     -unity-background-scale-mode: scale-to-fit;
 }
 
 .icon-right-right {
-    background-image: url('project://database/Assets/Images/right_right.png?fileID=2800000&guid=c81db524430c6f048bd130f5d2f293e5&type=3#right_right');
+    background-image: url('project://database/Assets/From_MNC/Images/right_right.png?fileID=2800000&guid=c81db524430c6f048bd130f5d2f293e5&type=3#right_right');
     -unity-background-scale-mode: scale-to-fit;
 }
 
@@ -308,7 +308,7 @@
 }
 
 #ModIcon {
-    background-image: url('project://database/Assets/Images/icon.png?fileID=2800000&guid=7ed5cdb1dc1b4730bdb0f8096d09dd9d&type=3#icon');
+    background-image: url('project://database/Assets/From_MNC/Images/icon.png?fileID=2800000&guid=7ed5cdb1dc1b4730bdb0f8096d09dd9d&type=3#icon');
 }
 
 #CloseButton {
@@ -328,7 +328,7 @@
 }
 
 #CloseButtonIcon {
-    background-image: url('project://database/Assets/Images/Cross.png?fileID=2800000&guid=127360a988ef02049b56bbbf3e73368b&type=3#Cross');
+    background-image: url('project://database/Assets/From_MNC/Images/Cross.png?fileID=2800000&guid=127360a988ef02049b56bbbf3e73368b&type=3#Cross');
     flex-grow: 1;
 }
 
