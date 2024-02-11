@@ -4,10 +4,10 @@
 			"path": "."
 		},
 		{
-			"path": "src/K2D2.Unity"
+			"path": "src/K2D2.Unity/K2D2.Unity"
 		},
 		{
-			"path": "src/K2D2.Unity/K2D2.Unity"
+			"path": "../test_Ktools"
 		}
 	],
 	"settings": {}

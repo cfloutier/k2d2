@@ -3,34 +3,31 @@ using UnityEditor.Animations;
 using UnityEngine.UIElements;
 using UnityEngine;
 using System.Collections.Generic;
+using System.Linq;
 
 
 [System.Serializable]
 public class Panel
 {
     public string code;
+    public string title;
 
-    public string label;
+    public string button_label;
+
+    public VisualElement panel;
+    public RunTab tab;
 
     public Panel()
     {
 
     }
 
-    public bool Init(VisualElement tab_bar)
+    public bool Init(RunTab tab, VisualElement panels)
     {
-        var code_bt = code + "_tabs";
-        Button tab_button = (Button) tab_bar.Q(code + "_tabs");
-        if (tab_button == null)
-        {
-            Debug.LogError("Not found: " + code_bt);
-            return false;
-        }
-
-        tab_button.text = label;
-
-
-
+        this.tab = tab;
+        
+        panel = panels.Q(code);
+        (panel.Children().First() as Label).text = title;
 
         return true;
     }
@@ -40,17 +37,16 @@ public class TabbedMenuController
 {
     public List<Panel> panels = new();
 
-    /* Define member variables*/
+    VisualTreeAsset tab_asset;
 
-   
-    private const string tabClassName = "unity-button.tab";
-    private const string currentlySelectedTabClassName = "currentlySelectedTab";
+    VisualElement tabs_bar;
+    VisualElement content_root;
+
+
+    //private const string tabClassName = "unity-button.tab";
+    private const string currentlySelectedTabClassName = "current";
     private const string unselectedContentClassName = "unselectedContent";
-    // Tab and tab content have the same prefix but different suffix
-    // Define the suffix of the tab name
-    private const string tabNameSuffix = "Tab";
-    // Define the suffix of the tab content name
-    private const string contentNameSuffix = "Content";
+
 
     private readonly VisualElement root;
 
@@ -59,26 +55,59 @@ public class TabbedMenuController
         this.root = root;
     }
 
-    public void Init(List<Panel> panels)
+    public void Init(VisualTreeAsset tab_asset, List<Panel> panels)
     {
         this.panels = panels;
-        RegisterTabCallbacks();
+        this.tab_asset = tab_asset;
+        BuildTabBar();
     }
 
-    public void RegisterTabCallbacks()
+    public void select(int index)
     {
-        var tabs_bar = root.Q("tabs");
+        if (index == 0)
+            index = 0;
+        if (index >= panels.Count)
+            index = panels.Count - 1;   
 
-        foreach(var panel in panels)
+        var panel = panels[index];
+        selectTab(panel.tab.root_tab);
+    }
+
+    public void BuildTabBar()
+    {
+        tabs_bar = root.Q("tabs");
+        content_root = root.Q("content");
+
+        tabs_bar.Clear();
+
+        foreach (var panel in panels)
         {
-            panel.Init(tabs_bar);
+            var tab_element = tab_asset.Instantiate();
+            var tabbutton = tab_element.Q<VisualElement>("template_tab_button");
+            var tab = new RunTab();
+            tab.SetVisualElement(tabbutton, panel);
+            tabs_bar.Add(tabbutton);
+            panel.Init(tab, content_root);
         }
 
-
-        UQueryBuilder<VisualElement> tabs = GetAllTabs();
-        tabs.ForEach((VisualElement tab) => {
+        foreach(var tab in tabs_bar.Children())
+        {
             tab.RegisterCallback<ClickEvent>(TabOnClick);
-        });
+        }
+    }
+
+    void selectTab(VisualElement clickedTab)
+    {
+        if (!TabIsCurrentlySelected(clickedTab))
+        {
+            foreach (var tab in tabs_bar.Children())
+            {
+                if (tab != clickedTab)
+                    UnselectTab(tab);
+            }
+
+            SelectTab(clickedTab);
+        }
     }
 
     /* Method for the tab on-click event: 
@@ -88,35 +117,26 @@ public class TabbedMenuController
     */
     private void TabOnClick(ClickEvent evt)
     {
-        Label clickedTab = evt.currentTarget as Label;
-        if (!TabIsCurrentlySelected(clickedTab))
-        {
-            GetAllTabs().Where(
-                (tab) => tab != clickedTab && TabIsCurrentlySelected(tab)
-            ).ForEach(UnselectTab);
-            SelectTab(clickedTab);
-        }
+        VisualElement clickedTab = evt.currentTarget as VisualElement;
+        selectTab (clickedTab);
     }
+
+
     //Method that returns a Boolean indicating whether a tab is currently selected
     private static bool TabIsCurrentlySelected(VisualElement tab)
     {
         return tab.ClassListContains(currentlySelectedTabClassName);
     }
 
-    private UQueryBuilder<VisualElement> GetAllTabs()
-    {
-        return root.Query<VisualElement>(className: tabClassName);
-    }
-
     /* Method for the selected tab: 
        -  Takes a tab as a parameter and adds the currentlySelectedTab class
        -  Then finds the tab content and removes the unselectedContent class */
-    private void SelectTab(Label tab)
+    private void SelectTab(VisualElement tab)
     {
         tab.AddToClassList(currentlySelectedTabClassName);
-        Label content = (Label) FindContent(tab);
+        var content = FindContent(tab);
         content.RemoveFromClassList(unselectedContentClassName);
-        Debug.Log(content.text);
+        //Debug.Log(content.text);
     }
 
     /* Method for the unselected tab: 
@@ -125,17 +145,19 @@ public class TabbedMenuController
     private void UnselectTab(VisualElement tab)
     {
         tab.RemoveFromClassList(currentlySelectedTabClassName);
+
+
         VisualElement content = FindContent(tab);
         content.AddToClassList(unselectedContentClassName);
     }
 
     // Method to generate the associated tab content name by for the given tab name
-    private static string GenerateContentName(VisualElement tab) =>
-        tab.name.Replace(tabNameSuffix, contentNameSuffix);
+    //private static string GenerateContentName(VisualElement tab) =>
+    //    tab.name.Replace(tabNameSuffix, contentNameSuffix);
 
-    // Method that takes a tab as a parameter and returns the associated content element
+    //// Method that takes a tab as a parameter and returns the associated content element
     private VisualElement FindContent(VisualElement tab)
     {
-        return root.Q(GenerateContentName(tab));
+        return content_root.Q(tab.name);
     }
 }
