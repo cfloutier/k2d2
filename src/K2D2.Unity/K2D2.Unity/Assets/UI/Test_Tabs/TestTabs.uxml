@@ -2,20 +2,23 @@
     <ui:Template name="TabSample" src="project://database/Assets/UI/Test_Tabs/TabSample.uxml?fileID=9197481963319205126&amp;guid=10d7c0db01e967944af9ca5f9573f4d1&amp;type=3#TabSample" />
     <Style src="project://database/Assets/UI/Test_Tabs/tabs.uss?fileID=7433441132597879392&amp;guid=9804805c8ed16e74c816c722f0cf7e95&amp;type=3#tabs" />
     <Style src="project://database/Assets/From_MNC/UI/ManeuverNodeControllerTheme.uss?fileID=7433441132597879392&amp;guid=73a250367c28bac49a63dab4cfd06f0e&amp;type=3#ManeuverNodeControllerTheme" />
-    <ui:VisualElement name="GUIFrame" style="border-top-left-radius: 10px; border-bottom-left-radius: 10px; border-top-right-radius: 10px; border-bottom-right-radius: 10px; padding-left: 9px; padding-right: 9px; padding-top: 9px; padding-bottom: 9px; height: 381px; width: 650px;">
-        <ui:VisualElement name="tabs" style="flex-direction: row; align-items: auto; justify-content: flex-start; flex-wrap: wrap; display: flex; align-self: auto; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; height: 36px;">
+    <ui:VisualElement name="GUIFrame" style="border-top-left-radius: 10px; border-bottom-left-radius: 10px; border-top-right-radius: 10px; border-bottom-right-radius: 10px; padding-left: 9px; padding-right: 9px; padding-top: 9px; padding-bottom: 9px; width: 350px;">
+        <ui:VisualElement name="tabs" style="flex-direction: row; align-items: stretch; justify-content: flex-start; flex-wrap: wrap; display: flex; align-self: auto; flex-grow: 0; flex-shrink: 0;">
             <ui:Instance template="TabSample" name="TabSample" />
-            <ui:VisualElement name="template_tab_button" class="tab current">
-                <ui:VisualElement name="is_running_light" class="is_running_light" style="top: -3px; right: -19px; width: auto; left: -13px; overflow: visible; border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 0;" />
-                <ui:Label tabindex="-1" text="Label" display-tooltip-when-elided="true" name="button_label" style="justify-content: center; -unity-text-align: lower-center; height: 34px; padding-bottom: 0; text-overflow: ellipsis;" />
-            </ui:VisualElement>
+            <ui:Instance template="TabSample" name="TabSample" />
+            <ui:Instance template="TabSample" name="TabSample" />
+            <ui:Instance template="TabSample" name="TabSample" style="margin-right: 0;" />
+            <ui:Instance template="TabSample" name="TabSample" />
         </ui:VisualElement>
         <ui:VisualElement name="content" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); display: flex;">
-            <ui:VisualElement name="node" class="unselectedContent" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
-                <ui:Label tabindex="-1" text="Node&#10;&#10;&#10;&#10;&#10;&#10;&#10;" display-tooltip-when-elided="true" name="Title" class="unselectedContent" />
+            <ui:VisualElement name="node" class="unselectedContent" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); display: flex;">
+                <ui:Label tabindex="-1" text="Node" display-tooltip-when-elided="true" name="Title" class="unselectedContent" />
+                <ui:Label tabindex="-1" text="Long Node Information&#10;bla &#10;bla bla&#10;bla" display-tooltip-when-elided="true" name="Node_Info" class="unselectedContent" />
+                <ui:Button text="Button" display-tooltip-when-elided="true" />
             </ui:VisualElement>
-            <ui:VisualElement name="lift" class="unselectedContent" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
-                <ui:Label tabindex="-1" text="Node&#10;&#10;&#10;&#10;&#10;&#10;&#10;" display-tooltip-when-elided="true" name="Title" class="unselectedContent" />
+            <ui:VisualElement name="lift" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); align-self: flex-start; display: none;">
+                <ui:Label tabindex="-1" text="The Title" display-tooltip-when-elided="true" name="Title" class="unselectedContent" />
+                <ui:FloatField label="Float Field" value="42,2" />
             </ui:VisualElement>
             <ui:VisualElement name="drone" class="unselectedContent" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
                 <ui:Label tabindex="-1" text="Node&#10;&#10;&#10;&#10;&#10;&#10;&#10;" display-tooltip-when-elided="true" name="Title" class="unselectedContent" />

@@ -1,7 +1,7 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
     <Style src="project://database/Assets/UI/Test_Tabs/tabs.uss?fileID=7433441132597879392&amp;guid=9804805c8ed16e74c816c722f0cf7e95&amp;type=3#tabs" />
     <ui:VisualElement name="template_tab_button" class="tab">
-        <ui:VisualElement name="is_running_light" class="is_running_light" style="top: -3px; right: -19px; width: auto; left: -13px; overflow: visible; border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 0;" />
+        <ui:VisualElement name="tab_light" class="tab_light" style="background-image: url(&apos;project://database/Assets/Images/Light_Button.png?fileID=2800000&amp;guid=778643882f96ecd47990fd5c8764fd03&amp;type=3#Light_Button&apos;); opacity: 1;" />
         <ui:Label tabindex="-1" text="Label" display-tooltip-when-elided="true" name="button_label" style="justify-content: center; -unity-text-align: lower-center; height: 34px; padding-bottom: 0; text-overflow: ellipsis;" />
     </ui:VisualElement>
 </ui:UXML>

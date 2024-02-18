@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Runtime.InteropServices;
 
 
 
@@ -13,6 +14,8 @@ public class Node: Panel
         code = "node";
         button_label = "Node ex";
         title = "The Node executor !";
+
+        
     }
 }
 
@@ -33,6 +36,11 @@ public class Drone : Panel
         code = "drone";
         button_label = "Drone";
         title = "let's ride";
+    }
+
+    public override void OnInit()
+    {
+        isRunning = true;
     }
 }
 

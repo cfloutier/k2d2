@@ -31,6 +31,25 @@ public class Panel
 
         return true;
     }
+
+    public virtual void OnInit()
+    {
+        
+    }
+
+    bool _is_running = false;
+
+    public bool isRunning
+    {
+        get
+        {
+            return _is_running;
+        }
+        set
+        {
+            tab.Running = value;
+        }
+    }
 }
 
 public class TabbedMenuController
@@ -60,6 +79,8 @@ public class TabbedMenuController
         this.panels = panels;
         this.tab_asset = tab_asset;
         BuildTabBar();
+
+        
     }
 
     public void select(int index)
