@@ -371,7 +371,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TabAsset: {fileID: 9197481963319205126, guid: 10d7c0db01e967944af9ca5f9573f4d1, type: 3}
-  start_selected: 1
+  start_selected: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
