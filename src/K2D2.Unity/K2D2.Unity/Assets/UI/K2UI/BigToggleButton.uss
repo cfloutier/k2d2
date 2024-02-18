@@ -6,6 +6,7 @@
     -unity-font-style: bold;
     -unity-text-align: upper-center;
     margin-bottom: 4px;
+    background-color: rgb(14, 14, 14);
 }
 
 .big-toggle-button:hover {
