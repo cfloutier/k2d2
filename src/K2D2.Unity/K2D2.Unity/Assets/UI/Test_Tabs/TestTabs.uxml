@@ -22,6 +22,7 @@
                 <K2UI.BigToggleButton />
                 <K2UI.Console tabindex="-1" text="This is some console text&#10;bb&#10;bla&#10;bla !!" />
                 <K2UI.StatusLine tabindex="-1" text="Status Line" level="Error" />
+                <ui:Slider picking-mode="Ignore" label="Slider" value="42" high-value="100" class="k2-slider" />
                 <ui:Button text="Button" display-tooltip-when-elided="true" />
             </ui:VisualElement>
             <ui:VisualElement name="lift" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); align-self: flex-start; display: none;">
