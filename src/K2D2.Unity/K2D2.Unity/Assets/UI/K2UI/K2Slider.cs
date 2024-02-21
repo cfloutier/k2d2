@@ -197,8 +197,7 @@ namespace K2UI
             min_max_bar.Add(max_element);
 
             tracker.Add(fill_bar);
-            main_slider.RegisterCallback<ChangeEvent<float>>((evt) => SliderValueChanged());
-
+            main_slider.RegisterCallback<ChangeEvent<float>>((evt) => { SliderValueChanged(); evt.StopPropagation();});
             main_slider.RegisterCallback<GeometryChangedEvent>((evt) => SliderValueChanged());
         }
 

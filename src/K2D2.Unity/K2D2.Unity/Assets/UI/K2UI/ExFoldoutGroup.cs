@@ -48,9 +48,13 @@ namespace K2UI
             }
         }
 
-
         private void onChanged(ChangeEvent<bool> evt)
         {
+            VisualElement target = evt.target as VisualElement;
+            
+            if (target.GetType() != typeof(Foldout))
+                return;
+
             if (evt.newValue)
             {
                 openedIndex = list_foldout.IndexOf(evt.target as Foldout);
