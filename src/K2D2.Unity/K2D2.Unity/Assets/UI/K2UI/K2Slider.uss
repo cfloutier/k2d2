@@ -3,7 +3,7 @@
 }
 
 .k2-slider > VisualElement {
-    background-color: rgb(0, 0, 0);
+    background-color: rgba(0, 0, 0, 0);
     height: 26px;
     border-width: 1px;
     border-radius: 1.5px;
@@ -83,7 +83,6 @@
 }
 
 .k2-slider-main {
-    border-bottom-width: 1px;
     border-left-color: rgb(63, 66, 154);
     border-right-color: rgb(63, 66, 154);
     border-top-color: rgb(63, 66, 154);
@@ -99,6 +98,7 @@
 .k2-slider-main #min_max_bar Label {
     margin-top: -10px;
     font-size: 11px;
+    min-width: 0;
 }
 
 .k2-slider-main #Label {

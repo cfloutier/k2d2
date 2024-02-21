@@ -7,7 +7,7 @@
 }
 
 .k2-status-line {
-    font-size: 14px;
+    font-size: 13px;
     -unity-font-definition: url('project://database/Packages/uitkforksp2.controls/Assets/Theme/Fonts/NotoSansMonoCJK/NotoSansMonoCJKtc-Regular%20SDF.asset?fileID=11400000&guid=7e59a668a0d7f70429ea9a2737af9ff9&type=2#NotoSansMonoCJKtc-Regular SDF');
 }
 
@@ -22,4 +22,76 @@
 .k2-status-line--error {
     color: rgb(255, 0, 0);
     -unity-font-style: normal;
+}
+
+.unity-foldout {
+    background-color: rgba(180, 150, 255, 0.07);
+}
+
+.unity-foldout > Toggle:hover {
+    background-color: rgba(113, 57, 255, 0.11);
+}
+
+Label {
+    font-size: 12px;
+    min-width: 93px;
+}
+
+#unity-text-input {
+    padding: 0;
+    background-color: rgba(0, 0, 0, 0.76);
+    border-color: var(--mnc-color-border);
+    border-radius: 2px;
+    max-width: 100px;
+    --unity-cursor-color: var(--mnc-color-border);
+}
+
+#unity-text-input > TextElement {
+    margin-left: 5px;
+    margin-top: 0;
+}
+
+.unity-progress-bar {
+}
+
+.unity-progress-bar__container {
+}
+
+.unity-progress-bar__background {
+    background-color: rgba(76, 79, 188, 0.09);
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-left-color: rgb(255, 255, 255);
+    border-right-color: rgb(255, 255, 255);
+    border-top-color: rgb(255, 255, 255);
+    border-bottom-color: rgb(255, 255, 255);
+    border-left-width: 2px;
+    border-right-width: 2px;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+}
+
+.unity-progress-bar__progress {
+    background-color: rgb(37, 176, 0);
+    margin-left: -1px;
+    border-top-left-radius: 11px;
+    border-bottom-left-radius: 11px;
+    border-top-right-radius: 11px;
+    border-bottom-right-radius: 11px;
+    padding-left: 8px;
+    padding-right: 8px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    margin-top: -1px;
+    margin-bottom: -1px;
+    margin-right: -1px;
+}
+
+.unity-progress-bar__title {
+    display: hidden;
+    font-size: 14px;
+    color: rgb(255, 255, 255);
+    -unity-font-style: bold;
 }

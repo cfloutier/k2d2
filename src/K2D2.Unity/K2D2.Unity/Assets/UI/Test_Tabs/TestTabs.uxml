@@ -17,11 +17,21 @@
         <ui:VisualElement name="content" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); display: flex;">
             <ui:VisualElement name="node" class="unselectedContent" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); display: flex;">
                 <ui:Label tabindex="-1" text="Node" display-tooltip-when-elided="true" name="Title" class="unselectedContent" />
-                <K2UI.SlideToggle label="My Toggle" value="false" />
-                <K2UI.BigToggleButton value="true" label="Big Button" />
-                <K2UI.Console tabindex="-1" text="This is some console text&#10;bb&#10;bla&#10;bla !!" />
-                <K2UI.K2Slider min-max-label="s-t" label-on-top="true" value="2.17" min="2" max="3" print-value="true" label="aaa" />
-                <K2UI.StatusLine tabindex="-1" text="Status Line" level="Error" />
+                <ui:Foldout text="Buttons" value="false">
+                    <K2UI.Console tabindex="-1" text="This is some console text&#10;bb&#10;bla&#10;bla !!" />
+                    <K2UI.BigToggleButton value="true" label="Big Button" />
+                </ui:Foldout>
+                <ui:Foldout text="Foldout" value="true">
+                    <ui:ProgressBar value="68.9" title="Progress" />
+                    <K2UI.SlideToggle label="My Toggle" value="false" />
+                    <K2UI.K2Slider label-on-top="true" min-max-label="a-b" print-value="true" min="-0.65" value="-6.78" max="1.78" />
+                    <ui:IntegerField label="Integer Field" value="42" />
+                    <ui:FloatField label="Float Field" value="42,2" />
+                </ui:Foldout>
+                <ui:Foldout text="Slider" value="false">
+                    <K2UI.K2Slider min-max-label="Min-Max" label-on-top="true" value="2.28" min="2.08" max="2.67" print-value="true" focusable="true" label="My Value" />
+                    <K2UI.StatusLine tabindex="-1" text="Status Line" level="Error" />
+                </ui:Foldout>
             </ui:VisualElement>
             <ui:VisualElement name="lift" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); align-self: flex-start; display: none;">
                 <ui:Label tabindex="-1" text="The Title" display-tooltip-when-elided="true" name="Title" class="unselectedContent" />

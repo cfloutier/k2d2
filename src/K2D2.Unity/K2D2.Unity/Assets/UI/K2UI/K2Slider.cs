@@ -17,7 +17,6 @@ namespace K2UI
                 get { yield break; }
             }
 
-
             private UxmlStringAttributeDescription m_Label = new()
             { name = "label", defaultValue = "K2Slider" };
 
@@ -211,14 +210,8 @@ namespace K2UI
             setLabels();
         }
 
-        void setLabels()
+        void setLabelPos()
         {
-            if (printValue)
-                main_slider.label = Label + $" : {Value:n2}";
-            else
-                main_slider.label = Label;
-
-
             if (_labelOnTop)
             {
                 if (label_element.parent == null) return;
@@ -236,6 +229,17 @@ namespace K2UI
                 label_element.parent.Remove(label_element);
                 main_slider.Insert(0, label_element);
             }
+
+        }
+
+        void setLabels()
+        {
+            setLabelPos();
+
+            if (printValue)
+                main_slider.label = Label + $" : {Value:n2}";
+            else
+                main_slider.label = Label;
 
             if (string.IsNullOrEmpty(minMaxLabel))
             {
