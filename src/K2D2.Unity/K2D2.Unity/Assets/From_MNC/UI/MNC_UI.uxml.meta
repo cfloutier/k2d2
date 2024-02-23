@@ -1,0 +1,10 @@
+fileFormatVersion: 2
+guid: d52e3de24cdd0314b96735ed47d44136
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: mnc_ui.bundle
+  assetBundleVariant: 
+  script: {fileID: 13804, guid: 0000000000000000e000000000000000, type: 0}

@@ -1,0 +1,22 @@
+fileFormatVersion: 2
+guid: bb5509ff949e2024186ba022c42b0002
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 12
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontNames:
+  - Acorn Caravan
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 8fcd5c1282faee74d9159785ef9716af, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
