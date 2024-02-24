@@ -11,6 +11,7 @@ namespace K2UI
         public new class UxmlFactory : UxmlFactory<ExFoldoutGroup, UxmlTraits> { }
         public new class UxmlTraits : VisualElement.UxmlTraits
         {
+
             public override IEnumerable<UxmlChildElementDescription> uxmlChildElementsDescription
             {
                 get
@@ -19,33 +20,37 @@ namespace K2UI
                 }
             }
 
+            UxmlIntAttributeDescription m_OpenedIndex =
+                new() { name = "opened-index", defaultValue = -1 };
+
             public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc)
             {
                 base.Init(ve, bag, cc);
+
+                var ate = ve as ExFoldoutGroup;
+
+                ate.openedIndex = m_OpenedIndex.GetValueFromBag(bag, cc);
             }
         }
 
         public ExFoldoutGroup()
         {
+            
             RegisterCallback<AttachToPanelEvent>(onAttached);
         }
 
-        int openedIndex = -1;
+        int _openedIndex = -1;
+        int openedIndex
+        {
+            get { return _openedIndex;}
+            set { _openedIndex = value; UpdateState();}
+        }
 
         List<Foldout> list_foldout;
 
         private void onAttached(AttachToPanelEvent evt)
         {
-
-            list_foldout = this.Query<Foldout>().ToList();
-            openedIndex = -1;
-            UpdateState();
-
-            foreach(var foldout in list_foldout)
-            {
-                foldout.value = false;
-                foldout.RegisterCallback<ChangeEvent<bool>>(onChanged);
-            }
+            updateList();
         }
 
         private void onChanged(ChangeEvent<bool> evt)
@@ -64,8 +69,31 @@ namespace K2UI
             // Debug.Log($"evt {evt.target}");
         }
 
+        public void updateList()
+        {
+            if (list_foldout != null)
+            {
+                foreach(var foldout in list_foldout)
+                {
+                    foldout.UnregisterCallback<ChangeEvent<bool>>(onChanged);     
+                }
+            }
+
+            list_foldout = this.Query<Foldout>().ToList();
+            // openedIndex = -1;
+            UpdateState();
+
+            foreach(var foldout in list_foldout)
+            {
+                // foldout.value = false;
+                foldout.RegisterCallback<ChangeEvent<bool>>(onChanged);     
+            }
+        }
+
+
         void UpdateState()
         {
+            if (list_foldout == null) return;
             var index = 0;
             foreach(var foldout in list_foldout)
             {

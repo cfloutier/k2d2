@@ -15,25 +15,28 @@
             <ui:Instance template="TabSample" name="TabSample" />
         </ui:VisualElement>
         <ui:VisualElement name="content" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); display: flex;">
-            <ui:VisualElement name="node" class="unselectedContent" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); display: flex;">
+            <ui:VisualElement name="controls" class="unselectedContent" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); display: flex;">
                 <ui:Label tabindex="-1" text="Node" display-tooltip-when-elided="true" name="Title" class="unselectedContent" />
-                <K2UI.ExFoldoutGroup>
-                    <ui:Foldout text="Buttons" value="false">
-                        <K2UI.Console tabindex="-1" text="This is some console text&#10;bb&#10;bla&#10;bla !!" />
-                        <K2UI.BigToggleButton value="true" label="Big Button" />
-                    </ui:Foldout>
-                    <ui:Foldout text="Foldout" value="true">
-                        <ui:ProgressBar value="68.9" title="Progress" />
-                        <K2UI.SlideToggle label="My Toggle" value="false" />
-                        <K2UI.K2Slider label-on-top="true" min-max-label="Min-Max" print-value="true" min="0" value="4.06" max="10" />
+                <K2UI.ExFoldoutGroup opened-index="0">
+                    <ui:Foldout text="Sliders &amp; Progress" value="true" name="Values">
+                        <K2UI.K2Slider label-on-top="true" min-max-label="Min-Max" print-value="true" min="0" value="20" max="100" name="MySlider" />
+                        <K2UI.K2ProgressBar value="52.4" max="100" label="Ma Valeur : " set-label-to-value="true" postfix=" %" name="MyBar" style="height: 25px; margin-top: 4px; margin-bottom: 4px;" />
                         <ui:IntegerField label="Integer Field" value="42" />
                         <ui:FloatField label="Float Field" value="42,2" />
                     </ui:Foldout>
-                    <ui:Foldout text="Slider" value="false">
-                        <K2UI.K2Slider min-max-label="Min-Max" label-on-top="true" value="2.28" min="2.08" max="2.67" print-value="true" focusable="true" label="My Value" />
+                    <ui:Foldout text="Labels" name="Labels">
+                        <K2UI.Console tabindex="-1" text="This is some console text&#10;bb&#10;bla&#10;bla !!" />
                         <K2UI.StatusLine tabindex="-1" text="Status Line" level="Error" />
                     </ui:Foldout>
+                    <ui:Foldout text="Buttons" value="true" name="Buttons">
+                        <K2UI.BigToggleButton value="true" label="Big Button" />
+                        <K2UI.SlideToggle label="My Toggle" value="false" />
+                    </ui:Foldout>
                 </K2UI.ExFoldoutGroup>
+            </ui:VisualElement>
+            <ui:VisualElement name="node" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); align-self: flex-start; display: none;">
+                <ui:Label tabindex="-1" text="The Title" display-tooltip-when-elided="true" name="Title" class="unselectedContent" />
+                <ui:FloatField label="Float Field" value="42,2" />
             </ui:VisualElement>
             <ui:VisualElement name="lift" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); align-self: flex-start; display: none;">
                 <ui:Label tabindex="-1" text="The Title" display-tooltip-when-elided="true" name="Title" class="unselectedContent" />

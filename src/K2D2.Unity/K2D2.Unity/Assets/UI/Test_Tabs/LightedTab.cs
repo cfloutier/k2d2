@@ -5,7 +5,7 @@ using UnityEngine.UIElements;
 
 
 // a tab button with a running state (light on/off)
-public class RunTab
+public class LightedTab
 {
     public VisualElement root_tab;
     Label the_label;

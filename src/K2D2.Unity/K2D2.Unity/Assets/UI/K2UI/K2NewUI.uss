@@ -1,5 +1,9 @@
 @import url('project://database/Assets/UI/K2UI/SlideToggle.uss?fileID=7433441132597879392&guid=a6dc5024ba8ad204e9099eca78c0703f&type=3#SlideToggle');
 @import url('project://database/Assets/UI/K2UI/BigToggleButton.uss?fileID=7433441132597879392&guid=1b6a73cd9e0a617469e5d501d696c7be&type=3#BigToggleButton');
+:root {
+    --k2-background-frame: rgba(76, 79, 188, 0.09);
+}
+
 .console {
     font-size: 10px;
     color: rgb(124, 129, 140);
@@ -58,32 +62,17 @@ Label {
 }
 
 .unity-progress-bar__background {
-    background-color: rgba(76, 79, 188, 0.09);
-    border-top-left-radius: 10px;
-    border-bottom-left-radius: 10px;
-    border-top-right-radius: 10px;
-    border-bottom-right-radius: 10px;
-    border-left-color: rgb(255, 255, 255);
-    border-right-color: rgb(255, 255, 255);
-    border-top-color: rgb(255, 255, 255);
-    border-bottom-color: rgb(255, 255, 255);
-    border-left-width: 2px;
-    border-right-width: 2px;
-    border-top-width: 2px;
-    border-bottom-width: 2px;
+    background-color: var(--k2-background-frame);
+    border-radius: 10px;
+    border-color: rgb(255, 255, 255);
+    border-width: 2px;
 }
 
 .unity-progress-bar__progress {
     background-color: rgb(37, 176, 0);
     margin-left: -1px;
-    border-top-left-radius: 11px;
-    border-bottom-left-radius: 11px;
-    border-top-right-radius: 11px;
-    border-bottom-right-radius: 11px;
-    padding-left: 8px;
-    padding-right: 8px;
-    padding-top: 8px;
-    padding-bottom: 8px;
+    border-radius: 11px;
+    padding: 8px;
     margin-top: -1px;
     margin-bottom: -1px;
     margin-right: -1px;
@@ -94,4 +83,58 @@ Label {
     font-size: 14px;
     color: rgb(255, 255, 255);
     -unity-font-style: bold;
+}
+
+.k2-progress-bar {
+    min-height: 16px;
+    margin-top: 4px;
+    margin-bottom: 4px;
+}
+
+.k2-progress-bar #frame {
+    width: 100%;
+    height: 100%;
+    background-color: var(--k2-background-frame);
+    border-color: rgb(255, 255, 255);
+    border-radius: 15px;
+    border-width: 2px;
+    flex-grow: 1;
+    flex-direction: column;
+    overflow: hidden;
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    justify-content: center;
+}
+
+.k2-progress-bar #progress {
+    width: 439px;
+    position: absolute;
+    height: 100%;
+    min-width: initial;
+    border-color: rgb(255, 255, 255);
+    border-width: 0;
+    min-height: initial;
+    background-color: rgb(37, 176, 0);
+    radius: 10px;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+.k2-progress-bar #label {
+    color: rgb(255, 255, 255);
+    -unity-font-style: bold;
+    border-left-color: rgb(195, 19, 19);
+    border-right-color: rgb(195, 19, 19);
+    border-top-color: rgb(195, 19, 19);
+    border-bottom-color: rgb(195, 19, 19);
+    text-shadow: 0 0 1px rgb(0, 0, 0);
+    position: absolute;
+    width: 100%;
+    font-size: 14px;
+    -unity-text-align: middle-center;
+    letter-spacing: 0;
 }

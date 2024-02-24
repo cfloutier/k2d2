@@ -15,26 +15,27 @@ public class Panel
     public string button_label;
 
     public VisualElement panel;
-    public RunTab tab;
+    public LightedTab tab;
 
     public Panel()
     {
 
     }
 
-    public bool Init(RunTab tab, VisualElement panels)
+    public bool Init(LightedTab tab, VisualElement panels)
     {
         this.tab = tab;
         
         panel = panels.Q(code);
         (panel.Children().First() as Label).text = title;
 
-        return true;
+        
+        return onInit();
     }
 
-    public virtual void OnInit()
+    public virtual bool onInit()
     {
-        
+        return false;
     }
 
     bool _is_running = false;
@@ -47,6 +48,7 @@ public class Panel
         }
         set
         {
+            _is_running = value;
             tab.Running = value;
         }
     }
@@ -61,11 +63,9 @@ public class TabbedMenuController
     VisualElement tabs_bar;
     VisualElement content_root;
 
-
     //private const string tabClassName = "unity-button.tab";
     private const string currentlySelectedTabClassName = "current";
     private const string unselectedContentClassName = "unselectedContent";
-
 
     private readonly VisualElement root;
 
@@ -78,9 +78,7 @@ public class TabbedMenuController
     {
         this.panels = panels;
         this.tab_asset = tab_asset;
-        BuildTabBar();
-
-        
+        BuildTabBar();   
     }
 
     public void select(int index)
@@ -105,7 +103,7 @@ public class TabbedMenuController
         {
             var tab_element = tab_asset.Instantiate();
             var tabbutton = tab_element.Q<VisualElement>("template_tab_button");
-            var tab = new RunTab();
+            var tab = new LightedTab();
             tab.SetVisualElement(tabbutton, panel);
             tabs_bar.Add(tabbutton);
             panel.Init(tab, content_root);
@@ -155,6 +153,7 @@ public class TabbedMenuController
     private void SelectTab(VisualElement tab)
     {
         tab.AddToClassList(currentlySelectedTabClassName);
+
         var content = FindContent(tab);
         content.RemoveFromClassList(unselectedContentClassName);
         //Debug.Log(content.text);
@@ -166,7 +165,6 @@ public class TabbedMenuController
     private void UnselectTab(VisualElement tab)
     {
         tab.RemoveFromClassList(currentlySelectedTabClassName);
-
 
         VisualElement content = FindContent(tab);
         content.AddToClassList(unselectedContentClassName);

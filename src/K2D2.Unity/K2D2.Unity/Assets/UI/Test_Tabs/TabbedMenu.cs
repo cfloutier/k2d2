@@ -6,16 +6,13 @@ using System.ComponentModel;
 using System.Runtime.InteropServices;
 
 
-
 public class Node: Panel
 {
     public Node()
     {
         code = "node";
         button_label = "Node ex";
-        title = "The Node executor !";
-
-        
+        title = "The Node executor !";       
     }
 }
 
@@ -38,9 +35,10 @@ public class Drone : Panel
         title = "let's ride";
     }
 
-    public override void OnInit()
+    public override bool onInit()
     {
         isRunning = true;
+        return true;
     }
 }
 
@@ -54,7 +52,6 @@ public class Land : Panel
     }
 }
 
-
 //Inherits from class `MonoBehaviour`. This makes it attachable to a game object as a component.
 public class TabbedMenu : MonoBehaviour
 {
@@ -64,9 +61,7 @@ public class TabbedMenu : MonoBehaviour
 
     public int start_selected = 1;
 
-
     // public List<Panel> panels;
-
     private void OnEnable()
     {
         UIDocument menu = GetComponent<UIDocument>();
@@ -74,6 +69,7 @@ public class TabbedMenu : MonoBehaviour
 
         List<Panel> panels = new()
         {
+            new ControlsPanel(),
             new Node(),
             new Lift(),
             new Drone(),
