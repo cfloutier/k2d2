@@ -21,7 +21,7 @@
                         <K2UI.StatusLine tabindex="-1" text="Status Line" level="Error" />
                     </ui:Foldout>
                     <ui:Foldout text="Buttons" value="true" name="Buttons">
-                        <K2UI.BigToggleButton value="true" label="Start Pilot" name="StartPilot" />
+                        <K2UI.BigToggleButton value="false" label="Start Pilot" name="StartPilot" />
                         <K2UI.SlideToggle label="My Toggle" value="false" />
                     </ui:Foldout>
                 </K2UI.ExFoldoutGroup>
