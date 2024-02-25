@@ -63,7 +63,7 @@ namespace K2UI
             if (evt.newValue)
             {
                 openedIndex = list_foldout.IndexOf(evt.target as Foldout);
-                Debug.Log($"index {openedIndex}");
+                // Debug.Log($"index {openedIndex}");
                 UpdateState();
             }
             // Debug.Log($"evt {evt.target}");

@@ -98,3 +98,6 @@
     transition-duration: var(--transition-duration-ligh-bt);
     transition-timing-function: ease-in-out-sine;
 }
+
+.k2-tab-button--active {
+}
