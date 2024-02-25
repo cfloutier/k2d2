@@ -370,8 +370,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e713f7a13744a2f4f89b17b661f10d02, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TabAsset: {fileID: 9197481963319205126, guid: 10d7c0db01e967944af9ca5f9573f4d1, type: 3}
-  start_selected: 0
+  start_selected: controls
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

@@ -3,13 +3,13 @@ using UnityEngine.UIElements;
 using K2UI;
 using System.Net.WebSockets;
 
-public class ControlsPanel : Panel
+using K2UI.Tabs;
+
+public class ControlsPanel : K2Panel
 {
     public ControlsPanel()
     {
         code = "controls";
-        button_label = "All Controls";
-        title = "All controls test";
     }
 
     K2ProgressBar bar;
@@ -27,6 +27,9 @@ public class ControlsPanel : Panel
             my_value = evt.newValue;
             UpdateBars();
         });
+
+        var big_button = panel.Q<BigToggleButton>("StartPilot");
+        big_button.RegisterCallback<ChangeEvent<bool>>(evt => isRunning = evt.newValue);
 
         UpdateBars();
         return true;

@@ -46,12 +46,13 @@ namespace K2UI
             get { return _active; }
             set
             {
+                
+
+                var m_event = ChangeEvent<bool>.GetPooled(_active, value);
                 _active = value;
                 EnableInClassList(checkedUssClassName, _active);
-                foreach(var callbacks in onChangedEvent)
-                {
-                    callbacks(active);
-                }
+                m_event.target = this; 
+                SendEvent(m_event);
             }
         }
 
@@ -72,11 +73,6 @@ namespace K2UI
                 ToggleValue();
                 }));
         }
-
-
-
-        public delegate void OnChanged(bool active);
-        List<OnChanged> onChangedEvent = new();
 
         // All three callbacks call this method.
         void ToggleValue()

@@ -115,14 +115,40 @@ namespace K2UI.Tabs
             }
         }
 
+        int findIndex(string code)
+        {
+            if (list_tabs.Count == 0)
+                updateList();
+
+            var index = 0;
+            foreach (var tab in list_tabs)
+            {
+                if (tab.name == code)
+                    return index;
+                index++;
+            }
+            return -1;
+        }
+
+        public void setOpenedPage(string code)
+        {
+            int index = findIndex(code);
+            if (index >=0)
+            {
+                openedIndex = index;
+                list_tabs[openedIndex].Active = true;
+            }
+            UpdateState();
+        }
+
         void UpdateState()
         {
             if (list_tabs == null) return;
             var index = 0;
-            foreach (var foldout in list_tabs)
+            foreach (var tab in list_tabs)
             {
                 if (index != openedIndex)
-                    foldout.Active = false;
+                    tab.Active = false;
 
                 index++;
             }

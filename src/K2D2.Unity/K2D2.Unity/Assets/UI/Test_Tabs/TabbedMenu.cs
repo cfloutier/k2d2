@@ -5,34 +5,29 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
 
+using K2UI.Tabs;
 
-public class Node: Panel
+public class Node: K2Panel
 {
     public Node()
     {
         code = "node";
-        button_label = "Node ex";
-        title = "The Node executor !";       
     }
 }
 
-public class Lift : Panel
+public class Lift : K2Panel
 {
     public Lift()
     {
         code = "lift";
-        button_label = "Lift !";
-        title = "To the orbit !";
     }
 }
 
-public class Drone : Panel
+public class Drone : K2Panel
 {
     public Drone()
     {
         code = "drone";
-        button_label = "Drone";
-        title = "let's ride";
     }
 
     public override bool onInit()
@@ -42,32 +37,34 @@ public class Drone : Panel
     }
 }
 
-public class Land : Panel
+public class Land : K2Panel
 {
     public Land()
     {
         code = "land";
-        button_label = "Land...";
-        title = "to the ground";
     }
 }
 
 //Inherits from class `MonoBehaviour`. This makes it attachable to a game object as a component.
 public class TabbedMenu : MonoBehaviour
 {
-    private TabbedMenuController controller;
+    private TabbedPage pages_controler;
 
-    public VisualTreeAsset TabAsset;
-
-    public int start_selected = 1;
+    public string start_selected = "node";
 
     // public List<Panel> panels;
     private void OnEnable()
     {
-        UIDocument menu = GetComponent<UIDocument>();
+       
+        
+    }
+
+    private void Start()
+    {
+         UIDocument menu = GetComponent<UIDocument>();
         VisualElement root = menu.rootVisualElement;
 
-        List<Panel> panels = new()
+        List<K2Panel> panels = new()
         {
             new ControlsPanel(),
             new Node(),
@@ -76,8 +73,8 @@ public class TabbedMenu : MonoBehaviour
             new Land()
         };
 
-        controller = new(root);
-        controller.Init(TabAsset, panels);
-        controller.select(start_selected);
+        pages_controler = root.Q<TabbedPage>();
+        pages_controler.Init(panels);
+        pages_controler.Select(start_selected);
     }
 }

@@ -7,7 +7,7 @@ namespace K2UI.Tabs
     /// <summary>
     /// TabButton have two states : active (showing current content) and lighted (pilot is on)
     /// </summary>
-    class TabButton : VisualElement
+    public class TabButton : VisualElement
     {
         public new class UxmlFactory : UxmlFactory<TabButton, UxmlTraits> { }
 

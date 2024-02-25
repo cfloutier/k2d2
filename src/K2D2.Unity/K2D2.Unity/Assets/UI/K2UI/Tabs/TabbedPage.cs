@@ -17,8 +17,7 @@ namespace K2UI.Tabs
         public new class UxmlTraits : VisualElement.UxmlTraits
         {
             public override IEnumerable<UxmlChildElementDescription> uxmlChildElementsDescription
-            {
-                
+            {    
                 get
                 {
                     // we can add only tabButton here
@@ -110,10 +109,14 @@ namespace K2UI.Tabs
         private void onTabChanged(ChangeEvent<string> evt)
         {
             // Debug.Log("changed "+evt.newValue);
+            ShowContent(evt.newValue);   
+        }
 
+        void ShowContent(string code)
+        {
             foreach (var page in el_content.Children())
             {
-                if (page.name ==  evt.newValue)
+                if (page.name == code)
                 {
                     page.style.display = DisplayStyle.Flex;
                 }
@@ -122,6 +125,21 @@ namespace K2UI.Tabs
                     page.style.display = DisplayStyle.None;
                 }
             }
+        }
+
+        List<K2Panel> panels;
+
+        public void Init(List<K2Panel> panels)
+        {
+            this.panels = panels;
+            foreach(K2Panel panel in this.panels)
+                panel.Init(el_tabsbar, el_content);
+        }
+
+        internal void Select(string code)
+        {
+            el_tabsbar.setOpenedPage(code);
+            ShowContent(code);         
         }
     }
 }
