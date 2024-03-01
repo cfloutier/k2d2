@@ -1,0 +1,11 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/Compas/compas.uss?fileID=7433441132597879392&amp;guid=e2bd53ecacfb99a4f9c9d2b73a0b1303&amp;type=3#compas" />
+    <ui:VisualElement name="frame" class="compas">
+        <ui:VisualElement name="lines" class="lines" />
+        <ui:VisualElement name="texts" style="flex-grow: 0; background-color: rgba(0, 0, 0, 0); position: absolute; width: 100%; height: 100%;">
+            <ui:Label tabindex="-1" text="N" display-tooltip-when-elided="true" enable-rich-text="false" name="BigText" class="big_text" />
+            <ui:Label tabindex="-1" text="60" display-tooltip-when-elided="true" enable-rich-text="false" name="SmallText" class="small_text" style="top: 9px; left: 135px;" />
+            <ui:Label tabindex="-1" text="E" display-tooltip-when-elided="true" enable-rich-text="false" name="BigText" class="big_text" style="left: 58px; bottom: 5px;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
