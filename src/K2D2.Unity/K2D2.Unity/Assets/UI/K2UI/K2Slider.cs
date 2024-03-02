@@ -44,30 +44,6 @@ namespace K2UI
                 defaultValue = 1f
             };
 
-            // private UxmlFloatAttributeDescription m_PageSize = new()
-            // {
-            //     name = "page-size",
-            //     defaultValue = 0f
-            // };
-
-            // private UxmlBoolAttributeDescription m_ShowInputField = new()
-            // {
-            //     name = "show-input-field",
-            //     defaultValue = false
-            // };
-
-            // private UxmlEnumAttributeDescription<SliderDirection> m_Direction = new()
-            // {
-            //     name = "direction",
-            //     defaultValue = SliderDirection.Horizontal
-            // };
-
-            // private UxmlBoolAttributeDescription m_Inverted = new()
-            // {
-            //     name = "inverted",
-            //     defaultValue = false
-            // };
-
             public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc)
             {
                 

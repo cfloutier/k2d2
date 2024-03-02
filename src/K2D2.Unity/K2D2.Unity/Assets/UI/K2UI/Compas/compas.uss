@@ -1,4 +1,4 @@
-.compas {
+.k2compas {
     flex-grow: 0;
     border-width: 2px;
     border-color: rgb(254, 255, 0);
@@ -11,32 +11,46 @@
     height: 53px;
     overflow: hidden;
     border-radius: 10px;
+    border-left-color: rgb(154, 154, 154);
+    border-right-color: rgb(154, 154, 154);
+    border-top-color: rgb(154, 154, 154);
+    border-bottom-color: rgb(154, 154, 154);
+    --center-line-width: 1;
+    --center-line-color: rgb(255, 255, 255);
+    --line-width: 2;
+    --line-color-1: rgb(145, 145, 145);
+    --line-color-2: rgb(73, 73, 73);
+    --line-color-3: rgb(46, 46, 46);
+    --line-y1: 30;
+    --line-y5: 25;
+    --line-y10: 20;
+    --line-y45: 25;
 }
 
-.compas .lines {
+.k2compas .lines {
     flex-grow: 0;
     background-color: rgba(0, 0, 0, 0);
     width: 100%;
     height: 100%;
-
     position: absolute;
 }
 
-
-.compas .shadow {
+.k2compas .shadow {
     flex-grow: 0;
     background-color: rgba(0, 0, 0, 0);
     width: 100%;
     height: 100%;
     overflow: hidden;
     position: absolute;
+    background-image: url('project://database/Assets/Images/shadow.png?fileID=2800000&guid=55836c4f1d2c90c48a7d03ee61ca1c32&type=3#shadow');
+    -unity-background-image-tint-color: rgba(168, 155, 155, 0.88);
 }
 
-.compas .big_text {
+.k2compas .big_text {
     position: absolute;
     -unity-text-align: lower-center;
     padding: 0;
-    -unity-font-definition: url('project://database/Assets/From_MNC/Fonts/Orbitron-Black%20SDF.asset?fileID=11400000&guid=5239ed64b02a55342a920e51ecef2971&type=2#Orbitron-Black SDF');
+    -unity-font-definition: url('project://database/Assets/Fonts/ArialRounded.asset?fileID=11400000&guid=7a6947395299c6045a727a85a9fc20f9&type=2#ArialRounded');
     font-size: 19px;
     border-left-color: rgb(207, 0, 0);
     border-right-color: rgb(207, 0, 0);
@@ -45,9 +59,10 @@
     width: 0;
     height: 0;
     padding-bottom: 0;
+    color: rgb(221, 221, 221);
 }
 
-.compas .small_text {
+.k2compas .small_text {
     position: absolute;
     -unity-text-align: lower-center;
     height: 11px;
@@ -57,4 +72,12 @@
     font-size: 10px;
     background-color: rgb(118, 27, 27);
     padding-bottom: 7px;
+}
+
+.k2compas .texts {
+    flex-grow: 0;
+    background-color: rgba(0, 0, 0, 0);
+    position: absolute;
+    width: 100%;
+    height: 100%;
 }

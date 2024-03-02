@@ -9,10 +9,10 @@ using System.Linq;
 namespace K2UI.Tabs
 {
     /// <summary>
-    /// Panels are classes added by the TabbedPage user. 
-    /// each one is mapped to the proper root VisualElement (the in #content, found by it's name == code )
-    /// 
-    /// 
+    /// K2Panels are classes added by the TabbedPage user. 
+    /// each one is mapped to the proper root VisualElement 
+    /// in the #content, found by it's #name == code
+    /// a TabButton must be added to the #buttons 
     /// please create an overriden class and add it to the TabbedPage 
     /// 
     /// </summary>
