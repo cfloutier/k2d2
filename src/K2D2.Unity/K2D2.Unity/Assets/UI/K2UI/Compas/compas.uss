@@ -6,8 +6,7 @@
     flex-direction: row;
     display: flex;
     flex-basis: initial;
-    width: 350px;
-    height: 42px;
+    height: 40px;
     overflow: hidden;
     border-radius: 10px;
     --center-line-width: 1;
@@ -21,6 +20,7 @@
     --line-y10: 20;
     --line-y45: 25;
     border-color: var(--k2-color-border);
+    margin-bottom: 5px;
 }
 
 .k2compas .lines {
