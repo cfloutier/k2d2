@@ -1,5 +1,5 @@
 .big-toggle-button {
-    border-color: rgb(76, 79, 188);
+    border-color: var(--k2-color-border);
     border-width: 0.5px;
     border-radius: 7px;
     font-size: 13px;

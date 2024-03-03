@@ -7,13 +7,64 @@ using UnityEngine.UIElements;
 
 namespace K2UI.Compas
 {
+    public class ButtonsFactory
+    {
+
+        
+        string uss_label = "big_text";
+        string uss_class = "label_button";
+
+        public Dictionary<int, Button> buttons = new();
+
+        public void start()
+        {
+            foreach (var label in buttons.Values)
+            {
+                label.style.display = DisplayStyle.None;
+            }
+        }
+
+        public Button buttonPool(int angle, K2Compass compass, string text, Vector2 pos)
+        {
+            Button button = null;
+
+            if (!buttons.ContainsKey(angle))
+            {
+                // need a new Label
+                button = new Button();
+                button.RegisterCallback<ClickEvent>(evt =>
+                    {
+                        compass.forceValue(angle);
+                    }
+                );     
+
+                button.AddToClassList(uss_label);
+                button.AddToClassList(uss_class);
+
+                buttons[angle] = button;
+            }
+            else
+            {
+                button = buttons[angle];
+            }
+
+            button.style.display = DisplayStyle.Flex;
+            // width of the button is hardcoded for the moment
+            button.style.left = pos.x - 20;
+            button.style.bottom = pos.y;
+            button.text = text;
+            button.name = text;
+            return button;
+        }
+    }
+
     // class used to pool a set of Label to avoitd creating new
-    public class LabelFactory
+    public class LabelsFactory
     {
         string uss_big_text = "big_text";
         string uss_small_text = "small_text";
 
-        public List<Label> labels = new List<Label>();
+        public List<Label> labels = new();
 
         int nb_used = 0;
 

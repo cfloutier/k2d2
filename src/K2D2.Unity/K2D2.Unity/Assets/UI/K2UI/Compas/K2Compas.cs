@@ -6,32 +6,35 @@ using UnityEngine.UIElements;
 using System.Linq;
 using System.Collections.Generic;
 using UnityEditor.UIElements;
+using System.Runtime.InteropServices;
 
-namespace K2UI.Compas
+using K2UI.Compas;
+
+namespace K2UI
 {
-    class K2Compass : VisualElement
+    public class K2Compass : VisualElement
     {
         public new class UxmlFactory : UxmlFactory<K2Compass, UxmlTraits> { }
 
         public new class UxmlTraits : VisualElement.UxmlTraits
         {
-            public override IEnumerable<UxmlChildElementDescription> uxmlChildElementsDescription
-            {
-                get { yield break; }
-            }
-
             private UxmlFloatAttributeDescription m_Value = new()
             { name = "value", defaultValue = 0 };
 
             private UxmlFloatAttributeDescription m_AngleRange = new()
             { name = "angle-range", defaultValue = 90f };
 
+            private UxmlBoolAttributeDescription m_Interactive = new()
+            { name = "interactive", defaultValue = true };
+
             public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc)
             {
+                base.Init(ve, bag, cc);
                 K2Compass k2_compas = (K2Compass)ve;
 
                 k2_compas.Value = m_Value.GetValueFromBag(bag, cc);
                 k2_compas.AngleRange = m_AngleRange.GetValueFromBag(bag, cc);
+                k2_compas.Interactive = m_Interactive.GetValueFromBag(bag, cc);
 
                 k2_compas.UpdateContent();
             }
@@ -49,6 +52,21 @@ namespace K2UI.Compas
             }
         }
 
+        // internal set value,
+        // can be called to get the event in return
+        public void forceValue(float new_value, bool send_event = true)
+        {
+            _value = new_value;
+            UpdateContent();
+            if (send_event)
+            {
+                float old_value = Value;
+                var my_event = ChangeEvent<float>.GetPooled(old_value, Value);
+                my_event.target = this;
+                SendEvent(my_event);
+            }
+        }
+
         float _angleRange = 0;
         public float AngleRange
         {
@@ -61,22 +79,38 @@ namespace K2UI.Compas
             }
         }
 
+        bool _interactive = true;
+        public bool Interactive
+        {
+            get { return _interactive; }
+            set
+            {
+                if (_interactive == value) return;
+                _interactive = value;
+                if (!_interactive)
+                    m_IsDragging = false;
+
+                UpdateContent();
+            }
+        }
+
         VisualElement el_line;
         VisualElement el_texts;
         VisualElement el_shadow;
-        
 
         public K2Compass()
         {
+            // Debug.Log("name:" + this.name);
             AddToClassList("k2compas");
             el_line = new VisualElement() { name = "lines" };
             el_line.AddToClassList("lines");
 
             el_texts = new VisualElement() { name = "texts" };
-            el_line.AddToClassList("texts");
+            el_texts.AddToClassList("texts");
 
             el_shadow = new VisualElement() { name = "shadow" };
             el_shadow.AddToClassList("shadow");
+            el_shadow.pickingMode = PickingMode.Ignore;
 
             Add(el_line);
             Add(el_texts);
@@ -158,7 +192,7 @@ namespace K2UI.Compas
                 if (customStyle.TryGetValue(s_LineColor_3, out my_color))
                 {
                     this.lineColor_3 = my_color;
-                }   
+                }
 
                 if (customStyle.TryGetValue(s_LineWidth, out my_float))
                 {
@@ -193,20 +227,26 @@ namespace K2UI.Compas
         void UpdateCustomStyles()
         {
             cs.UpdateCustomStyles(customStyle);
-
             UpdateContent();
         }
+
+
         // After the custom colors are resolved, this method uses them to color the meshes and (if necessary) repaint
         // the control.
-
 
         private void onGeometryChanged(GeometryChangedEvent evt)
         {
             UpdateContent();
         }
 
+        private bool m_IsDragging = false;
+        private Vector2 start_mouse_pos;
+        private float start_value;
+
         private void OnMouseUp(MouseUpEvent evt)
         {
+            if (!Interactive) return;
+
             if (m_IsDragging)
             {
                 m_IsDragging = false;
@@ -216,24 +256,21 @@ namespace K2UI.Compas
 
         private void OnMouseMove(MouseMoveEvent evt)
         {
+            if (!Interactive) return;
+
             if (m_IsDragging)
             {
                 Vector2 delta = evt.mousePosition - start_mouse_pos;
                 // Debug.Log("delta" + delta);
-                float old_value = Value;
-                Value = start_value - delta.x / pixel_per_deg;
-                var my_event =  ChangeEvent<float>.GetPooled(old_value, Value);
-                my_event.target = this;
-                SendEvent(my_event);
+                forceValue(fixDeg(start_value - delta.x / pixel_per_deg));
             }
         }
 
-        private bool m_IsDragging = false;
-        private Vector2 start_mouse_pos;
-        private float start_value;
 
         private void OnMouseDown(MouseDownEvent evt)
         {
+            if (!Interactive) return;
+
             if (!m_IsDragging)
             {
                 MouseCaptureController.CaptureMouse(this);
@@ -243,7 +280,8 @@ namespace K2UI.Compas
             }
         }
 
-        LabelFactory labels_factory = new();
+        LabelsFactory labels_factory = new LabelsFactory();
+        ButtonsFactory buttons_factory = new ButtonsFactory();
 
         // setup in uss
 
@@ -281,7 +319,7 @@ namespace K2UI.Compas
 
         float fixDeg(float deg)
         {
-            while (deg > 360)
+            while (deg >= 360)
                 deg -= 360;
             while (deg < 0)
                 deg += 360;
@@ -295,13 +333,14 @@ namespace K2UI.Compas
 
             // restart factory 
             labels_factory.start();
+            buttons_factory.start();
 
-            float deg = min_deg.FloorTen();
+            int deg = min_deg.FloorTen();
             while (deg <= max_deg)
             {
                 float x_pos = deg_to_xpos(deg, Value);
 
-                float drawn_deg = fixDeg(deg);
+                int drawn_deg = (int)fixDeg(deg);
                 if (drawn_deg % 45 == 0)
                 {
                     // need a label
@@ -310,8 +349,19 @@ namespace K2UI.Compas
                     {
                         var pos = new Vector2(x_pos, 0);
                         // if interactive must have a button 
-                        var label = labels_factory.labelPool(true, directions[index], pos);
-                        el_texts.Add(label);
+
+                        VisualElement el;
+                        if (Interactive)
+                        {
+                            el = buttons_factory.buttonPool(drawn_deg, this, directions[index], pos);
+                        }
+                        else
+                        {
+                            el = labels_factory.labelPool(true, directions[index], pos);
+                        }
+
+                        el_texts.Add(el);
+
                     }
                     else
                         Debug.LogError("index = " + index);
@@ -331,7 +381,7 @@ namespace K2UI.Compas
 
         void Draw(MeshGenerationContext ctx)
         {
-            float deg = min_deg;
+            int deg = min_deg;
 
             Painter2D painter = ctx.painter2D;
 

@@ -46,8 +46,6 @@ namespace K2UI
             get { return _active; }
             set
             {
-                
-
                 var m_event = ChangeEvent<bool>.GetPooled(_active, value);
                 _active = value;
                 EnableInClassList(checkedUssClassName, _active);

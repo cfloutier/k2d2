@@ -1,30 +1,26 @@
 .k2compas {
     flex-grow: 0;
     border-width: 2px;
-    border-color: rgb(254, 255, 0);
     background-color: rgb(0, 0, 0);
     border-radius: 19px;
     flex-direction: row;
     display: flex;
     flex-basis: initial;
     width: 350px;
-    height: 53px;
+    height: 42px;
     overflow: hidden;
     border-radius: 10px;
-    border-left-color: rgb(154, 154, 154);
-    border-right-color: rgb(154, 154, 154);
-    border-top-color: rgb(154, 154, 154);
-    border-bottom-color: rgb(154, 154, 154);
     --center-line-width: 1;
     --center-line-color: rgb(255, 255, 255);
     --line-width: 2;
     --line-color-1: rgb(145, 145, 145);
-    --line-color-2: rgb(73, 73, 73);
+    --line-color-2: rgb(104, 104, 104);
     --line-color-3: rgb(46, 46, 46);
     --line-y1: 30;
     --line-y5: 25;
     --line-y10: 20;
     --line-y45: 25;
+    border-color: var(--k2-color-border);
 }
 
 .k2compas .lines {
@@ -52,14 +48,11 @@
     padding: 0;
     -unity-font-definition: url('project://database/Assets/Fonts/ArialRounded.asset?fileID=11400000&guid=7a6947395299c6045a727a85a9fc20f9&type=2#ArialRounded');
     font-size: 19px;
-    border-left-color: rgb(207, 0, 0);
-    border-right-color: rgb(207, 0, 0);
-    border-top-color: rgb(207, 0, 0);
-    border-bottom-color: rgb(207, 0, 0);
     width: 0;
     height: 0;
     padding-bottom: 0;
     color: rgb(221, 221, 221);
+    min-width: 0;
 }
 
 .k2compas .small_text {
@@ -70,8 +63,8 @@
     padding: 0;
     -unity-font-definition: url('project://database/Assets/From_MNC/Fonts/LiberationSans-Bold%20SDF.asset?fileID=11400000&guid=56e687dfc2dc0944a86b55c9887e4d09&type=2#LiberationSans-Bold SDF');
     font-size: 10px;
-    background-color: rgb(118, 27, 27);
     padding-bottom: 7px;
+    min-width: 0;
 }
 
 .k2compas .texts {
@@ -80,4 +73,19 @@
     position: absolute;
     width: 100%;
     height: 100%;
+}
+
+.k2compas .label_button {
+    width: 40;
+    height: 24px;
+    border: 0;
+    background-color: rgba(0, 0, 0, 0);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+}
+
+.k2compas .label_button:hover {
+    background-color: rgba(168, 168, 168, 0.13);
 }

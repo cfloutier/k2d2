@@ -46,7 +46,7 @@ namespace K2UI
 
             public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc)
             {
-                
+                base.Init(ve, bag, cc);
                 K2Slider k2_slider = (K2Slider)ve;
                 Slider main_slider = k2_slider.main_slider;
 
@@ -67,8 +67,6 @@ namespace K2UI
 
                 k2_slider.SliderValueChanged();
                 k2_slider.setLabels();
-
-                base.Init(ve, bag, cc);
             }
         }
 

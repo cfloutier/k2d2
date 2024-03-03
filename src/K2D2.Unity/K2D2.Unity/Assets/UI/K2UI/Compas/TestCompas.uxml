@@ -1,7 +1,10 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/K2UI/K2UI.uss?fileID=7433441132597879392&amp;guid=d70a8288b6b3eee4a900aa2727eb7499&amp;type=3#K2UI" />
     <Style src="project://database/Assets/UI/K2UI/Compas/compas.uss?fileID=7433441132597879392&amp;guid=e2bd53ecacfb99a4f9c9d2b73a0b1303&amp;type=3#compas" />
     <ui:VisualElement name="frame" class="compas" style="width: 350px; background-color: rgb(0, 0, 0);">
         <ui:Label tabindex="-1" text="Label" display-tooltip-when-elided="true" name="Label-Value" />
-        <K2UI.Compas.K2Compass value="49.4" angle-range="85.7" style="height: 48px;" />
+        <K2UI.K2Compass name="interactive" value="15.32" angle-range="98.6" interactive="true" />
+        <ui:Label tabindex="-1" text="Non Interactive" display-tooltip-when-elided="true" />
+        <K2UI.K2Compass name="non_interactive" value="15.32" angle-range="98.6" interactive="false" />
     </ui:VisualElement>
 </ui:UXML>

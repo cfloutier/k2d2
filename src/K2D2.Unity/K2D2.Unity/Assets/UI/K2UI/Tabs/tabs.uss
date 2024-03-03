@@ -1,7 +1,7 @@
 .k2-tabsbar {
     flex-direction: row;
     flex-wrap: wrap;
-    border-color: var(--mnc-color-border);
+    border-color: var(--k2-color-border);
     border-bottom-width: 2px;
     justify-content: flex-start;
     align-items: stretch;
@@ -16,7 +16,7 @@
     margin-right: 0;
     flex-grow: 0;
     background-color: var(--k2-background-frame);
-    border-color: var(--mnc-color-border);
+    border-color: var(--k2-color-border);
     flex-direction: column;
     justify-content: flex-end;
     margin-bottom: -2px;

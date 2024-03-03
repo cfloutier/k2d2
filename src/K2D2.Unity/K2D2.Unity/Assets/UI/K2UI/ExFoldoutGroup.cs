@@ -11,7 +11,6 @@ namespace K2UI
         public new class UxmlFactory : UxmlFactory<ExFoldoutGroup, UxmlTraits> { }
         public new class UxmlTraits : VisualElement.UxmlTraits
         {
-
             public override IEnumerable<UxmlChildElementDescription> uxmlChildElementsDescription
             {
                 get
