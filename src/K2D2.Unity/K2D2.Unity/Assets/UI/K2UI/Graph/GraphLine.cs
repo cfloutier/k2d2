@@ -24,12 +24,15 @@ namespace K2UI.Graph
                 new() { name = "max-y", defaultValue = 1 };
 
             UxmlColorAttributeDescription m_Color =
-                new() { name = "color", defaultValue = Color.white };      
+                new() { name = "line-color", defaultValue = Color.white };    
+
+            UxmlFloatAttributeDescription m_LineWidth =
+                new() { name = "line-width", defaultValue = 1 };   
+              
 
             UxmlFloatAttributeDescription m_seed =
                 new() { name = "test-seed", defaultValue = -1 };      
             
-
             public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc)
             {
                 base.Init(ve, bag, cc);
@@ -39,7 +42,11 @@ namespace K2UI.Graph
                 ate.MinY = m_MinY.GetValueFromBag(bag, cc);
                 ate.MaxY = m_MaxY.GetValueFromBag(bag, cc);
                 ate.LineColor = m_Color.GetValueFromBag(bag, cc);
+                ate.LineWidth = m_LineWidth.GetValueFromBag(bag, cc);
+                
                 ate.TestSeed = m_seed.GetValueFromBag(bag, cc);
+
+                
             }
         }
 
@@ -83,6 +90,12 @@ namespace K2UI.Graph
         public Color LineColor  {
             get { return _color; }
             set { _color = value; MarkDirtyRepaint(); }
+        }
+
+        public float _line_width = 1;
+        public float LineWidth  {
+            get { return _line_width; }
+            set { _line_width = value; MarkDirtyRepaint(); }
         }
 
         public float _test_seed = -1;
@@ -161,7 +174,7 @@ namespace K2UI.Graph
 
             painter.lineCap = LineCap.Round;
 
-            painter.lineWidth = 2;
+            painter.lineWidth = LineWidth;
             painter.strokeColor = LineColor;
             painter.BeginPath();
 

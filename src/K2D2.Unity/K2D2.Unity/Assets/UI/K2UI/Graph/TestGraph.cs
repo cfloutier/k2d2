@@ -76,7 +76,7 @@ public class TestGraph : MonoBehaviour
             var color = color_lines;
             color.a = Mathf.Lerp(1, 0.05f, ((float)i)/nb_lines );
             line.LineColor = color;
-
+            line.LineWidth = 5;
             el_graph.Add(line);
             lines.Add(line);
             line.setRanges(0, 100, 0, 1);
