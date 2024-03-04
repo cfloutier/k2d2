@@ -24,7 +24,11 @@ namespace K2UI.Graph
                 new() { name = "max-y", defaultValue = 1 };
 
             UxmlColorAttributeDescription m_Color =
-                new() { name = "Color", defaultValue = Color.white };      
+                new() { name = "color", defaultValue = Color.white };      
+
+            UxmlFloatAttributeDescription m_seed =
+                new() { name = "test-seed", defaultValue = -1 };      
+            
 
             public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc)
             {
@@ -35,7 +39,16 @@ namespace K2UI.Graph
                 ate.MinY = m_MinY.GetValueFromBag(bag, cc);
                 ate.MaxY = m_MaxY.GetValueFromBag(bag, cc);
                 ate.LineColor = m_Color.GetValueFromBag(bag, cc);
+                ate.TestSeed = m_seed.GetValueFromBag(bag, cc);
             }
+        }
+
+        public void setRanges(float min_x, float max_x, float min_y, float max_y)
+        {
+            MinX = min_x;
+            MaxX = max_x;
+            MinY = min_y;
+            MaxY = max_y;          
         }
 
         public float _min_x = 0;
@@ -71,6 +84,40 @@ namespace K2UI.Graph
             get { return _color; }
             set { _color = value; MarkDirtyRepaint(); }
         }
+
+        public float _test_seed = -1;
+        public float TestSeed  {
+            get { return _test_seed; }
+            set { _test_seed = value; 
+
+
+            if (_test_seed >= 0)
+            {
+                rebuildtestLine();   
+                MarkDirtyRepaint(); }
+            }   
+        }
+
+        void rebuildtestLine()
+        {
+            int nb_point = 300;
+            float max_x = 100;
+            float period = 0.1f;
+
+            points = new List<Vector2>(); 
+
+            float x = 0; 
+            float dx = max_x / nb_point;
+
+            while (x <= max_x)
+            {
+                float y = Mathf.PerlinNoise(period*x, _test_seed);
+                points.Add(new Vector2(x, y));
+                x += dx;
+            }
+
+        }
+
 
         public Line()
         {

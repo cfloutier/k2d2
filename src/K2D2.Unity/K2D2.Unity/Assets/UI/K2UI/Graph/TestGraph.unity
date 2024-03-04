@@ -370,8 +370,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb7000fcbca9d4848a8275c9ce2c3b98, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 1
-  period: 0.2
+  speed: 0.01
+  period: 0.02
+  dt: 0.01
+  color_lines: {r: 1, g: 1, b: 1, a: 1}
+  nb_lines: 100
 --- !u!1 &1916601339
 GameObject:
   m_ObjectHideFlags: 0
