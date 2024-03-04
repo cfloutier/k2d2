@@ -60,14 +60,13 @@ public class TestGraph : MonoBehaviour
         my_line = root.Q<Line>();
 
         speed_slider = root.Q<K2Slider>("speed");
-        speed_slider.Value = speed;
-        speed_slider.Min = 0;
-        speed_slider.Max = 2;
+        speed_slider.InitValues(speed, 0, 2);
+       
         
         period_slider = root.Q<K2Slider>("period");
         period_slider.Value = period;
-        period_slider.Min = 0;
-        period_slider.Max = 0.3f;
+
+        speed_slider.InitValues(period, 0, 0.3f);
 
         speed_slider.RegisterCallback<ChangeEvent<float>>(evt => speed = evt.newValue);
         period_slider.RegisterCallback<ChangeEvent<float>>(evt => period = evt.newValue);
