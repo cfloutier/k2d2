@@ -1,0 +1,33 @@
+.big-toggle-button {
+    border-color: var(--k2-color-border);
+    border-width: 0.5px;
+    border-radius: 7px;
+    font-size: 13px;
+    -unity-font-style: bold;
+    -unity-text-align: upper-center;
+    margin-bottom: 4px;
+    background-color: rgb(14, 14, 14);
+}
+
+.big-toggle-button:hover {
+    background-color: var(--k2-hover_frame);
+}
+
+.big-toggle-button:active {
+    background-color: var(--k2-active_frame);
+}
+
+.big-toggle-button.checked {
+    background-image: url('project://database/Assets/Images/Light_Button.png?fileID=2800000&guid=778643882f96ecd47990fd5c8764fd03&type=3#Light_Button');
+    -unity-background-image-tint-color: rgb(106, 255, 6);
+}
+
+.big-toggle-button > Label {
+    color: rgb(255, 255, 255);
+    -unity-text-align: upper-center;
+}
+
+.big-toggle-button.checked > Label {
+    color: rgb(0, 0, 0);
+    -unity-text-align: upper-center;
+}

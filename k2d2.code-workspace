@@ -8,6 +8,9 @@
 		},
 		{
 			"path": "../test_Ktools"
+		},
+		{
+			"path": "../UitkForKsp2"
 		}
 	],
 	"settings": {}

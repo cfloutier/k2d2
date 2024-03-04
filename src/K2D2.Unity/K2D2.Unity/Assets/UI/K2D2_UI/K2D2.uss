@@ -1,0 +1,19 @@
+@import url('project://database/Assets/UI/K2UI/K2UI.uss?fileID=7433441132597879392&guid=d70a8288b6b3eee4a900aa2727eb7499&type=3#K2UI');
+.root {
+    margin-left: 11px;
+    margin-right: 11px;
+    margin-top: 11px;
+    margin-bottom: 11px;
+}
+
+#icon {
+    width: 40px;
+    height: 40px;
+    align-self: center;
+    background-image: url('project://database/Assets/Images/k2d2_big_icon.png?fileID=2800000&guid=8ef988e0f43beb149a76620d7ba3ed65&type=3#k2d2_big_icon');
+    margin-bottom: 0;
+    translate: -5px -7px;
+    position: absolute;
+    top: -33px;
+    left: 8px;
+}
