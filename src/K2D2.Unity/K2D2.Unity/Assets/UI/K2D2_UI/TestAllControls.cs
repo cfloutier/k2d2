@@ -50,7 +50,7 @@ public class TestAllControls : K2Panel
         });
 
         int_field = panel.Q<IntegerField>();
-        float_field.RegisterCallback<ChangeEvent<float>>((evt) =>
+        int_field.RegisterCallback<ChangeEvent<int>>((evt) =>
         {
             my_value = evt.newValue;
             UpdateBars();
@@ -69,6 +69,6 @@ public class TestAllControls : K2Panel
         slider.Value = my_value;
         compas.Value = my_value;
         float_field.value = my_value;
-
+        int_field.value = (int) my_value;
     }
 }
