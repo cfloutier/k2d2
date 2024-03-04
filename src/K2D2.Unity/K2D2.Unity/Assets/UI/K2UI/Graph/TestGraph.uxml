@@ -5,6 +5,6 @@
     <ui:VisualElement name="frame" class="compas main-frame" style="background-color: rgb(0, 0, 0);">
         <K2UI.K2Slider name="period" min="-100" max="100" print-value="true" label="Period" />
         <K2UI.K2Slider name="speed" min="-100" max="100" print-value="true" label="Speed" />
-        <K2UI.Graph.Line min-x="0" max-x="100" min-y="0" max-y="1" style="width: 100%; height: 300px; border-top-left-radius: 26px; border-bottom-left-radius: 26px; border-top-right-radius: 26px; border-bottom-right-radius: 26px; border-left-color: rgb(154, 154, 154); border-right-color: rgb(154, 154, 154); border-top-color: rgb(154, 154, 154); border-bottom-color: rgb(154, 154, 154); border-left-width: 3px; border-right-width: 3px; border-top-width: 3px; border-bottom-width: 3px;" />
+        <K2UI.Graph.GraphLine min-x="0" max-x="100" min-y="0" max-y="1" style="width: 100%; height: 300px; border-top-left-radius: 26px; border-bottom-left-radius: 26px; border-top-right-radius: 26px; border-bottom-right-radius: 26px; border-left-color: rgb(154, 154, 154); border-right-color: rgb(154, 154, 154); border-top-color: rgb(154, 154, 154); border-bottom-color: rgb(154, 154, 154); border-left-width: 3px; border-right-width: 3px; border-top-width: 3px; border-bottom-width: 3px;" />
     </ui:VisualElement>
 </ui:UXML>

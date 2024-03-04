@@ -50,14 +50,14 @@ public class TestGraph : MonoBehaviour
         return points;
     }
 
-    Line my_line;
+    GraphLine my_line;
     K2Slider speed_slider, period_slider;
 
     public void OnEnable()
     {
         var doc = GetComponent<UIDocument>();
         var root = doc.rootVisualElement;
-        my_line = root.Q<Line>();
+        my_line = root.Q<GraphLine>();
 
         speed_slider = root.Q<K2Slider>("speed");
         speed_slider.Value = speed;
