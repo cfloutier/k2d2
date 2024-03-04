@@ -130,6 +130,13 @@ namespace K2UI
                 _label = value;
             }
         }
+        
+        public void InitValues(float value, float min, float max)
+        {
+           Min = min;
+           Max = max;
+           Value = value;
+        }
 
         Slider main_slider;
 

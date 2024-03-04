@@ -2,9 +2,12 @@
     <Style src="project://database/Assets/UI/K2UI/K2UI.uss?fileID=7433441132597879392&amp;guid=d70a8288b6b3eee4a900aa2727eb7499&amp;type=3#K2UI" />
     <Style src="project://database/Assets/UI/K2UI/Compas/compas.uss?fileID=7433441132597879392&amp;guid=e2bd53ecacfb99a4f9c9d2b73a0b1303&amp;type=3#compas" />
     <Style src="project://database/Assets/UI/K2UI/Graph/Graph.uss?fileID=7433441132597879392&amp;guid=4652cfda17384d74abea95b5b7b4570c&amp;type=3#Graph" />
-    <ui:VisualElement name="frame" class="compas main-frame" style="background-color: rgb(0, 0, 0);">
-        <K2UI.K2Slider name="period" min="-100" max="100" print-value="true" label="Period" />
-        <K2UI.K2Slider name="speed" min="-100" max="100" print-value="true" label="Speed" />
-        <K2UI.Graph.GraphLine min-x="0" max-x="100" min-y="0" max-y="1" style="width: 100%; height: 300px; border-top-left-radius: 26px; border-bottom-left-radius: 26px; border-top-right-radius: 26px; border-bottom-right-radius: 26px; border-left-color: rgb(154, 154, 154); border-right-color: rgb(154, 154, 154); border-top-color: rgb(154, 154, 154); border-bottom-color: rgb(154, 154, 154); border-left-width: 3px; border-right-width: 3px; border-top-width: 3px; border-bottom-width: 3px;" />
+    <ui:VisualElement name="frame" class="compas main-frame" style="background-color: rgb(0, 0, 0); width: 799px;">
+        <K2UI.K2Slider name="period" min="0" max="1" print-value="true" label="Period" value="0.2" />
+        <K2UI.K2Slider name="speed" min="0" max="1" print-value="true" label="Speed" value="0.2" />
+        <K2UI.K2Slider name="dt" min="0" max="1" print-value="true" label="dt" value="0.2" />
+        <ui:VisualElement name="Graph" style="flex-grow: 1; background-color: rgba(0, 204, 255, 0.17); width: 100%; height: 416px; overflow: hidden; border-left-color: rgba(0, 232, 255, 0.29); border-right-color: rgba(0, 232, 255, 0.29); border-top-color: rgba(0, 232, 255, 0.29); border-bottom-color: rgba(0, 232, 255, 0.29); border-left-width: 2px; border-right-width: 2px; border-top-width: 2px; border-bottom-width: 2px; border-top-left-radius: 14px; border-bottom-left-radius: 14px; border-top-right-radius: 14px; border-bottom-right-radius: 14px;">
+            <K2UI.Graph.GraphLine max-x="100" min-y="0" color="#FFFFFFFF" test-seed="11.6" />
+        </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>
