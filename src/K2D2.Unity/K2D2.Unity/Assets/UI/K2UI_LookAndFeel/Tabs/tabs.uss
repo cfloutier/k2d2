@@ -76,7 +76,7 @@
     -unity-background-image-tint-color: rgb(18, 18, 18);
 }
 
-:root {
+.root {
     --transition-duration-ligh-bt: 1s;
 }
 

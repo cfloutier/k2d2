@@ -1,3 +1,9 @@
+
+.root {
+    --transition-duration-slider-bt: 2s;
+}
+
+
 .slide-toggle__input {
     max-width: 30px;
     border-top-left-radius: 8px;
@@ -23,7 +29,7 @@
     height: 16px;
 
     transition-property: background-color;
-    transition-duration: 0.5s;
+    transition-duration: 0.2s;
 }
 
 .slide-toggle__input-knob {
@@ -46,7 +52,7 @@
     translate: -1px 0.5px;
 
     transition-property: translate, background-color;
-    transition-duration: 0.5s, 0.5s;
+    transition-duration: 0.2s;
 }
 
 .slide-toggle__input--checked {
