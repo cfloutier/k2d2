@@ -1,6 +1,7 @@
 
 using UnityEngine.UIElements;
 using K2UI;
+using K2UI.Graph;
 using System.Net.WebSockets;
 
 using K2UI.Tabs;
@@ -22,6 +23,9 @@ public class TestAllControls : K2Panel
     float my_value = 5;
 
     IntegerField int_field;
+
+
+
 
 
     public override bool onInit()
@@ -55,12 +59,37 @@ public class TestAllControls : K2Panel
             my_value = evt.newValue;
             UpdateBars();
         });
+
+
+        tuning = panel.Q<K2Slider>("tuning");
+        tuning.RegisterCallback<ChangeEvent<float>>((evt) =>
+        {
+            UpdateLines();
+            
+        });
+
+        line_1 = panel.Q<GraphLine>("line_1");
+        line_2 = panel.Q<GraphLine>("line_2");
+
+        UpdateLines();
+
         
         var big_button = panel.Q<BigToggleButton>("StartPilot");
         big_button.RegisterCallback<ChangeEvent<bool>>(evt => isRunning = evt.newValue);
 
         UpdateBars();
+
+  
         return true;
+    }
+
+    K2Slider tuning;
+    GraphLine line_1, line_2;
+
+    void UpdateLines()
+    {
+        line_1.TestSeed = tuning.Value * 5;
+        line_2.TestSeed = tuning.Value * 10;
     }
 
     void UpdateBars()

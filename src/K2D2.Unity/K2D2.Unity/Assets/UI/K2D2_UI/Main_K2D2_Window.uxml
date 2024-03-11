@@ -1,6 +1,6 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/UI/K2D2_UI/K2D2.uss?fileID=7433441132597879392&amp;guid=f49119c0dc6aec7469a0374f7f606ceb&amp;type=3#K2D2" />
-    <Style src="project://database/Assets/UI/K2UI_LookAndFeel/K2UI.uss?fileID=7433441132597879392&amp;guid=d70a8288b6b3eee4a900aa2727eb7499&amp;type=3#K2UI" />
+    <Style src="project://database/Assets/UI/K2UI/K2UI.uss?fileID=7433441132597879392&amp;guid=d70a8288b6b3eee4a900aa2727eb7499&amp;type=3#K2UI" />
     <ui:VisualElement name="MainFrame" class="main-frame" style="position: absolute; left: 59px; top: 62px;">
         <ui:VisualElement name="title-bar" style="margin-bottom: 0; margin-top: -10px; background-color: rgba(76, 79, 188, 0.23); border-top-left-radius: 12px; border-bottom-left-radius: 0; border-top-right-radius: 12px; border-bottom-right-radius: 0; margin-right: -10px; margin-left: -10px; border-left-color: rgb(76, 79, 188); border-right-color: rgb(76, 79, 188); border-top-color: rgb(76, 79, 188); border-bottom-color: rgb(76, 79, 188);">
             <ui:VisualElement name="icon" style="width: 41px; height: 37px; top: -31px; left: 16px;" />
@@ -32,9 +32,10 @@
                         <K2UI.SlideToggle label="My Toggle" value="false" />
                     </ui:Foldout>
                     <ui:Foldout text="Graph" value="true" name="Graph">
+                        <K2UI.K2Slider name="tuning" value="0.5" label="Tuning" />
                         <ui:VisualElement name="Graph" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); width: 100%; height: 259px; overflow: hidden; border-left-color: rgba(163, 0, 255, 0.34); border-right-color: rgba(163, 0, 255, 0.34); border-top-color: rgba(163, 0, 255, 0.34); border-bottom-color: rgba(163, 0, 255, 0.34); border-left-width: 4px; border-right-width: 4px; border-top-width: 4px; border-bottom-width: 4px; border-top-left-radius: 22px; border-bottom-left-radius: 22px; border-top-right-radius: 22px; border-bottom-right-radius: 22px;">
-                            <K2UI.Graph.GraphLine test-seed="13.55" max-x="79.9" min-y="0" line-width="2.22" style="height: 100%; width: 100%; position: absolute;" />
-                            <K2UI.Graph.GraphLine test-seed="6.87" max-x="39.53" min-y="0" line-width="1.82" style="width: 100%; height: 100%; position: absolute;" />
+                            <K2UI.Graph.GraphLine test-seed="13.55" max-x="79.9" min-y="0" line-width="2.22" name="line_1" style="height: 100%; width: 100%; position: absolute;" />
+                            <K2UI.Graph.GraphLine test-seed="6.87" max-x="39.53" min-y="0" line-width="1.82" name="line_2" style="width: 100%; height: 100%; position: absolute;" />
                         </ui:VisualElement>
                     </ui:Foldout>
                 </K2UI.ExFoldoutGroup>
