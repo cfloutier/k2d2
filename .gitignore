@@ -239,3 +239,5 @@ local_dev_options.bat
 .idea/
 
 ksp_location.bat
+src/K2D2.Unity/K2D2.Unity/Assets/NuGet/**
+src/K2D2.Unity/K2D2.Unity/Assets/NuGet*

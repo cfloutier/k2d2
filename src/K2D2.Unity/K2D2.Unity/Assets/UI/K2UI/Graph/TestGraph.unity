@@ -339,7 +339,7 @@ MonoBehaviour:
   m_Script: {fileID: 19102, guid: 0000000000000000e000000000000000, type: 0}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_PanelSettings: {fileID: 11400000, guid: 146bd17f27afc034289ce1892dccad86, type: 2}
+  m_PanelSettings: {fileID: 11400000, guid: 1030e2e7184ac794faf2a9d67ae6a24e, type: 2}
   m_ParentUI: {fileID: 0}
   sourceAsset: {fileID: 9197481963319205126, guid: c0f4eda88ca047d43b46992a26dd8b5b, type: 3}
   m_SortingOrder: 0
@@ -374,7 +374,7 @@ MonoBehaviour:
   period: 0.02
   dt: 0.01
   color_lines: {r: 1, g: 1, b: 1, a: 1}
-  nb_lines: 100
+  nb_lines: 200
 --- !u!1 &1916601339
 GameObject:
   m_ObjectHideFlags: 0
