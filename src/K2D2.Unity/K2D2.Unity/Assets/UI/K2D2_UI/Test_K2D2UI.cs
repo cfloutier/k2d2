@@ -69,6 +69,7 @@ public class Test_K2D2UI : MonoBehaviour
         List<K2Panel> panels = new()
         {
             new TestAllControls(),
+            new TestSettings(),
             new Node(),
             new Lift(),
             new Drone(),

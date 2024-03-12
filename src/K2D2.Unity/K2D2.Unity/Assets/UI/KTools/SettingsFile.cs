@@ -1,14 +1,45 @@
-
-using UnityEngine;
 using System.Collections.Generic;
 using System;
 using System.Threading;
 using System.IO;
+
+using UnityEngine;
+using UnityEngine.UIElements;
+
 // using Newtonsoft.Json;
 // using BepInEx.Logging;
 
 namespace KTools
 {
+
+    public class SettingsBoolValue
+    {
+        public string path;
+
+        bool _value;
+        public bool Value
+        {
+            get { return _value;}
+            set { 
+                    if (value == _value) return;
+                
+                _value = value;
+                foreach(var listener in listeners)
+                    listener(_value);          
+            }
+        }
+
+        public delegate void onChanged(bool value);
+
+        public List< onChanged> listeners = new List<onChanged>();
+
+
+        public void ListenTo(VisualElement element)
+        {
+            element.RegisterCallback<ChangeEvent<bool>>( evt => Value = evt.newValue );
+        }
+    }
+
     public class SettingsFile
     {
         protected string file_path = "";
