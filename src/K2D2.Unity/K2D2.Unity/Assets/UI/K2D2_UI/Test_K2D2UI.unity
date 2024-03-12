@@ -370,7 +370,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e713f7a13744a2f4f89b17b661f10d02, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  start_selected: controls
+  start_selected: settings
 --- !u!1 &1916601339
 GameObject:
   m_ObjectHideFlags: 0

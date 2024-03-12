@@ -31,7 +31,7 @@ public class TestSettings : K2Panel
         SlideToggle toggle = panel.Q<SlideToggle>("bool_settings");
 
         toggle.value = settings.bool_item.Value;
-        settings.bool_item.ListenTo(toggle);
+        settings.bool_item.Bind(toggle);
 
         return true;
     }

@@ -6,13 +6,11 @@ using System.IO;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-// using Newtonsoft.Json;
+using Newtonsoft.Json;
 // using BepInEx.Logging;
 
 namespace KTools
 {
-
-
     public class SettingsBoolValue
     {
         public SettingsBoolValue(string path, bool default_value)
@@ -42,10 +40,8 @@ namespace KTools
 
         public List< onChanged> listeners = new List<onChanged>();
 
-
-        public void ListenTo(VisualElement element)
+        public void Bind(VisualElement element)
         {
-            
             element.RegisterCallback<ChangeEvent<bool>>( evt => Value = evt.newValue );
         }
     }
@@ -82,7 +78,7 @@ namespace KTools
             Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
             try
             {
-                this.data = JsonUtility.FromJson<Dictionary<string, string>>(File.ReadAllText(file_path));    
+                this.data = JsonConvert.DeserializeObject<Dictionary<string, string>>(File.ReadAllText(file_path));    
             }
             catch (System.Exception)
             {
@@ -98,7 +94,7 @@ namespace KTools
             Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
             try
             {
-                File.WriteAllText(file_path, JsonUtility.ToJson(data));
+                File.WriteAllText(file_path, JsonConvert.SerializeObject(data));
             }
             catch (System.Exception)
             {
