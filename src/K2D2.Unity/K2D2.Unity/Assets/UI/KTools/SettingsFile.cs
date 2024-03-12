@@ -12,8 +12,15 @@ using UnityEngine.UIElements;
 namespace KTools
 {
 
+
     public class SettingsBoolValue
     {
+        public SettingsBoolValue(string path, bool default_value)
+        {
+            this.path = path;
+            _value = SettingsFile.Instance.GetBool(path, default_value);
+        }
+
         public string path;
 
         bool _value;
@@ -23,9 +30,11 @@ namespace KTools
             set { 
                     if (value == _value) return;
                 
-                _value = value;
-                foreach(var listener in listeners)
-                    listener(_value);          
+                    _value = value;
+                    foreach(var listener in listeners)
+                        listener(_value);   
+
+                    SettingsFile.Instance.SetBool(path, _value);    
             }
         }
 
@@ -36,16 +45,30 @@ namespace KTools
 
         public void ListenTo(VisualElement element)
         {
+            
             element.RegisterCallback<ChangeEvent<bool>>( evt => Value = evt.newValue );
         }
     }
 
     public class SettingsFile
     {
+        static SettingsFile _instance;
+        static public SettingsFile Instance
+        {
+            get{
+                return _instance;
+            }
+        }
+
+        static public void Init(string file_path)
+        {
+            _instance = new SettingsFile(file_path);
+        }
+
         protected string file_path = "";
         Dictionary<string, string> data = new Dictionary<string, string>();
 
-        public SettingsFile(string file_path)
+        protected SettingsFile(string file_path)
         {
             this.file_path = file_path;
             Load();
@@ -55,7 +78,6 @@ namespace KTools
 
         protected void Load()
         {
-
             var previous_culture = Thread.CurrentThread.CurrentCulture;
             Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
             try

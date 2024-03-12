@@ -25,9 +25,6 @@ public class TestAllControls : K2Panel
     IntegerField int_field;
 
 
-
-
-
     public override bool onInit()
     {
         bar = panel.Q<K2ProgressBar>("MyBar");

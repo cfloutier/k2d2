@@ -7,6 +7,7 @@ using System.Runtime.InteropServices;
 
 using K2UI;
 using K2UI.Tabs;
+using KTools;
 
 public class Node: K2Panel
 {
@@ -62,9 +63,11 @@ public class Test_K2D2UI : MonoBehaviour
 
     private void Start()
     {
-         UIDocument menu = GetComponent<UIDocument>();
+        UIDocument menu = GetComponent<UIDocument>();
         VisualElement root = menu.rootVisualElement;
         root.MakeDraggable();
+
+        SettingsFile.Init("settings.json");
 
         List<K2Panel> panels = new()
         {
