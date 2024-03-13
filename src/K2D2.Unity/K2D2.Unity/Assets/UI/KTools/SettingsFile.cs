@@ -11,9 +11,44 @@ using Newtonsoft.Json;
 
 namespace KTools
 {
-    public class SettingsBoolValue
+    public class SettingsString
     {
-        public SettingsBoolValue(string path, bool default_value)
+        public SettingsString(string path, string default_value)
+        {
+            this.path = path;
+            _value = SettingsFile.Instance.GetString(path, default_value);
+        }
+
+        public string path;
+
+        string _value;
+        public string Value
+        {
+            get { return _value;}
+            set { 
+                    if (value == _value) return;
+                
+                    _value = value;
+                    foreach(var listener in listeners)
+                        listener(_value);   
+
+                    SettingsFile.Instance.SetString(path, _value);    
+            }
+        }
+
+        public delegate void onChanged(string value);
+
+        public List< onChanged> listeners = new List<onChanged>();
+
+        public void Bind(VisualElement element)
+        {
+            element.RegisterCallback<ChangeEvent<string>>( evt => Value = evt.newValue );
+        }
+    }
+
+    public class SettingsBool
+    {
+        public SettingsBool(string path, bool default_value)
         {
             this.path = path;
             _value = SettingsFile.Instance.GetBool(path, default_value);
@@ -45,6 +80,185 @@ namespace KTools
             element.RegisterCallback<ChangeEvent<bool>>( evt => Value = evt.newValue );
         }
     }
+
+    public class SettingsInt
+    {
+        public SettingsInt(string path, int default_value)
+        {
+            this.path = path;
+            _value = SettingsFile.Instance.GetInt(path, default_value);
+        }
+
+        public string path;
+
+        int _value;
+        public int Value
+        {
+            get { return _value;}
+            set { 
+                    if (value == _value) return;
+                
+                    _value = value;
+                    foreach(var listener in listeners)
+                        listener(_value);   
+
+                    SettingsFile.Instance.SetInt(path, _value);    
+            }
+        }
+
+        public delegate void onChanged(int value);
+
+        public List< onChanged> listeners = new List<onChanged>();
+
+        public void Bind(VisualElement element)
+        {
+            element.RegisterCallback<ChangeEvent<int>>( evt => Value = evt.newValue );
+        }
+    }
+
+    public class SettingsFloat
+    {
+        public SettingsFloat(string path, float default_value)
+        {
+            this.path = path;
+            _value = SettingsFile.Instance.GetFloat(path, default_value);
+        }
+
+        public string path;
+
+        float _value;
+        public float Value
+        {
+            get { return _value;}
+            set { 
+                    if (value == _value) return;
+                
+                    _value = value;
+                    foreach(var listener in listeners)
+                        listener(_value);   
+
+                    SettingsFile.Instance.SetFloat(path, _value);    
+            }
+        }
+
+        public delegate void onChanged(float value);
+
+        public List< onChanged> listeners = new List<onChanged>();
+
+        public void Bind(VisualElement element)
+        {
+            element.RegisterCallback<ChangeEvent<float>>( evt => Value = evt.newValue );
+        }
+    }
+
+    public class SettingsDouble
+    {
+        public SettingsDouble(string path, double default_value)
+        {
+            this.path = path;
+            _value = SettingsFile.Instance.GetDouble(path, default_value);
+        }
+
+        public string path;
+
+        double _value;
+        public double Value
+        {
+            get { return _value;}
+            set { 
+                    if (value == _value) return;
+                
+                    _value = value;
+                    foreach(var listener in listeners)
+                        listener(_value);   
+
+                    SettingsFile.Instance.SetDouble(path, _value);    
+            }
+        }
+
+        public delegate void onChanged(double value);
+
+        public List< onChanged> listeners = new List<onChanged>();
+
+        public void Bind(VisualElement element)
+        {
+            element.RegisterCallback<ChangeEvent<double>>( evt => Value = evt.newValue );
+        }
+    }
+
+    public class SettingsColor
+    {
+        public SettingsColor(string path, Color default_value)
+        {
+            this.path = path;
+            _value = SettingsFile.Instance.GetColor(path, default_value);
+        }
+
+        public string path;
+
+        Color _value;
+        public Color Value
+        {
+            get { return _value;}
+            set { 
+                    if (value == _value) return;
+                
+                    _value = value;
+                    foreach(var listener in listeners)
+                        listener(_value);   
+
+                    SettingsFile.Instance.SetColor(path, _value);    
+            }
+        }
+
+        public delegate void onChanged(Color value);
+
+        public List< onChanged> listeners = new List<onChanged>();
+
+        public void Bind(VisualElement element)
+        {
+            element.RegisterCallback<ChangeEvent<Color>>( evt => Value = evt.newValue );
+        }
+    }
+
+    public class SettingsVector3Value
+    {
+        public SettingsVector3Value(string path, Vector3 default_value)
+        {
+            this.path = path;
+            _value = SettingsFile.Instance.GetVector3(path, default_value);
+        }
+
+        public string path;
+
+        Vector3 _value;
+        public Vector3 Value
+        {
+            get { return _value;}
+            set { 
+                    if (value == _value) return;
+                
+                    _value = value;
+                    foreach(var listener in listeners)
+                        listener(_value);   
+
+                    SettingsFile.Instance.SetVector3(path, _value);    
+            }
+        }
+
+        public delegate void onChanged(Vector3 value);
+
+        public List< onChanged> listeners = new List<onChanged>();
+
+        public void Bind(VisualElement element)
+        {
+            element.RegisterCallback<ChangeEvent<Vector3>>( evt => Value = evt.newValue );
+        }
+    }
+
+
+
+
 
     public class SettingsFile
     {

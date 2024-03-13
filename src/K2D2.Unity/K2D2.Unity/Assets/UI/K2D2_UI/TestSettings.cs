@@ -9,7 +9,7 @@ using KTools;
 
 public class MySettingsClass
 {
-    public SettingsBoolValue bool_item  = new SettingsBoolValue("my_settings.bool_item", false);
+    public SettingsBool bool_item  = new SettingsBool("my_settings.bool_item", false);
 }
 
 public class TestSettings : K2Panel
