@@ -5,6 +5,7 @@ using UnityEngine.UIElements;
 using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
+using K2D2;
 
 namespace K2UI.Tabs
 {
@@ -14,14 +15,23 @@ namespace K2UI.Tabs
     /// in the #content, found by it's #name == code
     /// a TabButton must be added to the #buttons 
     /// 
-    /// please create an overriden class and add it to the TabbedPage 
+    /// create an overriden class and add it to the TabbedPage in the Init fct
     /// </summary>
     [System.Serializable]
     public class K2Panel
     {
         public string code;
 
+        // the main panel (including page and settings)
         public VisualElement panel;
+
+
+
+        // the settings page if found
+        public VisualElement settings_page;
+        // the main page if found
+        public VisualElement main_page;
+
         public TabButton tab_button;
 
         public K2Panel()
@@ -45,7 +55,26 @@ namespace K2UI.Tabs
                 return false;
             }
 
+            settings_page = panels.Q<VisualElement>("settings");
+            main_page = panels.Q<VisualElement>("page");
+
+            if (settings_page != null && main_page != null)
+            {     
+                GlobalSetting.settings_visible.listeners += onSettingsChanged;
+                onSettingsChanged(GlobalSetting.settings_visible.Value);
+            }
+            else
+            {
+                Debug.LogWarning("no settings for page name " + code);
+            }
+
             return onInit();
+        }
+
+        private void onSettingsChanged(bool value)
+        {
+            settings_page.style.display = value ? DisplayStyle.Flex : DisplayStyle.None;
+            main_page.style.display = !value ? DisplayStyle.Flex : DisplayStyle.None;         
         }
 
         public virtual bool onInit()

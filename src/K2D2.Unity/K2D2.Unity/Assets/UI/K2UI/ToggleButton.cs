@@ -4,22 +4,23 @@ using System.Collections.Generic;
 
 namespace K2UI
 {
-    class BigToggleButton : VisualElement
+    class ToggleButton : VisualElement
     {
-        public new class UxmlFactory : UxmlFactory<BigToggleButton, UxmlTraits> { }
+        public new class UxmlFactory : UxmlFactory<ToggleButton, UxmlTraits> { }
 
         // Add the two custom UXML attributes.
         public new class UxmlTraits : VisualElement.UxmlTraits
         {
             UxmlStringAttributeDescription m_String =
-                new() { name = "label", defaultValue = "Big Toggle Button !" };
+                new() { name = "label", defaultValue = "Toggle Button" };
             UxmlBoolAttributeDescription m_Bool =
                 new() { name = "value", defaultValue = false };
+
 
             public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc)
             {
                 base.Init(ve, bag, cc);
-                var ate = ve as BigToggleButton;
+                var ate = ve as ToggleButton;
 
                 ate.label = m_String.GetValueFromBag(bag, cc);
                 ate.active = m_Bool.GetValueFromBag(bag, cc);
@@ -56,11 +57,12 @@ namespace K2UI
 
         // In the spirit of the BEM standard, the BigToggleButton has its own block class and two element classes. It also
         // has a class that represents the enabled state of the toggle.
-        public static readonly string ussClassName = "big-toggle-button";
+        public static readonly string ussClassName = "toggle-button";
         public static readonly string checkedUssClassName = "checked";
 
+
         // This constructor allows users to set the contents of the label.
-        public BigToggleButton()
+        public ToggleButton()
         {
             label_el = new Label();
             Add(label_el);

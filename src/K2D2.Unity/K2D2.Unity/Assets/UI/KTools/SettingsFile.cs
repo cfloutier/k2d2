@@ -7,292 +7,98 @@ using UnityEngine;
 using UnityEngine.UIElements;
 
 using Newtonsoft.Json;
+using System.ComponentModel;
+using System.Linq.Expressions;
+using System.Runtime.InteropServices.WindowsRuntime;
 // using BepInEx.Logging;
 
 namespace KTools
 {
-    public class SettingsString
+    public class Settings<T>
     {
-        public SettingsString(string path, string default_value)
+        T default_value;
+
+        public Settings(string path, T default_value)
         {
             this.path = path;
-            _value = SettingsFile.Instance.GetString(path, default_value);
+            this.default_value = default_value;
+            if (SettingsFile.Instance.loaded)
+                loadValue();
+            else
+                SettingsFile.Instance.onloaded_event += loadValue;
+
+        }
+
+        void loadValue()
+        {
+            _value = SettingsFile.Instance.Get<T>(path, default_value);
         }
 
         public string path;
 
-        string _value;
-        public string Value
+        T _value;
+        public T Value
         {
-            get { return _value;}
-            set { 
-                    if (value == _value) return;
-                
-                    _value = value;
-                    foreach(var listener in listeners)
-                        listener(_value);   
+            get { return _value; }
+            set
+            {
+                if (value.Equals(_value)) return;
 
-                    SettingsFile.Instance.SetString(path, _value);    
+                _value = value;
+                listeners?.Invoke(Value);
+
+                SettingsFile.Instance.Set<T>(path, _value);
             }
         }
 
-        public delegate void onChanged(string value);
+        public delegate void onChanged(T value);
 
-        public List< onChanged> listeners = new List<onChanged>();
-
-        public void Bind(VisualElement element)
-        {
-            element.RegisterCallback<ChangeEvent<string>>( evt => Value = evt.newValue );
-        }
-    }
-
-    public class SettingsBool
-    {
-        public SettingsBool(string path, bool default_value)
-        {
-            this.path = path;
-            _value = SettingsFile.Instance.GetBool(path, default_value);
-        }
-
-        public string path;
-
-        bool _value;
-        public bool Value
-        {
-            get { return _value;}
-            set { 
-                    if (value == _value) return;
-                
-                    _value = value;
-                    foreach(var listener in listeners)
-                        listener(_value);   
-
-                    SettingsFile.Instance.SetBool(path, _value);    
-            }
-        }
-
-        public delegate void onChanged(bool value);
-
-        public List< onChanged> listeners = new List<onChanged>();
+        public event onChanged listeners;
 
         public void Bind(VisualElement element)
         {
-            element.RegisterCallback<ChangeEvent<bool>>( evt => Value = evt.newValue );
+            element.RegisterCallback<ChangeEvent<T>>(evt => Value = evt.newValue);
         }
     }
-
-    public class SettingsInt
-    {
-        public SettingsInt(string path, int default_value)
-        {
-            this.path = path;
-            _value = SettingsFile.Instance.GetInt(path, default_value);
-        }
-
-        public string path;
-
-        int _value;
-        public int Value
-        {
-            get { return _value;}
-            set { 
-                    if (value == _value) return;
-                
-                    _value = value;
-                    foreach(var listener in listeners)
-                        listener(_value);   
-
-                    SettingsFile.Instance.SetInt(path, _value);    
-            }
-        }
-
-        public delegate void onChanged(int value);
-
-        public List< onChanged> listeners = new List<onChanged>();
-
-        public void Bind(VisualElement element)
-        {
-            element.RegisterCallback<ChangeEvent<int>>( evt => Value = evt.newValue );
-        }
-    }
-
-    public class SettingsFloat
-    {
-        public SettingsFloat(string path, float default_value)
-        {
-            this.path = path;
-            _value = SettingsFile.Instance.GetFloat(path, default_value);
-        }
-
-        public string path;
-
-        float _value;
-        public float Value
-        {
-            get { return _value;}
-            set { 
-                    if (value == _value) return;
-                
-                    _value = value;
-                    foreach(var listener in listeners)
-                        listener(_value);   
-
-                    SettingsFile.Instance.SetFloat(path, _value);    
-            }
-        }
-
-        public delegate void onChanged(float value);
-
-        public List< onChanged> listeners = new List<onChanged>();
-
-        public void Bind(VisualElement element)
-        {
-            element.RegisterCallback<ChangeEvent<float>>( evt => Value = evt.newValue );
-        }
-    }
-
-    public class SettingsDouble
-    {
-        public SettingsDouble(string path, double default_value)
-        {
-            this.path = path;
-            _value = SettingsFile.Instance.GetDouble(path, default_value);
-        }
-
-        public string path;
-
-        double _value;
-        public double Value
-        {
-            get { return _value;}
-            set { 
-                    if (value == _value) return;
-                
-                    _value = value;
-                    foreach(var listener in listeners)
-                        listener(_value);   
-
-                    SettingsFile.Instance.SetDouble(path, _value);    
-            }
-        }
-
-        public delegate void onChanged(double value);
-
-        public List< onChanged> listeners = new List<onChanged>();
-
-        public void Bind(VisualElement element)
-        {
-            element.RegisterCallback<ChangeEvent<double>>( evt => Value = evt.newValue );
-        }
-    }
-
-    public class SettingsColor
-    {
-        public SettingsColor(string path, Color default_value)
-        {
-            this.path = path;
-            _value = SettingsFile.Instance.GetColor(path, default_value);
-        }
-
-        public string path;
-
-        Color _value;
-        public Color Value
-        {
-            get { return _value;}
-            set { 
-                    if (value == _value) return;
-                
-                    _value = value;
-                    foreach(var listener in listeners)
-                        listener(_value);   
-
-                    SettingsFile.Instance.SetColor(path, _value);    
-            }
-        }
-
-        public delegate void onChanged(Color value);
-
-        public List< onChanged> listeners = new List<onChanged>();
-
-        public void Bind(VisualElement element)
-        {
-            element.RegisterCallback<ChangeEvent<Color>>( evt => Value = evt.newValue );
-        }
-    }
-
-    public class SettingsVector3Value
-    {
-        public SettingsVector3Value(string path, Vector3 default_value)
-        {
-            this.path = path;
-            _value = SettingsFile.Instance.GetVector3(path, default_value);
-        }
-
-        public string path;
-
-        Vector3 _value;
-        public Vector3 Value
-        {
-            get { return _value;}
-            set { 
-                    if (value == _value) return;
-                
-                    _value = value;
-                    foreach(var listener in listeners)
-                        listener(_value);   
-
-                    SettingsFile.Instance.SetVector3(path, _value);    
-            }
-        }
-
-        public delegate void onChanged(Vector3 value);
-
-        public List< onChanged> listeners = new List<onChanged>();
-
-        public void Bind(VisualElement element)
-        {
-            element.RegisterCallback<ChangeEvent<Vector3>>( evt => Value = evt.newValue );
-        }
-    }
-
-
-
-
 
     public class SettingsFile
     {
         static SettingsFile _instance;
         static public SettingsFile Instance
         {
-            get{
+            get
+            {
+                if (_instance == null)
+                    _instance = new SettingsFile();
+
                 return _instance;
             }
         }
 
         static public void Init(string file_path)
         {
-            _instance = new SettingsFile(file_path);
+            Instance.Load(file_path);
         }
 
         protected string file_path = "";
         Dictionary<string, string> data = new Dictionary<string, string>();
 
-        protected SettingsFile(string file_path)
-        {
-            this.file_path = file_path;
-            Load();
-        }
+        public bool loaded = false;
+
+        public delegate void onLoaded();
+
+        public event onLoaded onloaded_event;
 
         // public ManualLogSource logger = BepInEx.Logging.Logger.CreateLogSource("K2D2.SettingsFile");
 
-        protected void Load()
+        protected void Load(string file_path)
         {
+            this.file_path = file_path;
             var previous_culture = Thread.CurrentThread.CurrentCulture;
             Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
             try
             {
-                this.data = JsonConvert.DeserializeObject<Dictionary<string, string>>(File.ReadAllText(file_path));    
+                this.data = JsonConvert.DeserializeObject<Dictionary<string, string>>(File.ReadAllText(file_path));
             }
             catch (System.Exception)
             {
@@ -300,6 +106,8 @@ namespace KTools
             }
 
             Thread.CurrentThread.CurrentCulture = previous_culture;
+            loaded = true;
+            onloaded_event?.Invoke();
         }
 
         protected void Save()
@@ -318,27 +126,110 @@ namespace KTools
             Thread.CurrentThread.CurrentCulture = previous_culture;
         }
 
-        public string GetString(string name, string defaultValue)
+        public T Get<T>(string key, T default_value)
         {
-            if (data.ContainsKey(name))
-                return data[name];
+            if (!data.ContainsKey(key))
+                return default_value;
 
-            return defaultValue;
+            Type object_type = typeof(T);
+            if (object_type == null)
+            {
+                throw new ArgumentNullException();
+            }
+            else if (object_type == typeof(string))
+            {
+                return (T)(object)GetString(key, (string)(object)default_value);
+            }
+            else if (object_type == typeof(bool))
+            {
+               return (T)(object)GetBool(key, (bool)(object)default_value);
+            }
+            else if (object_type == typeof(int))
+            {
+                return (T)(object)GetInt(key, (int)(object)default_value);
+            }
+            else if (object_type == typeof(float))
+            {
+                return (T)(object)GetFloat(key, (float)(object)default_value);
+            }
+            else if (object_type == typeof(double))
+            {
+                return (T)(object)GetDouble(key, (double)(object)default_value);
+            }
+            else if (object_type == typeof(Color))
+            {
+                return (T)(object)GetColor(key, (Color)(object)default_value);
+            }
+            else if (object_type == typeof(Vector3))
+            {
+                return (T)(object)GetVector3(key, (Vector3)(object)default_value);
+            }
+            else
+            {
+                throw new InvalidCastException(object_type + " not implemented");
+            }
         }
 
-        public void SetString(string name, string value)
+
+        public void Set<T>(string key, T value)
         {
-            if (data.ContainsKey(name))
+            Type object_type = typeof(T);
+            if (object_type == null)
             {
-                if (data[name] != value)
+                throw new ArgumentNullException();
+            }
+            else if (object_type == typeof(string))
+            {
+                SetString(key, (string)(object)value);
+            }
+            else if (object_type == typeof(bool))
+            {
+                SetBool(key, (bool)(object)value);
+            }
+            else if (object_type == typeof(int))
+            {
+                SetInt(key, (int)(object)value);
+            }
+            else if (object_type == typeof(float))
+            {
+                SetFloat(key, (float)(object)value);
+            }
+            else if (object_type == typeof(double))
+            {
+                SetDouble(key, (double)(object)value);
+            }
+            else if (object_type == typeof(Color))
+            {
+                SetColor(key, (Color)(object)value);
+            }
+            else if (object_type == typeof(Vector3))
+            {
+                SetVector3(key, (Vector3)(object)value);
+            }
+            else
+            {
+                throw new InvalidCastException(object_type + " not implemented");
+            }
+        }
+
+        public string GetString(string key, string default_value)
+        {
+            return Get<string>(key, default_value);
+        }
+
+        public void SetString(string key, string value)
+        {
+            if (data.ContainsKey(key))
+            {
+                if (data[key] != value)
                 {
-                    data[name] = value;
+                    data[key] = value;
                     Save();
                 }
             }
             else
             {
-                data[name] = value;
+                data[key] = value;
                 Save();
             }
         }
@@ -348,24 +239,24 @@ namespace KTools
         /// Get the parameter using bool value
         /// if not found it is added and saved at once
         /// </summary>
-        public bool GetBool(string name, bool defaultValue)
+        public bool GetBool(string key, bool default_value)
         {
-            if (data.ContainsKey(name))
-                return data[name] == "1";
+            if (data.ContainsKey(key))
+                return data[key] == "1";
             else
-                SetBool(name, defaultValue);
+                SetBool(key, default_value);
 
-            return defaultValue;
+            return default_value;
         }
 
         /// <summary>
         /// Set the parameter using bool value
         /// the value is saved at once
         /// </summary>
-        public void SetBool(string name, bool value)
+        public void SetBool(string key, bool value)
         {
             string value_str = value ? "1" : "0";
-            SetString(name, value_str);
+            SetString(key, value_str);
         }
 
 
@@ -373,48 +264,48 @@ namespace KTools
         /// Get the parameter using integer value
         /// if not found or on parsing error, it is replaced and saved at once
         /// </summary>
-        public int GetInt(string name, int defaultValue)
+        public int GetInt(string key, int default_value)
         {
-            if (data.ContainsKey(name))
+            if (data.ContainsKey(key))
             {
                 int value = 0;
-                if (int.TryParse(data[name], out value))
+                if (int.TryParse(data[key], out value))
                 {
                     return value;
                 }
             }
 
             // invalid or no value found in data
-            SetInt(name, defaultValue);
-            return defaultValue;
+            SetInt(key, default_value);
+            return default_value;
         }
 
         /// <summary>
         /// Set the parameter using integer value
         /// the value is saved at once
         /// </summary>
-        public void SetInt(string name, int value)
+        public void SetInt(string key, int value)
         {
-            SetString(name, value.ToString());
+            SetString(key, value.ToString());
         }
 
-        public TEnum GetEnum<TEnum>(string name, TEnum defaultValue) where TEnum : struct
+        public TEnum GetEnum<TEnum>(string key, TEnum default_value) where TEnum : struct
         {
-            if (data.ContainsKey(name))
+            if (data.ContainsKey(key))
             {
-                TEnum value = defaultValue;
-                if (Enum.TryParse<TEnum>(data[name], out value))
+                TEnum value = default_value;
+                if (Enum.TryParse<TEnum>(data[key], out value))
                 {
                     return value;
                 }
             }
 
-            return defaultValue;
+            return default_value;
         }
 
-        public void SetEnum<TEnum>(string name, TEnum value) where TEnum : struct
+        public void SetEnum<TEnum>(string key, TEnum value) where TEnum : struct
         {
-            SetString(name, value.ToString());
+            SetString(key, value.ToString());
         }
 
 
@@ -422,79 +313,79 @@ namespace KTools
         /// Get the parameter using float value
         /// if not found or on parsing error, it is replaced and saved at once
         /// </summary>
-        public float GetFloat(string name, float defaultValue)
+        public float GetFloat(string key, float default_value)
         {
-            if (data.ContainsKey(name))
+            if (data.ContainsKey(key))
             {
                 float value = 0;
-                if (float.TryParse(data[name], out value))
+                if (float.TryParse(data[key], out value))
                 {
                     return value;
                 }
             }
 
             // invalid or no value found in data
-            SetFloat(name, defaultValue);
-            return defaultValue;
+            SetFloat(key, default_value);
+            return default_value;
         }
 
         /// <summary>
         /// Set the parameter using float value
         /// the value is saved at once
         /// </summary>
-        public void SetFloat(string name, float value)
+        public void SetFloat(string key, float value)
         {
-            SetString(name, value.ToString());
+            SetString(key, value.ToString());
         }
 
         /// <summary>
         /// Get the parameter using double value
         /// if not found or on parsing error, it is replaced and saved at once
         /// </summary>
-        public double GetDouble(string name, double defaultValue)
+        public double GetDouble(string key, double default_value)
         {
-            if (data.ContainsKey(name))
+            if (data.ContainsKey(key))
             {
                 double value = 0;
-                if (double.TryParse(data[name], out value))
+                if (double.TryParse(data[key], out value))
                 {
                     return value;
                 }
             }
 
             // invalid or no value found in data
-            SetDouble(name, defaultValue);
-            return defaultValue;
+            SetDouble(key, default_value);
+            return default_value;
         }
 
         /// <summary>
         /// Set the parameter using double value
         /// the value is saved at once
         /// </summary>
-        public void SetDouble(string name, double value)
+        public void SetDouble(string key, double value)
         {
-            SetString(name, value.ToString());
+            SetString(key, value.ToString());
         }
 
         /// <summary>
         /// Get the parameter using Vector3 value
         ///  if not found or on parsing error, it is replaced and saved at once
         /// </summary>
-        public Vector3 GetVector3(string name, Vector3 defaultValue)
+        public Vector3 GetVector3(string key, Vector3 default_value)
         {
-            if (!data.ContainsKey(name))
+            if (!data.ContainsKey(key))
             {
-                SetVector3(name, defaultValue);
-                return defaultValue;
+                SetVector3(key, default_value);
+                return default_value;
             }
 
-            string txt = (string)data[name];
+            string txt = (string)data[key];
             string[] ar = txt.Split(';');
 
             if (ar.Length < 3)
             {
-                SetVector3(name, defaultValue);
-                return defaultValue;
+                SetVector3(key, default_value);
+                return default_value;
             }
 
             Vector3 result = Vector3.zero;
@@ -506,8 +397,8 @@ namespace KTools
             }
             catch
             {
-                SetVector3(name, defaultValue);
-                return defaultValue;
+                SetVector3(key, default_value);
+                return default_value;
             }
 
             return result;
@@ -517,31 +408,31 @@ namespace KTools
         /// Set the parameter using Vector3 value
         /// the value is saved at once
         /// </summary>
-        public void SetVector3(string name, Vector3 value)
+        public void SetVector3(string key, Vector3 value)
         {
             string text = value.x + ";" + value.y + ";" + value.z;
-            SetString(name, text);
+            SetString(key, text);
         }
 
         /// <summary>
         /// Get the parameter using Vector3d value
         ///  if not found or on parsing error, it is replaced and saved at once
         /// </summary>
-        // public Vector3 GetVector3d(string name, Vector3d defaultValue)
+        // public Vector3 GetVector3d(string key, Vector3d default_value)
         // {
-        //     if (!data.ContainsKey(name))
+        //     if (!data.ContainsKey(key))
         //     {
-        //         SetVector3d(name, defaultValue);
-        //         return defaultValue;
+        //         SetVector3d(key, default_value);
+        //         return default_value;
         //     }
 
-        //     string txt = data[name];
+        //     string txt = data[key];
         //     string[] ar = txt.Split(';');
 
         //     if (ar.Length < 3)
         //     {
-        //         SetVector3d(name, defaultValue);
-        //         return defaultValue;
+        //         SetVector3d(key, default_value);
+        //         return default_value;
         //     }
 
         //     Vector3d result = Vector3d.zero;
@@ -553,36 +444,36 @@ namespace KTools
         //     }
         //     catch
         //     {
-        //         SetVector3d(name, defaultValue);
-        //         return defaultValue;
+        //         SetVector3d(key, default_value);
+        //         return default_value;
         //     }
 
         //     return result;
         // }
 
-        // public void SetVector3d(string name, Vector3d value)
+        // public void SetVector3d(string key, Vector3d value)
         // {
         //     string text = value.x + ";" + value.y + ";" + value.z;
-        //     SetString(name, text);
+        //     SetString(key, text);
         // }
 
-        public Color GetColor(string name, Color defaultValue)
+        public Color GetColor(string key, Color default_value)
         {
-            if (!data.ContainsKey(name))
+            if (!data.ContainsKey(key))
             {
-                SetColor(name, defaultValue);
-                return defaultValue;
+                SetColor(key, default_value);
+                return default_value;
             }
 
-            string txt = data[name];
+            string txt = data[key];
             Color result = ColorTools.parseColor(txt);
             return result;
         }
 
-        public void SetColor(string name, Color value)
+        public void SetColor(string key, Color value)
         {
             string text = ColorTools.formatColorHtml(value);
-            SetString(name, text);
+            SetString(key, text);
         }
 
     }
