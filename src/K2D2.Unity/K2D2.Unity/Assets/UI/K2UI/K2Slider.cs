@@ -50,7 +50,7 @@ namespace K2UI
                 K2Slider k2_slider = (K2Slider)ve;
                 Slider main_slider = k2_slider.main_slider;
 
-                k2_slider.Value = m_Value.GetValueFromBag(bag, cc);
+                k2_slider.value = m_Value.GetValueFromBag(bag, cc);
                 k2_slider.printValue = m_printValue.GetValueFromBag(bag, cc);
                 k2_slider.labelOnTop = m_labelOnTop.GetValueFromBag(bag, cc);
                 k2_slider.minMaxLabel = m_MinMaxLabel.GetValueFromBag(bag, cc);
@@ -104,7 +104,7 @@ namespace K2UI
             }
         }
 
-        public float Value
+        public float value
         {
             get { return main_slider.value; }
             set { main_slider.value = value; }
@@ -135,7 +135,7 @@ namespace K2UI
         {
            Min = min;
            Max = max;
-           Value = value;
+           this.value = value;
         }
 
         Slider main_slider;
@@ -217,7 +217,7 @@ namespace K2UI
             setLabelPos();
 
             if (printValue)
-                main_slider.label = Label + $" : {Value:n2}";
+                main_slider.label = Label + $" : {value:n2}";
             else
                 main_slider.label = Label;
 

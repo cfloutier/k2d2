@@ -31,7 +31,7 @@ namespace K2D2.UI.Tests
         {
             bar = panel.Q<K2ProgressBar>("MyBar");
             slider = panel.Q<K2Slider>("MySlider");
-            slider.Value = my_value;
+            slider.value = my_value;
             slider.RegisterCallback<ChangeEvent<float>>((evt) =>
             {
                 my_value = evt.newValue;
@@ -86,14 +86,14 @@ namespace K2D2.UI.Tests
 
         void UpdateLines()
         {
-            line_1.TestSeed = tuning.Value * 5;
-            line_2.TestSeed = tuning.Value * 10;
+            line_1.TestSeed = tuning.value * 5;
+            line_2.TestSeed = tuning.value * 10;
         }
 
         void UpdateBars()
         {
             bar.Value = my_value;
-            slider.Value = my_value;
+            slider.value = my_value;
             compas.Value = my_value;
             float_field.value = my_value;
             int_field.value = (int)my_value;

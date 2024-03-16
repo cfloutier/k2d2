@@ -45,7 +45,7 @@ namespace KTools
                 if (value.Equals(_value)) return;
 
                 _value = value;
-                listeners?.Invoke(Value);
+                listeners?.Invoke(this.Value);
 
                 SettingsFile.Instance.Set<T>(path, _value);
             }

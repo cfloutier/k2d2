@@ -9,6 +9,7 @@ namespace K2D2.UI.Tests
     public class MySettingsClass
     {
         public Settings<bool> bool_item = new Settings<bool>("my_settings.bool_item", false);
+        public Settings<float> float_item = new Settings<float>("my_settings.float_item", 5);
     }
 
     public class TestSettings : K2Panel
@@ -24,11 +25,15 @@ namespace K2D2.UI.Tests
 
         public override bool onInit()
         {
-            SlideToggle toggle = panel.Q<SlideToggle>("bool_settings");
-
+            var toggle = panel.Q<SlideToggle>("bool_settings");
             toggle.value = settings.bool_item.Value;
             settings.bool_item.Bind(toggle);
 
+
+            var slider = panel.Q<K2Slider>("float_settings");
+            slider.value = settings.float_item.Value;
+            settings.float_item.Bind(slider);
+            
             return true;
         }
 

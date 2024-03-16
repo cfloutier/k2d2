@@ -90,7 +90,8 @@
             <ui:VisualElement name="test_settings" class="unselectedContent" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); display: flex;">
                 <ui:Label tabindex="-1" text="Settings" display-tooltip-when-elided="true" name="Title" class="unselectedContent" />
                 <K2UI.Console tabindex="-1" text="All Settings must be saved in settings file" />
-                <K2UI.SlideToggle value="false" label="Slide Toggle" name="bool_settings" />
+                <K2UI.K2Slider max="10" min="-10" name="float_settings" label="Float S" print-value="true" />
+                <K2UI.SlideToggle value="false" label="Bool S" name="bool_settings" />
             </ui:VisualElement>
         </K2UI.Tabs.TabbedPage>
     </ui:VisualElement>
