@@ -34,7 +34,6 @@ class TurnToSettings
         max_angle_maneuver = UI_Tools.FloatSliderTxt("Max Angle", max_angle_maneuver, 0.01f, 1, "°", "Accepted Angular error.");
         max_angular_speed = UI_Tools.FloatSliderTxt("Max Angular Speed", max_angular_speed, 0.01f, 1, "°/s", "Accepted Angular speed.");
     }
-
 }
 
 public class TurnTo : ExecuteController

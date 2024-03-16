@@ -160,7 +160,6 @@ public class NodeExecute : ComplexController
         }
 
         // UI_Tools.Console($"mode : {mode}");
-
         if (!isRunning)
         {
             if (next_maneuver_node == null)
@@ -197,6 +196,7 @@ public class NodeExecute : ComplexController
                                  KBaseStyle.big_button_warning, GUILayout.Width(40));
 
         GUILayout.EndHorizontal();
+        // call the current UI
         current_executor.onGUI();
     }
 

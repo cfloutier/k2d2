@@ -76,8 +76,6 @@ public class NodeExecuteSettings
                                 "Pause when the Node is executed");   
     }
 
-
-
     public void warp_ui()
     {
         auto_warp = UI_Tools.Toggle(auto_warp, "Auto Warp", "warp time before burn");

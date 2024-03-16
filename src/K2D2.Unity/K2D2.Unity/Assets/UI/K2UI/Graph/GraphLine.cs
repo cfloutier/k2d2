@@ -44,9 +44,7 @@ namespace K2UI.Graph
                 ate.LineColor = m_Color.GetValueFromBag(bag, cc);
                 ate.LineWidth = m_LineWidth.GetValueFromBag(bag, cc);
                 
-                ate.TestSeed = m_seed.GetValueFromBag(bag, cc);
-
-                
+                ate.TestSeed = m_seed.GetValueFromBag(bag, cc);     
             }
         }
 

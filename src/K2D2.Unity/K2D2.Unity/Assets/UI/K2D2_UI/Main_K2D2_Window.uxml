@@ -2,6 +2,8 @@
     <Style src="project://database/Assets/UI/K2D2_UI/K2D2.uss?fileID=7433441132597879392&amp;guid=f49119c0dc6aec7469a0374f7f606ceb&amp;type=3#K2D2" />
     <Style src="project://database/Assets/UI/K2UI/K2UI.uss?fileID=7433441132597879392&amp;guid=d70a8288b6b3eee4a900aa2727eb7499&amp;type=3#K2UI" />
     <Style src="project://database/Assets/UI/K2UI/ToggleButton.uss?fileID=7433441132597879392&amp;guid=1b6a73cd9e0a617469e5d501d696c7be&amp;type=3#ToggleButton" />
+    <Style src="project://database/Assets/UI/K2UI/SlideToggle/SlideToggle.uss?fileID=7433441132597879392&amp;guid=a6dc5024ba8ad204e9099eca78c0703f&amp;type=3#SlideToggle" />
+    <Style src="project://database/Assets/UI/K2UI/K2Slider.uss?fileID=7433441132597879392&amp;guid=3d8e4d9f1386ac94c97e6381ad01c59b&amp;type=3#K2Slider" />
     <ui:VisualElement name="MainFrame" class="main-frame" style="position: absolute; left: 11px; top: 36px;">
         <ui:VisualElement name="title-bar" style="margin-bottom: 0; margin-top: -10px; background-color: rgba(76, 79, 188, 0.23); border-top-left-radius: 12px; border-bottom-left-radius: 0; border-top-right-radius: 12px; border-bottom-right-radius: 0; margin-right: -10px; margin-left: -10px; border-left-color: rgb(76, 79, 188); border-right-color: rgb(76, 79, 188); border-top-color: rgb(76, 79, 188); border-bottom-color: rgb(76, 79, 188);">
             <ui:VisualElement name="Main_Icon" style="width: 41px; height: 37px; top: -31px; left: 16px;" />
@@ -73,9 +75,36 @@
             <K2UI.Tabs.TabButton name="lift" label="Lift" />
             <K2UI.Tabs.TabButton name="drone" label="Drone" />
             <K2UI.Tabs.TabButton name="land" label="Land" />
-            <ui:VisualElement name="node" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); align-self: flex-start; display: none;">
-                <ui:Label tabindex="-1" text="The Title" display-tooltip-when-elided="true" name="Title" class="unselectedContent" />
-                <ui:FloatField label="Float Field" value="42,2" />
+            <ui:VisualElement name="node" style="display: flex;">
+                <ui:Label tabindex="-1" text="Node Execution" display-tooltip-when-elided="true" name="Title" class="unselectedContent" />
+                <ui:VisualElement name="page" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); display: flex;">
+                    <ui:Label tabindex="-1" text="Page :" display-tooltip-when-elided="true" name="Title" class="unselectedContent" />
+                </ui:VisualElement>
+                <ui:VisualElement name="settings" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); display: flex;">
+                    <ui:Label tabindex="-1" text="Settings :" display-tooltip-when-elided="true" name="Title" class="unselectedContent" />
+                    <K2UI.ExFoldoutGroup opened-index="3">
+                        <ui:Foldout text="Execute" value="true" name="Execute">
+                            <K2UI.SlideToggle label="Show Nodes Infos " name="show_node_infos" />
+                            <K2UI.InlineEnum labels="T0;before;Mid-duration" name="start_mode" class="inline_enum" />
+                            <K2UI.K2Slider name="start_before" label="Start before T0" max="10" print-value="true" label-on-top="true" />
+                            <K2UI.SlideToggle label="Pause When Done" name="pause_on_end" tooltip="Pause when the Node is executed" />
+                        </ui:Foldout>
+                        <ui:Foldout text="Turn" value="false" name="Turn">
+                            <K2UI.K2Slider name="max_angle_maneuver" label="Max Angle" max="10" print-value="true" label-on-top="true" value="0" min="0.01" />
+                            <K2UI.K2Slider name="max_angular_speed" label="Max Angular Speed" max="10" print-value="true" label-on-top="true" value="0.98" min="0.01" />
+                        </ui:Foldout>
+                        <ui:Foldout text="Warp" value="false" name="Warp">
+                            <K2UI.SlideToggle label="Auto Warp" name="auto_warp" tooltip="Warp time before burn" />
+                            <K2UI.K2Slider label-on-top="true" min-max-label="Safe-Quick" print-value="true" min="0" value="1" max="7" name="warp_speed" label="Warp Speed" />
+                            <ui:IntegerField label="Before Burn (s)" value="42" is-delayed="true" name="warp_safe_duration" tooltip="Nb seconds in x1 before next phase (min:5)" />
+                        </ui:Foldout>
+                        <ui:Foldout text="Burn" value="true" name="Burn">
+                            <K2UI.K2Slider label-on-top="true" min-max-label="Precise-Quick" print-value="true" min="0.5" value="0.5" max="2" name="burn_adjust" label="Adjusting rate (m/s)" />
+                            <K2UI.K2Slider label-on-top="true" min-max-label="Precise-Quick" print-value="true" min="0.001" value="0.08" max="0.1" name="max_dv_error" label="Precision (m/s)" />
+                            <K2UI.SlideToggle label="Rotate During burn" tooltip="Keep SAS during burn phase." name="rotate_during_burn" />
+                        </ui:Foldout>
+                    </K2UI.ExFoldoutGroup>
+                </ui:VisualElement>
             </ui:VisualElement>
             <ui:VisualElement name="lift" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); align-self: flex-start; display: none;">
                 <ui:Label tabindex="-1" text="The Title" display-tooltip-when-elided="true" name="Title" class="unselectedContent" />
@@ -87,7 +116,7 @@
             <ui:VisualElement name="land" class="unselectedContent" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); display: none;">
                 <ui:Label tabindex="-1" text="Land" display-tooltip-when-elided="true" name="Title" class="unselectedContent" />
             </ui:VisualElement>
-            <ui:VisualElement name="test_settings" class="unselectedContent" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); display: flex;">
+            <ui:VisualElement name="test_settings" class="unselectedContent" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); display: none;">
                 <ui:Label tabindex="-1" text="Settings" display-tooltip-when-elided="true" name="Title" class="unselectedContent" />
                 <K2UI.Console tabindex="-1" text="All Settings must be saved in settings file" />
                 <K2UI.K2SliderInt name="int_settings" max="10" min-max-label="0-10" label-on-top="true" print-value="true" />

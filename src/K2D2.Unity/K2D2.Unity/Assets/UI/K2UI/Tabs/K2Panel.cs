@@ -55,8 +55,8 @@ namespace K2UI.Tabs
                 return false;
             }
 
-            settings_page = panels.Q<VisualElement>("settings");
-            main_page = panels.Q<VisualElement>("page");
+            settings_page = panel.Q<VisualElement>("settings");
+            main_page = panel.Q<VisualElement>("page");
 
             if (settings_page != null && main_page != null)
             {     

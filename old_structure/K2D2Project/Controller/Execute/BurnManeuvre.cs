@@ -11,7 +11,6 @@ namespace K2D2.Controller;
 
 class BurnManeuverSettings
 {
-
     public static float burn_adjust
     {
         get => KBaseSettings.sfile.GetFloat("warp.burn_adjust", 1.5f);
@@ -210,7 +209,6 @@ public class BurnManeuver : ExecuteController
         current_vessel.SetThrottle(throttle);
         last_throttle = throttle;
     }
-
 
     public void compute_throttle()
     {
