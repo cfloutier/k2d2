@@ -20,6 +20,7 @@
 .toggle-button.checked {
     background-image: url('project://database/Assets/Images/Light_Button.png?fileID=2800000&guid=778643882f96ecd47990fd5c8764fd03&type=3#Light_Button');
     -unity-background-image-tint-color: rgb(106, 255, 6);
+    color: rgb(0, 0, 0);
 }
 
 .toggle-button.yellow.checked {
@@ -67,4 +68,20 @@
     height: 16px;
     top: 1px;
     left: 1px;
+}
+
+.inline_enum {
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+    overflow: hidden;
+}
+
+.inline_enum .toggle-button {
+    flex-grow: 1;
+    height: 25px;
+    justify-content: flex-start;
+    align-self: auto;
+    -unity-text-align: middle-center;
+    font-size: 16px;
 }

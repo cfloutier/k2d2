@@ -6,12 +6,26 @@ using K2UI.Tabs;
 using KTools;
 namespace K2D2.UI.Tests
 {
+    public enum MyEnum
+    {
+        Down,
+        Middle,
+        Up,
+        Left,
+        Right,
+        Front,
+        Etc,
+ 
+    }
+
     public class MySettingsClass
     {
         public Settings<bool> bool_item = new Settings<bool>("my_settings.bool_item", false);
         public Settings<float> float_item = new Settings<float>("my_settings.float_item", 5);
 
         public Settings<int> int_item = new Settings<int>("my_settings.int_item", -5);
+
+        public EnumSetting<MyEnum> enum_item = new EnumSetting<MyEnum>("my_settings.enum_item", MyEnum.Middle);
     }
 
     public class TestSettings : K2Panel
@@ -37,6 +51,10 @@ namespace K2D2.UI.Tests
             var int_slider = panel.Q<K2SliderInt>("int_settings");
             int_slider.value = settings.int_item.Value;
             settings.int_item.Bind(int_slider);
+
+            var inline_enum = panel.Q<InlineEnum>("enum");
+            inline_enum.value = settings.enum_item.int_value;
+            settings.enum_item.Bind(inline_enum);
             
             return true;
         }

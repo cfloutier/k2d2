@@ -93,6 +93,7 @@
                 <K2UI.K2SliderInt name="int_settings" max="10" min-max-label="0-10" label-on-top="true" print-value="true" />
                 <K2UI.K2Slider max="10" min="-10" name="float_settings" label="Float S" print-value="true" />
                 <K2UI.SlideToggle value="false" label="Bool S" name="bool_settings" />
+                <K2UI.InlineEnum labels="Toto;titi;tata" name="enum" class="inline_enum" />
             </ui:VisualElement>
         </K2UI.Tabs.TabbedPage>
     </ui:VisualElement>

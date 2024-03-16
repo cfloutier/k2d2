@@ -10,12 +10,69 @@ using Newtonsoft.Json;
 using System.ComponentModel;
 using System.Linq.Expressions;
 using System.Runtime.InteropServices.WindowsRuntime;
+using K2UI;
 // using BepInEx.Logging;
 
 namespace KTools
 {
+    public class EnumSetting<TEnum> where TEnum : struct
+    {
+        public string path;
+        TEnum default_value;
+        public EnumSetting(string path, TEnum default_value)
+        {
+            this.path = path;
+            this.default_value = default_value;
+            if (SettingsFile.Instance.loaded)
+                loadValue();
+            else
+                SettingsFile.Instance.onloaded_event += loadValue;
+
+        }
+
+        void loadValue()
+        {
+            _value = SettingsFile.Instance.GetEnum<TEnum>(path, default_value);
+        }
+
+        TEnum _value;
+        public TEnum Value
+        {
+            get { return _value; }
+            set
+            {
+                if (value.Equals(_value)) return;
+
+                _value = value;
+                listeners?.Invoke(this.Value);
+
+                SettingsFile.Instance.SetEnum<TEnum>(path, _value);
+            }
+        }
+
+        public int int_value
+        {
+            get { return (int)(object) Value;}
+        }
+
+        public delegate void onChanged(TEnum value);
+
+        public event onChanged listeners;
+
+        public void Bind(InlineEnum element, string labels = null)
+        {    
+            if (labels == null)
+                element.labels = String.Join(";", Enum.GetNames( typeof(TEnum) ));
+            else
+                element.labels = labels;
+
+            element.RegisterCallback<ChangeEvent<int>>(evt => Value =(TEnum)Enum.ToObject(typeof(TEnum), evt.newValue));
+        }
+    }
+
     public class Settings<T>
     {
+        public string path;
         T default_value;
 
         public Settings(string path, T default_value)
@@ -34,7 +91,7 @@ namespace KTools
             _value = SettingsFile.Instance.Get<T>(path, default_value);
         }
 
-        public string path;
+        
 
         T _value;
         public T Value
