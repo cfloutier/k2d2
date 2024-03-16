@@ -5,10 +5,12 @@ using System.Data;
 
 namespace K2UI
 {
-    class K2Slider : VisualElement
+    /// <summary>
+    /// complete copy of the K2Slider, I've not figured out how to make it more generic
+    /// </summary>
+    class K2SliderInt : VisualElement
     {
-
-        public new class UxmlFactory : UxmlFactory<K2Slider, UxmlTraits> { }
+        public new class UxmlFactory : UxmlFactory<K2SliderInt, UxmlTraits> { }
 
         public new class UxmlTraits : VisualElement.UxmlTraits
         {
@@ -18,7 +20,7 @@ namespace K2UI
             }
 
             private UxmlStringAttributeDescription m_Label = new()
-            { name = "label", defaultValue = "K2Slider" };
+            { name = "label", defaultValue = "K2SliderInt" };
 
             private UxmlBoolAttributeDescription m_labelOnTop = new()
             { name = "label-on-top", defaultValue = false };
@@ -29,26 +31,20 @@ namespace K2UI
             private UxmlStringAttributeDescription m_MinMaxLabel = new()
             { name = "min-max-label", defaultValue = "" };
 
-            private UxmlFloatAttributeDescription m_Value = new()
-            { name = "value", defaultValue = 0f };
+            private UxmlIntAttributeDescription m_Value = new()
+            { name = "value", defaultValue = 0 };
 
-            private UxmlFloatAttributeDescription m_Min = new()
-            {
-                name = "min",
-                defaultValue = 0f
-            };
+            private UxmlIntAttributeDescription m_Min = new()
+            { name = "min", defaultValue = 0 };
 
-            private UxmlFloatAttributeDescription m_Max = new()
-            {
-                name = "max",
-                defaultValue = 1f
-            };
+            private UxmlIntAttributeDescription m_Max = new()
+            { name = "max", defaultValue = 100 };
 
             public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc)
             {
                 base.Init(ve, bag, cc);
-                K2Slider k2_slider = (K2Slider)ve;
-                Slider main_slider = k2_slider.main_slider;
+                K2SliderInt k2_slider = (K2SliderInt)ve;
+                SliderInt main_slider = k2_slider.main_slider;
 
                 k2_slider.value = m_Value.GetValueFromBag(bag, cc);
                 k2_slider.printValue = m_printValue.GetValueFromBag(bag, cc);
@@ -70,7 +66,7 @@ namespace K2UI
             }
         }
 
-        public float value
+        public int value
         {
             get { return main_slider.value; }
             set { main_slider.value = (int)value; }
@@ -119,27 +115,25 @@ namespace K2UI
             }
         }
 
-        public float Min
+        public int Min
         {
             get { return main_slider.lowValue; }
             set { main_slider.lowValue = value; }
         }
-        public float Max
+        public int Max
         {
             get { return main_slider.highValue; }
             set { main_slider.highValue = value; }
         }
 
-
-
-        public void InitValues(float value, float min, float max)
+        public void InitValues(int value, int min, int max)
         {
             Min = min;
             Max = max;
             this.value = value;
         }
 
-        protected Slider main_slider;
+        protected SliderInt main_slider;
 
         Label label_element;
 
@@ -156,10 +150,10 @@ namespace K2UI
 
         const string k2slider_uss = "k2-slider-main";
 
-        public K2Slider()
+        public K2SliderInt()
         {
             AddToClassList(k2slider_uss);
-            main_slider = new Slider() { name = "main_slider" };
+            main_slider = new SliderInt() { name = "main_slider" };
             main_slider.AddToClassList(slider_uss);
             Add(main_slider);
             dragger = main_slider.Q<VisualElement>("unity-dragger");
@@ -178,7 +172,7 @@ namespace K2UI
             min_max_bar.Add(max_element);
 
             tracker.Add(fill_bar);
-            main_slider.RegisterCallback<ChangeEvent<float>>((evt) => { SliderValueChanged(); });
+            main_slider.RegisterCallback<ChangeEvent<int>>((evt) => { SliderValueChanged(); });
             main_slider.RegisterCallback<GeometryChangedEvent>((evt) => SliderValueChanged());
         }
 
@@ -217,7 +211,7 @@ namespace K2UI
             setLabelPos();
 
             if (printValue)
-                main_slider.label = Label + $" : {value:n2}";
+                main_slider.label = Label + $" : {value}";
             else
                 main_slider.label = Label;
 
@@ -240,5 +234,5 @@ namespace K2UI
             }
         }
     }
-  
+
 }
