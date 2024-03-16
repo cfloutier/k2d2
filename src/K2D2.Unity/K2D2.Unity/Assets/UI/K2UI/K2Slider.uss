@@ -81,6 +81,3 @@
     font-size: 11px;
     min-width: 0;
 }
-
-.k2-slider-main #Label {
-}
