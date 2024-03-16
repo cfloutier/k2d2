@@ -52,9 +52,9 @@ namespace K2D2.UI.Tests
             int_slider.value = settings.int_item.Value;
             settings.int_item.Bind(int_slider);
 
-            var inline_enum = panel.Q<InlineEnum>("enum");
-            inline_enum.value = settings.enum_item.int_value;
+            var inline_enum = panel.Q<InlineEnum>("enum");    
             settings.enum_item.Bind(inline_enum);
+            inline_enum.value = settings.enum_item.int_value;
             
             return true;
         }

@@ -11,6 +11,7 @@ using System.ComponentModel;
 using System.Linq.Expressions;
 using System.Runtime.InteropServices.WindowsRuntime;
 using K2UI;
+using System.Globalization;
 // using BepInEx.Logging;
 
 namespace KTools
@@ -323,6 +324,7 @@ namespace KTools
         /// </summary>
         public int GetInt(string key, int default_value)
         {
+            
             if (data.ContainsKey(key))
             {
                 int value = 0;
@@ -371,11 +373,12 @@ namespace KTools
         /// if not found or on parsing error, it is replaced and saved at once
         /// </summary>
         public float GetFloat(string key, float default_value)
-        {
+        {  
             if (data.ContainsKey(key))
             {
                 float value = 0;
-                if (float.TryParse(data[key], out value))
+                if (float.TryParse(data[key], NumberStyles.Float | NumberStyles.AllowThousands,
+                             CultureInfo.InvariantCulture, out value))
                 {
                     return value;
                 }
@@ -383,6 +386,7 @@ namespace KTools
 
             // invalid or no value found in data
             SetFloat(key, default_value);
+            
             return default_value;
         }
 
@@ -392,7 +396,7 @@ namespace KTools
         /// </summary>
         public void SetFloat(string key, float value)
         {
-            SetString(key, value.ToString());
+            SetString(key, value.ToStringInvariant());         
         }
 
         /// <summary>
@@ -404,7 +408,8 @@ namespace KTools
             if (data.ContainsKey(key))
             {
                 double value = 0;
-                if (double.TryParse(data[key], out value))
+                if (double.TryParse(data[key], NumberStyles.Float | NumberStyles.AllowThousands,
+                             CultureInfo.InvariantCulture, out value))
                 {
                     return value;
                 }
@@ -420,8 +425,8 @@ namespace KTools
         /// the value is saved at once
         /// </summary>
         public void SetDouble(string key, double value)
-        {
-            SetString(key, value.ToString());
+        {           
+            SetString(key, value.ToStringInvariant());
         }
 
         /// <summary>

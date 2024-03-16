@@ -73,7 +73,7 @@ namespace K2UI
         public float value
         {
             get { return main_slider.value; }
-            set { main_slider.value = (int)value; }
+            set { main_slider.value = value; }
         }
 
         string _label;
@@ -217,7 +217,11 @@ namespace K2UI
             setLabelPos();
 
             if (printValue)
-                main_slider.label = Label + $" : {value:n2}";
+            {
+
+                main_slider.label = Label + " : " + value.ToStringInvariant("N2"); ;
+                // Thread.CurrentThread.CurrentCulture = previous_culture;
+            }
             else
                 main_slider.label = Label;
 
