@@ -29,7 +29,7 @@
 }
 
 .toggle-button.big {
-    height: 45px;
+    height: 30px;
     justify-content: center;
 }
 
@@ -38,8 +38,8 @@
 }
 
 .toggle-button.big.icon {
-    height: 45px;
-    width: 45px;
+    height: 30px;
+    width: 30px;
     justify-content: center;
     margin-left: 0;
     padding-left: 4px;

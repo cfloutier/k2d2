@@ -1,11 +1,10 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <Style src="project://database/Assets/From_MNC/UI/ManeuverNodeControllerTheme.uss?fileID=7433441132597879392&amp;guid=73a250367c28bac49a63dab4cfd06f0e&amp;type=3#ManeuverNodeControllerTheme" />
-    <Style src="project://database/Assets/UI/K2UI/K2NewUI.uss?fileID=7433441132597879392&amp;guid=d70a8288b6b3eee4a900aa2727eb7499&amp;type=3#K2NewUI" />
-    <Style src="project://database/Assets/UI/K2UI/SlideToggle.uss?fileID=7433441132597879392&amp;guid=a6dc5024ba8ad204e9099eca78c0703f&amp;type=3#SlideToggle" />
-    <Style src="project://database/Assets/UI/K2UI/BigToggleButton.uss?fileID=7433441132597879392&amp;guid=1b6a73cd9e0a617469e5d501d696c7be&amp;type=3#BigToggleButton" />
-    <Style src="project://database/Assets/UI/K2UI/K2Slider.uss?fileID=7433441132597879392&amp;guid=3d8e4d9f1386ac94c97e6381ad01c59b&amp;type=3#K2Slider" />
-    <Style src="project://database/Assets/UI/K2UI/Tabs/tabs.uss?fileID=7433441132597879392&amp;guid=51945eb7b64f1ab4986c6d98dc37254e&amp;type=3#tabs" />
-    <ui:VisualElement name="GUIFrame" style="border-top-left-radius: 10px; border-bottom-left-radius: 10px; border-top-right-radius: 10px; border-bottom-right-radius: 10px; padding-left: 9px; padding-right: 9px; padding-top: 9px; padding-bottom: 9px; width: 350px; display: flex;">
+    <Style src="project://database/Assets/Runtime/K2UI/USS/K2UI.uss?fileID=7433441132597879392&amp;guid=d70a8288b6b3eee4a900aa2727eb7499&amp;type=3#K2UI" />
+    <Style src="project://database/Assets/Runtime/K2UI/USS/SlideToggle.uss?fileID=7433441132597879392&amp;guid=a6dc5024ba8ad204e9099eca78c0703f&amp;type=3#SlideToggle" />
+    <Style src="project://database/Assets/Runtime/K2UI/USS/ToggleButton.uss?fileID=7433441132597879392&amp;guid=1b6a73cd9e0a617469e5d501d696c7be&amp;type=3#ToggleButton" />
+    <Style src="project://database/Assets/Runtime/K2UI/USS/K2Slider.uss?fileID=7433441132597879392&amp;guid=3d8e4d9f1386ac94c97e6381ad01c59b&amp;type=3#K2Slider" />
+    <Style src="project://database/Assets/Runtime/K2UI/USS/tabs.uss?fileID=7433441132597879392&amp;guid=51945eb7b64f1ab4986c6d98dc37254e&amp;type=3#tabs" />
+    <ui:VisualElement name="GUIFrame" class="main-frame" style="border-top-left-radius: 10px; border-bottom-left-radius: 10px; border-top-right-radius: 10px; border-bottom-right-radius: 10px; padding-left: 9px; padding-right: 9px; padding-top: 9px; padding-bottom: 9px; width: 350px; display: flex;">
         <K2UI.Tabs.TabbedPage>
             <ui:VisualElement name="controls" class="unselectedContent" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); display: flex;">
                 <ui:Label tabindex="-1" text="All Controls" display-tooltip-when-elided="true" name="Title" class="unselectedContent" />
@@ -21,7 +20,6 @@
                         <K2UI.StatusLine tabindex="-1" text="Status Line" level="Error" />
                     </ui:Foldout>
                     <ui:Foldout text="Buttons" value="true" name="Buttons">
-                        <K2UI.BigToggleButton value="false" label="Start Pilot" name="StartPilot" />
                         <K2UI.SlideToggle label="My Toggle" value="false" />
                     </ui:Foldout>
                 </K2UI.ExFoldoutGroup>

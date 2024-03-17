@@ -1,0 +1,9 @@
+#TitleContainer {
+    height: 28px;
+    align-items: center;
+}
+
+#Title {
+    font-size: 15px;
+    -unity-font-definition: var(--k2-font-title);
+}
