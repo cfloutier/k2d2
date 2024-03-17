@@ -1,5 +1,5 @@
 using KSP.UI.Binding;
-using K2D2.Unity.Runtime;
+
 using UitkForKsp2.API;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -94,10 +94,10 @@ public class MyFirstWindowController : MonoBehaviour
         var isAfternoon = _noonToggle.value;
 
         // Get the greeting for the player from the example script in our Unity project assembly we loaded earlier
-        var greeting = ExampleScript.GetGreeting(playerName, isAfternoon);
+        // var greeting = ExampleScript.GetGreeting(playerName, isAfternoon);
 
         // Set the text of the greeting label
-        _greetingLabel.text = greeting;
+        // _greetingLabel.text = greeting;
         // Make the greeting label visible
         _greetingLabel.style.display = DisplayStyle.Flex;
     }

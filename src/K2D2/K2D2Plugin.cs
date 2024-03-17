@@ -49,14 +49,14 @@ public class K2D2Plugin : BaseSpaceWarpPlugin
             // - The name of the asset bundle:
             "K2D2_ui/" +
             // - The path to the asset in your Unity project (without the "Assets/" part)
-            "ui/myfirstwindow/myfirstwindow.uxml"
+            "UI/K2D2_UI/Main_K2D2_Window.uxml"
         );
 
         // Create the window options object
         var windowOptions = new WindowOptions
         {
             // The ID of the window. It should be unique to your mod.
-            WindowId = "K2D2_MyFirstWindow",
+            WindowId = "K2D2",
             // The transform of parent game object of the window.
             // If null, it will be created under the main canvas.
             Parent = null,
@@ -74,33 +74,33 @@ public class K2D2Plugin : BaseSpaceWarpPlugin
         };
 
         // Create the window
-        var myFirstWindow = Window.Create(windowOptions, myFirstWindowUxml);
+        var k2d2_window = Window.Create(windowOptions, myFirstWindowUxml);
         // Add a controller for the UI to the window's game object
-        var myFirstWindowController = myFirstWindow.gameObject.AddComponent<MyFirstWindowController>();
+        var k2d2_window_controller = k2d2_window.gameObject.AddComponent<MyFirstWindowController>();
 
         // Register Flight AppBar button
         Appbar.RegisterAppButton(
             ModName,
             ToolbarFlightButtonID,
             AssetManager.GetAsset<Texture2D>($"{ModGuid}/images/icon.png"),
-            isOpen => myFirstWindowController.IsWindowOpen = isOpen
+            isOpen => k2d2_window_controller.IsWindowOpen = isOpen
         );
 
         // Register OAB AppBar Button
-        Appbar.RegisterOABAppButton(
-            ModName,
-            ToolbarOabButtonID,
-            AssetManager.GetAsset<Texture2D>($"{ModGuid}/images/icon.png"),
-            isOpen => myFirstWindowController.IsWindowOpen = isOpen
-        );
+        // Appbar.RegisterOABAppButton(
+        //     ModName,
+        //     ToolbarOabButtonID,
+        //     AssetManager.GetAsset<Texture2D>($"{ModGuid}/images/icon.png"),
+        //     isOpen => myFirstWindowController.IsWindowOpen = isOpen
+        // );
 
         // Register KSC AppBar Button
-        Appbar.RegisterKSCAppButton(
-            ModName,
-            ToolbarKscButtonID,
-            AssetManager.GetAsset<Texture2D>($"{ModGuid}/images/icon.png"),
-            () => myFirstWindowController.IsWindowOpen = !myFirstWindowController.IsWindowOpen
-        );
+        // Appbar.RegisterKSCAppButton(
+        //     ModName,
+        //     ToolbarKscButtonID,
+        //     AssetManager.GetAsset<Texture2D>($"{ModGuid}/images/icon.png"),
+        //     () => myFirstWindowController.IsWindowOpen = !myFirstWindowController.IsWindowOpen
+        // );
     }
 
     /// <summary>
@@ -108,10 +108,12 @@ public class K2D2Plugin : BaseSpaceWarpPlugin
     /// </summary>
     private static void LoadAssemblies()
     {
+        Debug.Log("Trying to load K2D2 Assemblies");
         // Load the Unity project assembly
         var currentFolder = new FileInfo(Assembly.GetExecutingAssembly().Location).Directory!.FullName;
         var unityAssembly = Assembly.LoadFrom(Path.Combine(currentFolder, "K2D2.Unity.dll"));
         // Register any custom UI controls from the loaded assembly
+         Debug.Log("assemblie : "+  unityAssembly);
         CustomControls.RegisterFromAssembly(unityAssembly);
     }
 }

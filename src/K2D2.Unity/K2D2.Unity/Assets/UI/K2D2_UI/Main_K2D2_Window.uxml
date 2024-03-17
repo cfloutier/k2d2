@@ -19,68 +19,21 @@
             </ui:Button>
         </ui:VisualElement>
         <K2UI.Tabs.TabbedPage selected-tab-Name="controls">
-            <ui:VisualElement name="controls" class="unselectedContent" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); display: none;">
-                <ui:Label tabindex="-1" text="All Controls" display-tooltip-when-elided="true" name="Title" class="unselectedContent" />
-                <ui:VisualElement name="settings" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); display: none;">
-                    <ui:Label tabindex="-1" text="Settings :" display-tooltip-when-elided="true" />
-                    <K2UI.ExFoldoutGroup opened-index="0">
-                        <ui:Foldout text="Settings 1" value="false" name="Settings_1">
-                            <K2UI.K2Slider label-on-top="true" min-max-label="Min-Max" print-value="true" min="0" value="12.91" max="100" name="MySlider" />
-                            <K2UI.K2ProgressBar value="107.3" max="100" label="the Value" set-label-to-value="true" postfix=" %" name="MyBar" style="height: 25px; margin-top: 4px; margin-bottom: 4px;" />
-                            <K2UI.K2Compass />
-                            <ui:IntegerField label="Integer Field" value="42" is-delayed="true" />
-                            <ui:FloatField label="Float Field" value="42,2" is-delayed="true" />
-                        </ui:Foldout>
-                        <ui:Foldout text="Settings 2" value="false" name="Settings_1">
-                            <K2UI.K2Slider label-on-top="true" min-max-label="Min-Max" print-value="true" min="0" value="12.91" max="100" name="MySlider" />
-                            <K2UI.K2ProgressBar value="107.3" max="100" label="the Value" set-label-to-value="true" postfix=" %" name="MyBar" style="height: 25px; margin-top: 4px; margin-bottom: 4px;" />
-                            <K2UI.K2Compass />
-                            <ui:IntegerField label="Integer Field" value="42" is-delayed="true" />
-                            <ui:FloatField label="Float Field" value="42,2" is-delayed="true" />
-                        </ui:Foldout>
-                    </K2UI.ExFoldoutGroup>
-                </ui:VisualElement>
-                <ui:VisualElement name="page" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
-                    <ui:Label tabindex="-1" text="Page :" display-tooltip-when-elided="true" />
-                    <K2UI.ExFoldoutGroup opened-index="0">
-                        <ui:Foldout text="Sliders &amp; Progress" value="false" name="Values">
-                            <K2UI.K2Slider label-on-top="true" min-max-label="Min-Max" print-value="true" min="0" value="12.91" max="100" name="MySlider" />
-                            <K2UI.K2ProgressBar value="107.3" max="100" label="the Value" set-label-to-value="true" postfix=" %" name="MyBar" style="height: 25px; margin-top: 4px; margin-bottom: 4px;" />
-                            <K2UI.K2Compass />
-                            <ui:IntegerField label="Integer Field" value="42" is-delayed="true" />
-                            <ui:FloatField label="Float Field" value="42,2" is-delayed="true" />
-                        </ui:Foldout>
-                        <ui:Foldout text="Labels" name="Labels" value="true">
-                            <ui:Label tabindex="-1" text="Label" display-tooltip-when-elided="true" />
-                            <K2UI.Console tabindex="-1" text="This is some console text&#10;bb&#10;bla&#10;bla !!" />
-                            <K2UI.StatusLine tabindex="-1" text="Status Line" level="Error" />
-                        </ui:Foldout>
-                        <ui:Foldout text="Buttons" value="true" name="Buttons">
-                            <K2UI.ToggleButton name="StartPilot" class="yellow" />
-                            <K2UI.SlideToggle label="My Toggle" value="false" />
-                        </ui:Foldout>
-                        <ui:Foldout text="Graph" value="true" name="Graph">
-                            <K2UI.K2Slider name="tuning" value="0.5" label="Tuning" />
-                            <ui:VisualElement name="Graph" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); width: 100%; height: 259px; overflow: hidden; border-left-color: rgba(163, 0, 255, 0.34); border-right-color: rgba(163, 0, 255, 0.34); border-top-color: rgba(163, 0, 255, 0.34); border-bottom-color: rgba(163, 0, 255, 0.34); border-left-width: 4px; border-right-width: 4px; border-top-width: 4px; border-bottom-width: 4px; border-top-left-radius: 22px; border-bottom-left-radius: 22px; border-top-right-radius: 22px; border-bottom-right-radius: 22px;">
-                                <K2UI.Graph.GraphLine test-seed="13.55" max-x="79.9" min-y="0" line-width="2.22" name="line_1" style="height: 100%; width: 100%; position: absolute;" />
-                                <K2UI.Graph.GraphLine test-seed="6.87" max-x="39.53" min-y="0" line-width="1.82" name="line_2" style="width: 100%; height: 100%; position: absolute;" />
-                            </ui:VisualElement>
-                        </ui:Foldout>
-                    </K2UI.ExFoldoutGroup>
-                </ui:VisualElement>
-            </ui:VisualElement>
-            <K2UI.Tabs.TabButton name="controls" label="Controls" style="margin-right: 2px; margin-bottom: -1px;" />
-            <K2UI.Tabs.TabButton name="test_settings" label="Settings" />
-            <K2UI.Tabs.TabButton name="node" label="Node" />
-            <K2UI.Tabs.TabButton name="lift" label="Lift" />
-            <K2UI.Tabs.TabButton name="drone" label="Drone" />
-            <K2UI.Tabs.TabButton name="land" label="Land" />
             <ui:VisualElement name="node" style="display: flex;">
-                <ui:Label tabindex="-1" text="Node Execution" display-tooltip-when-elided="true" name="Title" class="unselectedContent" />
+                <ui:Label tabindex="-1" text="Node Execution" display-tooltip-when-elided="true" name="Title" class="unselectedContent" style="display: none;" />
                 <ui:VisualElement name="page" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); display: flex;">
-                    <ui:Label tabindex="-1" text="Page :" display-tooltip-when-elided="true" name="Title" class="unselectedContent" />
+                    <ui:Label tabindex="-1" text="Node Infos : ..." display-tooltip-when-elided="true" name="node_infos" class="console" />
+                    <K2UI.StatusLine tabindex="-1" name="status_node" text="Node ...." />
+                    <ui:VisualElement name="button_bars" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); flex-direction: row;">
+                        <K2UI.ToggleButton name="run" label="RUN !!!" class="big" style="flex-grow: 1;" />
+                        <K2UI.ToggleButton name="pause" class="big icon" style="flex-shrink: 0; margin-left: 9px;">
+                            <ui:VisualElement name="icon" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); background-image: url(&apos;project://database/Assets/Images/pause.png?fileID=2800000&amp;guid=02fa898692f9898449b2e0582c422977&amp;type=3#pause&apos;); -unity-background-scale-mode: scale-to-fit;" />
+                        </K2UI.ToggleButton>
+                    </ui:VisualElement>
+                    <ui:Label tabindex="-1" text="Pilot" display-tooltip-when-elided="true" name="pilot_console" class="console" />
+                    <K2UI.StatusLine tabindex="-1" text="Status Pilot" name="status_pilot" />
                 </ui:VisualElement>
-                <ui:VisualElement name="settings" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); display: flex;">
+                <ui:VisualElement name="settings" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); display: none;">
                     <ui:Label tabindex="-1" text="Settings :" display-tooltip-when-elided="true" name="Title" class="unselectedContent" />
                     <K2UI.ExFoldoutGroup opened-index="3">
                         <ui:Foldout text="Execute" value="true" name="Execute">
@@ -110,19 +63,15 @@
                 <ui:Label tabindex="-1" text="The Title" display-tooltip-when-elided="true" name="Title" class="unselectedContent" />
                 <ui:FloatField label="Float Field" value="42,2" />
             </ui:VisualElement>
-            <ui:VisualElement name="drone" class="unselectedContent" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); display: none;">
-                <ui:Label tabindex="-1" text="Drone" display-tooltip-when-elided="true" name="Title" class="unselectedContent" />
-            </ui:VisualElement>
+            <K2UI.Tabs.TabButton name="node" label="Node" />
             <ui:VisualElement name="land" class="unselectedContent" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); display: none;">
                 <ui:Label tabindex="-1" text="Land" display-tooltip-when-elided="true" name="Title" class="unselectedContent" />
             </ui:VisualElement>
-            <ui:VisualElement name="test_settings" class="unselectedContent" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); display: none;">
-                <ui:Label tabindex="-1" text="Settings" display-tooltip-when-elided="true" name="Title" class="unselectedContent" />
-                <K2UI.Console tabindex="-1" text="All Settings must be saved in settings file" />
-                <K2UI.K2SliderInt name="int_settings" max="10" min-max-label="0-10" label-on-top="true" print-value="true" />
-                <K2UI.K2Slider max="10" min="-10" name="float_settings" label="Float S" print-value="true" />
-                <K2UI.SlideToggle value="false" label="Bool S" name="bool_settings" />
-                <K2UI.InlineEnum labels="Toto;titi;tata" name="enum" class="inline_enum" />
+            <K2UI.Tabs.TabButton name="lift" label="Lift" />
+            <K2UI.Tabs.TabButton name="drone" label="Drone" />
+            <K2UI.Tabs.TabButton name="land" label="Land" />
+            <ui:VisualElement name="drone" class="unselectedContent" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); display: none;">
+                <ui:Label tabindex="-1" text="Drone" display-tooltip-when-elided="true" name="Title" class="unselectedContent" />
             </ui:VisualElement>
         </K2UI.Tabs.TabbedPage>
     </ui:VisualElement>

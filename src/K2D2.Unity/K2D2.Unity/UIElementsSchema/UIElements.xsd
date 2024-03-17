@@ -4,6 +4,9 @@
   <xs:import schemaLocation="UnityEditor.UIElements.xsd" namespace="UnityEditor.UIElements" />
   <xs:import schemaLocation="UitkForKsp2.Controls.xsd" namespace="UitkForKsp2.Controls" />
   <xs:import schemaLocation="UitkForKsp2.Controls.zExperimental.xsd" namespace="UitkForKsp2.Controls.zExperimental" />
+  <xs:import schemaLocation="K2UI.xsd" namespace="K2UI" />
+  <xs:import schemaLocation="K2UI.Tabs.xsd" namespace="K2UI.Tabs" />
+  <xs:import schemaLocation="K2UI.Graph.xsd" namespace="K2UI.Graph" />
   <xs:import schemaLocation="UnityEditor.UIElements.Debugger.xsd" namespace="UnityEditor.UIElements.Debugger" />
   <xs:import schemaLocation="Unity.UI.Builder.xsd" namespace="Unity.UI.Builder" />
   <xs:import schemaLocation="UnityEditor.Search.xsd" namespace="UnityEditor.Search" />

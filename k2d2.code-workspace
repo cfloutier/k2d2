@@ -5,6 +5,9 @@
 		},
 		{
 			"path": "../UitkForKsp2"
+		},
+		{
+			"path": "../../../Program Files (x86)/Steam/steamapps/common/Kerbal Space Program 2"
 		}
 	],
 	"settings": {}
