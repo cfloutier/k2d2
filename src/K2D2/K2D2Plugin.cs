@@ -9,8 +9,24 @@ using K2D2.UI;
 using UitkForKsp2.API;
 using UnityEngine;
 using UnityEngine.UIElements;
-
+using BepInEx.Logging;
+using KTools;
 namespace K2D2;
+
+
+
+class L
+{
+    public static void Log(string txt)
+    {
+        K2D2Plugin.logger.LogInfo(txt);
+    }
+
+    public static void Vector3(string label, Vector3 value)
+    {
+        K2D2Plugin.logger.LogInfo(label + " : " + StrTool.Vector3ToString(value));
+    }
+}
 
 [BepInPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
 [BepInDependency(SpaceWarpPlugin.ModGuid, SpaceWarpPlugin.ModVer)]
@@ -28,6 +44,8 @@ public class K2D2Plugin : BaseSpaceWarpPlugin
     internal const string ToolbarFlightButtonID = "BTN-K2D2Flight";
     internal const string ToolbarOabButtonID = "BTN-K2D2OAB";
     internal const string ToolbarKscButtonID = "BTN-K2D2KSC";
+
+    public static ManualLogSource logger = BepInEx.Logging.Logger.CreateLogSource("K2D2");
 
     /// <summary>
     /// Runs when the mod is first initialized.

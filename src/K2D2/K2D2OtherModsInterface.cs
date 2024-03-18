@@ -70,7 +70,6 @@ public class K2D2OtherModsInterface
             FPPropertyInfo = FPType!.GetProperty("Instance", BindingFlags.Public | BindingFlags.Static);
             
             CircularizeMethodInfo = FPPropertyInfo!.PropertyType.GetMethod("Circularize");
-
         }
 
         Logger.LogInfo($"fpLoaded = {fpLoaded}");
@@ -84,41 +83,10 @@ public class K2D2OtherModsInterface
         {
             FPInstance = FPPropertyInfo.GetValue(null);
 
-            K2D2_Plugin.logger.LogMessage($"Circularize at UT {burnUT} s (+-{burnOffsetFactor})");
+            K2D2Plugin.logger.LogMessage($"Circularize at UT {burnUT} s (+-{burnOffsetFactor})");
             return (bool) CircularizeMethodInfo!.Invoke(FPInstance, [burnUT, burnOffsetFactor]);
         }
 
         return false;
     }
-
-    //public void OnGUI(ManeuverNodeData currentNode)
-    //{
-    //    GUILayout.BeginHorizontal();
-
-    //    if (FPStyles.SquareButton("Make\nNode"))
-    //        FlightPlanUI.Instance.MakeNode();
-
-    //    if (mncLoaded && _mncVerCheck >= 0)
-    //    {
-    //        GUILayout.FlexibleSpace();
-    //        if (FPStyles.SquareButton(FPStyles.MNCIcon))
-    //            CallMNC();
-    //    }
-
-    //    if (k2d2Loaded && currentNode != null)
-    //    {
-    //        GUILayout.FlexibleSpace();
-    //        if (FPStyles.SquareButton(FPStyles.K2D2BigIcon))
-    //            CallK2D2();
-    //    }
-    //    GUILayout.EndHorizontal();
-
-    //    if (checkK2D2status)
-    //    {
-    //        GetK2D2Status();
-    //        GUILayout.BeginHorizontal();
-    //        KTools.UI.UI_Tools.Label($"K2D2: {k2d2Status}");
-    //        GUILayout.EndHorizontal();
-    //    }
-    //}
 }
