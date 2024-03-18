@@ -14,7 +14,7 @@ public class TouchDown : ExecuteController
     KSPVessel current_vessel;
     BurndV burn_dV = new BurndV();
 
-    float gravity_inclination = 0;
+    // float gravity_inclination = 0;
     float gravity_direction_factor = 0;
     float gravity;
 

@@ -51,12 +51,8 @@ namespace K2D2.Controller
             get { return ui_visible || isRunning; }
         }
 
-        // true if the controller is running
-        public virtual bool isRunning
-        {
-            get { return false; }
-            set { }
-        }
+        
+    
 
         public virtual bool isActive
         {

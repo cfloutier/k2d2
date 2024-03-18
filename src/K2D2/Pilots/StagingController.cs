@@ -9,12 +9,9 @@ namespace K2D2.Controller;
 
 public class StagingSettings
 {
-
     public static Setting<bool> auto_staging = new("staging.auto_staging", false);
    
-
     public static Setting<float> freeze_duration = new ("staging.freeze_duration", 1f);
-
     
     // public static void settings_UI()
     // {
@@ -180,7 +177,6 @@ public class StagingController : BaseController
            
         }
     }
-
 
     public bool CheckStaging()
     {

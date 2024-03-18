@@ -22,9 +22,9 @@ class WarpToSettings
         return TimeWarpTools.ratioToIndex((float)time_ratio);
     }
 
-    public static ClampedSetting<float> warp_speed = new("warp.speed", 2, 0, 7);
+    public static ClampSetting<float> warp_speed = new("warp.speed", 2, 0, 7);
 
-    public static ClampedSetting<float> warp_safe_duration = new("warp.safe_duration", 10, 5, int.MaxValue);
+    public static ClampSetting<float> warp_safe_duration = new("warp.safe_duration", 10, 5, int.MaxValue);
 
 
     // public static void onGUI()

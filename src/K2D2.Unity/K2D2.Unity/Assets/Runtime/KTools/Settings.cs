@@ -117,11 +117,11 @@ namespace KTools
 
     
 
-    public class ClampedSetting<T> : Setting<T> where T : System.IComparable<T>
+    public class ClampSetting<T> : Setting<T> where T : System.IComparable<T>
     {
         T min, max;
 
-        public ClampedSetting(string path, T default_value, T min, T max): base(path, default_value)
+        public ClampSetting(string path, T default_value, T min, T max): base(path, default_value)
         {
             this.min = min;
             this.max = max;     

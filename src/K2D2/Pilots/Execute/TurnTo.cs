@@ -10,9 +10,9 @@ namespace K2D2.Controller;
 class TurnToSettings
 {
     // Need a clamp !!!! 
-    public static ClampedSetting<float> max_angle_maneuver = new ("turn.max_angle_maneuver", 0.3f, 0, 7);
+    public static ClampSetting<float> max_angle_maneuver = new ("turn.max_angle_maneuver", 0.3f, 0, 7);
 
-    public static ClampedSetting<float> max_angular_speed = new ("turn.max_angular_speed", 1f, 0, 7);
+    public static ClampSetting<float> max_angular_speed = new ("turn.max_angular_speed", 1f, 0, 7);
    
     // public static void onGUI()
     // {

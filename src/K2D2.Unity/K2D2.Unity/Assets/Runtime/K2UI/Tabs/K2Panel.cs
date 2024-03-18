@@ -83,7 +83,8 @@ namespace K2UI.Tabs
 
         bool _is_running = false;
 
-        public bool isRunning
+        // true if the controller is running
+        public virtual bool isRunning
         {
             get
             {
