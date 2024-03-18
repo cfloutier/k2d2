@@ -142,8 +142,6 @@ public class K2D2Plugin : BaseSpaceWarpPlugin
         loaded = true;
     }
 
-
-
     /// <summary>
     /// Loads all the assemblies for the mod.
     /// </summary>
@@ -218,7 +216,7 @@ public class K2D2Plugin : BaseSpaceWarpPlugin
 
     public bool settings_visible = false;
 
-    ControllerManager controllerManager = new ControllerManager();
+    public ControllerManager controllerManager = new ControllerManager();
 
     void FixedUpdate()
     {

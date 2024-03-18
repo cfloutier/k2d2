@@ -19,6 +19,10 @@
             </ui:Button>
         </ui:VisualElement>
         <K2UI.Tabs.TabbedPage selected-tab-Name="controls">
+            <K2UI.Tabs.TabButton name="node" label="Node" />
+            <K2UI.Tabs.TabButton name="lift" label="Lift" />
+            <K2UI.Tabs.TabButton name="drone" label="Drone" />
+            <K2UI.Tabs.TabButton name="land" label="Land" />
             <ui:VisualElement name="node" style="display: flex;">
                 <ui:Label tabindex="-1" text="Node Execution" display-tooltip-when-elided="true" name="Title" class="unselectedContent" style="display: none;" />
                 <ui:VisualElement name="page" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); display: flex;">
@@ -62,13 +66,9 @@
                 <ui:Label tabindex="-1" text="The Title" display-tooltip-when-elided="true" name="Title" class="unselectedContent" />
                 <ui:FloatField label="Float Field" value="42,2" />
             </ui:VisualElement>
-            <K2UI.Tabs.TabButton name="node" label="Node" />
             <ui:VisualElement name="land" class="unselectedContent" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); display: none;">
                 <ui:Label tabindex="-1" text="Land" display-tooltip-when-elided="true" name="Title" class="unselectedContent" />
             </ui:VisualElement>
-            <K2UI.Tabs.TabButton name="lift" label="Lift" />
-            <K2UI.Tabs.TabButton name="drone" label="Drone" />
-            <K2UI.Tabs.TabButton name="land" label="Land" />
             <ui:VisualElement name="drone" class="unselectedContent" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); display: none;">
                 <ui:Label tabindex="-1" text="Drone" display-tooltip-when-elided="true" name="Title" class="unselectedContent" />
             </ui:VisualElement>

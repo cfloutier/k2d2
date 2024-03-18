@@ -1,3 +1,4 @@
+using K2UI.Tabs;
 using KSP.UI.Binding;
 
 using UitkForKsp2.API;
@@ -52,6 +53,9 @@ public class MyFirstWindowController : MonoBehaviour
         }
     }
 
+
+    TabbedPage tab_page;
+
     /// <summary>
     /// Runs when the window is first created, and every time the window is re-enabled.
     /// </summary>
@@ -65,40 +69,16 @@ public class MyFirstWindowController : MonoBehaviour
         // so we need to get the first child of the TemplateContainer to get our actual root VisualElement.
         _rootElement = _window.rootVisualElement[0];
 
-        // Get the text field from the window
-        _nameTextfield = _rootElement.Q<TextField>("name-textfield");
-        // Get the toggle from the window
-        _noonToggle = _rootElement.Q<Toggle>("noon-toggle");
-        // Get the greeting label from the window
-        _greetingLabel = _rootElement.Q<Label>("greeting-label");
-
         // Center the window by default
         _rootElement.CenterByDefault();
 
         // Get the close button from the window
         var closeButton = _rootElement.Q<Button>("close-button");
         // Add a click event handler to the close button
-        closeButton.clicked += () => IsWindowOpen = false;
+        closeButton.clicked += () => IsWindowOpen = false; 
 
-        // Get the "Say hello!" button from the window
-        var sayHelloButton = _rootElement.Q<Button>("say-hello-button");
-        // Add a click event handler to the button
-        sayHelloButton.clicked += SayHelloButtonClicked;
-    }
+        tab_page = _rootElement.Q<TabbedPage>();
+        tab_page.Init(K2D2Plugin.Instance.controllerManager.controllers)
 
-    private void SayHelloButtonClicked()
-    {
-        // Get the value of the text field
-        var playerName = _nameTextfield.value;
-        // Get the value of the toggle
-        var isAfternoon = _noonToggle.value;
-
-        // Get the greeting for the player from the example script in our Unity project assembly we loaded earlier
-        // var greeting = ExampleScript.GetGreeting(playerName, isAfternoon);
-
-        // Set the text of the greeting label
-        // _greetingLabel.text = greeting;
-        // Make the greeting label visible
-        _greetingLabel.style.display = DisplayStyle.Flex;
     }
 }
