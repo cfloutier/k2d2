@@ -66,7 +66,7 @@ public class StagingController : BaseController
     {
         is_staging = true;
         // record time
-        end_time = GeneralTools.Game.UniverseModel.UniverseTime + StagingSettings.freeze_duration.Value;
+        end_time = GeneralTools.Game.UniverseModel.UniverseTime + StagingSettings.freeze_duration.V;
         current_time = GeneralTools.Game.UniverseModel.UniverseTime;
     }
 
@@ -188,7 +188,7 @@ public class StagingController : BaseController
         CalculateVesselStageFuel();
 
         // return true if staging in progress
-        if (!StagingSettings.auto_staging.Value)
+        if (!StagingSettings.auto_staging.V)
         {
             is_staging = false;
             return false;

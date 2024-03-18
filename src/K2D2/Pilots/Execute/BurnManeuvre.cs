@@ -11,13 +11,11 @@ namespace K2D2.Controller;
 
 class BurnManeuverSettings
 {
- 
     public static Setting<float> burn_adjust = new ("burn.burn_adjust", 1.5f);
     public static Setting<float> max_dv_error = new ("burn.max_dv_error", 0.1f);
     public static Setting<bool> rotate_during_burn = new ("burn.rotate_during_burn", false);
     // public static Setting<bool> rotate_during_burn = new ("burn.rotate_during_burn", false);
 
-   
 
     // static public void onGUI()
     // {
@@ -39,7 +37,7 @@ public class BurnManeuver : ExecuteController
 
     public BurnManeuver()
     {
-        current_vessel = K2D2_Plugin.Instance.current_vessel;
+        current_vessel = K2D2Plugin.Instance.current_vessel;
     }
 
     double start_dt;
@@ -114,7 +112,7 @@ public class BurnManeuver : ExecuteController
             {
                 mode = Mode.Burning;
 
-                if (BurnManeuverSettings.rotate_during_burn)
+                if (BurnManeuverSettings.rotate_during_burn.V)
                     SASTool.setAutoPilot(AutopilotMode.Maneuver);
                 else
                     SASTool.setAutoPilot(AutopilotMode.StabilityAssist);
@@ -160,7 +158,7 @@ public class BurnManeuver : ExecuteController
 
             // var required_dv = maneuver.BurnRequiredDV;
             // remaining_dv = required_dv - burn_dV.burned_dV;
-            if (remaining_dv <= BurnManeuverSettings.max_dv_error)
+            if (remaining_dv <= BurnManeuverSettings.max_dv_error.V)
             {
                 Finished();
                 return;
@@ -205,39 +203,39 @@ public class BurnManeuver : ExecuteController
             return;
         }
 
-        needed_throttle = remaining_full_burn_time * BurnManeuverSettings.burn_adjust;
+        needed_throttle = remaining_full_burn_time * BurnManeuverSettings.burn_adjust.V;
     }
 
-    public override void onGUI()
-    {
-        switch (mode)
-        {
-            case Mode.Waiting:
-                UI_Tools.OK("Waiting !");
-                UI_Tools.Console(status_line);
-                break;
-            case Mode.Burning:
-                UI_Tools.Warning("Burning !");
-                UI_Tools.ProgressBar(remaining_dv, 0, maneuver.BurnRequiredDV);
-                UI_Tools.Console(StrTool.DurationToString(remaining_full_burn_time));
-                break;
-        }
+    // public override void onGUI()
+    // {
+    //     switch (mode)
+    //     {
+    //         case Mode.Waiting:
+    //             UI_Tools.OK("Waiting !");
+    //             UI_Tools.Console(status_line);
+    //             break;
+    //         case Mode.Burning:
+    //             UI_Tools.Warning("Burning !");
+    //             UI_Tools.ProgressBar(remaining_dv, 0, maneuver.BurnRequiredDV);
+    //             UI_Tools.Console(StrTool.DurationToString(remaining_full_burn_time));
+    //             break;
+    //     }
 
-        if (K2D2Settings.debug_mode)
-        {
-            if (maneuver == null) return;
+    //     if (K2D2Settings.debug_mode)
+    //     {
+    //         if (maneuver == null) return;
 
-            //UI_Tools.Console($"start_dt {Tools.remainingStartTime(maneuver)}");
-            //UI_Tools.Console($"end_dt {Tools.remainingEndTime(maneuver)}");
+    //         //UI_Tools.Console($"start_dt {Tools.remainingStartTime(maneuver)}");
+    //         //UI_Tools.Console($"end_dt {Tools.remainingEndTime(maneuver)}");
 
-            UI_Tools.Console($"BurnRequiredDV {maneuver.BurnRequiredDV}");
-            UI_Tools.Console($"angle {angle}");
-            UI_Tools.Console($"sign {sign}");
-            UI_Tools.Console($"remaining_dv {remaining_dv}");
-            UI_Tools.Console($"remaining_full_burn_time {remaining_full_burn_time}");
-            UI_Tools.Console($"needed_throttle {needed_throttle}");
+    //         UI_Tools.Console($"BurnRequiredDV {maneuver.BurnRequiredDV}");
+    //         UI_Tools.Console($"angle {angle}");
+    //         UI_Tools.Console($"sign {sign}");
+    //         UI_Tools.Console($"remaining_dv {remaining_dv}");
+    //         UI_Tools.Console($"remaining_full_burn_time {remaining_full_burn_time}");
+    //         UI_Tools.Console($"needed_throttle {needed_throttle}");
 
-            //burn_dV.onGUI();
-        }
-    }
+    //         //burn_dV.onGUI();
+    //     }
+    // }
 }

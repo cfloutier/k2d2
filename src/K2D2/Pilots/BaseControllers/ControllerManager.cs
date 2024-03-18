@@ -2,7 +2,7 @@
 using System.Linq;
 using K2D2.Controller;
 
-namespace K2D2.Models
+namespace K2D2.Controller
 {
     public class ControllerManager
     {

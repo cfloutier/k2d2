@@ -1,0 +1,168 @@
+using System.Collections.Generic;
+using System;
+using System.Threading;
+using System.IO;
+
+using UnityEngine;
+using UnityEngine.UIElements;
+
+using Newtonsoft.Json;
+using K2UI;
+using System.Globalization;
+using JetBrains.Annotations;
+
+
+namespace KTools
+{
+    public class EnumSetting<TEnum> where TEnum : struct
+    {
+        public string path;
+        TEnum default_value;
+        public EnumSetting(string path, TEnum default_value)
+        {
+            this.path = path;
+            this.default_value = default_value;
+            if (SettingsFile.Instance.loaded)
+                loadValue();
+            else
+                SettingsFile.Instance.onloaded_event += loadValue;
+
+        }
+
+        void loadValue()
+        {
+            _value = SettingsFile.Instance.GetEnum<TEnum>(path, default_value);
+        }
+
+        TEnum _value;
+        public TEnum Value
+        {
+            get { return _value; }
+            set
+            {
+                if (value.Equals(_value)) return;
+
+                _value = value;
+                listeners?.Invoke(this.Value);
+
+                SettingsFile.Instance.SetEnum<TEnum>(path, _value);
+            }
+        }
+
+        public int int_value
+        {
+            get { return (int)(object) Value;}
+        }
+
+        public delegate void onChanged(TEnum value);
+
+        public event onChanged listeners;
+
+        public void Bind(InlineEnum element, string labels = null)
+        {    
+            if (labels == null)
+                element.labels = String.Join(";", Enum.GetNames( typeof(TEnum) ));
+            else
+                element.labels = labels;
+
+            element.RegisterCallback<ChangeEvent<int>>(evt => Value =(TEnum)Enum.ToObject(typeof(TEnum), evt.newValue));
+        }
+    }
+
+    public class Setting<T>
+    {
+        public string path;
+        T default_value;
+
+        public Setting(string path, T default_value)
+        {
+            this.path = path;
+            this.default_value = default_value; 
+            if (SettingsFile.Instance.loaded)
+                loadValue();
+            else
+                SettingsFile.Instance.onloaded_event += loadValue;
+
+        }
+
+        void loadValue()
+        {
+            _value = SettingsFile.Instance.Get<T>(path, default_value);
+        }
+
+        T _value;
+        public virtual T V
+        {
+            get { return _value; }
+            set
+            {
+                if (value.Equals(_value)) return;
+
+                _value = value;
+                listeners?.Invoke(this.V);
+
+                SettingsFile.Instance.Set<T>(path, _value);
+            }
+        }
+
+        public delegate void onChanged(T value);
+
+        public event onChanged listeners;
+
+        public void Bind(VisualElement element)
+        {
+            element.RegisterCallback<ChangeEvent<T>>(evt => V = evt.newValue);
+        }
+    }
+
+    
+
+    public class ClampedSetting<T> : Setting<T> where T : System.IComparable<T>
+    {
+        T min, max;
+
+        public ClampedSetting(string path, T default_value, T min, T max): base(path, default_value)
+        {
+            this.min = min;
+            this.max = max;     
+        }
+
+
+        public override T V { 
+            get => base.V; 
+            set {
+                value = Extensions.Clamp(value, min, max);
+                base.V = value;
+            } 
+        }
+    }
+
+    public class ClampedSettingInt : Setting<int>
+    {
+        int min, max;
+
+        public ClampedSettingInt(string path, int default_value, int min, int max): base(path, default_value)
+        {
+            this.min = min;
+            this.max = max;     
+        }
+
+
+        public override int V { 
+            get => base.V; 
+            set {
+                if (value < min)
+                    value = min;
+                else if (value > max)
+                    value = max;
+
+
+                value = Mathf.Clamp(value, min, max);
+                base.V = value;
+            } 
+        }
+    }
+
+
+
+}

@@ -60,7 +60,7 @@ namespace K2UI.Tabs
             if (settings_page != null && main_page != null)
             {     
                 GlobalSetting.settings_visible.listeners += onSettingsChanged;
-                onSettingsChanged(GlobalSetting.settings_visible.Value);
+                onSettingsChanged(GlobalSetting.settings_visible.V);
             }
             else
             {

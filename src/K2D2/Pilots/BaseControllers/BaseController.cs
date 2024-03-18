@@ -65,7 +65,7 @@ namespace K2D2.Controller
                 if (!Enabled)
                     return false;
                
-                if (debug_mode_only && !K2D2Settings.debug_mode.Value)
+                if (debug_mode_only && !K2D2Settings.debug_mode.V)
                     return false;
 
                 return true; 

@@ -2,38 +2,23 @@ using K2D2.KSPService;
 using KSP.Sim;
 using KSP.Sim.Maneuver;
 using KTools;
-using KTools.UI;
+// using KTools.UI;
 using UnityEngine;
 
 namespace K2D2.Controller;
 
 class TurnToSettings
 {
-    public static float max_angle_maneuver
-    {
-        get => KBaseSettings.sfile.GetFloat("turn.max_angle_maneuver", 0.3f);
-        set
-        {
-            value = Mathf.Clamp(value, 0, 7);
-            KBaseSettings.sfile.SetFloat("turn.max_angle_maneuver", value);
-        }
-    }
+    // Need a clamp !!!! 
+    public static ClampedSetting<float> max_angle_maneuver = new ("turn.max_angle_maneuver", 0.3f, 0, 7);
 
-    public static float max_angular_speed
-    {
-        get => KBaseSettings.sfile.GetFloat("turn.max_angular_speed", 1f);
-        set
-        {
-            value = Mathf.Clamp(value, 0, 7);
-            KBaseSettings.sfile.SetFloat("turn.max_angular_speed", value);
-        }
-    }
-
-    public static void onGUI()
-    {
-        max_angle_maneuver = UI_Tools.FloatSliderTxt("Max Angle", max_angle_maneuver, 0.01f, 1, "°", "Accepted Angular error.");
-        max_angular_speed = UI_Tools.FloatSliderTxt("Max Angular Speed", max_angular_speed, 0.01f, 1, "°/s", "Accepted Angular speed.");
-    }
+    public static ClampedSetting<float> max_angular_speed = new ("turn.max_angular_speed", 1f, 0, 7);
+   
+    // public static void onGUI()
+    // {
+    //     max_angle_maneuver = UI_Tools.FloatSliderTxt("Max Angle", max_angle_maneuver, 0.01f, 1, "°", "Accepted Angular error.");
+    //     max_angular_speed = UI_Tools.FloatSliderTxt("Max Angular Speed", max_angular_speed, 0.01f, 1, "°/s", "Accepted Angular speed.");
+    // }
 }
 
 public class TurnTo : ExecuteController
@@ -85,7 +70,7 @@ public class TurnTo : ExecuteController
 
     public override void Start()
     {
-        current_vessel = K2D2_Plugin.Instance.current_vessel;
+        current_vessel = K2D2Plugin.Instance.current_vessel;
         // reset time warp
         TimeWarpTools.SetRateIndex(0, false);
     }
@@ -198,7 +183,7 @@ public class TurnTo : ExecuteController
 
     bool checkManeuverDirection()
     {
-        double max_angle = TurnToSettings.max_angle_maneuver;
+        double max_angle = TurnToSettings.max_angle_maneuver.V;
 
         var telemetry = SASTool.getTelemetry();
         if (!telemetry.HasManeuver)
@@ -219,7 +204,7 @@ public class TurnTo : ExecuteController
 
     bool checkAngularRotation()
     {
-        double max_angular_speed = TurnToSettings.max_angular_speed;
+        double max_angular_speed = TurnToSettings.max_angular_speed.V;
         var angular_rotation_pc = current_vessel.GetAngularSpeed().vector;
 
         status_line = "Waiting for stabilisation";
@@ -235,31 +220,31 @@ public class TurnTo : ExecuteController
         return true;
     }
 
-    public override void onGUI()
-    {
-        UI_Tools.Warning("Check Attitude");
-        UI_Tools.Console(status_line);
+    // public override void onGUI()
+    // {
+    //     UI_Tools.Warning("Check Attitude");
+    //     UI_Tools.Console(status_line);
 
-        // UI_Tools.Console($"sas.sas_response v {Tools.print_vector(sas_response)}");
+    //     // UI_Tools.Console($"sas.sas_response v {Tools.print_vector(sas_response)}");
 
-        if (K2D2Settings.debug_mode)
-        {
-            var telemetry = SASTool.getTelemetry();
-            if (!telemetry.HasManeuver)
-                return;
+    //     if (K2D2Settings.debug_mode)
+    //     {
+    //         var telemetry = SASTool.getTelemetry();
+    //         if (!telemetry.HasManeuver)
+    //             return;
 
-            var autopilot = current_vessel.Autopilot;
+    //         var autopilot = current_vessel.Autopilot;
 
-            // var angulor_vel_coord = VesselInfos.GetAngularSpeed().coordinateSystem;
-            var angularVelocity = current_vessel.GetAngularSpeed().vector;
+    //         // var angulor_vel_coord = VesselInfos.GetAngularSpeed().coordinateSystem;
+    //         var angularVelocity = current_vessel.GetAngularSpeed().vector;
 
-            // UI_Tools.Console($"angulor_vel_coord {angulor_vel_coord}");
-            Vector maneuver_dir = telemetry.ManeuverDirection;
-            // UI_Tools.Console($"maneuver_dir ref {maneuver_dir.coordinateSystem}");
-            // UI_Tools.Console($"maneuver_dir {StrTool.VectorToString(maneuver_dir.vector)}");
-            UI_Tools.Console($"angularVelocity {StrTool.Vector3ToString(angularVelocity)}");
-            // UI_Tools.Console($"angularVelocity {StrTool.VectorToString(angularVelocity)}");
-            UI_Tools.Console($"autopilot {autopilot.AutopilotMode}");
-        }
-    }
+    //         // UI_Tools.Console($"angulor_vel_coord {angulor_vel_coord}");
+    //         Vector maneuver_dir = telemetry.ManeuverDirection;
+    //         // UI_Tools.Console($"maneuver_dir ref {maneuver_dir.coordinateSystem}");
+    //         // UI_Tools.Console($"maneuver_dir {StrTool.VectorToString(maneuver_dir.vector)}");
+    //         UI_Tools.Console($"angularVelocity {StrTool.Vector3ToString(angularVelocity)}");
+    //         // UI_Tools.Console($"angularVelocity {StrTool.VectorToString(angularVelocity)}");
+    //         UI_Tools.Console($"autopilot {autopilot.AutopilotMode}");
+    //     }
+    // }
 }

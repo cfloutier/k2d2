@@ -54,7 +54,7 @@ public class K2D2Plugin : BaseSpaceWarpPlugin
 
     public KSPVessel current_vessel = new KSPVessel();
 
-    bool loaded = false;
+    static bool loaded = false;
 
     /// <summary>
     /// Runs when the mod is first initialized.
@@ -242,14 +242,14 @@ public class K2D2Plugin : BaseSpaceWarpPlugin
         {
             var message = (GameStateChangedMessage)msg;
 
-            if (message.CurrentState == GameState.FlightView)
-            {
-                ShapeDrawer.Instance.can_draw = true;
-            }
-            else if (message.PreviousState == GameState.FlightView)
-            {
-                ShapeDrawer.Instance.can_draw = false;
-            }
+            // if (message.CurrentState == GameState.FlightView)
+            // {
+            //     ShapeDrawer.Instance.can_draw = true;
+            // }
+            // else if (message.PreviousState == GameState.FlightView)
+            // {
+            //     ShapeDrawer.Instance.can_draw = false;
+            // }
         });
 
         Game.Messages.Subscribe<VesselChangedMessage>(msg =>

@@ -40,7 +40,7 @@ public class NodeExecute : ComplexController
         K2D2PilotsMgr.Instance.RegisterPilot("Node", this);
 
         sub_contollers.Add(current_executor);
-        current_vessel = K2D2_Plugin.Instance.current_vessel;
+        current_vessel = K2D2Plugin.Instance.current_vessel;
 
         GeneralTools.Game.Messages.Subscribe<VesselChangedMessage>(OnActiveVesselChanged);
 
@@ -100,7 +100,7 @@ public class NodeExecute : ComplexController
                 turn.StartManeuver(execute_node);
                 break;
             case Mode.Warp:
-                if (!execute_settings.auto_warp)
+                if (!execute_settings.auto_warp.V)
                 {
                     setMode(Mode.Burn);
                     return;
@@ -141,7 +141,7 @@ public class NodeExecute : ComplexController
         if (mode == Mode.Burn)
         {
             Stop();
-            if (execute_settings.pause_on_end)
+            if (execute_settings.pause_on_end.V)
                 TimeWarpTools.SetIsPaused(true);
             return;
         }
@@ -150,56 +150,56 @@ public class NodeExecute : ComplexController
         setMode(next);
     }
 
-    public override void onGUI()
-    {
-        if (K2D2_Plugin.Instance.settings_visible)
-        {
-            // default Settings UI
-            K2D2Settings.onGUI();
-            settingsUI();
-            return;
-        }
+    // public override void onGUI()
+    // {
+    //     if (K2D2Plugin.Instance.settings_visible)
+    //     {
+    //         // default Settings UI
+    //         K2D2Settings.onGUI();
+    //         settingsUI();
+    //         return;
+    //     }
 
-        // UI_Tools.Console($"mode : {mode}");
-        if (!isRunning)
-        {
-            if (next_maneuver_node == null)
-            {
-                UI_Tools.Label("No Maneuver node.");
-                TestFlightPlan.FPToolsUI();
-                return;
-            }
+    //     // UI_Tools.Console($"mode : {mode}");
+    //     if (!isRunning)
+    //     {
+    //         if (next_maneuver_node == null)
+    //         {
+    //             UI_Tools.Label("No Maneuver node.");
+    //             TestFlightPlan.FPToolsUI();
+    //             return;
+    //         }
 
-            if (!valid_maneuver)
-            {
-                UI_Tools.Label("Invalid Maneuver node.");
-                UI_Tools.Console("Actually a KSP2 bug when loading scenaries. Please open map to fix it");
-                return;
-            }
-        }
+    //         if (!valid_maneuver)
+    //         {
+    //             UI_Tools.Label("Invalid Maneuver node.");
+    //             UI_Tools.Console("Actually a KSP2 bug when loading scenaries. Please open map to fix it");
+    //             return;
+    //         }
+    //     }
 
-        if (execute_settings.show_node_infos)
-        {
-            node_infos();
-        }
+    //     if (execute_settings.show_node_infos)
+    //     {
+    //         node_infos();
+    //     }
 
-        if (!isRunning && !canStart())
-        {
-            UI_Tools.Label("No valid Maneuver node found");
-            return;
-        }
+    //     if (!isRunning && !canStart())
+    //     {
+    //         UI_Tools.Label("No valid Maneuver node found");
+    //         return;
+    //     }
 
-        GUILayout.BeginHorizontal();
-        isRunning = UI_Tools.BigToggleButton(isRunning, "Run", "Stop");
+    //     GUILayout.BeginHorizontal();
+    //     isRunning = UI_Tools.BigToggleButton(isRunning, "Run", "Stop");
 
-        execute_settings.pause_on_end = GUILayout.Toggle(execute_settings.pause_on_end, 
-                                new GUIContent(KBaseStyle.pause, "Auto-Pause when the Node is executed"),
-                                 KBaseStyle.big_button_warning, GUILayout.Width(40));
+    //     execute_settings.pause_on_end = GUILayout.Toggle(execute_settings.pause_on_end, 
+    //                             new GUIContent(KBaseStyle.pause, "Auto-Pause when the Node is executed"),
+    //                              KBaseStyle.big_button_warning, GUILayout.Width(40));
 
-        GUILayout.EndHorizontal();
-        // call the current UI
-        current_executor.onGUI();
-    }
+    //     GUILayout.EndHorizontal();
+    //     // call the current UI
+    //     current_executor.onGUI();
+    // }
 
     public bool valid_maneuver = false;
 
@@ -262,7 +262,7 @@ public class NodeExecute : ComplexController
                     UT = execute_node.Time - execute_node.BurnDuration / 2;
                     break;
                 case NodeExecuteSettings.StartMode.constant:
-                    UT = execute_node.Time - execute_settings.start_before.Value;
+                    UT = execute_node.Time - execute_settings.start_before.V;
                     break;
             }
 
@@ -281,50 +281,50 @@ public class NodeExecute : ComplexController
         }
     }
 
-    public FoldOut accordion = new FoldOut();
+    // public FoldOut accordion = new FoldOut();
 
-    void settingsUI()
-    {
-        if (accordion.Count == 0)
-        {
-            // accordion.addChapter("Staging", StagingSettings.settings_UI);
-            accordion.addChapter("Execute", execute_settings.settings_UI);
-            accordion.addChapter("Turn", TurnToSettings.onGUI);
-            accordion.addChapter("Warp", execute_settings.warp_ui);
-            accordion.addChapter("Burn", BurnManeuverSettings.onGUI);
+    // void settingsUI()
+    // {
+    //     if (accordion.Count == 0)
+    //     {
+    //         // accordion.addChapter("Staging", StagingSettings.settings_UI);
+    //         accordion.addChapter("Execute", execute_settings.settings_UI);
+    //         accordion.addChapter("Turn", TurnToSettings.onGUI);
+    //         accordion.addChapter("Warp", execute_settings.warp_ui);
+    //         accordion.addChapter("Burn", BurnManeuverSettings.onGUI);
 
-            accordion.singleChapter = true;
-        }
+    //         accordion.singleChapter = true;
+    //     }
 
-        accordion.OnGUI();
-    }
+    //     accordion.OnGUI();
+    // }
 
-    void node_infos()
-    {
-        UI_Tools.Title("Node Infos");
-        ManeuverNodeData node = null;
-        if (isRunning)
-            node = execute_node;
-        else
-            node = next_maneuver_node;
+    // void node_infos()
+    // {
+    //     UI_Tools.Title("Node Infos");
+    //     ManeuverNodeData node = null;
+    //     if (isRunning)
+    //         node = execute_node;
+    //     else
+    //         node = next_maneuver_node;
 
-        if (node == null)
-            return;
+    //     if (node == null)
+    //         return;
 
-        var dt = GeneralTools.remainingStartTime(node);
-        UI_Tools.Label($"Node in <b>{StrTool.DurationToString(dt)}</b>");
-        UI_Tools.Label($"dV {node.BurnRequiredDV:n2} m/s");
-        UI_Tools.Label($"Duration {StrTool.DurationToString(node.BurnDuration)}");
+    //     var dt = GeneralTools.remainingStartTime(node);
+    //     UI_Tools.Label($"Node in <b>{StrTool.DurationToString(dt)}</b>");
+    //     UI_Tools.Label($"dV {node.BurnRequiredDV:n2} m/s");
+    //     UI_Tools.Label($"Duration {StrTool.DurationToString(node.BurnDuration)}");
 
-        if (K2D2Settings.debug_mode)
-        {
-            if (dt < 0)
-            {
-                UI_Tools.Label("In The Past");
-                return;
-            }
-        }
-    }
+    //     if (K2D2Settings.debug_mode)
+    //     {
+    //         if (dt < 0)
+    //         {
+    //             UI_Tools.Label("In The Past");
+    //             return;
+    //         }
+    //     }
+    // }
 
 
     public override bool isRunning
@@ -346,7 +346,7 @@ public class NodeExecute : ComplexController
             else
             {
                 // reset controller to desactivate other controllers.
-                K2D2_Plugin.ResetControllers();
+                K2D2Plugin.ResetControllers();
                 TimeWarpTools.SetIsPaused(false);
                 
                 setMode(Mode.Turn);

@@ -10,12 +10,12 @@ namespace K2D2
     {
         public static VesselAutopilot currentAutoPilot()
         {
-            return K2D2_Plugin.Instance.current_vessel?.VesselComponent?.Autopilot;
+            return K2D2Plugin.Instance.current_vessel?.VesselComponent?.Autopilot;
         }
 
         public static VesselSAS currentSas()
         {
-            return K2D2_Plugin.Instance.current_vessel?.VesselComponent?.Autopilot?.SAS;
+            return K2D2Plugin.Instance.current_vessel?.VesselComponent?.Autopilot?.SAS;
         }
 
         public static double getSasResponsePC()
@@ -46,7 +46,6 @@ namespace K2D2
             return my_obj as TelemetryComponent;
         }
 
-
         public static void setAutoPilot(AutopilotMode mode)
         {
             var autopilot = currentAutoPilot();
@@ -55,9 +54,6 @@ namespace K2D2
             autopilot.Enabled = true;
             autopilot.SetMode(mode);
         }
-
-
     }
-
 }
 

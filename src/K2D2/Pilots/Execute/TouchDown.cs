@@ -1,6 +1,6 @@
 using K2D2.KSPService;
 using KSP.Sim;
-using KTools.UI;
+// using KTools.UI;
 using UnityEngine;
 
 namespace K2D2.Controller;
@@ -24,7 +24,7 @@ public class TouchDown : ExecuteController
     {
         sub_contollers.Add(burn_dV);
         // logger.LogMessage("LandingController !");
-        current_vessel = K2D2_Plugin.Instance.current_vessel;
+        current_vessel = K2D2Plugin.Instance.current_vessel;
     }
 
     public void computeGravityRatio()
@@ -162,37 +162,37 @@ public class TouchDown : ExecuteController
         current_vessel.SetThrottle(wanted_throttle);
     }
 
-    public override void onGUI()
-    {
-        // need to burn !
-        if (delta_speed > 0)
-        {
-            GUI.color = Color.red;
-            UI_Tools.Console($"Max speed : {max_speed:n2} !!");
-            UI_Tools.Console($"delta speed  : {delta_speed:n2}  m/s");
-            GUI.color = Color.white;
-        }
-        else
-        {
-            UI_Tools.Console($"Max speed : {max_speed:n2}  m/s");
-            UI_Tools.Console($"delta speed  : {-delta_speed:n2}  m/s");
-        }
+    // public override void onGUI()
+    // {
+    //     // need to burn !
+    //     if (delta_speed > 0)
+    //     {
+    //         GUI.color = Color.red;
+    //         UI_Tools.Console($"Max speed : {max_speed:n2} !!");
+    //         UI_Tools.Console($"delta speed  : {delta_speed:n2}  m/s");
+    //         GUI.color = Color.white;
+    //     }
+    //     else
+    //     {
+    //         UI_Tools.Console($"Max speed : {max_speed:n2}  m/s");
+    //         UI_Tools.Console($"delta speed  : {-delta_speed:n2}  m/s");
+    //     }
 
-        if (burn_dV.burned_dV > 0)
-            UI_Tools.Console($"dV consumed : {burn_dV.burned_dV:n2} m/s");
+    //     if (burn_dV.burned_dV > 0)
+    //         UI_Tools.Console($"dV consumed : {burn_dV.burned_dV:n2} m/s");
 
-        if (K2D2Settings.debug_mode)
-        {
-            if (gravity_compensation)
-            {
-                UI_Tools.Console($"gravity : {gravity:n2}");
-                UI_Tools.Console($"gravity inclination : {gravity_inclination:n2}°");
-                //UI_Tools.Console($"gravity_direction_factor : {gravity_direction_factor:n2}");
-            }
+    //     if (K2D2Settings.debug_mode)
+    //     {
+    //         if (gravity_compensation)
+    //         {
+    //             UI_Tools.Console($"gravity : {gravity:n2}");
+    //             UI_Tools.Console($"gravity inclination : {gravity_inclination:n2}°");
+    //             //UI_Tools.Console($"gravity_direction_factor : {gravity_direction_factor:n2}");
+    //         }
 
-            UI_Tools.Console($"wanted_throttle : {wanted_throttle:n2}");
-        }
-    }
+    //         UI_Tools.Console($"wanted_throttle : {wanted_throttle:n2}");
+    //     }
+    // }
 
 
 }

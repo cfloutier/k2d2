@@ -90,33 +90,33 @@ public class BurndV : BaseController
         full_dv = (float)(full_thrust.magnitude / totalMass);
     }
 
-    public override void onGUI()
-    {
-        if (current_vessel.VesselComponent == null) return;
-        VesselDeltaVComponent delta_v = current_vessel.VesselComponent.VesselDeltaV;
-        if (delta_v == null)
-        {
-            UI_Tools.Error("NO VesselDeltaVComponent");
-            return;
-        }
-        //List<DeltaVEngineInfo> engineInfos = delta_v.EngineInfo;
+    // public override void onGUI()
+    // {
+    //     if (current_vessel.VesselComponent == null) return;
+    //     VesselDeltaVComponent delta_v = current_vessel.VesselComponent.VesselDeltaV;
+    //     if (delta_v == null)
+    //     {
+    //         UI_Tools.Error("NO VesselDeltaVComponent");
+    //         return;
+    //     }
+    //     //List<DeltaVEngineInfo> engineInfos = delta_v.EngineInfo;
 
-        var vehicle = current_vessel.VesselVehicle;
-        if (vehicle == null) return;
-        var mainThrottle = vehicle.mainThrottle;
+    //     var vehicle = current_vessel.VesselVehicle;
+    //     if (vehicle == null) return;
+    //     var mainThrottle = vehicle.mainThrottle;
 
-        //UI_Tools.Console($"nb_engines {engineInfos.Count}  ");
-
-
-        UI_Tools.Console($"mainThrottle {mainThrottle}");
-        // UI_Tools.Console($"actual_thrust  {Tools.printVector(actual_thrust)}  ");
-        UI_Tools.Console($"actual_dv  {actual_dv:n5}  ");
+    //     //UI_Tools.Console($"nb_engines {engineInfos.Count}  ");
 
 
-        // UI_Tools.Console($"full_thrust  {Tools.printVector(full_thrust)}  ");
-        UI_Tools.Console($"full_dv  {full_dv:n5}  ");
-        UI_Tools.Console($"burned_dV <b> {burned_dV:n5} </b>");
-        if (GUILayout.Button("Reset"))
-            burned_dV = 0;
-    }
+    //     UI_Tools.Console($"mainThrottle {mainThrottle}");
+    //     // UI_Tools.Console($"actual_thrust  {Tools.printVector(actual_thrust)}  ");
+    //     UI_Tools.Console($"actual_dv  {actual_dv:n5}  ");
+
+
+    //     // UI_Tools.Console($"full_thrust  {Tools.printVector(full_thrust)}  ");
+    //     UI_Tools.Console($"full_dv  {full_dv:n5}  ");
+    //     UI_Tools.Console($"burned_dV <b> {burned_dV:n5} </b>");
+    //     if (GUILayout.Button("Reset"))
+    //         burned_dV = 0;
+    // }
 }

@@ -2,53 +2,39 @@ using BepInEx.Logging;
 using KSP.Sim;
 using KSP.Sim.Maneuver;
 using KTools;
-using KTools.UI;
+// using KTools.UI;
 using UnityEngine;
 
 namespace K2D2.Controller;
 
 class WarpToSettings
 {
+
     // compute max warp index depending on remaining time
     public static int compute_wanted_warp_index(double time_left)
     {
         if (time_left < 0)
             return 0;
 
-        double time_ratio = 1 + time_left / (10 - warp_speed);
+        double time_ratio = 1 + time_left / (10 - warp_speed.V);
 
         // adding 1 because x1 during the warp mode is a lame
         return TimeWarpTools.ratioToIndex((float)time_ratio);
     }
 
-    public static float warp_speed
-    {
-        get => KBaseSettings.sfile.GetFloat("warp.speed", 2);
-        set
-        {
-            value = Mathf.Clamp(value, 0, 7);
-            KBaseSettings.sfile.SetFloat("warp.speed", value);
-        }
-    }
+    public static ClampedSetting<float> warp_speed = new("warp.speed", 2, 0, 7);
 
-    public static int warp_safe_duration
-    {
-        get => KBaseSettings.sfile.GetInt("warp.safe_duration", 10);
-        set
-        {
-            if (value < 5) value = 5;
-            KBaseSettings.sfile.SetInt("warp.safe_duration", value);
-        }
-    }
+    public static ClampedSetting<float> warp_safe_duration = new("warp.safe_duration", 10, 5, int.MaxValue);
 
-    public static void onGUI()
-    {
-        warp_speed = UI_Tools.FloatSliderTxt("Warp Speed", warp_speed, 0, 7, "", "Warp adjust rate");
-        UI_Tools.Right_Left_Text("Safe", "Quick");
 
-        warp_safe_duration = UI_Fields.IntFieldLine("warp_safe_duration", "Before Burn Time", warp_safe_duration, 5, int.MaxValue, "s",
-            "Nb seconds in x1 before next phase (min:5)");
-    }
+    // public static void onGUI()
+    // {
+    //     warp_speed = UI_Tools.FloatSliderTxt("Warp Speed", warp_speed, 0, 7, "", "Warp adjust rate");
+    //     UI_Tools.Right_Left_Text("Safe", "Quick");
+
+    //     warp_safe_duration = UI_Fields.IntFieldLine("warp_safe_duration", "Before Burn Time", warp_safe_duration, 5, int.MaxValue, "s",
+    //         "Nb seconds in x1 before next phase (min:5)");
+    // }
 }
 
 public class WarpTo : ExecuteController
@@ -119,7 +105,7 @@ public class WarpTo : ExecuteController
     public override void Start()
     {
         finished = false;
-        current_vessel = K2D2_Plugin.Instance.current_vessel;
+        current_vessel = K2D2Plugin.Instance.current_vessel;
     }
 
     double dt;
@@ -132,7 +118,7 @@ public class WarpTo : ExecuteController
 
         if (add_safe_duration)
         {
-            var ut_modified = UT - WarpToSettings.warp_safe_duration;
+            var ut_modified = UT - WarpToSettings.warp_safe_duration.V;
             dt = ut_modified - GeneralTools.Game.UniverseModel.UniverseTime;
         }
         else
@@ -193,17 +179,16 @@ public class WarpTo : ExecuteController
         }
     }
 
+    // public override void onGUI()
+    // {
+    //     UI_Tools.OK("Time Warp");
+    //     UI_Tools.Console(status_line);
 
-    public override void onGUI()
-    {
-        UI_Tools.OK("Time Warp");
-        UI_Tools.Console(status_line);
-
-        if (K2D2Settings.debug_mode)
-        {
-            UI_Tools.Console($"CurrentRateIndex {TimeWarpTools.CurrentRateIndex}");
-            UI_Tools.Console($"CurrentRate x{TimeWarpTools.CurrentRate}");
-            UI_Tools.Console($"index_rate x{TimeWarpTools.indexToRatio(TimeWarpTools.CurrentRateIndex)}");
-        }
-    }
+    //     if (K2D2Settings.debug_mode)
+    //     {
+    //         UI_Tools.Console($"CurrentRateIndex {TimeWarpTools.CurrentRateIndex}");
+    //         UI_Tools.Console($"CurrentRate x{TimeWarpTools.CurrentRate}");
+    //         UI_Tools.Console($"index_rate x{TimeWarpTools.indexToRatio(TimeWarpTools.CurrentRateIndex)}");
+    //     }
+    // }
 }
