@@ -8,7 +8,7 @@ namespace K2D2
 {
     public class GlobalSetting
     {
-        public static Settings<bool> settings_visible = new Settings<bool>("", false);
+        public static Setting<bool> settings_visible = new Setting<bool>("", false);
     }
 }
 

@@ -68,15 +68,15 @@ namespace KTools
         }
     }
 
-    public class Settings<T>
+    public class Setting<T>
     {
         public string path;
         T default_value;
 
-        public Settings(string path, T default_value)
+        public Setting(string path, T default_value)
         {
             this.path = path;
-            this.default_value = default_value;
+            this.default_value = default_value; 
             if (SettingsFile.Instance.loaded)
                 loadValue();
             else

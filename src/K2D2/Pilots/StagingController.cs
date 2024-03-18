@@ -1,53 +1,34 @@
-
-
-
 using K2D2.KSPService;
 using KTools;
-using KTools.UI;
+
 using BepInEx.Logging;
-
 using KSP.Sim.impl;
-using KSP.Sim;
 using KSP.Sim.ResourceSystem;
-namespace K2D2.Controller;
 
-using System.ComponentModel;
-using UnityEngine;
+namespace K2D2.Controller;
 
 public class StagingSettings
 {
-    public static bool auto_staging
-    {
-        get => KBaseSettings.sfile.GetBool("staging.auto_staging", false);
-        set
-        {
-            KBaseSettings.sfile.SetBool("staging.auto_staging", value);
-        }
-    }
 
-    public static float freeze_duration
-    {
-        get => KBaseSettings.sfile.GetFloat("staging.freeze_duration", 1f);
-        set
-        {
-            // value = Mathf.Clamp(value, 0 , 1);
-            KBaseSettings.sfile.SetFloat("staging.freeze_duration", value);
-        }
-    }
+    public static Setting<bool> auto_staging = new("staging.auto_staging", false);
+   
+
+    public static Setting<float> freeze_duration = new ("staging.freeze_duration", 1f);
+
     
-    public static void settings_UI()
-    {
-        UI_Tools.Console("Next Stage if at least one tank is empty");
-        auto_staging = UI_Tools.Toggle(auto_staging, "Auto Staging");
+    // public static void settings_UI()
+    // {
+    //     UI_Tools.Console("Next Stage if at least one tank is empty");
+    //     auto_staging = UI_Tools.Toggle(auto_staging, "Auto Staging");
 
-        UI_Tools.Console("Freeze K2D2 Pilots during staging");
-        GUILayout.BeginHorizontal();
+    //     UI_Tools.Console("Freeze K2D2 Pilots during staging");
+    //     GUILayout.BeginHorizontal();
        
-        UI_Tools.Label("Freeze Duration (s): ");
+    //     UI_Tools.Label("Freeze Duration (s): ");
         
-        freeze_duration = UI_Fields.FloatField("freeze_duration", freeze_duration, 1);
-        GUILayout.EndHorizontal();
-    }
+    //     freeze_duration = UI_Fields.FloatField("freeze_duration", freeze_duration, 1);
+    //     GUILayout.EndHorizontal();
+    // }
 }
 
 /// <summary>
@@ -85,7 +66,7 @@ public class StagingController : BaseController
     {
         is_staging = true;
         // record time
-        end_time = GeneralTools.Game.UniverseModel.UniverseTime + StagingSettings.freeze_duration;
+        end_time = GeneralTools.Game.UniverseModel.UniverseTime + StagingSettings.freeze_duration.Value;
         current_time = GeneralTools.Game.UniverseModel.UniverseTime;
     }
 
@@ -207,7 +188,7 @@ public class StagingController : BaseController
         CalculateVesselStageFuel();
 
         // return true if staging in progress
-        if (!StagingSettings.auto_staging)
+        if (!StagingSettings.auto_staging.Value)
         {
             is_staging = false;
             return false;
@@ -240,63 +221,55 @@ public class StagingController : BaseController
         return is_staging;
     }
 
-    public override void onGUI()
-    {  
-        if (K2D2_Plugin.Instance.settings_visible)
-        {
-            K2D2Settings.onGUI();
-            StagingSettings.settings_UI();
-            return;
-        }
+    // public override void onGUI()
+    // {  
+    //     if (K2D2_Plugin.Instance.settings_visible)
+    //     {
+    //         K2D2Settings.onGUI();
+    //         StagingSettings.settings_UI();
+    //         return;
+    //     }
 
-        UI_Tools.Title("Staging");
+    //     UI_Tools.Title("Staging");
 
-        if (StagingSettings.auto_staging)
-            UI_Tools.Label($"Auto Staging is On. (timer: {StagingSettings.freeze_duration}s) ");
+    //     if (StagingSettings.auto_staging)
+    //         UI_Tools.Label($"Auto Staging is On. (timer: {StagingSettings.freeze_duration}s) ");
 
-        if (Full_Stage_Percentage < 0)
-        {
-            UI_Tools.Console($"No Active Stage.");
-        }
-        else
-        {
-            // var StageFuelPercentage
-            UI_Tools.Console($"Total Fuel remaning : {Full_Stage_Percentage:n2}%");
-            UI_Tools.Console($"Next Empty Tank : {Min_Stage_Percentage:n2}%");
-            if (Min_Stage_Percentage == 0)
-            {
-                UI_Tools.Warning($"Stage NOW !");
-            }
-        }
-    }
+    //     if (Full_Stage_Percentage < 0)
+    //     {
+    //         UI_Tools.Console($"No Active Stage.");
+    //     }
+    //     else
+    //     {
+    //         // var StageFuelPercentage
+    //         UI_Tools.Console($"Total Fuel remaning : {Full_Stage_Percentage:n2}%");
+    //         UI_Tools.Console($"Next Empty Tank : {Min_Stage_Percentage:n2}%");
+    //         if (Min_Stage_Percentage == 0)
+    //         {
+    //             UI_Tools.Warning($"Stage NOW !");
+    //         }
+    //     }
+    // }
 
-    public void stagingUI()
-    {
-        if (!is_staging)
-            return;
+    // public void stagingUI()
+    // {
+    //     if (!is_staging)
+    //         return;
 
-        UI_Tools.Title("Staging in progress");
+    //     UI_Tools.Title("Staging in progress");
 
-        if (end_time > 0 )
-        {   
-            var remaining = end_time - current_time; 
-            UI_Tools.Console($"Timer : {remaining:n2} s");
-        }
+    //     if (end_time > 0 )
+    //     {   
+    //         var remaining = end_time - current_time; 
+    //         UI_Tools.Console($"Timer : {remaining:n2} s");
+    //     }
 
-        return;
-    }
-
+    //     return;
+    // }
 
     public override void onReset()
     {
         is_staging = false;
     }
-
-
-
-
-
-
-
 
 }

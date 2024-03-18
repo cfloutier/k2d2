@@ -11,9 +11,14 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using BepInEx.Logging;
 using KTools;
+using K2D2.KSPService;
+using KSP.Game;
+using KSP.Sim.ResourceSystem;
+
+using KSP.Messages;
+using K2D2.Controller;
+
 namespace K2D2;
-
-
 
 class L
 {
@@ -47,6 +52,10 @@ public class K2D2Plugin : BaseSpaceWarpPlugin
 
     public static ManualLogSource logger = BepInEx.Logging.Logger.CreateLogSource("K2D2");
 
+    public KSPVessel current_vessel = new KSPVessel();
+
+    bool loaded = false;
+
     /// <summary>
     /// Runs when the mod is first initialized.
     /// </summary>
@@ -58,6 +67,16 @@ public class K2D2Plugin : BaseSpaceWarpPlugin
 
         // Load all the other assemblies used by this mod
         LoadAssemblies();
+        new K2D2PilotsMgr();
+        SettingsFile.Init("K2d2_settings.json");
+        
+
+        gameObject.hideFlags = HideFlags.HideAndDontSave;
+        DontDestroyOnLoad(gameObject);
+        RegisterMessages();
+
+        // create staging 
+        new StagingController();
 
         // Load the UI from the asset bundle
         var myFirstWindowUxml = AssetManager.GetAsset<VisualTreeAsset>(
@@ -119,7 +138,11 @@ public class K2D2Plugin : BaseSpaceWarpPlugin
         //     AssetManager.GetAsset<Texture2D>($"{ModGuid}/images/icon.png"),
         //     () => myFirstWindowController.IsWindowOpen = !myFirstWindowController.IsWindowOpen
         // );
+
+        loaded = true;
     }
+
+
 
     /// <summary>
     /// Loads all the assemblies for the mod.
@@ -133,5 +156,106 @@ public class K2D2Plugin : BaseSpaceWarpPlugin
         // Register any custom UI controls from the loaded assembly
          Debug.Log("assemblie : "+  unityAssembly);
         CustomControls.RegisterFromAssembly(unityAssembly);
+    }
+
+    private static GameState[] validScenes = new[] { GameState.FlightView, GameState.Map3DView };
+
+    //private static GameState last_game_state ;
+
+    private static bool ValidScene()
+    {
+        if (GeneralTools.Game == null) return false;
+
+        var state = GeneralTools.Game.GlobalGameState.GetState();
+        bool is_valid = validScenes.Contains(state);
+        if (!is_valid)
+        {
+            ResetControllers();
+        }
+        return is_valid;
+    }
+
+    void Update()
+    {
+        // main_ui?.Update();
+
+        Debug.developerConsoleVisible = false;
+        // Update Models (even on non valid scenes)
+        current_vessel.Update();
+
+        if (K2D2OtherModsInterface.instance == null)
+        {
+            var other_mods = new K2D2OtherModsInterface();
+            other_mods.CheckModsVersions();
+        }
+
+        // if (ValidScene())
+        // {
+        //     // Debug.developerConsoleVisible = false;
+        //     if (Input.GetKey(KeyCode.LeftAlt) && Input.GetKeyDown(KeyCode.O))
+        //         ToggleAppBarButton(!drawUI);
+
+        //     _maneuverProvider.Update();
+        //     StagingController.Instance.Update();
+
+        //     if (!StagingController.Instance.is_staging)
+        //     {
+        //         // Update Controllers only if staging is not in progress
+        //         controllerManager.UpdateControllers();
+        //     }   
+
+        //     UI_Tools.OnUpdate();
+        // }
+    }
+
+      // call on reset on controller, each on can reset it's status
+    public static void ResetControllers()
+    {
+        if (!loaded) return;
+        StagingController.Instance.onReset();
+        Instance.controllerManager.onReset(); 
+    }
+
+    public bool settings_visible = false;
+
+    ControllerManager controllerManager = new ControllerManager();
+
+    void FixedUpdate()
+    {
+        if (ValidScene())
+        {
+            controllerManager.FixedUpdateControllers();
+        }
+    }
+
+    private void LateUpdate()
+    {
+        if (ValidScene())
+        {
+            controllerManager.LateUpdateControllers();
+        }
+    }
+
+    private void RegisterMessages()
+    {
+        Game.Messages.Subscribe<GameStateChangedMessage>(msg =>
+        {
+            var message = (GameStateChangedMessage)msg;
+
+            if (message.CurrentState == GameState.FlightView)
+            {
+                ShapeDrawer.Instance.can_draw = true;
+            }
+            else if (message.PreviousState == GameState.FlightView)
+            {
+                ShapeDrawer.Instance.can_draw = false;
+            }
+        });
+
+        Game.Messages.Subscribe<VesselChangedMessage>(msg =>
+        {
+            var message = (VesselChangedMessage)msg;
+            ResetControllers();
+        });
     }
 }
