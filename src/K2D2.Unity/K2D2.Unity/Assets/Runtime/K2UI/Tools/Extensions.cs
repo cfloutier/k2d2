@@ -6,13 +6,11 @@ using System;
 
 namespace K2UI
 {
+    /// <summary>
+    /// Extensions usied for VisualElement
+    /// </summary>
     public static class ExtensionMethods
     {
-        public static int FloorTen (this int i)
-        {
-            return ((int)Mathf.Floor(i / 10f)) * 10;
-        }
-
         public static void Clean(this VisualElement el)
         {
             var count = el.childCount;
@@ -34,16 +32,5 @@ namespace K2UI
             element.AddManipulator(new DragManipulator());
             return element;
         }
-
-
-        private static IFormatProvider inv 
-                    = System.Globalization.CultureInfo.InvariantCulture.NumberFormat;
-
-        public static string ToStringInvariant<T>(this T obj, string format=null)
-        {
-            return (format == null) ? System.FormattableString.Invariant($"{obj}") 
-                                    : String.Format(inv, $"{{0:{format}}}", obj);
-        }
-
     }
 }

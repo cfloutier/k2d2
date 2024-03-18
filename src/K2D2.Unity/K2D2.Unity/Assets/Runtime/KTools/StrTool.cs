@@ -73,7 +73,7 @@ namespace KTools
             return sign + meters.ToString("0") + " m";
         }
 
-        static public string Vector3ToString(Vector3d vec)
+        static public string Vector3ToString(Vector3 vec)
         {
             return $"{vec.x:n2} {vec.y:n2} {vec.z:n2}";
         }

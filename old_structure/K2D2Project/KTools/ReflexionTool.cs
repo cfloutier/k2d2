@@ -27,8 +27,6 @@ public class ReflexionTool
                     BindingFlags.NonPublic | BindingFlags.Instance);
 
         dynMethod.Invoke(instance, args);
-
-
     }
 }
 
