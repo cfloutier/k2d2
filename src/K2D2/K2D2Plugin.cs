@@ -56,6 +56,8 @@ public class K2D2Plugin : BaseSpaceWarpPlugin
 
     static bool loaded = false;
 
+    K2D2Window main_window = null;
+
     /// <summary>
     /// Runs when the mod is first initialized.
     /// </summary>
@@ -77,6 +79,16 @@ public class K2D2Plugin : BaseSpaceWarpPlugin
 
         // create staging 
         new StagingPilot();
+
+        pilots_manager.AddPilot(new NodeExPilot());
+        pilots_manager.AddPilot(new LandingPilot());
+        pilots_manager.AddPilot(new DronePilot());
+        pilots_manager.AddPilot(new AttitudePilot());
+        // pilots_manager.AddPilot(new LiftController());
+     
+        // controllerManager.AddController(new WarpController());
+        // pilots_manager.AddPilot(new DockingAssist());
+
 
         // Load the UI from the asset bundle
         var myFirstWindowUxml = AssetManager.GetAsset<VisualTreeAsset>(
@@ -113,14 +125,14 @@ public class K2D2Plugin : BaseSpaceWarpPlugin
         // Create the window
         var k2d2_window = Window.Create(windowOptions, myFirstWindowUxml);
         // Add a controller for the UI to the window's game object
-        var k2d2_window_controller = k2d2_window.gameObject.AddComponent<K2D2Window>();
+        main_window = k2d2_window.gameObject.AddComponent<K2D2Window>();
 
         // Register Flight AppBar button
         Appbar.RegisterAppButton(
             ModName,
             ToolbarFlightButtonID,
             AssetManager.GetAsset<Texture2D>($"{ModGuid}/images/icon.png"),
-            isOpen => k2d2_window_controller.IsWindowOpen = isOpen
+            isOpen => main_window.IsWindowOpen = isOpen
         );
 
         // Register OAB AppBar Button
@@ -138,6 +150,8 @@ public class K2D2Plugin : BaseSpaceWarpPlugin
         //     AssetManager.GetAsset<Texture2D>($"{ModGuid}/images/icon.png"),
         //     () => myFirstWindowController.IsWindowOpen = !myFirstWindowController.IsWindowOpen
         // );
+
+
 
         loaded = true;
     }
@@ -187,23 +201,20 @@ public class K2D2Plugin : BaseSpaceWarpPlugin
             other_mods.CheckModsVersions();
         }
 
-        // if (ValidScene())
-        // {
-        //     // Debug.developerConsoleVisible = false;
-        //     if (Input.GetKey(KeyCode.LeftAlt) && Input.GetKeyDown(KeyCode.O))
-        //         ToggleAppBarButton(!drawUI);
+        if (ValidScene())
+        {
+            // Debug.developerConsoleVisible = false;
+            if (Input.GetKey(KeyCode.LeftAlt) && Input.GetKeyDown(KeyCode.O))
+                main_window.IsWindowOpen = !main_window.IsWindowOpen;
 
-        //     _maneuverProvider.Update();
-        //     StagingController.Instance.Update();
+            StagingPilot.Instance.Update();
 
-        //     if (!StagingController.Instance.is_staging)
-        //     {
-        //         // Update Controllers only if staging is not in progress
-        //         controllerManager.UpdateControllers();
-        //     }   
-
-        //     UI_Tools.OnUpdate();
-        // }
+            if (!StagingPilot.Instance.is_staging)
+            {
+                // Update Controllers only if staging is not in progress
+                pilots_manager.UpdateControllers();
+            }   
+        }
     }
 
       // call on reset on controller, each on can reset it's status

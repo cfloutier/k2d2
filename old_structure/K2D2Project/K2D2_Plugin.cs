@@ -155,7 +155,7 @@ public class K2D2_Plugin : BaseSpaceWarpPlugin
         new StagingController();
 
         // Add Controllers that inherit from BaseController here:
-        controllerManager.AddController(new SimpleManeuverController(logger, ref _maneuverProvider));
+        // controllerManager.AddController(new SimpleManeuverController(logger, ref _maneuverProvider));
         controllerManager.AddController(new NodeExecute());
         controllerManager.AddController(new LandingController());
         controllerManager.AddController(new DroneController());

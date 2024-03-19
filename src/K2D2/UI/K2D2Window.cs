@@ -1,4 +1,5 @@
 using K2D2.Controller;
+using K2UI;
 using K2UI.Tabs;
 using KSP.UI.Binding;
 
@@ -71,18 +72,38 @@ public class K2D2Window : MonoBehaviour
         // Center the window by default
         _rootElement.CenterByDefault();
 
+        IsWindowOpen = false;
+
         // Get the close button from the window
         var closeButton = _rootElement.Q<Button>("close-button");
         // Add a click event handler to the close button
         closeButton.clicked += () => IsWindowOpen = false; 
 
+        // list all pilot panel
         pilots_panels.Clear();
         foreach(var pilot in K2D2Plugin.Instance.pilots_manager.pilots)
         {
-            pilots_panels.Add(pilot.panel);
+            var panel = pilot.panel;
+            if (panel != null)
+                pilots_panels.Add(panel);
         }
 
         tab_page = _rootElement.Q<TabbedPage>();
         tab_page.Init(pilots_panels);
+        // inti current tab from settings
+        tab_page.Select(K2D2Settings.current_tab.V);
+        // save the current_tab to settings
+        tab_page.RegisterCallback<ChangeEvent<string>>(evt => K2D2Settings.current_tab.V = evt.newValue);
+
+
+        var title_bar = _rootElement.Q("title-bar");
+
+        var settings_button = title_bar.Q<ToggleButton>("settings-toggle");
+        var staging_toggle = title_bar.Q<ToggleButton>("staging-toggle");
+
+        GlobalSetting.settings_visible.Bind(settings_button);
+
+        settings_button.RegisterCallback<ChangeEvent<bool>>( evt => StagingPilot.Instance.Enabled = evt.newValue );
     }
+
 }
