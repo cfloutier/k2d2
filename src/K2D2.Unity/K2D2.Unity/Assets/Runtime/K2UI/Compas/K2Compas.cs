@@ -31,7 +31,7 @@ namespace K2UI
                 base.Init(ve, bag, cc);
                 K2Compass k2_compas = (K2Compass)ve;
 
-                k2_compas.Value = m_Value.GetValueFromBag(bag, cc);
+                k2_compas.value = m_Value.GetValueFromBag(bag, cc);
                 k2_compas.AngleRange = m_AngleRange.GetValueFromBag(bag, cc);
                 k2_compas.Interactive = m_Interactive.GetValueFromBag(bag, cc);
 
@@ -40,7 +40,7 @@ namespace K2UI
         }
 
         float _value = 0;
-        public float Value
+        public float value
         {
             get { return _value; }
             set
@@ -59,8 +59,8 @@ namespace K2UI
             UpdateContent();
             if (send_event)
             {
-                float old_value = Value;
-                var my_event = ChangeEvent<float>.GetPooled(old_value, Value);
+                float old_value = value;
+                var my_event = ChangeEvent<float>.GetPooled(old_value, value);
                 my_event.target = this;
                 SendEvent(my_event);
             }
@@ -192,7 +192,7 @@ namespace K2UI
                 MouseCaptureController.CaptureMouse(this);
                 m_IsDragging = true;
                 start_mouse_pos = evt.mousePosition;
-                start_value = Value;
+                start_value = value;
             }
         }
 
@@ -219,8 +219,8 @@ namespace K2UI
             height = rect.height;
             pixel_per_deg = width / AngleRange;
 
-            min_deg = (int)Mathf.Ceil(xpos_to_deg(0, Value - 10));
-            max_deg = (int)Mathf.Floor(xpos_to_deg(width + 10, Value));
+            min_deg = (int)Mathf.Ceil(xpos_to_deg(0, value - 10));
+            max_deg = (int)Mathf.Floor(xpos_to_deg(width + 10, value));
         }
 
         float xpos_to_deg(float xpos, float angle)
@@ -254,7 +254,7 @@ namespace K2UI
             int deg = min_deg.FloorTen();
             while (deg <= max_deg)
             {
-                float x_pos = deg_to_xpos(deg, Value);
+                float x_pos = deg_to_xpos(deg, value);
 
                 int drawn_deg = (int)fixDeg(deg);
                 if (drawn_deg % 45 == 0)
@@ -304,7 +304,7 @@ namespace K2UI
             painter.lineCap = LineCap.Round;
             while (deg < max_deg)
             {
-                float x_pos = deg_to_xpos(deg, Value);
+                float x_pos = deg_to_xpos(deg, value);
                 float h;
 
                 float drawn_deg = fixDeg(deg);
@@ -352,6 +352,10 @@ namespace K2UI
             painter.Stroke();
         }
 
-
+        public void Bind(Setting<float> setting)
+        {
+            this.value = setting.V;
+            setting.Bind(this);
+        }
     }
 }

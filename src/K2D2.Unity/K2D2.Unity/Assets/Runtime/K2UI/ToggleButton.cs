@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UIElements;
 using System.Collections.Generic;
+using KTools;
 
 namespace K2UI
 {
@@ -16,14 +17,13 @@ namespace K2UI
             UxmlBoolAttributeDescription m_Bool =
                 new() { name = "value", defaultValue = false };
 
-
             public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc)
             {
                 base.Init(ve, bag, cc);
                 var ate = ve as ToggleButton;
 
                 ate.label = m_String.GetValueFromBag(bag, cc);
-                ate.active = m_Bool.GetValueFromBag(bag, cc);
+                ate.value = m_Bool.GetValueFromBag(bag, cc);
             }
         }
 
@@ -41,15 +41,15 @@ namespace K2UI
                 label_el.text = value;
             }
         }
-        bool _active;
-        public bool active
+        bool _value;
+        public bool value
         {
-            get { return _active; }
+            get { return _value; }
             set
             {
-                var m_event = ChangeEvent<bool>.GetPooled(_active, value);
-                _active = value;
-                EnableInClassList(checkedUssClassName, _active);
+                var m_event = ChangeEvent<bool>.GetPooled(_value, value);
+                _value = value;
+                EnableInClassList(checkedUssClassName, _value);
                 m_event.target = this; 
                 SendEvent(m_event);
             }
@@ -77,7 +77,7 @@ namespace K2UI
         // All three callbacks call this method.
         void ToggleValue()
         {
-            active = !active;
+            value = !value;
         }
 
         // // Because ToggleValue() sets the value property, the BaseField class fires a ChangeEvent. This results in a
@@ -90,6 +90,14 @@ namespace K2UI
         //     //This line of code styles the input element to look enabled or disabled.
 
         // }
+
+
+        public void Bind(Setting<bool> setting)
+        {
+            this.value = setting.V;
+            setting.Bind(this);
+        }
+        
     }
 
 }

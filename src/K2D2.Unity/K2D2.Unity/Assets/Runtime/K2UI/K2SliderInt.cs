@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UIElements;
 using System.Collections.Generic;
-using System.Data;
+using KTools;
 
 namespace K2UI
 {
@@ -232,6 +232,20 @@ namespace K2UI
                 else
                     max_element.text = "";
             }
+        }
+
+        public void Bind(Setting<int> setting)
+        {
+            this.value = setting.V;
+            setting.Bind(this);
+        }
+
+        public void Bind(ClampSetting<int> setting)
+        {
+            this.Min = setting.min;
+            this.Max = setting.max;
+            this.value = setting.V;          
+            setting.Bind(this);
         }
     }
 

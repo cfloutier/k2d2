@@ -244,6 +244,20 @@ namespace K2UI
                     max_element.text = "";
             }
         }
+
+        public void Bind(Setting<float> setting)
+        {
+            this.value = setting.V;
+            setting.Bind(this);
+        }
+
+        public void Bind(ClampSetting<float> setting)
+        {
+            this.Min = setting.min;
+            this.Max = setting.max;
+            this.value = setting.V;          
+            setting.Bind(this);
+        }
     }
   
 }

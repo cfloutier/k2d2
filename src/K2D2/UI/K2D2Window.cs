@@ -105,5 +105,4 @@ public class K2D2Window : MonoBehaviour
 
         settings_button.RegisterCallback<ChangeEvent<bool>>( evt => StagingPilot.Instance.Enabled = evt.newValue );
     }
-
 }

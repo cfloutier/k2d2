@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UIElements;
+using KTools;
 
 namespace K2UI
 {
@@ -99,6 +100,12 @@ namespace K2UI
 
             //This line of code styles the input element to look enabled or disabled.
             m_Input.EnableInClassList(inputCheckedUssClassName, newValue);
+        }
+
+        public void Bind(Setting<bool> setting)
+        {
+            this.value = setting.V;
+            setting.Bind(this);
         }
     }
 }

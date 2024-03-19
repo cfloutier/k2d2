@@ -119,7 +119,7 @@ namespace KTools
 
     public class ClampSetting<T> : Setting<T> where T : System.IComparable<T>
     {
-        T min, max;
+        public T min, max;
 
         public ClampSetting(string path, T default_value, T min, T max): base(path, default_value)
         {

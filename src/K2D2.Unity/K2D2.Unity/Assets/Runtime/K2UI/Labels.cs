@@ -9,7 +9,6 @@ namespace K2UI
     {
         public static new readonly string ussClassName = "console";
 
-
         public new class UxmlFactory : UxmlFactory<Console, UxmlTraits> { }
 
         public new class UxmlTraits : TextElement.UxmlTraits { }
@@ -68,11 +67,9 @@ namespace K2UI
             }
         }
 
-
         public StatusLine() : base()
         {
             AddToClassList(uss_name);
-
         }
     }
 
