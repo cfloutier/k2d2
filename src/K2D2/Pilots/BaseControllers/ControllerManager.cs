@@ -4,18 +4,18 @@ using K2D2.Controller;
 
 namespace K2D2.Controller
 {
-    public class ControllerManager
+    public class PilotsManager
     {
-        public List<BaseController> controllers = new List<BaseController>();
+        public List<Pilot> pilots = new List<Pilot>();
 
-        public void AddController(BaseController controller)
+        public void AddPilot(Pilot controller)
         {
-            controllers.Add(controller);
+            pilots.Add(controller);
         }
 
         public void onReset()
         {
-            foreach (var controller in controllers)
+            foreach (var controller in pilots)
             {
                 controller.onReset();
             }
@@ -27,7 +27,7 @@ namespace K2D2.Controller
         /// </summary>
         public void UpdateControllers()
         {
-            foreach (var controller in controllers)
+            foreach (var controller in pilots)
             {
                 controller.Update();
             }
@@ -38,7 +38,7 @@ namespace K2D2.Controller
         /// </summary>
         public void LateUpdateControllers()
         {
-            foreach (var controller in controllers)
+            foreach (var controller in pilots)
             {
                 controller.LateUpdate();
             }
@@ -49,7 +49,7 @@ namespace K2D2.Controller
         /// </summary>
         public void FixedUpdateControllers()
         {
-            foreach (var controller in controllers)
+            foreach (var controller in pilots)
             {
                 controller.FixedUpdate();
             }

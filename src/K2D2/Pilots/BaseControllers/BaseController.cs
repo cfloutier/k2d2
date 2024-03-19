@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using K2UI.Tabs;
+
 using KSP.Game;
 using KSP.Messages;
 
@@ -9,7 +9,7 @@ using KSP.Messages;
 
 namespace K2D2.Controller
 {
-    public class BaseController : K2Panel
+    public class BaseController 
     {
         //public List<KSP.Game.GameState> applicableStates = new List<KSP.Game.GameState>();
 
@@ -46,13 +46,18 @@ namespace K2D2.Controller
             }
         }
 
+        bool _is_running = false;
+
+        public virtual bool isRunning
+        {
+            get {return _is_running;}
+            set { _is_running = value; }
+        }
+
         public bool need_update
         {
             get { return ui_visible || isRunning; }
         }
-
-        
-    
 
         public virtual bool isActive
         {

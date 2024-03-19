@@ -76,7 +76,7 @@ public class K2D2Plugin : BaseSpaceWarpPlugin
         RegisterMessages();
 
         // create staging 
-        new StagingController();
+        new StagingPilot();
 
         // Load the UI from the asset bundle
         var myFirstWindowUxml = AssetManager.GetAsset<VisualTreeAsset>(
@@ -113,7 +113,7 @@ public class K2D2Plugin : BaseSpaceWarpPlugin
         // Create the window
         var k2d2_window = Window.Create(windowOptions, myFirstWindowUxml);
         // Add a controller for the UI to the window's game object
-        var k2d2_window_controller = k2d2_window.gameObject.AddComponent<MyFirstWindowController>();
+        var k2d2_window_controller = k2d2_window.gameObject.AddComponent<K2D2Window>();
 
         // Register Flight AppBar button
         Appbar.RegisterAppButton(
@@ -210,19 +210,19 @@ public class K2D2Plugin : BaseSpaceWarpPlugin
     public static void ResetControllers()
     {
         if (!loaded) return;
-        StagingController.Instance.onReset();
-        Instance.controllerManager.onReset(); 
+        StagingPilot.Instance.onReset();
+        Instance.pilots_manager.onReset(); 
     }
 
     public bool settings_visible = false;
 
-    public ControllerManager controllerManager = new ControllerManager();
+    public PilotsManager pilots_manager = new PilotsManager();
 
     void FixedUpdate()
     {
         if (ValidScene())
         {
-            controllerManager.FixedUpdateControllers();
+            pilots_manager.FixedUpdateControllers();
         }
     }
 
@@ -230,7 +230,7 @@ public class K2D2Plugin : BaseSpaceWarpPlugin
     {
         if (ValidScene())
         {
-            controllerManager.LateUpdateControllers();
+            pilots_manager.LateUpdateControllers();
         }
     }
 

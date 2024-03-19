@@ -1,0 +1,566 @@
+using BepInEx.Logging;
+using K2D2.KSPService;
+using KSP.Game;
+using KSP.Sim;
+using KSP.Sim.impl;
+using KTools;
+// using KTools.UI;
+using UnityEngine;
+
+namespace K2D2.Controller;
+
+public class LandingSettings
+{
+    public Setting<bool> verbose_infos = new("land.verbose_infos", true);
+    public Setting<bool> auto_warp = new("land.auto_warp", true);
+    public ClampSetting<float> burn_before = new("land.burnBefore", 0, 0, 10);
+    public Setting<int> rotation_warp_duration = new("land.rotation_warp_duration", 60);
+    // Warp with check of rotation
+    public Setting<int> max_rotation = new("land.max_rotation", 30);
+
+
+    public float brake_speed
+    {
+        get => 50;
+        // get => Settings.s_settings_file.GetFloat("land.brake_speed", 20);
+        // set { Settings.s_settings_file.SetFloat("land.brake_speed", value); }
+    }
+
+    public float pause_time
+    {
+        get => 1;
+        // get => Settings.s_settings_file.GetFloat("land.brake_speed", 20);
+        // set { Settings.s_settings_file.SetFloat("land.brake_speed", value); }
+    }
+
+    public Setting<float> start_touchdown_altitude = new("land.touch_down_altitude", 1500);
+
+    public Setting<float> touch_down_ratio = new("land.touch_down_ratio", 0.5f);
+
+    public ClampSetting<float> touch_down_speed = new("land.touch_down_speed", 2.5f,  0, 100);
+
+
+    // public FoldOut accordion = new FoldOut();
+
+    // void LandingUI()
+    // {
+    //     verbose_infos = UI_Tools.Toggle(verbose_infos, "Verbose");
+    //     burn_before = UI_Tools.FloatSliderTxt("Burn Before", burn_before, 0, 10, "s", "Burn before critical time (chicken mode)");
+    // }
+
+    // void WarpUI()
+    // {
+    //     auto_warp = UI_Tools.Toggle(auto_warp, "Auto Time-Warp");
+
+    //     if (auto_warp)
+    //     {
+    //         WarpToSettings.onGUI();
+
+    //         if (K2D2Settings.debug_mode)
+    //         {
+    //             UI_Tools.Title("// Rotation Warp");
+    //             rotation_warp_duration = UI_Fields.IntFieldLine("rotation_warp_duration", "Rot. Warp Duration", rotation_warp_duration, 0, int.MaxValue,
+    //                                                             "During Rotation Warp, Attitude is checked");
+    //             max_rotation = UI_Tools.FloatSliderTxt("Safe Warp Rotation", max_rotation, 0, 90, "°", "Max angle (stop warp when reached)");
+    //         }
+    //         else
+    //         {
+    //             rotation_warp_duration = 0;
+    //         }
+
+    //     }
+    // }
+
+    // void TouchDown_UI()
+    // {
+    //     // UI_Tools.Title("// Touch Down");
+
+    //     GUILayout.Label("Start TouchDown Altitude : " + StrTool.DistanceToString(start_touchdown_altitude), KBaseStyle.slider_text);
+    //     start_touchdown_altitude = UI_Tools.FloatSlider(start_touchdown_altitude, 100, 5000, "Altitude for starting Touch-Down Phase");
+
+    //     touch_down_ratio = UI_Tools.FloatSliderTxt("Altitude/speed ratio", touch_down_ratio, 0.5f, 3, "", "Speed is based on altitude");
+    //     UI_Tools.Right_Left_Text("Safe", "Danger");
+
+    //     touch_down_speed = UI_Tools.FloatSliderTxt("Touch-Down speed", touch_down_speed, 0.1f, 10, "m/s", "Speed when touching ground");
+
+    // }
+
+    // public void settings_UI()
+    // {
+    //     if (accordion.Count == 0)
+    //     {
+    //         accordion.addChapter("Landing Settings", LandingUI);
+    //         accordion.addChapter("Warp", WarpUI);
+    //         accordion.addChapter("Touch Down", TouchDown_UI);
+    //         accordion.singleChapter = true;
+    //     }
+
+    //     accordion.OnGUI();
+    // }
+
+    public float compute_limit_speed(float altitude)
+    {
+        // just to have understandable settings (not 0.1)
+        float div = 10;
+        return altitude * touch_down_ratio.V / div + touch_down_speed.V;
+    }
+}
+
+public class LandingPilot : Pilot
+{
+    public ManualLogSource logger = BepInEx.Logging.Logger.CreateLogSource("K2D2.LandingController");
+
+    LandingSettings land_settings = new LandingSettings();
+
+    public static LandingPilot Instance { get; set; }
+
+    public KSPVessel current_vessel;
+
+    public BurndV burn_dV = new BurndV();
+
+    public WarpTo warp_to = new WarpTo();
+
+    public TouchDown brake = new TouchDown();
+
+    public SingleExecuteController current_executor = new SingleExecuteController();
+
+    public LandingPilot()
+    {
+        Instance = this;
+        debug_mode_only = false;
+        name = "Land";
+        K2D2PilotsMgr.Instance.RegisterPilot("Land", this);
+
+        sub_contollers.Add(burn_dV);
+        sub_contollers.Add(current_executor);
+
+        // logger.LogMessage("LandingController !");
+        current_vessel = K2D2Plugin.Instance.current_vessel;
+    }
+
+
+    public enum Mode
+    {
+        Off,
+        Pause,
+        QuickWarp,
+        RotationWarp,
+        Waiting,
+        Brake,
+        TouchDown
+    }
+
+    public Mode mode = Mode.Off;
+
+
+    double end_pause_Ut;
+
+    public void setMode(Mode mode)
+    {
+        if (mode == this.mode)
+            return;
+
+        logger.LogInfo("setMode " + mode);
+
+        this.mode = mode;
+
+        if (mode == Mode.Off)
+        {
+            TimeWarpTools.SetRateIndex(0, false);
+            current_executor.setController(null);
+            return;
+        }
+        switch (mode)
+        {
+            case Mode.Off:
+                current_executor.setController(null);
+                break;
+            case Mode.Pause:
+                end_pause_Ut = GeneralTools.Current_UT + land_settings.pause_time;
+                current_vessel.SetThrottle(0);
+                break;
+            case Mode.QuickWarp:
+                current_vessel.SetThrottle(0);
+                if (!land_settings.auto_warp.V)
+                    setMode(Mode.Waiting);
+                else
+                {
+                    current_executor.setController(warp_to);
+                    warp_to.Start_Retrograde(startSafeWarp_UT);
+                    warp_to.max_warp_index = 6;
+                }
+                break;
+            case Mode.RotationWarp:
+                current_vessel.SetThrottle(0);
+                if (!land_settings.auto_warp.V)
+                    setMode(Mode.Waiting);
+                else
+                {
+                    current_executor.setController(warp_to);
+                    warp_to.Start_Retrograde(startBurn_UT, true);
+                    warp_to.max_warp_index = 2;
+                }
+                break;
+            case Mode.Waiting:
+                current_vessel.SetThrottle(0);
+                current_executor.setController(null);
+                break;
+            case Mode.Brake:
+            case Mode.TouchDown:
+                current_executor.setController(brake);
+                break;
+        }
+
+        logger.LogInfo("current_pilot " + mode);
+    }
+
+    public void nextMode()
+    {
+        // start
+        if (mode == Mode.Off)
+        {
+            isRunning = true;
+            return;
+        }
+
+        var next = this.mode + 1;
+        setMode(next);
+    }
+
+    bool _active = false;
+    public override bool isRunning
+    {
+        get { return _active; }
+        set
+        {
+            if (value == _active)
+                return;
+
+            if (!value)
+            {
+                // stop
+                if (current_vessel != null)
+                    current_vessel.SetThrottle(0);
+
+                setMode(Mode.Off);
+                _active = false;
+            }
+            else
+            {
+                // Start total burn counter
+                burn_dV.reset();
+
+                // reset controller to desactivate other controllers.
+                K2D2Plugin.ResetControllers();
+
+                _active = true;
+                setMode(Mode.QuickWarp);
+            }
+        }
+    }
+
+    public override void onReset()
+    {
+        isRunning = false;
+    }
+
+    float current_falling_speed = 0;
+
+    bool collision_detected = false;
+
+    double adjusted_collision_UT = 0;
+    double startBurn_UT = 0;
+    double startSafeWarp_UT = 0;
+    double speed_collision;
+    double burn_duration;
+
+    public void computeValues()
+    {
+        collision_detected = false;
+        var current_vessel = K2D2Plugin.Instance.current_vessel;
+        if (current_vessel == null)
+        {
+            // UI_Tools.Console("no vessel");
+            return;
+        }
+
+        PatchedConicsOrbit orbit = current_vessel.VesselComponent.Orbit;
+
+        collision_detected = compute_real_collision();
+        speed_collision = orbit.GetOrbitalVelocityAtUTZup(adjusted_collision_UT).magnitude;
+        burn_duration = (speed_collision / burn_dV.full_dv);
+
+        compute_startBurn();
+    }
+
+    public void compute_startBurn()
+    {
+        startBurn_UT = adjusted_collision_UT - burn_duration - land_settings.burn_before.V;
+        startSafeWarp_UT = startBurn_UT - land_settings.rotation_warp_duration.V;
+    }
+
+    public bool compute_real_collision()
+    {
+        // start in 2 minutes
+        double start_time = GeneralTools.Game.UniverseModel.UniverseTime + 2 * 60;
+        bool collide = false;
+
+        PatchedConicsOrbit orbit = current_vessel.VesselComponent.Orbit;
+        var body = orbit.referenceBody;
+        double current_time_ut = GeneralTools.Game.UniverseModel.UniverseTime;
+        double deltaTime = 60; // seconds in the future
+        int max_occurrences = 100;
+        double time = start_time;
+        double terrainAltitude;
+
+        float radius = current_vessel.VesselComponent.SimulationObject.objVesselBehavior.BoundingSphere.radius;
+
+        for (int i = 0; i < max_occurrences; i++)
+        {
+            Vector3d pos;
+            Vector ve;
+
+            orbit.GetStateVectorsFromUT(time, out pos, out ve);
+
+            Position ps = new Position(ve.coordinateSystem, pos);
+            double sceneryOffset;
+
+            body.GetAltitudeFromTerrain(ps, out terrainAltitude, out sceneryOffset);
+            // terrainAltitude -= radius;
+
+            if (terrainAltitude < 0)
+            {
+                collide = true;
+                if (deltaTime > 0)
+                {
+                    // dychotomy
+                    deltaTime = -deltaTime / 2;
+                }
+                time += deltaTime;
+            }
+            else
+            {
+                if (deltaTime < 0)
+                {
+                    // dychotomy
+                    deltaTime = -deltaTime / 2;
+                }
+                time += deltaTime;
+            }
+
+            if (Math.Abs(terrainAltitude) < 1)
+            {
+                break;
+            }
+        }
+
+        adjusted_collision_UT = time;
+        return collide;
+    }
+    Vector SurfaceVelocity;
+    public override void Update()
+    {
+        if (!ui_visible && !isRunning) return;
+        if (current_vessel == null || current_vessel.VesselVehicle == null)
+            return;
+
+        altitude = (float)current_vessel.GetApproxAltitude();
+
+        SurfaceVelocity = current_vessel.VesselVehicle.SurfaceVelocity;
+        SurfaceVelocity.Reframe(current_vessel.VesselVehicle.Up.coordinateSystem);
+        current_falling_speed = (float)-SurfaceVelocity.vector.y;
+
+        // detect collision and compute time to burn
+        computeValues();
+
+        if (!collision_detected)
+        {
+            // after patch ksp detect with altitude and remove the collision point
+            if (isRunning)
+            {
+                setMode(Mode.TouchDown);
+            }
+            else
+            {
+                // no more collision
+                isRunning = false;
+            }
+        }
+
+        if (!isRunning)
+            return;
+
+        // landing detection....
+        if (altitude < 5 && current_falling_speed < 1)
+        {
+            //current_vessel.SetThrottle(0);
+            isRunning = false;
+            return;
+        }
+        if (mode == Mode.Pause)
+        {
+            if (GeneralTools.Current_UT > end_pause_Ut)
+            {
+                setMode(Mode.QuickWarp);
+            }
+            return;
+        }
+
+        if (mode == Mode.QuickWarp)
+        {
+            warp_to.UT = startSafeWarp_UT;
+        }
+        else if (mode == Mode.RotationWarp)
+        {
+            warp_to.UT = startBurn_UT;
+        }
+        else if (mode == Mode.Waiting)
+        {
+            var dt = startBurn_UT - GeneralTools.Game.UniverseModel.UniverseTime;
+            if (dt <= 0)
+            {
+                nextMode();
+                return;
+            }
+        }
+        else if (mode == Mode.Brake)
+        {
+            brake.max_speed = 0;
+            brake.gravity_compensation = true;
+            if (current_falling_speed < land_settings.brake_speed)
+            {
+                // we reached the speed to stop brake
+                // check next phase
+                if (altitude < land_settings.start_touchdown_altitude.V)
+                {
+                    setMode(Mode.TouchDown);
+                }
+                else
+                {
+                    // too high altitude retry.... very worng burn time ......
+                    setMode(Mode.Pause);
+                }
+                return;
+            }
+        }
+        else if (mode == Mode.TouchDown)
+        {
+            TimeWarpTools.SetRateIndex(0, false);
+            brake.max_speed = land_settings.compute_limit_speed(altitude);
+            brake.gravity_compensation = true;
+        }
+
+        // call the sub controllers
+        base.Update();
+
+        if (current_executor.finished)
+        {
+            // auto next
+            nextMode();
+        }
+    }
+
+    public float altitude;
+
+    // public void context_infos()
+    // {
+    //     // UI_Tools.Console($"Altitude : {StrTool.DistanceToString(altitude)}");
+    //     UI_Tools.Console($"Current Fall Speed : {current_falling_speed:n2} m/s");
+
+    //     if (collision_detected)
+    //     {
+    //         UI_Tools.Title("Collision detected !");
+
+    //         if (land_settings.verbose_infos)
+    //         {
+    //             UI_Tools.Label($"Collision in {StrTool.DurationToString(adjusted_collision_UT - GeneralTools.Game.UniverseModel.UniverseTime)}");
+    //             UI_Tools.Label($"speed collision {speed_collision:n2} m/s");
+    //             UI_Tools.Label($"start_burn in <b>{StrTool.DurationToString(startBurn_UT - GeneralTools.Game.UniverseModel.UniverseTime)}</b>");
+    //             UI_Tools.Label($"burn_duration {burn_duration:n2} s");
+    //         }
+    //     }
+    //     else
+    //     {
+    //         UI_Tools.Title("No Collision detected");
+    //     }
+
+    //     // UI_Tools.Console($"current_V_speed : { StrTool.DistanceToString(altitude)}");
+
+
+
+    //     // if (land_settings.verbose_infos)
+    //     //     UI_Tools.Console($"Altitude : { StrTool.DistanceToString(altitude)}");
+    // }
+
+    // public override void onGUI()
+    // {
+    //     if (K2D2_Plugin.Instance.settings_visible)
+    //     {
+    //         K2D2Settings.onGUI();
+    //         land_settings.settings_UI();
+    //         return;
+    //     }
+
+    //     UI_Tools.Title("Landing Pilot");
+    //     context_infos();
+
+    //     if (!collision_detected)
+    //         return;
+
+    //     var state = GeneralTools.Game.GlobalGameState.GetState();
+    //     if (state != GameState.FlightView)
+    //     {
+    //         UI_Tools.Console("Landing is only available in Fligh View");
+    //         return;
+    //     }
+    //     GUILayout.BeginHorizontal();
+
+    //     isRunning = UI_Tools.BigToggleButton(isRunning, "Brake", "Stop");
+
+    //     if (mode != Mode.TouchDown)
+    //         if (UI_Tools.BigButton("Touch-Down !"))
+    //         {
+    //             isRunning = true;
+    //             setMode(Mode.TouchDown);
+    //         }
+
+    //     GUILayout.EndHorizontal();
+
+    //     if (isRunning)
+    //     {
+    //         switch (mode)
+    //         {
+    //             default:
+    //             case Mode.Off: break;
+    //             case Mode.Pause:
+    //                 UI_Tools.Warning("Pause");
+    //                 break;
+    //             case Mode.QuickWarp:
+    //                 UI_Tools.OK("Quick Warp");
+    //                 break;
+    //             case Mode.RotationWarp:
+    //                 UI_Tools.Warning("Rotating Warp");
+    //                 break;
+    //             case Mode.Waiting:
+    //                 UI_Tools.OK($"Waiting : {StrTool.DurationToString(startBurn_UT - GeneralTools.Game.UniverseModel.UniverseTime)}");
+    //                 break;
+    //             case Mode.Brake:
+    //                 UI_Tools.Warning($"Brake !");
+    //                 break;
+    //             case Mode.TouchDown:
+    //                 UI_Tools.Warning($"Touch Down...");
+    //                 break;
+    //         }
+
+    //         if (current_executor != null && !string.IsNullOrEmpty(current_executor.status_line))
+    //             UI_Tools.Console(current_executor.status_line);
+    //     }
+
+    //     UI_Tools.Console($"Altitude : {StrTool.DistanceToString(altitude)}");
+
+    //     //    UI_Tools.Console("SurfaceVelocity" + StrTool.VectorToString(SurfaceVelocity.vector));
+
+    //     if (isRunning && burn_dV.burned_dV > 0)
+    //         UI_Tools.Console($"Burned : {burn_dV.burned_dV:n1} m/s");
+    // }
+}
