@@ -220,31 +220,31 @@ public class TurnTo : ExecuteController
         return true;
     }
 
-    // public override void onGUI()
-    // {
-    //     UI_Tools.Warning("Check Attitude");
-    //     UI_Tools.Console(status_line);
+    public override void updateUI(FullStatus st)
+    {
+        st.Status("Check Attitude", K2UI.StatusLine.Level.Warning);
+        st.Console(status_line);
 
-    //     // UI_Tools.Console($"sas.sas_response v {Tools.print_vector(sas_response)}");
+        // UI_Tools.Console($"sas.sas_response v {Tools.print_vector(sas_response)}");
 
-    //     if (K2D2Settings.debug_mode)
-    //     {
-    //         var telemetry = SASTool.getTelemetry();
-    //         if (!telemetry.HasManeuver)
-    //             return;
+        if (K2D2Settings.debug_mode.V)
+        {
+            var telemetry = SASTool.getTelemetry();
+            if (!telemetry.HasManeuver)
+                return;
 
-    //         var autopilot = current_vessel.Autopilot;
+            var autopilot = current_vessel.Autopilot;
 
-    //         // var angulor_vel_coord = VesselInfos.GetAngularSpeed().coordinateSystem;
-    //         var angularVelocity = current_vessel.GetAngularSpeed().vector;
+            // var angulor_vel_coord = VesselInfos.GetAngularSpeed().coordinateSystem;
+            var angularVelocity = current_vessel.GetAngularSpeed().vector;
 
-    //         // UI_Tools.Console($"angulor_vel_coord {angulor_vel_coord}");
-    //         Vector maneuver_dir = telemetry.ManeuverDirection;
-    //         // UI_Tools.Console($"maneuver_dir ref {maneuver_dir.coordinateSystem}");
-    //         // UI_Tools.Console($"maneuver_dir {StrTool.VectorToString(maneuver_dir.vector)}");
-    //         UI_Tools.Console($"angularVelocity {StrTool.Vector3ToString(angularVelocity)}");
-    //         // UI_Tools.Console($"angularVelocity {StrTool.VectorToString(angularVelocity)}");
-    //         UI_Tools.Console($"autopilot {autopilot.AutopilotMode}");
-    //     }
-    // }
+            // UI_Tools.Console($"angulor_vel_coord {angulor_vel_coord}");
+            Vector maneuver_dir = telemetry.ManeuverDirection;
+            // UI_Tools.Console($"maneuver_dir ref {maneuver_dir.coordinateSystem}");
+            // UI_Tools.Console($"maneuver_dir {StrTool.VectorToString(maneuver_dir.vector)}");
+            st.Console($"angularVelocity {StrTool.Vector3ToString(angularVelocity)}");
+            // UI_Tools.Console($"angularVelocity {StrTool.VectorToString(angularVelocity)}");
+            st.Console($"autopilot {autopilot.AutopilotMode}");
+        }
+    }
 }

@@ -9,7 +9,7 @@ namespace K2UI
     /// <summary>
     /// Extensions usied for VisualElement
     /// </summary>
-    public static class ExtensionMethods
+    public static class VisualElementExtension
     {
         public static void Clean(this VisualElement el)
         {
@@ -31,6 +31,11 @@ namespace K2UI
         {
             element.AddManipulator(new DragManipulator());
             return element;
+        }
+
+        public static void Show(this VisualElement element, bool show)
+        {
+            element.style.display = show ? DisplayStyle.Flex : DisplayStyle.None;
         }
     }
 }

@@ -1,3 +1,6 @@
+using K2UI;
+using UnityEngine.UIElements;
+
 namespace K2D2.Controller
 {
 
@@ -33,14 +36,11 @@ namespace K2D2.Controller
             }
         }
 
-        public override void onGUI() { if (sub_controler != null) sub_controler.onGUI(); }
+        public override void updateUI(FullStatus st) { if (sub_controler != null) sub_controler.updateUI(st); }
         public override void Update() { if (sub_controler != null) sub_controler.Update(); }
         public override void LateUpdate() { if (sub_controler != null) sub_controler.LateUpdate(); }
         public override void FixedUpdate() { if (sub_controler != null) sub_controler.FixedUpdate(); }
-
     }
-
-
 
     /// base class for all Execute controller
     /// each Execute controller have a specific task like Auto warp or Auto Burn to achieve.

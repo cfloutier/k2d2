@@ -32,6 +32,6 @@ public class TestCompas : MonoBehaviour
     private void onValue(ChangeEvent<float> evt)
     {
         el_Label.text = $"Value : {evt.newValue:n2}°";
-        el_compas_noint.Value = evt.newValue;
+        el_compas_noint.value = evt.newValue;
     }
 }

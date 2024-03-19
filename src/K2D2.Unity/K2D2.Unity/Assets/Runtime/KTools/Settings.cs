@@ -109,6 +109,12 @@ namespace KTools
 
         public event onChanged listeners;
 
+        public void listen(onChanged listener)
+        {
+            listeners+= listener;
+            listener(V);
+        }
+
         public void Bind(VisualElement element)
         {
             element.RegisterCallback<ChangeEvent<T>>(evt => V = evt.newValue);

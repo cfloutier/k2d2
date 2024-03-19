@@ -24,7 +24,7 @@ namespace K2D2.Controller
         }
 
         // MUST be build in constructor
-        K2Panel _panel = null;
+        protected K2Panel _panel = null;
         
        public virtual K2Panel panel
        {

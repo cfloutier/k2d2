@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using K2UI;
 using KSP.Game;
 using KSP.Messages;
+using UnityEngine.UIElements;
 
 // using KTools.UI;
 
@@ -80,9 +81,9 @@ namespace K2D2.Controller
             // onReset is called each time scene become Invalid, or when a controller need exclusivity
         }
 
-        public virtual void onGUI()
+        public virtual void updateUI( FullStatus st )
         {
-            // On GUI is used to draw UI in needed, using GUILayout
+            // called to update a simple Controler UI
         }
 
         public virtual void Update()

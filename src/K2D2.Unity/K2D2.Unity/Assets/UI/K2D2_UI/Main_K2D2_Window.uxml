@@ -36,8 +36,9 @@
                     </ui:VisualElement>
                     <ui:Label tabindex="-1" text="Pilot" display-tooltip-when-elided="true" name="pilot_console" class="console" />
                     <K2UI.StatusLine tabindex="-1" text="Status Pilot" name="status_pilot" />
+                    <K2UI.K2ProgressBar name="progress" set-label-to-value="true" value="70.27" max="100" label=" " postfix=" %" />
                 </ui:VisualElement>
-                <ui:VisualElement name="settings" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); display: flex;">
+                <ui:VisualElement name="settings" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); display: none;">
                     <K2UI.ExFoldoutGroup opened-index="3">
                         <ui:Foldout text="Execute" value="true" name="Execute">
                             <K2UI.SlideToggle label="Show Nodes Infos " name="show_node_infos" />

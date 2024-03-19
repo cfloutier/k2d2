@@ -1,11 +1,15 @@
 
 using BepInEx.Logging;
 using K2D2.KSPService;
+using K2UI;
 using KSP.Sim;
 using KSP.Sim.Maneuver;
 using KTools;
+using UitkForKsp2.API;
+
 // using KTools.UI;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace K2D2.Controller;
 
@@ -206,36 +210,39 @@ public class BurnManeuver : ExecuteController
         needed_throttle = remaining_full_burn_time * BurnManeuverSettings.burn_adjust.V;
     }
 
-    // public override void onGUI()
-    // {
-    //     switch (mode)
-    //     {
-    //         case Mode.Waiting:
-    //             UI_Tools.OK("Waiting !");
-    //             UI_Tools.Console(status_line);
-    //             break;
-    //         case Mode.Burning:
-    //             UI_Tools.Warning("Burning !");
-    //             UI_Tools.ProgressBar(remaining_dv, 0, maneuver.BurnRequiredDV);
-    //             UI_Tools.Console(StrTool.DurationToString(remaining_full_burn_time));
-    //             break;
-    //     }
+    public override void updateUI(FullStatus st)
+    {
+        switch (mode)
+        {
+            case Mode.Waiting:
+                st.Status("Waiting !", StatusLine.Level.Normal);
+                st.Console(status_line);
+                break;
+            case Mode.Burning:
+                st.Status("Burning !", StatusLine.Level.Warning);
+                st.Console(status_line);
+                if (maneuver.BurnRequiredDV >= 0)
+                    st.Progess(remaining_dv / maneuver.BurnRequiredDV);
+                    
+                st.Console(StrTool.DurationToString(remaining_full_burn_time));
+                break;
+        }
 
-    //     if (K2D2Settings.debug_mode)
-    //     {
-    //         if (maneuver == null) return;
+        if (K2D2Settings.debug_mode.V)
+        {
+            if (maneuver == null) return;
+            st.Console("-----------------");
+            //st.Console($"start_dt {Tools.remainingStartTime(maneuver)}");
+            //st.Console($"end_dt {Tools.remainingEndTime(maneuver)}");
 
-    //         //UI_Tools.Console($"start_dt {Tools.remainingStartTime(maneuver)}");
-    //         //UI_Tools.Console($"end_dt {Tools.remainingEndTime(maneuver)}");
+            st.Console($"BurnRequiredDV {maneuver.BurnRequiredDV}");
+            st.Console($"angle {angle}");
+            st.Console($"sign {sign}");
+            st.Console($"remaining_dv {remaining_dv}");
+            st.Console($"remaining_full_burn_time {remaining_full_burn_time}");
+            st.Console($"needed_throttle {needed_throttle}");
 
-    //         UI_Tools.Console($"BurnRequiredDV {maneuver.BurnRequiredDV}");
-    //         UI_Tools.Console($"angle {angle}");
-    //         UI_Tools.Console($"sign {sign}");
-    //         UI_Tools.Console($"remaining_dv {remaining_dv}");
-    //         UI_Tools.Console($"remaining_full_burn_time {remaining_full_burn_time}");
-    //         UI_Tools.Console($"needed_throttle {needed_throttle}");
-
-    //         //burn_dV.onGUI();
-    //     }
-    // }
+            //burn_dV.onGUI();
+        }
+    }
 }

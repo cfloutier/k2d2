@@ -26,7 +26,6 @@ namespace K2D2.UI.Tests
 
         IntegerField int_field;
 
-
         public override bool onInit()
         {
             bar = panel.Q<K2ProgressBar>("MyBar");
@@ -94,7 +93,7 @@ namespace K2D2.UI.Tests
         {
             bar.Value = my_value;
             slider.value = my_value;
-            compas.Value = my_value;
+            compas.value = my_value;
             float_field.value = my_value;
             int_field.value = (int)my_value;
         }

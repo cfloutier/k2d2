@@ -34,7 +34,7 @@ namespace K2UI
                 var ate = ve as K2ProgressBar;
 
                 ate.Label = m_Label.GetValueFromBag(bag, cc);
-                ate.Value = m_Value.GetValueFromBag(bag, cc);
+                ate.value = m_Value.GetValueFromBag(bag, cc);
                 ate.Min = m_Min.GetValueFromBag(bag, cc);
                 ate.Max = m_Max.GetValueFromBag(bag, cc);
 
@@ -55,7 +55,7 @@ namespace K2UI
         }
 
         float _value;
-        public float Value
+        public float value
         {
             get { return _value; }
             set { _value = value; updateRender(); }
@@ -94,13 +94,13 @@ namespace K2UI
         {
             if (el_progress != null)
             {
-                var len = new StyleLength(Length.Percent(Mathf.InverseLerp(Min, Max, Value) * 100));
+                var len = new StyleLength(Length.Percent(Mathf.InverseLerp(Min, Max, value) * 100));
                 el_progress.style.width = len;
             }
             if (el_label != null)
             {
                 if (LabelValue)
-                    el_label.text = Label + $"{Value:n2}{Postfix}";
+                    el_label.text = Label + $"{value:n2}{Postfix}";
                 else
                    el_label.text = Label;
             }

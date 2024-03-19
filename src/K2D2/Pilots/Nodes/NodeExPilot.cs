@@ -1,5 +1,6 @@
 using BepInEx.Logging;
 using K2D2.KSPService;
+using K2UI;
 using KSP.Messages;
 using KSP.Sim;
 using KSP.Sim.Maneuver;
@@ -20,7 +21,7 @@ public class NodeExPilot : Pilot
     public ManeuverNodeData next_maneuver_node = null;
     ManeuverNodeData execute_node = null;
 
-    NodeExecuteSettings execute_settings = new NodeExecuteSettings();
+    public NodeExecuteSettings settings = new NodeExecuteSettings();
 
     // Sub Pilots
     TurnTo turn;
@@ -32,10 +33,15 @@ public class NodeExPilot : Pilot
 
     public SingleExecuteController current_executor = new SingleExecuteController();
 
+    NodeExUI ui;
+
     public NodeExPilot()
     {
         Instance = this;
         debug_mode_only = false;
+
+        _panel = ui = new NodeExUI(this);
+
         name = "Node";
         K2D2PilotsMgr.Instance.RegisterPilot("Node", this);
 
@@ -100,7 +106,7 @@ public class NodeExPilot : Pilot
                 turn.StartManeuver(execute_node);
                 break;
             case Mode.Warp:
-                if (!execute_settings.auto_warp.V)
+                if (!settings.auto_warp.V)
                 {
                     setMode(Mode.Burn);
                     return;
@@ -141,13 +147,51 @@ public class NodeExPilot : Pilot
         if (mode == Mode.Burn)
         {
             Stop();
-            if (execute_settings.pause_on_end.V)
+            if (settings.pause_on_end.V)
                 TimeWarpTools.SetIsPaused(true);
             return;
         }
 
         var next = this.mode + 1;
         setMode(next);
+    }
+
+
+    public void UpdateUI()
+    {
+        ui.status_bar.Reset();
+
+        var st = ui.status_bar;
+
+        
+        if (!isRunning)
+        {
+            if (next_maneuver_node == null)
+            {
+                st.Status("No Maneuver node.", StatusLine.Level.Normal);
+                return;
+            }
+
+            if (!valid_maneuver)
+            {
+                st.Status("No Maneuver node.", StatusLine.Level.Warning);
+                st.Console("Actually a KSP2 bug when loading scenaries. Please open map to fix it");               
+                return;
+            }
+
+            if (settings.show_node_infos.V)
+            {
+                node_infos();
+            }
+
+            if (!isRunning && !canStart())
+            {
+                st.Status("No valid Maneuver node found", StatusLine.Level.Warning);
+                return;
+            }
+        } 
+        else
+            current_executor.updateUI(st);
     }
 
     // public override void onGUI()
@@ -199,6 +243,24 @@ public class NodeExPilot : Pilot
     //     GUILayout.EndHorizontal();
     //     // call the current UI
     //     current_executor.onGUI();
+    // }
+
+      // public FoldOut accordion = new FoldOut();
+
+    // void settingsUI()
+    // {
+    //     if (accordion.Count == 0)
+    //     {
+    //         // accordion.addChapter("Staging", StagingSettings.settings_UI);
+    //         accordion.addChapter("Execute", execute_settings.settings_UI);
+    //         accordion.addChapter("Turn", TurnToSettings.onGUI);
+    //         accordion.addChapter("Warp", execute_settings.warp_ui);
+    //         accordion.addChapter("Burn", BurnManeuverSettings.onGUI);
+
+    //         accordion.singleChapter = true;
+    //     }
+
+    //     accordion.OnGUI();
     // }
 
     public bool valid_maneuver = false;
@@ -253,7 +315,7 @@ public class NodeExPilot : Pilot
 
             //stagingController.CheckStaging();
             double UT = 0;
-            switch (execute_settings.start_mode.Value)
+            switch (settings.start_mode.Value)
             {
                 case NodeExecuteSettings.StartMode.precise:
                     UT = execute_node.Time;
@@ -262,7 +324,7 @@ public class NodeExPilot : Pilot
                     UT = execute_node.Time - execute_node.BurnDuration / 2;
                     break;
                 case NodeExecuteSettings.StartMode.constant:
-                    UT = execute_node.Time - execute_settings.start_before.V;
+                    UT = execute_node.Time - settings.start_before.V;
                     break;
             }
 
@@ -279,53 +341,38 @@ public class NodeExPilot : Pilot
             // auto next
             nextMode();
         }
+
+        UpdateUI();
     }
 
-    // public FoldOut accordion = new FoldOut();
+    void node_infos()
+    {
+        string txt = "<b>Node Infos</b>";
 
-    // void settingsUI()
-    // {
-    //     if (accordion.Count == 0)
-    //     {
-    //         // accordion.addChapter("Staging", StagingSettings.settings_UI);
-    //         accordion.addChapter("Execute", execute_settings.settings_UI);
-    //         accordion.addChapter("Turn", TurnToSettings.onGUI);
-    //         accordion.addChapter("Warp", execute_settings.warp_ui);
-    //         accordion.addChapter("Burn", BurnManeuverSettings.onGUI);
+        ManeuverNodeData node = null;
+        if (isRunning)
+            node = execute_node;
+        else
+            node = next_maneuver_node;
 
-    //         accordion.singleChapter = true;
-    //     }
+        if (node == null)
+            return;
 
-    //     accordion.OnGUI();
-    // }
+        var dt = GeneralTools.remainingStartTime(node);
+        txt += $"\n Node in <b>{StrTool.DurationToString(dt)}</b>";
+        txt += $"\n dV {node.BurnRequiredDV:n2} m/s";
+        txt += $"\n Duration {StrTool.DurationToString(node.BurnDuration)}";
 
-    // void node_infos()
-    // {
-    //     UI_Tools.Title("Node Infos");
-    //     ManeuverNodeData node = null;
-    //     if (isRunning)
-    //         node = execute_node;
-    //     else
-    //         node = next_maneuver_node;
+        if (K2D2Settings.debug_mode.V)
+        {
+            if (dt < 0)
+            {
+                txt += $"\n In The Past";
+            }
+        }
 
-    //     if (node == null)
-    //         return;
-
-    //     var dt = GeneralTools.remainingStartTime(node);
-    //     UI_Tools.Label($"Node in <b>{StrTool.DurationToString(dt)}</b>");
-    //     UI_Tools.Label($"dV {node.BurnRequiredDV:n2} m/s");
-    //     UI_Tools.Label($"Duration {StrTool.DurationToString(node.BurnDuration)}");
-
-    //     if (K2D2Settings.debug_mode)
-    //     {
-    //         if (dt < 0)
-    //         {
-    //             UI_Tools.Label("In The Past");
-    //             return;
-    //         }
-    //     }
-    // }
-
+        ui.node_infos.Set(txt);
+    }
 
     public override bool isRunning
     {

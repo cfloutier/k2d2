@@ -95,7 +95,6 @@ public class K2D2Window : MonoBehaviour
         // save the current_tab to settings
         tab_page.RegisterCallback<ChangeEvent<string>>(evt => K2D2Settings.current_tab.V = evt.newValue);
 
-
         var title_bar = _rootElement.Q("title-bar");
 
         var settings_button = title_bar.Q<ToggleButton>("settings-toggle");

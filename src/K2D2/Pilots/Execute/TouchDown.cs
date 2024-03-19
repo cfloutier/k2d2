@@ -1,4 +1,5 @@
 using K2D2.KSPService;
+using K2UI;
 using KSP.Sim;
 // using KTools.UI;
 using UnityEngine;
@@ -162,37 +163,30 @@ public class TouchDown : ExecuteController
         current_vessel.SetThrottle(wanted_throttle);
     }
 
-    // public override void onGUI()
-    // {
-    //     // need to burn !
-    //     if (delta_speed > 0)
-    //     {
-    //         GUI.color = Color.red;
-    //         UI_Tools.Console($"Max speed : {max_speed:n2} !!");
-    //         UI_Tools.Console($"delta speed  : {delta_speed:n2}  m/s");
-    //         GUI.color = Color.white;
-    //     }
-    //     else
-    //     {
-    //         UI_Tools.Console($"Max speed : {max_speed:n2}  m/s");
-    //         UI_Tools.Console($"delta speed  : {-delta_speed:n2}  m/s");
-    //     }
+    public override void updateUI(FullStatus st)
+    {
+        // need to burn ?
 
-    //     if (burn_dV.burned_dV > 0)
-    //         UI_Tools.Console($"dV consumed : {burn_dV.burned_dV:n2} m/s");
+        string txt = $" Max speed : {max_speed:n2} !!";
+        txt += $"\n delta speed  : {delta_speed:n2}  m/s";    
 
-    //     if (K2D2Settings.debug_mode)
-    //     {
-    //         if (gravity_compensation)
-    //         {
-    //             UI_Tools.Console($"gravity : {gravity:n2}");
-    //             UI_Tools.Console($"gravity inclination : {gravity_inclination:n2}°");
-    //             //UI_Tools.Console($"gravity_direction_factor : {gravity_direction_factor:n2}");
-    //         }
+        var level = delta_speed > 0 ? StatusLine.Level.Warning : StatusLine.Level.Normal;
+        st.Status(txt, level );
+       
+        if (burn_dV.burned_dV > 0)
+            st.Console($"dV consumed : {burn_dV.burned_dV:n2} m/s");
 
-    //         UI_Tools.Console($"wanted_throttle : {wanted_throttle:n2}");
-    //     }
-    // }
+        if (K2D2Settings.debug_mode.V)
+        {
+            if (gravity_compensation)
+            {
+                st.Console($"gravity : {gravity:n2}");
+                st.Console($"gravity_direction_factor : {gravity_direction_factor:n2}");   
+            }
+
+            st.Console($"wanted_throttle : {wanted_throttle:n2}");
+        }
+    }
 
 
 }

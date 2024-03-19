@@ -166,7 +166,12 @@ namespace KTools
 
         public string GetString(string key, string default_value)
         {
-            return Get<string>(key, default_value);
+            if (data.ContainsKey(key))
+            {
+                return data[key];
+            }
+
+            return default_value;
         }
 
         public void SetString(string key, string value)

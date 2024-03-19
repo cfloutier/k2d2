@@ -18,13 +18,13 @@ namespace K2D2.Controller
                 sub_contollers.Add(single_sub);
         }
 
-        public override void onGUI()
+        public override void updateUI(FullStatus st)
         {
             // On GUI is used to draw UI in needed, using GUILayout
 
             foreach (BaseController contoller in sub_contollers)
             {
-                contoller.onGUI();
+                contoller.updateUI(st);
             }
         }
 

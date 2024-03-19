@@ -178,17 +178,16 @@ public class WarpTo : ExecuteController
             status_line += $"\nAttitude Correction = {turn_to.angle:n2} ° < {max_angle}";
         }
     }
+    public override void updateUI(FullStatus st)
+    {
+        st.Status("Time Warp");
+        st.Console(status_line);
 
-    // public override void onGUI()
-    // {
-    //     UI_Tools.OK("Time Warp");
-    //     UI_Tools.Console(status_line);
-
-    //     if (K2D2Settings.debug_mode)
-    //     {
-    //         UI_Tools.Console($"CurrentRateIndex {TimeWarpTools.CurrentRateIndex}");
-    //         UI_Tools.Console($"CurrentRate x{TimeWarpTools.CurrentRate}");
-    //         UI_Tools.Console($"index_rate x{TimeWarpTools.indexToRatio(TimeWarpTools.CurrentRateIndex)}");
-    //     }
-    // }
+        if (K2D2Settings.debug_mode.V)
+        {
+            st.Console($"CurrentRateIndex {TimeWarpTools.CurrentRateIndex}");
+            st.Console($"CurrentRate x{TimeWarpTools.CurrentRate}");
+            st.Console($"index_rate x{TimeWarpTools.indexToRatio(TimeWarpTools.CurrentRateIndex)}");
+        }
+    }
 }
