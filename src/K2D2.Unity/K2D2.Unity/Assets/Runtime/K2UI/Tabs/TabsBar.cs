@@ -93,7 +93,7 @@ namespace K2UI.Tabs
 
         public void updateList()
         {
-            Debug.Log("updateList");
+            // Debug.Log("updateList");
             if (list_tabs != null)
             {
                 foreach (var foldout in list_tabs)

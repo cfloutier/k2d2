@@ -67,7 +67,7 @@ namespace K2UI.Tabs
             UxmlBoolAttributeDescription m_Active =
                 new() { name = "active", defaultValue = false };
             UxmlBoolAttributeDescription m_Lighted =
-                new() { name = "lighted", defaultValue = false };         
+                new() { name = "lighted", defaultValue = false };    
 
             public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc)
             {

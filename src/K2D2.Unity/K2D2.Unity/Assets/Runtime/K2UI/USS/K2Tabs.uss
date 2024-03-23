@@ -19,9 +19,9 @@
     border-color: var(--k2-color-border);
     flex-direction: column;
     justify-content: flex-end;
-    margin-bottom: -2px;
+    margin-bottom: 2px;
     -unity-font-style: normal;
-    margin-top: 7px;
+    margin-top: 2px;
     border-left-width: 1px;
     border-right-width: 1px;
     border-top-width: 1px;
@@ -29,6 +29,12 @@
     min-width: 50px;
     padding-right: 4px;
     padding-left: 4px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-bottom-color: rgb(95, 101, 255);
+    padding-top: 0;
+    -unity-text-align: upper-left;
+    padding-bottom: 1px;
 }
 
 .k2-tab-button > Label {
@@ -86,7 +92,9 @@
 }
 
 .k2-tab-button--active {
-    height: 35px;
     background-color: rgba(48, 50, 120, 0.37);
-    margin-top: 2px;
+    border-left-width: 2px;
+    border-right-width: 2px;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
 }
