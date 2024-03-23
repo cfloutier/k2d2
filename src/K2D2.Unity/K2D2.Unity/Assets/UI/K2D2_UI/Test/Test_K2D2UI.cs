@@ -9,8 +9,6 @@ using KTools;
 
 namespace K2D2.UI.Tests
 {
- 
- 
     public class Test_K2D2UI : MonoBehaviour
     {
         private TabbedPage pages_controler;
@@ -20,7 +18,6 @@ namespace K2D2.UI.Tests
         // public List<Panel> panels;
         private void OnEnable()
         {
-
 
         }
 
@@ -50,7 +47,4 @@ namespace K2D2.UI.Tests
                 pages_controler.Update();
         }
     }
-
-
-
 }

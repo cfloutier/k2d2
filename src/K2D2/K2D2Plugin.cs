@@ -116,7 +116,7 @@ public class K2D2Plugin : BaseSpaceWarpPlugin
             MoveOptions = new MoveOptions
             {
                 // Whether or not the window can be moved by dragging.
-                IsMovingEnabled = true,
+                IsMovingEnabled = false,
                 // Whether or not the window can only be moved within the screen bounds.
                 CheckScreenBounds = true
             }

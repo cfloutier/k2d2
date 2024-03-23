@@ -39,10 +39,14 @@ public class FullStatus
         status.Show(true);
     }
 
-    public void Progess(double ratio)
+    public void Progess(double ratio, string label = null)
     {
         progressBar.value = (float)(ratio * 100);
         progressBar.Show(true);
+        if (!string.IsNullOrEmpty(label))
+        {
+            progressBar.Label = label;
+        }
     }
 }
 
@@ -55,7 +59,7 @@ class NodeExUI : K2Panel
         code = "node";
     }
     
-    public K2UI.Console node_infos;
+    public K2UI.Console node_infos_el;
 
     public FullStatus status_bar = new FullStatus();
 
@@ -63,7 +67,7 @@ class NodeExUI : K2Panel
 
     public override bool onInit()
     {
-        node_infos = panel.Q<K2UI.Console>("node_infos");
+        node_infos_el = panel.Q<K2UI.Console>("node_infos");
 
         run_button = panel.Q<ToggleButton>("run");
         pause_button = panel.Q<ToggleButton>("pause");
@@ -75,13 +79,58 @@ class NodeExUI : K2Panel
             progressBar = panel.Q<K2UI.K2ProgressBar>("progress"),
         };
 
-        pilot.settings.show_node_infos.listen((value) => node_infos.Show(value));
+        pilot.settings.show_node_infos.listen((value) => node_infos_el.Show(value));
 
         pilot.is_running_event += is_running => run_button.value = is_running;
-        run_button.RegisterCallback<ChangeEvent<bool>>(evt => pilot.isRunning = evt.newValue);
-        
+        run_button.RegisterCallback<ChangeEvent<bool>>(evt => pilot.isRunning = evt.newValue);     
         pause_button.Bind(pilot.settings.pause_on_end);
+        pilot.settings.setupUI(settings_page);
 
         return true;
     }
+
+    void UpdateNodeInfos()
+    {
+        string txt = "<b>Node Infos</b>";
+
+        ManeuverNodeData node = null;
+        if (pilot.isRunning)
+            node = pilot.execute_node;
+        else
+            node = pilot.next_maneuver_node;
+
+        if (node == null)
+        {
+            node_infos_el.Show(false);
+            return;
+        }
+            
+        var dt = GeneralTools.remainingStartTime(node);
+        txt += $"\n Node in <b>{StrTool.DurationToString(dt)}</b>";
+        txt += $"\n dV {node.BurnRequiredDV:n2} m/s";
+        txt += $"\n Duration {StrTool.DurationToString(node.BurnDuration)}";
+        if (dt < 0)
+        {
+            txt += $"\n In The Past";
+        }
+        
+        node_infos_el.Set(txt);
+    }
+
+
+    public override bool onUpdateUI()
+    {
+        if (!base.onUpdateUI())
+            return false;
+
+        if (pilot.settings.show_node_infos.V)
+        {
+            UpdateNodeInfos();
+        }
+       
+        return true;
+    }
+
+
+
 }

@@ -1,6 +1,8 @@
+using K2UI;
 using KTools;
 // using KTools.UI;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace K2D2.Controller;
 
@@ -18,27 +20,48 @@ public class NodeExecuteSettings
 
     public Setting<float> start_before = new Setting<float>("execute.start_before", 1);
 
-    //  public void settings_UI()
-    // {
-    //     show_node_infos = UI_Tools.Toggle(show_node_infos, "Show Nodes Infos");
+    public void setupUI(VisualElement root)
+    {
+        root.Q<K2Toggle>("show_node_infos").Bind(show_node_infos);
+        
+        // Turn To
+        root.Q<K2Slider>("max_angle_maneuver").Bind(TurnToSettings.max_angle_maneuver);
+        root.Q<K2Slider>("max_angular_speed").Bind(TurnToSettings.max_angular_speed);
 
-    //     start_mode = UI_Tools.EnumGrid<StartMode>("Start Burn at :", start_mode, StartMode_Labels);
+        // Warp
+        root.Q<K2Toggle>("auto_warp").Bind(auto_warp);
+        var warp_settings = root.Q<VisualElement>("warp_settings");    
+        auto_warp.listeners += (value) => warp_settings.Show(value); 
 
-    //     if (start_mode == StartMode.constant)
-    //     {
-    //         start_before = UI_Tools.FloatSliderTxt("Start before T0", start_before, 0, 10, "s");
-    //     }
+        warp_settings.Q<K2Slider>().Bind(WarpToSettings.warp_speed);
+        warp_settings.Q<K2Slider>().Bind(WarpToSettings.warp_safe_duration);
 
-    //     pause_on_end = UI_Tools.Toggle(pause_on_end, 
-    //                             "Pause When Done", 
-    //                             "Pause when the Node is executed");   
-    // }
+        // Burn
+        root.Q<K2Slider>("burn_adjust").Bind(BurnManeuverSettings.burn_adjust);
+        root.Q<K2Slider>("max_dv_error").Bind(BurnManeuverSettings.max_dv_error);
 
-    // public void warp_ui()
-    // {
-    //     auto_warp = UI_Tools.Toggle(auto_warp, "Auto Warp", "warp time before burn");
-    //     if (auto_warp)
-    //         WarpToSettings.onGUI();
-    // }
+        // Experimental
+        var inline_enum = root.Q<InlineEnum>("start_mode");    
+        start_mode.Bind(inline_enum);
+        inline_enum.value = start_mode.int_value;
+        
+        var start_before_el = root.Q<K2Slider>("start_before");    
+        // hide if start mode is not constant
+        start_before_el.Show(start_mode.V == StartMode.constant); 
+        start_mode.listeners += (value) => start_before_el.Show(value == StartMode.constant); 
+        start_before_el.Bind(start_before);
+
+        root.Q<K2Toggle>("rotate_during_burn").Bind(BurnManeuverSettings.rotate_during_burn);
+    }
+
+
+
+    
+
+    
+                           
+    
+
+
 }
 

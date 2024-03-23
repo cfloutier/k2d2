@@ -35,7 +35,7 @@ namespace KTools
         }
 
         TEnum _value;
-        public TEnum Value
+        public TEnum V
         {
             get { return _value; }
             set
@@ -43,7 +43,7 @@ namespace KTools
                 if (value.Equals(_value)) return;
 
                 _value = value;
-                listeners?.Invoke(this.Value);
+                listeners?.Invoke(this.V);
 
                 SettingsFile.Instance.SetEnum<TEnum>(path, _value);
             }
@@ -51,7 +51,7 @@ namespace KTools
 
         public int int_value
         {
-            get { return (int)(object) Value;}
+            get { return (int)(object) V;}
         }
 
         public delegate void onChanged(TEnum value);
@@ -65,7 +65,7 @@ namespace KTools
             else
                 element.labels = labels;
 
-            element.RegisterCallback<ChangeEvent<int>>(evt => Value =(TEnum)Enum.ToObject(typeof(TEnum), evt.newValue));
+            element.RegisterCallback<ChangeEvent<int>>(evt => V =(TEnum)Enum.ToObject(typeof(TEnum), evt.newValue));
         }
     }
 

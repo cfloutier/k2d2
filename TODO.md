@@ -22,10 +22,10 @@ UITK :
     * [x] TabBar cs
     * [x] TabbedPage cs
     * [x] Panel cs
-    * [ ] Enable / disable Tabs
-    * [ ] Avoid update Ui if tab is not visible
+    * [x] Enable / disable Tabs
+    * [x] Avoid update Ui if tab is not visible
     * [ ] default tab on startup
-    * [ ] UI look (back to simple buttons !)
+    * [x] UI look (back to simple buttons !)
 
 * [x] Status Line
     * [x] cs
@@ -40,6 +40,7 @@ UITK :
     * [x] uss
     * [ ] test delayed
     * [ ] Bindable
+    * [ ] Focus Label
 
 * [x] Windows Header
 
@@ -54,11 +55,12 @@ UITK :
     * [x] Graph Line
     * [ ] Gradient
 
-* [ ]  full uss file
-    * [ ] Header transparency
-    * [ ] Fold out background
+* [x]  full uss file
+    * [x] Header transparency
+    * [x] Fold out background
 
-* [ ] draggable and window limit
+* [x] draggable 
+  * [ ] and window limit
 * [ ] bug on size change
 * [ ] Ui is not resizable @munix help
 
@@ -66,14 +68,15 @@ UITK :
 
 -----------------------------
 
-* [ ] Node ex 
+* [x] Node ex 
   * [x] Main UI
-    * [ ] Node info not active on run
-    * [ ] button binding on active
-    * [ ] add Node using Flight Plan
-  * [ ] Settings
+    * [x] Node info not active on run
+    * [x] button binding on active
+    * [x] add Node using Flight Plan
+  * [x] Settings
     * [x] UI
-    * [ ] Binding
+    * [x] Binding
+
 * [ ] Lift
   * [ ] Main UI
     * [ ] UI

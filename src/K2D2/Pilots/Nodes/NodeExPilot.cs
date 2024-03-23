@@ -19,7 +19,7 @@ public class NodeExPilot : Pilot
     public static NodeExPilot Instance { get; set; }
 
     public ManeuverNodeData next_maneuver_node = null;
-    ManeuverNodeData execute_node = null;
+    public ManeuverNodeData execute_node = null;
 
     public NodeExecuteSettings settings = new NodeExecuteSettings();
 
@@ -162,12 +162,6 @@ public class NodeExPilot : Pilot
         ui.status_bar.Reset();
 
         var st = ui.status_bar;
-
-        if (settings.show_node_infos.V)
-        {
-            node_infos();
-        }
-        
         if (!isRunning)
         {
             if (next_maneuver_node == null)
@@ -182,8 +176,6 @@ public class NodeExPilot : Pilot
                 st.Console("Actually a KSP2 bug when loading scenaries. Please open map to fix it");               
                 return;
             }
-
-          
 
             if (!isRunning && !canStart())
             {
@@ -316,7 +308,7 @@ public class NodeExPilot : Pilot
 
             //stagingController.CheckStaging();
             double UT = 0;
-            switch (settings.start_mode.Value)
+            switch (settings.start_mode.V)
             {
                 case NodeExecuteSettings.StartMode.precise:
                     UT = execute_node.Time;
@@ -346,33 +338,7 @@ public class NodeExPilot : Pilot
         UpdateUI();
     }
 
-    void node_infos()
-    {
-        string txt = "<b>Node Infos</b>";
-
-        ManeuverNodeData node = null;
-        if (isRunning)
-            node = execute_node;
-        else
-            node = next_maneuver_node;
-
-        if (node == null)
-        {
-            ui.node_infos.Show(false);
-            return;
-        }
-            
-        var dt = GeneralTools.remainingStartTime(node);
-        txt += $"\n Node in <b>{StrTool.DurationToString(dt)}</b>";
-        txt += $"\n dV {node.BurnRequiredDV:n2} m/s";
-        txt += $"\n Duration {StrTool.DurationToString(node.BurnDuration)}";
-        if (dt < 0)
-        {
-            txt += $"\n In The Past";
-        }
-        
-        ui.node_infos.Set(txt);
-    }
+  
 
     public override bool isRunning
     {

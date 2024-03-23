@@ -10,7 +10,7 @@ using UnityEngine.UIElements;
 namespace K2D2.UI;
 
 /// <summary>
-/// Controller for the MyFirstWindow UI.
+/// Controller for the K2D2Window UI.
 /// </summary>
 public class K2D2Window : MonoBehaviour
 {
@@ -34,7 +34,7 @@ public class K2D2Window : MonoBehaviour
             _isWindowOpen = value;
 
             // Set the display style of the root element to show or hide the window
-            _rootElement.style.display = value ? DisplayStyle.Flex : DisplayStyle.None;
+            _rootElement.Show(value);
             // Alternatively, you can deactivate the window game object to close the window and stop it from updating,
             // which is useful if you perform expensive operations in the window update loop. However, this will also
             // mean you will have to re-register any event handlers on the window elements when re-enabled in OnEnable.
@@ -103,5 +103,14 @@ public class K2D2Window : MonoBehaviour
         GlobalSetting.settings_visible.Bind(settings_button);
 
         settings_button.RegisterCallback<ChangeEvent<bool>>( evt => StagingPilot.Instance.Enabled = evt.newValue );
+
+
+        _rootElement.MakeDraggable();
+    }
+
+
+    void Update()
+    {
+        tab_page.Update();
     }
 }

@@ -1,15 +1,17 @@
 using BepInEx.Logging;
+using K2UI;
 using KSP.Sim;
 using KSP.Sim.Maneuver;
 using KTools;
 // using KTools.UI;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
+using UnityEngine.UIElements;
 
 namespace K2D2.Controller;
 
 class WarpToSettings
 {
-
     // compute max warp index depending on remaining time
     public static int compute_wanted_warp_index(double time_left)
     {
@@ -24,17 +26,7 @@ class WarpToSettings
 
     public static ClampSetting<float> warp_speed = new("warp.speed", 2, 0, 7);
 
-    public static ClampSetting<float> warp_safe_duration = new("warp.safe_duration", 10, 5, int.MaxValue);
-
-
-    // public static void onGUI()
-    // {
-    //     warp_speed = UI_Tools.FloatSliderTxt("Warp Speed", warp_speed, 0, 7, "", "Warp adjust rate");
-    //     UI_Tools.Right_Left_Text("Safe", "Quick");
-
-    //     warp_safe_duration = UI_Fields.IntFieldLine("warp_safe_duration", "Before Burn Time", warp_safe_duration, 5, int.MaxValue, "s",
-    //         "Nb seconds in x1 before next phase (min:5)");
-    // }
+    public static ClampSetting<float> warp_safe_duration = new("warp.safe_duration", 10, 5, 120);
 }
 
 public class WarpTo : ExecuteController

@@ -18,18 +18,6 @@ class BurnManeuverSettings
     public static Setting<float> burn_adjust = new ("burn.burn_adjust", 1.5f);
     public static Setting<float> max_dv_error = new ("burn.max_dv_error", 0.1f);
     public static Setting<bool> rotate_during_burn = new ("burn.rotate_during_burn", false);
-    // public static Setting<bool> rotate_during_burn = new ("burn.rotate_during_burn", false);
-
-
-    // static public void onGUI()
-    // {
-    //     burn_adjust = UI_Tools.FloatSliderTxt("Adjusting rate", burn_adjust, 0.5f, 2, "m/s", "Used during final adjust phase");
-    //     UI_Tools.Right_Left_Text("Precise", "Quick");
-
-    //     max_dv_error = UI_Tools.FloatSliderTxt("Precision", max_dv_error, 0.001f, 0.1f, "m/s", "max delta speed in final adjust phase", 3);
-
-    //     rotate_during_burn = UI_Tools.Toggle(rotate_during_burn, "Rotate During burn", "Keep following Maneuver Node\ndirection during burn phase");
-    // }
 }
 
 public class BurnManeuver : ExecuteController
@@ -222,7 +210,7 @@ public class BurnManeuver : ExecuteController
                 st.Status("Burning !", StatusLine.Level.Warning);
                 st.Console(status_line);
                 if (maneuver.BurnRequiredDV >= 0)
-                    st.Progess(remaining_dv / maneuver.BurnRequiredDV);
+                    st.Progess(remaining_dv / maneuver.BurnRequiredDV, $"{remaining_dv:n1} m/s");
                     
                 st.Console(StrTool.DurationToString(remaining_full_burn_time));
                 break;
