@@ -5,10 +5,11 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Attach to Player",
+            "name": "Unity Debugger",
             "type": "vstuc",
             "request": "attach",
-            "endPoint": "192.168.1.72:56623"
+            "endPoint": "Unity Player",
+            "projectPath": "${workspaceFolder}"
         }
     ]
 }

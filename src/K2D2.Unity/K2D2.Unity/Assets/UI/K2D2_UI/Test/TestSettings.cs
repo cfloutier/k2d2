@@ -24,24 +24,22 @@ namespace K2D2.UI.Tests
     public class MySettingsClass
     {
         public Setting<bool> bool_item = new Setting<bool>("my_settings.bool_item", false);
-        public Setting<float> float_item = new Setting<float>("my_settings.float_item", 5);
-
-        public Setting<int> int_item = new Setting<int>("my_settings.int_item", -5);
+        public ClampSetting<float> float_item = new ClampSetting<float>("my_settings.float_item", 5, 0, 100);
+        public ClampSetting<int> int_item = new ClampSetting<int>("my_settings.int_item", -5, -10, 10);
 
         public EnumSetting<MyEnum> enum_item = new EnumSetting<MyEnum>("my_settings.enum_item", MyEnum.Middle);
     }
 
-    public class TestSettings : K2Panel
+    public class TestSettings
     {
         MySettingsClass settings;
 
         public TestSettings()
         {
-            code = "test_settings";
             settings = new MySettingsClass();
         }
 
-        public override bool onInit()
+        public void init(VisualElement panel)
         {
             var toggle = panel.Q<SlideToggle>("bool_settings");
             toggle.value = settings.bool_item.V;
@@ -58,8 +56,6 @@ namespace K2D2.UI.Tests
             var inline_enum = panel.Q<InlineEnum>("enum");    
             settings.enum_item.Bind(inline_enum);
             inline_enum.value = settings.enum_item.int_value;
-            
-            return true;
         }
     }
 }

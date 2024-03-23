@@ -14,7 +14,7 @@ namespace K2D2.Controller
             get => base.isRunning;
 
             set {
-                if (value != base.isRunning)
+                if (value == base.isRunning)
                     return;
 
                 base.isRunning = value;

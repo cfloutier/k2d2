@@ -24,8 +24,6 @@ namespace K2UI.Tabs
         // the main panel (including page and settings)
         public VisualElement panel;
 
-
-
         // the settings page if found
         public VisualElement settings_page;
         // the main page if found
@@ -81,6 +79,14 @@ namespace K2UI.Tabs
             return false;
         }
 
+        public virtual bool onUpdateUI()
+        {
+            if (!isVisible)
+                return false;
+            
+            return true;
+        }
+
         bool _is_running = false;
 
         // true if the controller is running
@@ -94,6 +100,19 @@ namespace K2UI.Tabs
             {
                 _is_running = value;
                 tab_button.Lighted = value;
+            }
+        }
+
+        bool _is_visible;
+        public bool isVisible
+        {
+            get
+            {
+                return _is_visible;
+            }
+            set
+            {
+                _is_visible = value;
             }
         }
     }

@@ -26,8 +26,14 @@ namespace K2D2.UI.Tests
 
         IntegerField int_field;
 
+        TestSettings settings_ui;
+
+
         public override bool onInit()
         {
+            settings_ui = new TestSettings();
+            settings_ui.init(settings_page);
+            
             bar = panel.Q<K2ProgressBar>("MyBar");
             slider = panel.Q<K2Slider>("MySlider");
             slider.value = my_value;
@@ -63,7 +69,6 @@ namespace K2D2.UI.Tests
             tuning.RegisterCallback<ChangeEvent<float>>((evt) =>
             {
                 UpdateLines();
-
             });
 
             line_1 = panel.Q<GraphLine>("line_1");
@@ -75,8 +80,6 @@ namespace K2D2.UI.Tests
             big_button.RegisterCallback<ChangeEvent<bool>>(evt => isRunning = evt.newValue);
 
             UpdateBars();
-
-
             return true;
         }
 
@@ -97,5 +100,7 @@ namespace K2D2.UI.Tests
             float_field.value = my_value;
             int_field.value = (int)my_value;
         }
+
+
     }
 }

@@ -130,6 +130,11 @@ namespace K2UI.Tabs
                     page.style.display = DisplayStyle.None;
                 }
             }
+
+            foreach (var panel in panels)
+            {
+                panel.isVisible = panel.code == code;    
+            }
         }
 
         List<K2Panel> panels;
@@ -145,6 +150,12 @@ namespace K2UI.Tabs
         {
             el_tabsbar.setOpenedPage(code);
             ShowContent(code);         
+        }
+
+        public void Update()
+        {
+            foreach(K2Panel panel in this.panels)
+                panel.onUpdateUI();
         }
     }
 }

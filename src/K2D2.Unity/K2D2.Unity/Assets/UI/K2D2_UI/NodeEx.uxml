@@ -7,31 +7,28 @@
     <ui:VisualElement name="node" style="display: flex;">
         <ui:Label tabindex="-1" text="Node Execution" display-tooltip-when-elided="true" name="Title" class="unselectedContent" style="display: none;" />
         <ui:VisualElement name="page" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); display: flex;">
-            <K2UI.Console tabindex="-1" name="node_infos" />
-            <K2UI.StatusLine tabindex="-1" name="status_node" text="Node ...." />
+            <K2UI.Console tabindex="-1" name="node_infos" text="Node Infos ..." />
             <ui:VisualElement name="button_bars" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); flex-direction: row;">
                 <K2UI.ToggleButton name="run" label="RUN !!!" class="big" style="flex-grow: 1;" />
                 <K2UI.ToggleButton name="pause" class="big icon yellow" style="flex-shrink: 0; margin-left: 3px; margin-right: 0;">
                     <ui:VisualElement name="icon" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); background-image: url(&apos;project://database/Assets/Images/pause.png?fileID=2800000&amp;guid=02fa898692f9898449b2e0582c422977&amp;type=3#pause&apos;); -unity-background-scale-mode: scale-to-fit;" />
                 </K2UI.ToggleButton>
             </ui:VisualElement>
-            <K2UI.Console tabindex="-1" name="pilot_console" />
+            <K2UI.Console tabindex="-1" name="pilot_console" text="Console Pilot" />
             <K2UI.StatusLine tabindex="-1" text="Status Pilot" name="status_pilot" />
             <K2UI.K2ProgressBar name="progress" set-label-to-value="true" value="70.27" max="100" label=" " postfix=" %" />
         </ui:VisualElement>
         <ui:VisualElement name="settings" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); display: none;">
-            <K2UI.ExFoldoutGroup opened-index="3">
-                <ui:Foldout text="Execute" value="true" name="Execute">
+            <K2UI.ExFoldoutGroup opened-index="3" style="margin-top: 6px;">
+                <ui:Foldout text="Execute" value="false" name="Execute">
                     <K2UI.SlideToggle label="Show Nodes Infos " name="show_node_infos" />
-                    <K2UI.InlineEnum labels="T0;before;Mid-duration" name="start_mode" class="inline_enum" />
-                    <K2UI.K2Slider name="start_before" label="Start before T0" max="10" print-value="true" label-on-top="true" />
                     <K2UI.SlideToggle label="Pause When Done" name="pause_on_end" tooltip="Pause when the Node is executed" />
                 </ui:Foldout>
                 <ui:Foldout text="Turn" value="false" name="Turn">
                     <K2UI.K2Slider name="max_angle_maneuver" label="Max Angle" max="10" print-value="true" label-on-top="true" value="0" min="0.01" />
                     <K2UI.K2Slider name="max_angular_speed" label="Max Angular Speed" max="10" print-value="true" label-on-top="true" value="0.98" min="0.01" />
                 </ui:Foldout>
-                <ui:Foldout text="Warp" value="false" name="Warp">
+                <ui:Foldout text="Warp" value="true" name="Warp">
                     <K2UI.SlideToggle label="Auto Warp" name="auto_warp" tooltip="Warp time before burn" />
                     <K2UI.K2Slider label-on-top="true" min-max-label="Safe-Quick" print-value="true" min="0" value="1" max="7" name="warp_speed" label="Warp Speed" />
                     <ui:IntegerField label="Before Burn (s)" value="42" is-delayed="true" name="warp_safe_duration" tooltip="Nb seconds in x1 before next phase (min:5)" />
@@ -40,6 +37,10 @@
                     <K2UI.K2Slider label-on-top="true" min-max-label="Precise-Quick" print-value="true" min="0.5" value="0.5" max="2" name="burn_adjust" label="Adjusting rate (m/s)" />
                     <K2UI.K2Slider label-on-top="true" min-max-label="Precise-Quick" print-value="true" min="0.001" value="0.08" max="0.1" name="max_dv_error" label="Precision (m/s)" />
                     <K2UI.SlideToggle label="Rotate During burn" tooltip="Keep SAS during burn phase." name="rotate_during_burn" />
+                </ui:Foldout>
+                <ui:Foldout text="Experimental" value="true" name="Experimental">
+                    <K2UI.InlineEnum labels="T0;before;Mid-duration" name="start_mode" class="inline_enum" />
+                    <K2UI.K2Slider name="start_before" label="Start before T0" max="10" print-value="true" label-on-top="true" />
                 </ui:Foldout>
             </K2UI.ExFoldoutGroup>
         </ui:VisualElement>

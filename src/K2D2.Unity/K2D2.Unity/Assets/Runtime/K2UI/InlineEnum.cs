@@ -67,6 +67,11 @@ namespace K2UI
             }
         }
 
+        public InlineEnum()
+        {
+            AddToClassList("inline_enum");
+        }
+
         string[] labels_list = null;
         public List<Button> buttons = new();
 

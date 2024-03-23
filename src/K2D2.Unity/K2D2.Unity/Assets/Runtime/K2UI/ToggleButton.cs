@@ -47,6 +47,7 @@ namespace K2UI
             get { return _value; }
             set
             {
+                if (value == _value) return;
                 var m_event = ChangeEvent<bool>.GetPooled(_value, value);
                 _value = value;
                 EnableInClassList(checkedUssClassName, _value);

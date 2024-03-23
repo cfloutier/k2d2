@@ -163,6 +163,10 @@ public class NodeExPilot : Pilot
 
         var st = ui.status_bar;
 
+        if (settings.show_node_infos.V)
+        {
+            node_infos();
+        }
         
         if (!isRunning)
         {
@@ -179,10 +183,7 @@ public class NodeExPilot : Pilot
                 return;
             }
 
-            if (settings.show_node_infos.V)
-            {
-                node_infos();
-            }
+          
 
             if (!isRunning && !canStart())
             {
@@ -356,21 +357,20 @@ public class NodeExPilot : Pilot
             node = next_maneuver_node;
 
         if (node == null)
+        {
+            ui.node_infos.Show(false);
             return;
-
+        }
+            
         var dt = GeneralTools.remainingStartTime(node);
         txt += $"\n Node in <b>{StrTool.DurationToString(dt)}</b>";
         txt += $"\n dV {node.BurnRequiredDV:n2} m/s";
         txt += $"\n Duration {StrTool.DurationToString(node.BurnDuration)}";
-
-        if (K2D2Settings.debug_mode.V)
+        if (dt < 0)
         {
-            if (dt < 0)
-            {
-                txt += $"\n In The Past";
-            }
+            txt += $"\n In The Past";
         }
-
+        
         ui.node_infos.Set(txt);
     }
 
@@ -379,9 +379,9 @@ public class NodeExPilot : Pilot
         get { return mode != Mode.Off; }
         set
         {
-            if (isRunning == value)
+            if (value == base.isRunning)
                 return;
-            
+  
             if (!value)
             {
                 // stop
@@ -398,6 +398,9 @@ public class NodeExPilot : Pilot
                 
                 setMode(Mode.Turn);
             }
+
+            // send call backs
+            base.isRunning = value; 
         }
     }
 

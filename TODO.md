@@ -62,10 +62,13 @@ UITK :
 * [ ] bug on size change
 * [ ] Ui is not resizable @munix help
 
+* [ ] Tooltips
+
 -----------------------------
 
 * [ ] Node ex 
   * [x] Main UI
+    * [ ] Node info not active on run
     * [ ] button binding on active
     * [ ] add Node using Flight Plan
   * [ ] Settings
