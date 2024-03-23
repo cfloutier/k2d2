@@ -38,6 +38,25 @@ namespace K2D2.UI.Tests
             return true;
         }
     }
+
+    public class DisablePage: K2Panel
+    {
+        public DisablePage()
+        {
+            code = "disable";
+        }
+
+        public override bool onInit()
+        {
+            var parent_tabs = panel.GetFirstAncestorOfType<TabbedPage>();
+
+            var toogle = panel.Q<K2Toggle>("controls");     
+            toogle.RegisterCallback<ChangeEvent<bool>>( evt => parent_tabs.Enable("controls", !evt.newValue));
+            toogle = panel.Q<K2Toggle>("timer");     
+            toogle.RegisterCallback<ChangeEvent<bool>>( evt => parent_tabs.Enable("timer", !evt.newValue));
+            return true;
+        }
+    }
   
 
     //Inherits from class `MonoBehaviour`. This makes it attachable to a game object as a component.
@@ -67,18 +86,16 @@ namespace K2D2.UI.Tests
                 new TestAllControls(),
                 // new TestSettings(),
                 new TimerPanel(),
-               
+                new DisablePage(),
             };
 
             var settings_toggle = root.Q<ToggleButton>("settings-toggle");
             GlobalSetting.settings_visible.Bind(settings_toggle);
 
-
             pages_controler = root.Q<TabbedPage>();
             pages_controler.Init(panels);
             pages_controler.Select(start_selected);
         }
-
 
         public void Update()
         {

@@ -2,7 +2,7 @@
     <Style src="project://database/Assets/UI/K2D2_UI/K2D2.uss?fileID=7433441132597879392&amp;guid=f49119c0dc6aec7469a0374f7f606ceb&amp;type=3#K2D2" />
     <Style src="project://database/Assets/Runtime/K2UI/USS/K2UI.uss?fileID=7433441132597879392&amp;guid=d70a8288b6b3eee4a900aa2727eb7499&amp;type=3#K2UI" />
     <Style src="project://database/Assets/Runtime/K2UI/USS/ToggleButton.uss?fileID=7433441132597879392&amp;guid=1b6a73cd9e0a617469e5d501d696c7be&amp;type=3#ToggleButton" />
-    <Style src="project://database/Assets/Runtime/K2UI/USS/SlideToggle.uss?fileID=7433441132597879392&amp;guid=a6dc5024ba8ad204e9099eca78c0703f&amp;type=3#SlideToggle" />
+    <Style src="project://database/Assets/Runtime/K2UI/USS/K2Toggle.uss?fileID=7433441132597879392&amp;guid=a6dc5024ba8ad204e9099eca78c0703f&amp;type=3#K2Toggle" />
     <Style src="project://database/Assets/Runtime/K2UI/USS/K2Slider.uss?fileID=7433441132597879392&amp;guid=3d8e4d9f1386ac94c97e6381ad01c59b&amp;type=3#K2Slider" />
     <ui:VisualElement name="MainFrame" class="main-frame" style="position: absolute; left: 11px; top: 36px;">
         <ui:VisualElement name="title-bar" style="margin-bottom: 0; margin-top: -10px; background-color: rgba(76, 79, 188, 0.23); border-top-left-radius: 12px; border-bottom-left-radius: 0; border-top-right-radius: 12px; border-bottom-right-radius: 0; margin-right: -10px; margin-left: -10px; border-left-color: rgb(76, 79, 188); border-right-color: rgb(76, 79, 188); border-top-color: rgb(76, 79, 188); border-bottom-color: rgb(76, 79, 188);">
@@ -19,8 +19,7 @@
             </ui:Button>
         </ui:VisualElement>
         <K2UI.Tabs.TabbedPage selected-tab-Name="controls">
-            <K2UI.Tabs.TabButton name="controls" label="Controls" />
-            <ui:VisualElement name="controls" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
+            <K2UI.Tabs.TabPage name="controls" label="Controls test" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); display: none;">
                 <ui:VisualElement name="page" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); display: none;">
                     <K2UI.ExFoldoutGroup style="margin-top: 6px;">
                         <ui:Foldout text="Progress &amp; Compas">
@@ -43,16 +42,19 @@
                 </ui:VisualElement>
                 <ui:VisualElement name="settings" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); display: flex;">
                     <ui:Label tabindex="-1" text="Settings page... all must be saved" display-tooltip-when-elided="true" />
-                    <K2UI.SlideToggle name="bool_settings" label="Bool Toggle" />
+                    <K2UI.K2Toggle name="bool_settings" label="Bool Toggle" />
                     <K2UI.K2Slider name="float_settings" label="Float Slider" label-on-top="true" max="100" value="5" />
                     <K2UI.K2SliderInt label="Int Slider" name="int_settings" />
                     <K2UI.InlineEnum name="enum" />
                 </ui:VisualElement>
-            </ui:VisualElement>
-            <K2UI.Tabs.TabButton name="timer" label="Timer" />
-            <ui:VisualElement name="timer" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); display: none;">
+            </K2UI.Tabs.TabPage>
+            <K2UI.Tabs.TabPage name="timer" label="Timer" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); display: none;">
                 <ui:Label tabindex="-1" text="Label" display-tooltip-when-elided="true" name="timer_label" />
-            </ui:VisualElement>
+            </K2UI.Tabs.TabPage>
+            <K2UI.Tabs.TabPage name="disable" label="Disable Tabs" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); display: flex;">
+                <K2UI.K2Toggle name="controls" label="Hide Controls" />
+                <K2UI.K2Toggle name="timer" label="Hide Timer" />
+            </K2UI.Tabs.TabPage>
         </K2UI.Tabs.TabbedPage>
     </ui:VisualElement>
 </ui:UXML>

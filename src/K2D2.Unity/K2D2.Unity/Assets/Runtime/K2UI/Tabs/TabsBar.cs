@@ -10,11 +10,9 @@ namespace K2UI.Tabs
         public TabsBar()
         {
             AddToClassList("k2-tabsbar");   
-            RegisterCallback<AttachToPanelEvent>(onAttached);   
-            RegisterCallback<GeometryChangedEvent>(onContentChanged);   
-        }
-
-        
+            // RegisterCallback<AttachToPanelEvent>(onAttached);   
+            // RegisterCallback<GeometryChangedEvent>(onContentChanged);   
+        }    
 
         public new class UxmlFactory : UxmlFactory<TabsBar, UxmlTraits> { }
         public new class UxmlTraits : VisualElement.UxmlTraits
@@ -51,15 +49,15 @@ namespace K2UI.Tabs
 
         public List<TabButton> list_tabs;
 
-        private void onAttached(AttachToPanelEvent evt)
-        {
-            updateList();
-        }
+        // private void onAttached(AttachToPanelEvent evt)
+        // {
+        //     updateList();
+        // }
 
-        private void onContentChanged(GeometryChangedEvent evt)
-        {
-            updateList();
-        }
+        // private void onContentChanged(GeometryChangedEvent evt)
+        // {
+        //     updateList();
+        // }
 
         private void onChanged(ChangeEvent<bool> evt)
         {
@@ -95,6 +93,7 @@ namespace K2UI.Tabs
 
         public void updateList()
         {
+            Debug.Log("updateList");
             if (list_tabs != null)
             {
                 foreach (var foldout in list_tabs)

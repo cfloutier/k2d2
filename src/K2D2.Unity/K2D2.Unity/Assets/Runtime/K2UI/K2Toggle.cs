@@ -5,9 +5,9 @@ using KTools;
 namespace K2UI
 {
     // Derives from BaseField<bool> base class. Represents a container for its input part.
-    public class SlideToggle : BaseField<bool>
+    public class K2Toggle : BaseField<bool>
     {
-        public new class UxmlFactory : UxmlFactory<SlideToggle, UxmlTraits> { }
+        public new class UxmlFactory : UxmlFactory<K2Toggle, UxmlTraits> { }
 
         public new class UxmlTraits : BaseFieldTraits<bool, UxmlBoolAttributeDescription> { }
 
@@ -23,10 +23,10 @@ namespace K2UI
 
         // Custom controls need a default constructor. This default constructor calls the other constructor in this
         // class.
-        public SlideToggle() : this("Toggle") { label="Toggle"; }
+        public K2Toggle() : this("Toggle") { label="Toggle"; }
 
         // This constructor allows users to set the contents of the label.
-        public SlideToggle(string label) : base(label, new())
+        public K2Toggle(string label) : base(label, new())
         {
             // Style the control overall.
             AddToClassList(ussClassName);
@@ -54,7 +54,7 @@ namespace K2UI
 
         static void OnClick(ClickEvent evt)
         {
-            var slideToggle = evt.currentTarget as SlideToggle;
+            var slideToggle = evt.currentTarget as K2Toggle;
             slideToggle.ToggleValue();
 
             evt.StopPropagation();
@@ -62,7 +62,7 @@ namespace K2UI
 
         static void OnSubmit(NavigationSubmitEvent evt)
         {
-            var slideToggle = evt.currentTarget as SlideToggle;
+            var slideToggle = evt.currentTarget as K2Toggle;
             slideToggle.ToggleValue();
 
             evt.StopPropagation();
@@ -70,7 +70,7 @@ namespace K2UI
 
         static void OnKeydownEvent(KeyDownEvent evt)
         {
-            var slideToggle = evt.currentTarget as SlideToggle;
+            var slideToggle = evt.currentTarget as K2Toggle;
 
             // NavigationSubmitEvent event already covers keydown events at runtime, so this method shouldn't handle
             // them.

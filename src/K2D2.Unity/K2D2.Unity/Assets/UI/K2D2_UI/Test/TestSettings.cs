@@ -41,7 +41,7 @@ namespace K2D2.UI.Tests
 
         public void init(VisualElement panel)
         {
-            var toggle = panel.Q<SlideToggle>("bool_settings");
+            var toggle = panel.Q<K2Toggle>("bool_settings");
             toggle.value = settings.bool_item.V;
             settings.bool_item.Bind(toggle);
 

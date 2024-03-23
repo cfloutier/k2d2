@@ -49,14 +49,14 @@ namespace K2UI.Tabs
             set { _selected_tab_name = value; }
         }
 
-        TabsBar el_tabsbar;
-        VisualElement el_content;
+        TabsBar tabsbar_el;
+        VisualElement content_el;
 
         public override VisualElement contentContainer 
         {
             get{
-                 if (el_content != null) 
-                    return el_content;
+                 if (content_el != null) 
+                    return content_el;
                  else 
                     return this;
             }      
@@ -70,45 +70,60 @@ namespace K2UI.Tabs
 
         void Setup()
         {
-            el_tabsbar = new TabsBar() {name = "TabsBar"};
+            tabsbar_el = new TabsBar() {name = "TabsBar"};
             var content = new VisualElement() {name = "Content"};
 
-            Add(el_tabsbar);
+            Add(tabsbar_el);
             Add(content);
             // setup main content after adding to parent
-            el_content = content;
-
-            el_tabsbar.RegisterCallback<ChangeEvent<string>>(onTabChanged);
+            content_el = content;
+            tabsbar_el.RegisterCallback<ChangeEvent<string>>(onTabChanged);
         }
 
         private void InitializeUI()
         {
-            CheckForTabs();
-            el_content.RegisterCallback<GeometryChangedEvent>(HandleContentChanged);
-            el_content.RegisterCallback<AttachToPanelEvent>(HandleAttachedToPanel);
+            content_el.RegisterCallback<GeometryChangedEvent>(HandleContentChanged);
+            
         }
 
-        private void HandleAttachedToPanel(AttachToPanelEvent evt)
-        {
-            CheckForTabs();
-        }
- 
         private void HandleContentChanged(GeometryChangedEvent evt)
         {
-            CheckForTabs();
+            BuildButtons();
+
         }
 
-        List<TabButton> all_tabs = new();
 
-        void CheckForTabs()
+        bool hasChanged()
         {
-            // move all tabs from content and put them in the tab bar 
-            var new_button = el_content.Q<TabButton>();
-            while (new_button != null)
+            var buttons = tabsbar_el.Query<TabButton>().ToList();
+            var pages = content_el.Query<TabPage>().ToList();
+
+            if (buttons.Count != pages.Count)
+                return true;
+
+            for (int i = 0; i < buttons.Count ; i++)
             {
-                el_tabsbar.Add(new_button);
-                new_button = el_content.Q<TabButton>();
+                if (buttons[i].name != pages[i].name)
+                    return true;
             }
+
+            return false;
+        }
+
+        void BuildButtons()
+        {
+            if (!hasChanged())
+                return;
+
+            tabsbar_el.Clear();
+            var pages = content_el.Query<TabPage>().ToList();
+            foreach (var page in pages)
+            {
+                var bt = new TabButton();
+                page.setButton(bt);
+                tabsbar_el.Add(bt);
+            }
+            tabsbar_el.updateList();
         }
 
         private void onTabChanged(ChangeEvent<string> evt)
@@ -119,17 +134,13 @@ namespace K2UI.Tabs
 
         void ShowContent(string code)
         {
-            foreach (var page in el_content.Children())
+            foreach (var page in content_el.Children())
             {
-                if (page.name == code)
-                {
-                    page.style.display = DisplayStyle.Flex;
-                }
-                else
-                {
-                    page.style.display = DisplayStyle.None;
-                }
+                page.Show(page.name == code);
             }
+
+            if (panels == null)
+                return;
 
             foreach (var panel in panels)
             {
@@ -137,18 +148,28 @@ namespace K2UI.Tabs
             }
         }
 
+        public void Enable(string code, bool enable)
+        {
+            foreach (var panel in panels)
+            {
+                if (panel.code == code)
+                    panel.enabled = enable;
+            }
+        }
+
         List<K2Panel> panels;
 
         public void Init(List<K2Panel> panels)
         {
+            BuildButtons();
             this.panels = panels;
             foreach(K2Panel panel in this.panels)
-                panel.Init(el_tabsbar, el_content);
+                panel.Init(tabsbar_el, content_el);
         }
 
         public void Select(string code)
         {
-            el_tabsbar.setOpenedPage(code);
+            tabsbar_el.setOpenedPage(code);
             ShowContent(code);         
         }
 
@@ -157,5 +178,7 @@ namespace K2UI.Tabs
             foreach(K2Panel panel in this.panels)
                 panel.onUpdateUI();
         }
+
+
     }
 }

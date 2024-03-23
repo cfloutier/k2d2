@@ -81,7 +81,7 @@ namespace K2UI
             if (checkTarget<IntegerField>(target)) return;
             if (checkTarget<FloatField>(target)) return;
             if (checkTarget<TextField>(target)) return;
-            if (checkTarget<SlideToggle>(target)) return;
+            if (checkTarget<K2Toggle>(target)) return;
             if (checkTarget<K2Compass>(target)) return;
 
             // _mode = target.pickingMode;

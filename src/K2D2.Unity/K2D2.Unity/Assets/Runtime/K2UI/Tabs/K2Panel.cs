@@ -5,6 +5,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
 using K2D2;
+using UnityEditor.MemoryProfiler;
 
 namespace K2UI.Tabs
 {
@@ -22,7 +23,7 @@ namespace K2UI.Tabs
         public string code;
 
         // the main panel (including page and settings)
-        public VisualElement panel;
+        public TabPage panel;
 
         // the settings page if found
         public VisualElement settings_page;
@@ -45,7 +46,7 @@ namespace K2UI.Tabs
                 return false;
             }
 
-            panel = panels.Q<VisualElement>(code);
+            panel = panels.Q<TabPage>(code);
             if (panel == null)
             {
                 Debug.LogError("missing content with name " + code);
@@ -55,8 +56,10 @@ namespace K2UI.Tabs
             settings_page = panel.Q<VisualElement>("settings");
             main_page = panel.Q<VisualElement>("page");
 
+            tab_button.Show(enabled);
+
             if (settings_page != null && main_page != null)
-            {     
+            {
                 GlobalSetting.settings_visible.listeners += onSettingsChanged;
                 onSettingsChanged(GlobalSetting.settings_visible.V);
             }
@@ -70,8 +73,8 @@ namespace K2UI.Tabs
 
         private void onSettingsChanged(bool value)
         {
-            settings_page.style.display = value ? DisplayStyle.Flex : DisplayStyle.None;
-            main_page.style.display = !value ? DisplayStyle.Flex : DisplayStyle.None;         
+            settings_page.Show(value);
+            main_page.Show(!value);
         }
 
         public virtual bool onInit()
@@ -83,7 +86,7 @@ namespace K2UI.Tabs
         {
             if (!isVisible)
                 return false;
-            
+
             return true;
         }
 
@@ -103,7 +106,7 @@ namespace K2UI.Tabs
             }
         }
 
-        bool _is_visible;
+        public bool _is_visible = false;
         public bool isVisible
         {
             get
@@ -113,6 +116,22 @@ namespace K2UI.Tabs
             set
             {
                 _is_visible = value;
+            }
+        }
+
+        public bool _enabled = true;
+        public virtual bool enabled
+        {
+            get
+            {
+                return _enabled;
+            }
+            set
+            {
+                if (value == _enabled) return;
+                _enabled = value;
+        
+                tab_button.Show(_enabled);
             }
         }
     }
