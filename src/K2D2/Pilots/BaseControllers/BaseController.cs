@@ -52,8 +52,15 @@ namespace K2D2.Controller
         public virtual bool isRunning
         {
             get {return _is_running;}
-            set { _is_running = value; }
+            set { 
+                if (_is_running == value) return;
+                _is_running = value; 
+                is_running_event?.Invoke(_is_running);
+            }
         }
+
+        public delegate void onRunning(bool is_running);
+        public event onRunning is_running_event;
 
         public bool need_update
         {

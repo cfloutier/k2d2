@@ -77,7 +77,9 @@ class NodeExUI : K2Panel
 
         pilot.settings.show_node_infos.listen((value) => node_infos.Show(value));
 
+        pilot.is_running_event += is_running => run_button.value = is_running;
         run_button.RegisterCallback<ChangeEvent<bool>>(evt => pilot.isRunning = evt.newValue);
+        
         pause_button.Bind(pilot.settings.pause_on_end);
 
         return true;
