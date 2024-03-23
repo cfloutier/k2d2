@@ -91,7 +91,7 @@ namespace K2D2.UI.Tests
 
         void UpdateBars()
         {
-            bar.Value = my_value;
+            bar.value = my_value;
             slider.value = my_value;
             compas.value = my_value;
             float_field.value = my_value;

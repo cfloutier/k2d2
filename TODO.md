@@ -3,11 +3,11 @@ UITK :
 * [ ] rebuild full set of controllers
 ----------------------------------------
 
-* [ ] big toogle button (rename to toggle button)
+* [x] big toogle button (rename to toggle button)
     * [x] cs
     * [x] uss
-    * [ ] add icon
-    * [ ] active color
+    * [x] add icon
+    * [x] active color
 * [x] small slider toogle
     * [x] cs
     * [x] uss
@@ -23,6 +23,10 @@ UITK :
     * [x] TabbedPage cs
     * [x] Panel cs
     * [ ] Enable / disable Tabs
+    * [ ] Avoid update Ui if tab is not visible
+    * [ ] default tab on startup
+    * [ ] UI look (back to simple buttons !)
+
 * [x] Status Line
     * [x] cs
     * [x] uss
@@ -31,24 +35,77 @@ UITK :
     * [x] uss
 * [x] Label
     * [x] uss
+
 * [ ] Value Fields 
     * [x] uss
     * [ ] test delayed
+    * [ ] Bindable
 
-* [ ] Windows Header
+* [x] Windows Header
 
-* [ ] Settings bindable
-    * [ ] settings pages + button Settings 
+* [x] Settings bindable
+    * [x] settings pages + button Settings 
 
 * [ ] Repeat button
 * [ ] Field with repeat button (for the drone)
 
-* [ ] Compass
+* [x] Compass
 * [ ] Curve Panel
+    * [x] Graph Line
+    * [ ] Gradient
 
-* [ ] New uss file architecture
+* [ ]  full uss file
+    * [ ] Header transparency
+    * [ ] Fold out background
+
+* [ ] draggable and window limit
+* [ ] bug on size change
+* [ ] Ui is not resizable @munix help
 
 -----------------------------
+
+* [ ] Node ex 
+  * [x] Main UI
+    * [ ] button binding on active
+    * [ ] add Node using Flight Plan
+  * [ ] Settings
+    * [x] UI
+    * [ ] Binding
+* [ ] Lift
+  * [ ] Main UI
+    * [ ] UI
+  * [ ] Settings
+    * [ ] UI
+    * [ ] Binding  
+
+* [ ] Land
+  * [ ] Main UI
+    * [ ] UI
+    * [ ] Code
+  * [ ] Settings
+    * [ ] UI
+    * [ ] Binding  
+
+* [ ] Drone
+  * [ ] Main UI
+    * [ ] UI
+    * [ ] Code
+  * [ ] Settings
+    * [ ] UI
+    * [ ] Binding  
+
+* [ ] Attitude
+  * [ ] Main UI
+    * [ ] UI
+    * [ ] Code
+  * [ ] Settings
+    * [ ] UI
+    * [ ] Binding  
+
+
+
+
+----------------------------
 
 reminder for next version : 
 

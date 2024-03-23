@@ -5,12 +5,10 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Attach to Unity",
+            "name": "Attach to Player",
             "type": "vstuc",
             "request": "attach",
-            "endPoint": "127.0.0.1:56712"
+            "endPoint": "192.168.1.72:56623"
         }
-
-
     ]
 }

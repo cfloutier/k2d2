@@ -101,14 +101,16 @@
 
 .console {
     font-size: 14px;
-    color: rgb(171, 179, 196);
-    -unity-font-definition: url('project://database/Packages/uitkforksp2.controls/Assets/Theme/Fonts/SFPixelate/pixelate%20SDF.asset?fileID=11400000&guid=b04efd89de5b82b47829ada6e728086c&type=2#pixelate SDF');
+    color: rgb(185, 207, 219);
+    -unity-font-definition: url('project://database/Assets/Fonts/Sax%20Mono.asset?fileID=11400000&guid=a6fc3433277ba9741b90d888f9ae4b53&type=2#Sax Mono');
     -unity-font-style: normal;
+    white-space: normal;
 }
 
 .k2-status-line {
-    font-size: 13px;
+    font-size: 16px;
     -unity-font-definition: url('project://database/Packages/uitkforksp2.controls/Assets/Theme/Fonts/NotoSansMonoCJK/NotoSansMonoCJKtc-Regular%20SDF.asset?fileID=11400000&guid=7e59a668a0d7f70429ea9a2737af9ff9&type=2#NotoSansMonoCJKtc-Regular SDF');
+    white-space: normal;
 }
 
 .k2-status-line--normal {
@@ -125,7 +127,6 @@
 }
 
 Label {
-    font-size: 12px;
     min-width: 93px;
     -unity-text-align: upper-left;
 }
