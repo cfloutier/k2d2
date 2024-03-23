@@ -9,57 +9,8 @@ using KTools;
 
 namespace K2D2.UI.Tests
 {
-
-
-    public class TimerPanel: K2Panel
-    {
-        public TimerPanel()
-        {
-            code = "timer";
-        }
-
-
-        Label my_label;
-
-        public override bool onInit()
-        {
-            my_label = panel.Q<Label>("timer_label");     
-            return true;
-        }
-
-        public override bool onUpdateUI()
-        {
-            if (!base.onUpdateUI())
-                return false;
-
-            Debug.Log("calling update");
-            my_label.text = $"time is {Time.time:n1} s";
-
-            return true;
-        }
-    }
-
-    public class DisablePage: K2Panel
-    {
-        public DisablePage()
-        {
-            code = "disable";
-        }
-
-        public override bool onInit()
-        {
-            var parent_tabs = panel.GetFirstAncestorOfType<TabbedPage>();
-
-            var toogle = panel.Q<K2Toggle>("controls");     
-            toogle.RegisterCallback<ChangeEvent<bool>>( evt => parent_tabs.Enable("controls", !evt.newValue));
-            toogle = panel.Q<K2Toggle>("timer");     
-            toogle.RegisterCallback<ChangeEvent<bool>>( evt => parent_tabs.Enable("timer", !evt.newValue));
-            return true;
-        }
-    }
-  
-
-    //Inherits from class `MonoBehaviour`. This makes it attachable to a game object as a component.
+ 
+ 
     public class Test_K2D2UI : MonoBehaviour
     {
         private TabbedPage pages_controler;
@@ -80,13 +31,9 @@ namespace K2D2.UI.Tests
             root.MakeDraggable();
 
             SettingsFile.Init("settings.json");
-
             List<K2Panel> panels = new()
             {
-                new TestAllControls(),
-                // new TestSettings(),
-                new TimerPanel(),
-                new DisablePage(),
+               
             };
 
             var settings_toggle = root.Q<ToggleButton>("settings-toggle");

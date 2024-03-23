@@ -5,7 +5,6 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
 using K2D2;
-using UnityEditor.MemoryProfiler;
 
 namespace K2UI.Tabs
 {
