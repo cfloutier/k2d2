@@ -1,0 +1,51 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/K2D2_UI/K2D2.uss?fileID=7433441132597879392&amp;guid=f49119c0dc6aec7469a0374f7f606ceb&amp;type=3#K2D2" />
+    <Style src="project://database/Assets/Runtime/K2UI/USS/K2UI.uss?fileID=7433441132597879392&amp;guid=d70a8288b6b3eee4a900aa2727eb7499&amp;type=3#K2UI" />
+    <Style src="project://database/Assets/Runtime/K2UI/USS/ToggleButton.uss?fileID=7433441132597879392&amp;guid=1b6a73cd9e0a617469e5d501d696c7be&amp;type=3#ToggleButton" />
+    <Style src="project://database/Assets/Runtime/K2UI/USS/K2Toggle.uss?fileID=7433441132597879392&amp;guid=a6dc5024ba8ad204e9099eca78c0703f&amp;type=3#K2Toggle" />
+    <Style src="project://database/Assets/Runtime/K2UI/USS/K2Slider.uss?fileID=7433441132597879392&amp;guid=3d8e4d9f1386ac94c97e6381ad01c59b&amp;type=3#K2Slider" />
+    <K2UI.Tabs.TabPage name="lift" label="Lift" style="display: flex;">
+        <ui:Label tabindex="-1" text="It&apos;s time Take-off" display-tooltip-when-elided="true" name="Title" class="unselectedContent" style="display: flex;" />
+        <ui:VisualElement name="page" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); display: flex;">
+            <ui:Foldout text="Profile" value="true" name="profile">
+                <ui:IntegerField label="Ap Altitude" value="42" name="destination_Ap_km">
+                    <ui:Label tabindex="-1" text="km" display-tooltip-when-elided="true" style="width: 28px; min-width: 10px; margin-right: 0; margin-left: 10px;" />
+                </ui:IntegerField>
+                <K2UI.K2Slider name="end_rotate_altitude_km" label="5° Alt." max="10" print-value="false" label-on-top="false" value="0" min="0.01" />
+                <K2UI.K2Slider name="mid_rotate_altitude_km" label="45° Alt." max="10" print-value="false" label-on-top="false" value="0.98" min="0.01" />
+                <ui:IntegerField label="90° Altitude" value="42" name="start_altitude_km">
+                    <ui:Label tabindex="-1" text="km" display-tooltip-when-elided="true" style="width: 28px; min-width: 10px; margin-right: 0; margin-left: 10px;" />
+                </ui:IntegerField>
+            </ui:Foldout>
+            <K2UI.K2Slider name="max_throttle" label="Max Throttle" max="10" print-value="false" label-on-top="false" value="0" min="0.01" />
+            <K2UI.ToggleButton name="run" label="Start" class="big" style="flex-grow: 1;" />
+            <ui:VisualElement name="full_status" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
+                <K2UI.Console tabindex="-1" name="pilot_console" text="Console Pilot" />
+                <K2UI.StatusLine tabindex="-1" text="Status Pilot" name="status_pilot" />
+                <K2UI.K2ProgressBar name="progress" set-label-to-value="false" value="70.27" max="100" label=" " postfix=" %" style="height: 25px;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="settings" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); display: none;">
+            <ui:Label tabindex="-1" text="Settings" display-tooltip-when-elided="true" class="unselectedContent" style="display: flex;" />
+            <K2UI.K2Toggle label="Show Nodes Infos " name="show_node_infos" />
+            <K2UI.ExFoldoutGroup opened-index="3" style="margin-top: 6px;">
+                <ui:Foldout text="Warp" value="true" name="Warp">
+                    <K2UI.K2Toggle label="Auto Warp" name="auto_warp" tooltip="Warp time before burn" />
+                    <ui:VisualElement name="warp_settings" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
+                        <K2UI.K2Slider label-on-top="true" min-max-label="Safe-Quick" print-value="true" min="0" value="1" max="7" name="warp_speed" label="Warp Speed" />
+                        <ui:IntegerField label="Before Burn (s)" value="42" is-delayed="true" name="warp_safe_duration" tooltip="Nb seconds in x1 before next phase (min:5)" />
+                    </ui:VisualElement>
+                </ui:Foldout>
+                <ui:Foldout text="Burn" value="false" name="Burn">
+                    <K2UI.K2Slider label-on-top="true" min-max-label="Precise-Quick" print-value="true" min="0.5" value="0.5" max="2" name="burn_adjust" label="Adjusting rate (m/s)" />
+                    <K2UI.K2Slider label-on-top="true" min-max-label="Precise-Quick" print-value="true" min="0.001" value="0.08" max="0.1" name="max_dv_error" label="Precision (m/s)" />
+                </ui:Foldout>
+                <ui:Foldout text="Experimental" value="false" name="Experimental">
+                    <K2UI.InlineEnum labels="T0;before;Mid-duration" name="start_mode" class="inline_enum" />
+                    <K2UI.K2Slider label-on-top="true" print-value="true" min="0" value="1" max="10" name="start_before" label="Start Before T0 (s)" />
+                    <K2UI.K2Toggle label="Rotate During burn" tooltip="Keep SAS during burn phase." name="rotate_during_burn" />
+                </ui:Foldout>
+            </K2UI.ExFoldoutGroup>
+        </ui:VisualElement>
+    </K2UI.Tabs.TabPage>
+</ui:UXML>

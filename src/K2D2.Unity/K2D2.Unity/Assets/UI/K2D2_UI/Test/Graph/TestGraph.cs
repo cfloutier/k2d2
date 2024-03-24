@@ -102,7 +102,6 @@ public class TestGraph : MonoBehaviour
         {
             var points = buildPerlin(i*dt);
             lines[i].setPoints(points);
-        }
-        
+        }      
     }
 }

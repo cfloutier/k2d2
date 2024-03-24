@@ -70,9 +70,8 @@ public class K2D2Plugin : BaseSpaceWarpPlugin
         // Load all the other assemblies used by this mod
         LoadAssemblies();
         new K2D2PilotsMgr();
-        SettingsFile.Init("K2d2_settings.json");
+        SettingsFile.Init(this, "k2d2_settings.json");
         
-
         gameObject.hideFlags = HideFlags.HideAndDontSave;
         DontDestroyOnLoad(gameObject);
         RegisterMessages();

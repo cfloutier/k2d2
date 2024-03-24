@@ -1,5 +1,6 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <ui:Template name="NodeEx" src="project://database/Assets/UI/K2D2_UI/NodeEx.uxml?fileID=9197481963319205126&amp;guid=f15f79d82752d7446bce3054802d8872&amp;type=3#NodeEx" />
+    <ui:Template name="Lift" src="project://database/Assets/UI/K2D2_UI/Lift.uxml?fileID=9197481963319205126&amp;guid=aee8281d46c73a74087b6974fd1bcded&amp;type=3#Lift" />
     <Style src="project://database/Assets/UI/K2D2_UI/K2D2.uss?fileID=7433441132597879392&amp;guid=f49119c0dc6aec7469a0374f7f606ceb&amp;type=3#K2D2" />
     <Style src="project://database/Assets/Runtime/K2UI/USS/K2UI.uss?fileID=7433441132597879392&amp;guid=d70a8288b6b3eee4a900aa2727eb7499&amp;type=3#K2UI" />
     <Style src="project://database/Assets/Runtime/K2UI/USS/ToggleButton.uss?fileID=7433441132597879392&amp;guid=1b6a73cd9e0a617469e5d501d696c7be&amp;type=3#ToggleButton" />
@@ -20,11 +21,8 @@
             </ui:Button>
         </ui:VisualElement>
         <K2UI.Tabs.TabbedPage selected-tab-Name="controls">
-            <ui:Instance template="NodeEx" name="node" />
-            <K2UI.Tabs.TabPage name="lift" label="Lift" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); align-self: flex-start; display: none;">
-                <ui:Label tabindex="-1" text="The Title" display-tooltip-when-elided="true" name="Title" class="unselectedContent" />
-                <ui:FloatField label="Float Field" value="42,2" />
-            </K2UI.Tabs.TabPage>
+            <ui:Instance template="NodeEx" name="node" style="display: none;" />
+            <ui:Instance template="Lift" name="Lift" style="display: flex;" />
             <K2UI.Tabs.TabPage name="land" label="Land" class="unselectedContent" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); display: none;">
                 <ui:Label tabindex="-1" text="Land" display-tooltip-when-elided="true" name="Title" class="unselectedContent" />
             </K2UI.Tabs.TabPage>
