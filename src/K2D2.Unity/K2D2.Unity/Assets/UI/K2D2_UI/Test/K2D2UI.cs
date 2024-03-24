@@ -34,7 +34,7 @@ namespace K2D2.UI.Tests
             };
 
             var settings_toggle = root.Q<ToggleButton>("settings-toggle");
-            GlobalSetting.settings_visible.Bind(settings_toggle);
+            settings_toggle.Bind(GlobalSetting.settings_visible);
 
             pages_controler = root.Q<TabbedPage>();
             pages_controler.Init(panels);

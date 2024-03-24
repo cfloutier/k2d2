@@ -237,15 +237,18 @@ namespace K2UI
         public void Bind(Setting<int> setting)
         {
             this.value = setting.V;
-            setting.Bind(this);
+            setting.listeners += v => this.value = v;
+            RegisterCallback<ChangeEvent<int>>(evt => setting.V = evt.newValue);
         }
 
         public void Bind(ClampSetting<int> setting)
         {
             this.Min = setting.min;
             this.Max = setting.max;
-            this.value = setting.V;          
-            setting.Bind(this);
+            
+            this.value = setting.V;
+            setting.listeners += v => this.value = v;
+            RegisterCallback<ChangeEvent<int>>(evt => setting.V = evt.newValue);
         }
     }
 

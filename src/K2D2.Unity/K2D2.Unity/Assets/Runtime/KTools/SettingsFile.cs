@@ -32,11 +32,11 @@ namespace KTools
             Instance.Load(file_path);
         }
 
-        public List<IResettable> register = new();
+        public List<IResettable> reset_register = new();
 
         public void Reset()
         {
-            foreach(var s in register)
+            foreach(var s in reset_register)
             {
                 s.Reset();
             }

@@ -100,14 +100,11 @@ public class K2D2Window : MonoBehaviour
         var settings_button = title_bar.Q<ToggleButton>("settings-toggle");
         var staging_toggle = title_bar.Q<ToggleButton>("staging-toggle");
 
-        GlobalSetting.settings_visible.Bind(settings_button);
-
-        settings_button.RegisterCallback<ChangeEvent<bool>>( evt => StagingPilot.Instance.Enabled = evt.newValue );
-
+        settings_button.Bind(GlobalSetting.settings_visible);
+        staging_toggle.RegisterCallback<ChangeEvent<bool>>( evt => StagingPilot.Instance.Enabled = evt.newValue );
 
         _rootElement.MakeDraggable();
     }
-
 
     void Update()
     {

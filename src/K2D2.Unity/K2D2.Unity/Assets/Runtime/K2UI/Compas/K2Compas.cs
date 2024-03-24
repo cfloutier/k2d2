@@ -355,7 +355,8 @@ namespace K2UI
         public void Bind(Setting<float> setting)
         {
             this.value = setting.V;
-            setting.Bind(this);
+            setting.listeners += v => this.value = v;
+            RegisterCallback<ChangeEvent<float>>(evt => setting.V = evt.newValue);
         }
     }
 }

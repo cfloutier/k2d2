@@ -32,6 +32,8 @@ namespace KTools
             else
                 SettingsFile.Instance.onloaded_event += loadValue;
 
+            if (!string.IsNullOrEmpty(path))    
+                SettingsFile.Instance.reset_register.Add(this);
         }
 
         public void Reset()
@@ -62,6 +64,7 @@ namespace KTools
         public int int_value
         {
             get { return (int)(object) V;}
+            set { _value = (TEnum)(object) value;}
         }
 
         public delegate void onChanged(TEnum value);
@@ -70,12 +73,7 @@ namespace KTools
 
         public void Bind(InlineEnum element, string labels = null)
         {    
-            if (labels == null)
-                element.labels = String.Join(";", Enum.GetNames( typeof(TEnum) ));
-            else
-                element.labels = labels;
-
-            element.RegisterCallback<ChangeEvent<int>>(evt => V =(TEnum)Enum.ToObject(typeof(TEnum), evt.newValue));
+           
         }
     }
 
@@ -92,6 +90,9 @@ namespace KTools
                 loadValue();
             else
                 SettingsFile.Instance.onloaded_event += loadValue;
+
+            if (!string.IsNullOrEmpty(path))    
+                SettingsFile.Instance.reset_register.Add(this);
         }
 
         public void Reset()
@@ -122,6 +123,12 @@ namespace KTools
         public delegate void onChanged(T value);
 
         public event onChanged listeners;
+
+        public void listen(onChanged listener)
+        {
+            listeners+= listener;
+            listener(V);
+        }
     }
 
 

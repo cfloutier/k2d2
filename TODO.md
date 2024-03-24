@@ -7,7 +7,7 @@ UITK :
     * [x] cs
     * [x] uss
     * [x] add icon
-    * [x] active color
+    * [x] active color (green or yellow)
 * [x] small slider toogle
     * [x] cs
     * [x] uss
@@ -26,7 +26,6 @@ UITK :
     * [x] Avoid update Ui if tab is not visible
     * [ ] default tab on startup
     * [x] UI look (back to simple buttons !)
-
 * [x] Status Line
     * [x] cs
     * [x] uss
@@ -35,8 +34,8 @@ UITK :
     * [x] uss
 * [x] Label
     * [x] uss
-
-* [ ] Value Fields 
+* [x] InlineEnum
+* [ ] Editor Fields 
     * [x] uss
     * [ ] test delayed
     * [ ] Bindable
@@ -45,9 +44,15 @@ UITK :
 * [x] Windows Header
 
 * [x] Settings bindable
+    * [x] string
+    * [x] int
+    * [x] float
+    * [x] Color
+    * [x] Enum
+
     * [x] Settings pages + button Settings 
-    * [ ] Too ways settings
-    * [ ] reset to default
+    * [x] Too ways settings
+    * [x] reset to default
 
 * [ ] Repeat button
 * [ ] Field with repeat button (for the drone)
@@ -63,13 +68,13 @@ UITK :
 
 * [x] draggable 
   * [ ] and window limit
+
 * [ ] bug on size change
 * [ ] Ui is not resizable @munix help
 
 * [ ] Tooltips
 
 -----------------------------
-
 * [x] Node ex 
   * [x] Main UI
     * [x] Node info not active on run

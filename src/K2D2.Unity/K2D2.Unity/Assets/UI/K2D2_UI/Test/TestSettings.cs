@@ -44,15 +44,9 @@ namespace K2D2.UI.Tests
             panel.Q<K2Slider>("float_settings").Bind(settings.float_item);
             panel.Q<K2SliderInt>("int_settings").Bind(settings.int_item);
 
+            panel.Q<InlineEnum>("enum").Bind(settings.enum_item);
 
-            var inline_enum = panel.Q<InlineEnum>("enum");    
-            settings.enum_item.Bind(inline_enum);
-            inline_enum.value = settings.enum_item.int_value;
-
-            var bt = panel.Q<Button>("reset");
-            bt.RegisterCallback<ClickEvent>(evt => SettingsFile.Instance.Reset());
-
-
+            panel.Q<Button>("reset").RegisterCallback<ClickEvent>(evt => SettingsFile.Instance.Reset());     
         }
     }
 }

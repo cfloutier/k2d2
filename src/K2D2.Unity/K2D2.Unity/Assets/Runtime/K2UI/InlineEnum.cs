@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using System.Collections.Generic;
 // using KTools;
-// using System;
+using System;
 
 namespace K2UI
 {
@@ -102,18 +102,20 @@ namespace K2UI
             for (int i = 0 ; i < buttons.Count; i++)
             {
                 var bt = buttons[i];
-                if (i == value)
-                {
-                    bt.AddToClassList("checked");
-                }
-                else
-                {
-                    bt.RemoveFromClassList("checked");
-                }
+                bt.EnableInClassList("checked", i == value); 
             }
         }
 
-       
-    }
+        public void Bind<TEnum>(KTools.EnumSetting<TEnum> setting, string labels = null) where TEnum : struct
+        {
+            this.value = setting.int_value;
+            if (labels == null)
+                this.labels = String.Join(";", Enum.GetNames( typeof(TEnum) ));
+            else
+                this.labels = labels;
 
+            setting.listeners += v => this.value = (int)(object) v;
+            RegisterCallback<ChangeEvent<int>>(evt => setting.V = (TEnum)Enum.ToObject(typeof(TEnum), evt.newValue));
+        }
+    }
 }

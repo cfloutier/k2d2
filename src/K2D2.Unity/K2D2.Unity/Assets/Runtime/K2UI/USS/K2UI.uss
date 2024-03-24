@@ -24,7 +24,7 @@
     --k2-hover_frame: rgb(16, 16, 37);
     --k2-active_frame: rgb(30, 32, 77);
     --k2-color-border: rgb(76, 80, 188);
-    --k2-color-border-bottom: rgb(96, 100, 224);
+    --k2-color-border-bottom: rgb(90, 94, 211);
     --k2-font-size: 14px;
     --k2-spacing: 0;
 }
