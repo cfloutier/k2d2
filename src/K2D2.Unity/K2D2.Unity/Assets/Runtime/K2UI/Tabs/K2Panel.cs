@@ -31,6 +31,8 @@ namespace K2UI.Tabs
 
         public TabButton tab_button;
 
+        TabbedPage tabbed_page;
+
         public K2Panel()
         {
 
@@ -38,6 +40,8 @@ namespace K2UI.Tabs
 
         public bool Init(VisualElement buttons, VisualElement panels)
         {
+            tabbed_page = panels.GetFirstAncestorOfType<TabbedPage>();
+
             tab_button = buttons.Q<TabButton>(code);
             if (tab_button == null)
             {
@@ -131,6 +135,12 @@ namespace K2UI.Tabs
                 _enabled = value;
         
                 tab_button.Show(_enabled);
+
+                // check if this is the current tab
+                if (tabbed_page.CurrentTabCode == code)
+                {
+                    tabbed_page.SelectFirst();
+                }
             }
         }
     }

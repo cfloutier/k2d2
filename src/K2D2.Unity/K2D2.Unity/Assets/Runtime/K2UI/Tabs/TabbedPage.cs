@@ -3,6 +3,7 @@
 using UnityEngine;
 using UnityEngine.UIElements;
 using System.Collections.Generic;
+using UnityEditor.UIElements;
 
 namespace K2UI.Tabs
 {
@@ -132,8 +133,27 @@ namespace K2UI.Tabs
             ShowContent(evt.newValue);   
         }
 
+        string current_tab = "";
+        public string CurrentTabCode
+        {
+            get => current_tab;
+        }
+
+        public void SelectFirst()
+        {
+            foreach (var panel in panels)
+            {
+                if (panel.enabled)
+                {
+                    ShowContent(panel.code);
+                    return;
+                }
+            }
+        }
+
         void ShowContent(string code)
         {
+            current_tab = code;
             foreach (var page in content_el.Children())
             {
                 page.Show(page.name == code);
@@ -146,6 +166,8 @@ namespace K2UI.Tabs
             {
                 panel.isVisible = panel.code == code;    
             }
+
+            tabsbar_el.setOpenedPage(code);
         }
 
         public void Enable(string code, bool enable)
@@ -172,6 +194,8 @@ namespace K2UI.Tabs
             tabsbar_el.setOpenedPage(code);
             ShowContent(code);         
         }
+
+
 
         public void Update()
         {

@@ -42,9 +42,6 @@ namespace KTools
             }
         }
 
-
-
-
         protected string file_path = "";
         Dictionary<string, string> data = new Dictionary<string, string>();
 

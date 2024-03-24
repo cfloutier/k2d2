@@ -64,13 +64,24 @@ namespace K2D2.UI.Tests
             code = "about";
         }
 
+
+        void onSettingsChanged(bool visible)
+        {
+            enabled = visible;
+        }
+
+
         public override bool onInit()
         {
-            // var parent_tabs = panel.GetFirstAncestorOfType<TabbedPage>();
-            Button reset_bt = panel.Q<Button>("reset");  
+            // enable only if settings is visible
+            GlobalSetting.settings_visible.listen(onSettingsChanged);
+            
+            Button reset_bt = panel.Q<Button>("reset_settings");  
             reset_bt.RegisterCallback<ClickEvent>( evt => SettingsFile.Instance.Reset());
 
             return true;
+
+
         }
     }
 
@@ -103,6 +114,7 @@ namespace K2D2.UI.Tests
                 // new TestSettings(),
                 new TimerPanel(),
                 new DisablePage(),
+                new AboutPage(),
             };
 
             var settings_toggle = root.Q<ToggleButton>("settings-toggle");
