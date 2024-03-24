@@ -1,6 +1,11 @@
 .toggle-button {
-    margin-bottom: 4px;
+    border-color: var(--k2-color-border);
+    border-width: 1px;
+    border-bottom-color: var(--k2-color-border-bottom);
+    border-bottom-width: 2px;
     background-color: var(--k2-color-button-background);
+    border-radius: 5px;
+    margin-bottom: 4px;
 }
 
 .toggle-button:hover {

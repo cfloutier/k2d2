@@ -40,9 +40,14 @@ namespace K2D2.UI.Tests
         {
             panel.Q<K2Toggle>("bool_settings").Bind(settings.bool_item);
             panel.Q<K2Toggle>("bool_linked").Bind(settings.bool_item);
+            panel.Q<ToggleButton>("toggle_linked").Bind(settings.bool_item);
+
        
             panel.Q<K2Slider>("float_settings").Bind(settings.float_item);
+            panel.Q<K2Slider>("float_linked").Bind(settings.float_item);
+
             panel.Q<K2SliderInt>("int_settings").Bind(settings.int_item);
+            panel.Q<K2SliderInt>("int_linked").Bind(settings.int_item);
 
             panel.Q<InlineEnum>("enum").Bind(settings.enum_item);
 

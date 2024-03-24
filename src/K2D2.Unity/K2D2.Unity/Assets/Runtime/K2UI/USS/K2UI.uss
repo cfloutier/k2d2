@@ -47,17 +47,14 @@
 }
 
 .unity-button:hover {
- 
     background-color: var(--k2-color-button-background-hover);
 }
 
-.unity-button:active
-{
+.unity-button:active {
     background-color: var(--k2-active_frame);
 }
 
-.unity-button.big
-{
+.unity-button.big {
     height: 40px;
     font-size: 20px;
 }
@@ -239,4 +236,36 @@ Label {
     font-size: 12px;
     -unity-text-align: middle-center;
     letter-spacing: 0;
+}
+
+.group_label {
+    position: absolute;
+    min-width: 0;
+    font-size: 12px;
+    top: -9px;
+    left: 4px;
+    height: 12px;
+    padding-top: 2px;
+    padding-right: 4px;
+    padding-bottom: 2px;
+    background-color: rgb(0, 0, 0);
+    padding-left: 6px;
+}
+
+.group {
+    flex-grow: 1;
+    background-color: rgba(0, 0, 0, 0);
+    border-width: 1px;
+    border-bottom-width: 2px;
+    border-color: var(--k2-color-border);
+    border-bottom-color: var(--k2-color-border-bottom);
+    margin-top: 10px;
+    padding-top: 5px;
+    padding-bottom: 0;
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+    padding-left: 6px;
+    padding-right: 12px;
 }

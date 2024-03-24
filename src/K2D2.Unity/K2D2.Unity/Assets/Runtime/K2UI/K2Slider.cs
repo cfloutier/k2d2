@@ -19,7 +19,7 @@ namespace K2UI
             }
 
             private UxmlStringAttributeDescription m_Label = new()
-            { name = "label", defaultValue = "K2Slider" };
+            { name = "label", defaultValue = "" };
 
             private UxmlBoolAttributeDescription m_labelOnTop = new()
             { name = "label-on-top", defaultValue = false };
@@ -219,7 +219,6 @@ namespace K2UI
 
             if (printValue)
             {
-
                 main_slider.label = Label + " : " + value.ToStringInvariant("N2"); ;
                 // Thread.CurrentThread.CurrentCulture = previous_culture;
             }
@@ -234,14 +233,25 @@ namespace K2UI
             {
                 min_max_bar.style.display = DisplayStyle.Flex;
 
-                var labels = minMaxLabel.Split("-");
-                if (labels.Length >= 1)
-                    min_element.text = labels[0];
-
-                if (labels.Length >= 2)
-                    max_element.text = labels[1];
+                if (minMaxLabel == "x")
+                {
+                    // magic code to take from min max values
+                    min_element.text = Min.ToStringInvariant();
+                    max_element.text = Max.ToStringInvariant();
+                }
                 else
-                    max_element.text = "";
+                {
+                    var labels = minMaxLabel.Split("-");
+                    if (labels.Length >= 1)
+                        min_element.text = labels[0];
+
+                    if (labels.Length >= 2)
+                        max_element.text = labels[1];
+                    else
+                        max_element.text = "";
+                }
+
+              
             }
         }
 
@@ -257,10 +267,10 @@ namespace K2UI
         {
             this.Min = setting.min;
             this.Max = setting.max;
-            this.value = setting.V; 
-            setting.listeners += v => this.value = v;         
+            this.value = setting.V;
+            setting.listeners += v => this.value = v;
             RegisterCallback<ChangeEvent<float>>(evt => setting.V = evt.newValue);
         }
     }
-  
+
 }

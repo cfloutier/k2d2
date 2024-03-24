@@ -20,7 +20,7 @@ namespace K2UI
             }
 
             private UxmlStringAttributeDescription m_Label = new()
-            { name = "label", defaultValue = "K2SliderInt" };
+            { name = "label", defaultValue = "" };
 
             private UxmlBoolAttributeDescription m_labelOnTop = new()
             { name = "label-on-top", defaultValue = false };
@@ -222,15 +222,23 @@ namespace K2UI
             else
             {
                 min_max_bar.style.display = DisplayStyle.Flex;
-
-                var labels = minMaxLabel.Split("-");
-                if (labels.Length >= 1)
-                    min_element.text = labels[0];
-
-                if (labels.Length >= 2)
-                    max_element.text = labels[1];
+                if (minMaxLabel == "x")
+                {
+                    // magic code to take from min max values
+                    min_element.text = Min.ToStringInvariant();
+                    max_element.text = Max.ToStringInvariant();
+                }
                 else
-                    max_element.text = "";
+                {
+                    var labels = minMaxLabel.Split("-");
+                    if (labels.Length >= 1)
+                        min_element.text = labels[0];
+
+                    if (labels.Length >= 2)
+                        max_element.text = labels[1];
+                    else
+                        max_element.text = "";
+                }
             }
         }
 
