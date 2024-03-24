@@ -98,3 +98,7 @@
     border-top-width: 2px;
     border-bottom-width: 2px;
 }
+
+TabPage {
+    margin-top: 5px;
+}

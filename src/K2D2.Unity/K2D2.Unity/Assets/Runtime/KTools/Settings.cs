@@ -14,7 +14,12 @@ using JetBrains.Annotations;
 
 namespace KTools
 {
-    public class EnumSetting<TEnum> where TEnum : struct
+    public interface IResettable
+    {
+        void Reset();
+    }
+
+    public class EnumSetting <TEnum> : IResettable where TEnum : struct
     {
         public string path;
         TEnum default_value;
@@ -27,6 +32,11 @@ namespace KTools
             else
                 SettingsFile.Instance.onloaded_event += loadValue;
 
+        }
+
+        public void Reset()
+        {
+            this.V = default_value;
         }
 
         void loadValue()
@@ -69,7 +79,7 @@ namespace KTools
         }
     }
 
-    public class Setting<T>
+    public class Setting<T> : IResettable
     {
         public string path;
         T default_value;
@@ -82,7 +92,11 @@ namespace KTools
                 loadValue();
             else
                 SettingsFile.Instance.onloaded_event += loadValue;
+        }
 
+        public void Reset()
+        {
+            this.V = default_value;
         }
 
         void loadValue()
@@ -108,20 +122,8 @@ namespace KTools
         public delegate void onChanged(T value);
 
         public event onChanged listeners;
-
-        public void listen(onChanged listener)
-        {
-            listeners+= listener;
-            listener(V);
-        }
-
-        public void Bind(VisualElement element)
-        {
-            element.RegisterCallback<ChangeEvent<T>>(evt => V = evt.newValue);
-        }
     }
 
-    
 
     public class ClampSetting<T> : Setting<T> where T : System.IComparable<T>
     {

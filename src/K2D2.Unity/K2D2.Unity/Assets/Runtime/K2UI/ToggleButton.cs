@@ -96,7 +96,8 @@ namespace K2UI
         public void Bind(Setting<bool> setting)
         {
             this.value = setting.V;
-            setting.Bind(this);
+            setting.listeners += v => this.value = v;
+            RegisterCallback<ChangeEvent<bool>>(evt => setting.V = evt.newValue);
         }
         
     }

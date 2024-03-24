@@ -1,6 +1,7 @@
 // This script attaches the tabbed menu logic to the game.
 using UnityEngine;
 using UnityEngine.UIElements;
+
 using System.Collections.Generic;
 
 using K2UI;
@@ -55,6 +56,24 @@ namespace K2D2.UI.Tests
             return true;
         }
     }
+
+    public class AboutPage: K2Panel
+    {
+        public AboutPage()
+        {
+            code = "about";
+        }
+
+        public override bool onInit()
+        {
+            // var parent_tabs = panel.GetFirstAncestorOfType<TabbedPage>();
+            Button reset_bt = panel.Q<Button>("reset");  
+            reset_bt.RegisterCallback<ClickEvent>( evt => SettingsFile.Instance.Reset());
+
+            return true;
+        }
+    }
+
   
     //Inherits from class `MonoBehaviour`. This makes it attachable to a game object as a component.
     public class Test_UI : MonoBehaviour
@@ -87,7 +106,7 @@ namespace K2D2.UI.Tests
             };
 
             var settings_toggle = root.Q<ToggleButton>("settings-toggle");
-            GlobalSetting.settings_visible.Bind(settings_toggle);
+            settings_toggle.Bind(GlobalSetting.settings_visible);
 
             pages_controler = root.Q<TabbedPage>();
             pages_controler.Init(panels);

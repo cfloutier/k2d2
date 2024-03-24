@@ -32,6 +32,19 @@ namespace KTools
             Instance.Load(file_path);
         }
 
+        public List<IResettable> register = new();
+
+        public void Reset()
+        {
+            foreach(var s in register)
+            {
+                s.Reset();
+            }
+        }
+
+
+
+
         protected string file_path = "";
         Dictionary<string, string> data = new Dictionary<string, string>();
 

@@ -19,7 +19,7 @@
     --k2-color-background: rgb(0, 0, 0);
     --k2-color-button-text: rgb(242, 242, 242);
     --k2-color-button-background: rgb(12, 12, 27);
-    --k2-color-button-background-hover: rgb(31, 31, 73);
+    --k2-color-button-background-hover: rgb(19, 19, 44);
     --k2-background-frame: rgba(76, 79, 188, 0.1);
     --k2-hover_frame: rgb(16, 16, 37);
     --k2-active_frame: rgb(30, 32, 77);
@@ -35,6 +35,8 @@
     border-radius: 3px;
     border-width: 1px;
     border-color: var(--k2-color-border);
+    border-bottom-color: var(--k2-color-border-bottom);
+    border-bottom-width: 2px;
     background-color: var(--k2-color-button-background);
     margin: 2px 4px;
     padding-left: 4px;
@@ -42,6 +44,22 @@
     margin-left: 2px;
     margin-right: 2px;
     color: var(--k2-color-button-text);
+}
+
+.unity-button:hover {
+ 
+    background-color: var(--k2-color-button-background-hover);
+}
+
+.unity-button:active
+{
+    background-color: var(--k2-active_frame);
+}
+
+.unity-button.big
+{
+    height: 40px;
+    font-size: 20px;
 }
 
 .main-frame {

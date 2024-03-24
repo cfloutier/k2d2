@@ -45,7 +45,9 @@ UITK :
 * [x] Windows Header
 
 * [x] Settings bindable
-    * [x] settings pages + button Settings 
+    * [x] Settings pages + button Settings 
+    * [ ] Too ways settings
+    * [ ] reset to default
 
 * [ ] Repeat button
 * [ ] Field with repeat button (for the drone)

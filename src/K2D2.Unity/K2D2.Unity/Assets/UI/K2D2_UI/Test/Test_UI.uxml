@@ -20,7 +20,7 @@
             </ui:Button>
         </ui:VisualElement>
         <K2UI.Tabs.TabbedPage selected-tab-Name="controls" style="margin-top: 4px;">
-            <K2UI.Tabs.TabPage name="controls" label="Controls test" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); display: none;">
+            <K2UI.Tabs.TabPage name="controls" label="Controls test" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); display: flex;">
                 <ui:VisualElement name="page" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); display: none;">
                     <K2UI.ExFoldoutGroup style="margin-top: 6px;">
                         <ui:Foldout text="Progress &amp; Compas">
@@ -43,18 +43,24 @@
                 </ui:VisualElement>
                 <ui:VisualElement name="settings" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); display: flex;">
                     <ui:Label tabindex="-1" text="Settings page... all must be saved" display-tooltip-when-elided="true" />
-                    <K2UI.K2Toggle name="bool_settings" label="Bool Toggle" />
-                    <K2UI.K2Slider name="float_settings" label="Float Slider" label-on-top="true" max="100" value="5" />
-                    <K2UI.K2SliderInt label="Int Slider" name="int_settings" />
+                    <K2UI.K2Toggle name="bool_settings" label="Bool Toggle (True)" />
+                    <K2UI.K2Toggle name="bool_linked" label="Linked" />
+                    <K2UI.K2Slider name="float_settings" label="Float Slider (5)" label-on-top="true" max="100" value="5" />
+                    <K2UI.K2SliderInt label="Int Slider (-5)" name="int_settings" />
                     <K2UI.InlineEnum name="enum" />
+                    <ui:Button text="Reset" display-tooltip-when-elided="true" class="big" />
                 </ui:VisualElement>
             </K2UI.Tabs.TabPage>
             <K2UI.Tabs.TabPage name="timer" label="Timer" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); display: none;">
                 <ui:Label tabindex="-1" text="Label" display-tooltip-when-elided="true" name="timer_label" />
             </K2UI.Tabs.TabPage>
-            <K2UI.Tabs.TabPage name="disable" label="Disable Tabs" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); display: flex;">
+            <K2UI.Tabs.TabPage name="disable" label="Disable Tabs" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); display: none;">
                 <K2UI.K2Toggle name="controls" label="Hide Controls" />
                 <K2UI.K2Toggle name="timer" label="Hide Timer" />
+            </K2UI.Tabs.TabPage>
+            <K2UI.Tabs.TabPage name="about" label="About" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); display: none;">
+                <ui:Label tabindex="-1" text="About page (only visible when settings is on)" display-tooltip-when-elided="true" />
+                <ui:Button text="Reset Settings" display-tooltip-when-elided="true" name="reset_settings" />
             </K2UI.Tabs.TabPage>
         </K2UI.Tabs.TabbedPage>
     </ui:VisualElement>
