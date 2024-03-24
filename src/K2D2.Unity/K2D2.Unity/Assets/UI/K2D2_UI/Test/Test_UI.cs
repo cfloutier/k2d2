@@ -104,7 +104,7 @@ namespace K2D2.UI.Tests
             VisualElement root = menu.rootVisualElement;
             root.MakeDraggable();
 
-            SettingsFile.Init("settings.json");
+            SettingsFile.Init(this, "settings.json");
 
             List<K2Panel> panels = new()
             {

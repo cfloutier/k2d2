@@ -8,9 +8,6 @@ namespace K2UI
 {
     public class Group : VisualElement
     {
-        public static new readonly string ussClassName = "group";
-        public static new readonly string ussLabelClassName = "group_label";
-
         public new class UxmlFactory : UxmlFactory<Group, UxmlTraits> { }
 
         public new class UxmlTraits : VisualElement.UxmlTraits
@@ -49,9 +46,9 @@ namespace K2UI
 
         public Group() : base()
         {
-            AddToClassList(ussClassName);
+            AddToClassList("group");
             label_el = new Label();
-            label_el.AddToClassList(ussLabelClassName);
+            label_el.AddToClassList("group_label");
             Add(label_el);
         }
     }

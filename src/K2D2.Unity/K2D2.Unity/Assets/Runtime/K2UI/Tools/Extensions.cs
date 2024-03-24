@@ -44,6 +44,7 @@ namespace K2UI
             element.value = setting.V;
             setting.listeners += v => element.value = v;
             element.RegisterCallback<ChangeEvent<int>>(evt => setting.V = evt.newValue);
+            element.isDelayed = true;
         }
 
         public static void Bind(this FloatField element, Setting<float> setting)
@@ -51,6 +52,7 @@ namespace K2UI
             element.value = setting.V;
             setting.listeners += v => element.value = v;
             element.RegisterCallback<ChangeEvent<float>>(evt => setting.V = evt.newValue);
+            element.isDelayed = true;
         }
     }
 }

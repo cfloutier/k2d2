@@ -11,6 +11,9 @@
 		},
 		{
 			"path": "../k2d2_master"
+		},
+		{
+			"path": "../ManeuverNodeController"
 		}
 	],
 	"settings": {}

@@ -1,8 +1,8 @@
-using System.Collections.Generic;
 using System;
 using System.Threading;
 using System.IO;
-
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -27,9 +27,9 @@ namespace KTools
             }
         }
 
-        static public void Init(string file_path)
+        static public void Init(MonoBehaviour main, string file_path)
         {
-            Instance.Load(file_path);
+            Instance.Load(main, file_path);
         }
 
         public List<IResettable> reset_register = new();
@@ -40,7 +40,9 @@ namespace KTools
             {
                 s.Reset();
             }
+            needSave = true;
         }
+        bool needSave = false;
 
         protected string file_path = "";
         Dictionary<string, string> data = new Dictionary<string, string>();
@@ -53,7 +55,7 @@ namespace KTools
 
         // public ManualLogSource logger = BepInEx.Logging.Logger.CreateLogSource("K2D2.SettingsFile");
 
-        protected void Load(string file_path)
+        protected void Load(MonoBehaviour main, string file_path)
         {
             this.file_path = file_path;
             var previous_culture = Thread.CurrentThread.CurrentCulture;
@@ -70,6 +72,19 @@ namespace KTools
             Thread.CurrentThread.CurrentCulture = previous_culture;
             loaded = true;
             onloaded_event?.Invoke();
+            main.StartCoroutine(this.SaveIfNeeded());
+        }
+
+        IEnumerator SaveIfNeeded()
+        {
+            while (Application.isPlaying)
+            {
+                 if (needSave)
+                {
+                    Save();
+                }
+                yield return new WaitForSeconds(1);
+            }
         }
 
         protected void Save()
@@ -86,6 +101,7 @@ namespace KTools
             }
 
             Thread.CurrentThread.CurrentCulture = previous_culture;
+            needSave = false;
         }
 
         public T Get<T>(string key, T default_value)
@@ -191,13 +207,13 @@ namespace KTools
                 if (data[key] != value)
                 {
                     data[key] = value;
-                    Save();
+                    needSave = true;
                 }
             }
             else
             {
                 data[key] = value;
-                Save();
+                needSave = true;
             }
         }
 
