@@ -10,10 +10,10 @@
             <ui:VisualElement name="Main_Icon" style="width: 40px; height: 30px; top: -23px; left: 14px; background-image: url(&apos;project://database/Assets/Images/cropped_40px.png?fileID=2800000&amp;guid=6a5fd6f51e722db49a3b2c207a7e7a73&amp;type=3#cropped_40px&apos;);" />
             <ui:Label text="K2-D2" style="-unity-font-definition: url(&apos;project://database/Assets/Fonts/Caravan.asset?fileID=11400000&amp;guid=9e9be541f4b684c4eb71cf35fcc59555&amp;type=2#Caravan&apos;); font-size: 21px; margin-left: 8px; flex-grow: 1;" />
             <K2UI.ToggleButton label=" " name="staging-toggle" value="false" class="mini-toggle" style="margin-right: 1px;">
-                <ui:VisualElement name="icon" style="background-image: url(&apos;project://database/Assets/Images/Staging.png?fileID=2800000&amp;guid=fd127b2a5598d0e468cb9d651c90d84a&amp;type=3#Staging&apos;); top: 3px; left: 3px; height: 14px; width: 14px;" />
+                <ui:VisualElement name="icon" style="background-image: url(&apos;project://database/Assets/Images/Staging.png?fileID=2800000&amp;guid=fd127b2a5598d0e468cb9d651c90d84a&amp;type=3#Staging&apos;); top: 2px; left: 2px; height: 14px; width: 14px;" />
             </K2UI.ToggleButton>
             <K2UI.ToggleButton label=" " name="settings-toggle" value="false" class="mini-toggle" style="margin-right: 4px;">
-                <ui:VisualElement name="icon" style="top: 3px; left: 1px;" />
+                <ui:VisualElement name="icon" style="top: 1px; left: 1px;" />
             </K2UI.ToggleButton>
             <ui:Button name="close-button" style="width: 20px; border-top-left-radius: 5px; border-bottom-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px;">
                 <ui:VisualElement name="Icon" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); position: absolute; left: 2px; top: 2px; right: 2px; bottom: 2px; background-image: url(&apos;project://database/Assets/Images/Cross.png?fileID=2800000&amp;guid=4514c86ca5e842041a595323be7f8293&amp;type=3#Cross&apos;);" />
@@ -48,12 +48,14 @@
                         <K2UI.ToggleButton name="toggle_linked" />
                     </K2UI.Group>
                     <K2UI.Group text="Integers" name="integers">
-                        <K2UI.K2SliderInt label="Int Slider (-5)" name="int_settings" />
+                        <K2UI.K2SliderInt label="Int Slider (-5)" name="int_settings" print-value="true" min-max-label="x" label-on-top="true" />
                         <K2UI.K2SliderInt name="int_linked" print-value="false" />
+                        <ui:IntegerField label="Integer Field" value="42" name="int_field" />
                     </K2UI.Group>
                     <K2UI.Group name="floats" text="Floats">
-                        <K2UI.K2Slider name="float_settings" label="Float Slider (5)" label-on-top="true" max="100" value="5" />
+                        <K2UI.K2Slider name="float_settings" label="Float Slider (5)" label-on-top="true" max="100.2" value="5" print-value="true" min-max-label="x" />
                         <K2UI.K2Slider name="float_linked" label-on-top="false" max="100" value="5" />
+                        <ui:FloatField label="Float Field" value="42,2" name="float_field" />
                     </K2UI.Group>
                     <K2UI.Group text="Enum">
                         <K2UI.InlineEnum name="enum" />

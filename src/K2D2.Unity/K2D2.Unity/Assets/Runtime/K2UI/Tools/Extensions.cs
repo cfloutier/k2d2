@@ -3,6 +3,7 @@
 using UnityEngine;
 using UnityEngine.UIElements;
 using System;
+using KTools;
 
 namespace K2UI
 {
@@ -36,6 +37,20 @@ namespace K2UI
         public static void Show(this VisualElement element, bool show)
         {
             element.style.display = show ? DisplayStyle.Flex : DisplayStyle.None;
+        }
+
+        public static void Bind(this IntegerField element, Setting<int> setting)
+        {
+            element.value = setting.V;
+            setting.listeners += v => element.value = v;
+            element.RegisterCallback<ChangeEvent<int>>(evt => setting.V = evt.newValue);
+        }
+
+        public static void Bind(this FloatField element, Setting<float> setting)
+        {
+            element.value = setting.V;
+            setting.listeners += v => element.value = v;
+            element.RegisterCallback<ChangeEvent<float>>(evt => setting.V = evt.newValue);
         }
     }
 }

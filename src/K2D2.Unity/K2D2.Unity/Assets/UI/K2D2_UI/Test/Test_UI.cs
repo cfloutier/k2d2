@@ -80,8 +80,6 @@ namespace K2D2.UI.Tests
             reset_bt.RegisterCallback<ClickEvent>( evt => SettingsFile.Instance.Reset());
 
             return true;
-
-
         }
     }
 
