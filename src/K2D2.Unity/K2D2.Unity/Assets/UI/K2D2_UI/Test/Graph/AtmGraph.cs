@@ -76,9 +76,6 @@ public class AtmGraph : MonoBehaviour
             for (int x = 0; x < texture.width; x++)
             {
                 texture.SetPixel(x, y, c);
-
-                // if (mainBody.hasAtmosphere && (int)(maxAtmosphereAltitude_km / scale) == y)
-                //     texture.SetPixel(x, y, XKCDColors.LightGreyBlue);
             }
         }
 

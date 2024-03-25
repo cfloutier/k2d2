@@ -24,7 +24,7 @@ UITK :
     * [x] Panel cs
     * [x] Enable / disable Tabs
     * [x] Avoid update Ui if tab is not visible
-    * [ ] default tab on startup
+    * [x] default tab on startup
     * [x] UI look (back to simple buttons !)
 * [x] Status Line
     * [x] cs
@@ -35,11 +35,11 @@ UITK :
 * [x] Label
     * [x] uss
 * [x] InlineEnum
-* [ ] Editor Fields 
+* [x] Editor Fields 
     * [x] uss
-    * [ ] test delayed
-    * [ ] Bindable
-    * [ ] Focus Label
+    * [x] test delayed
+    * [x] Bindable
+    * [x] Focus Label
 
 * [x] Windows Header
 
@@ -58,9 +58,9 @@ UITK :
 * [ ] Field with repeat button (for the drone)
 
 * [x] Compass
-* [ ] Curve Panel
+* [x] Curve Panel
     * [x] Graph Line
-    * [ ] Gradient
+    * [x] Gradient
 
 * [x]  full uss file
     * [x] Header transparency
@@ -84,9 +84,10 @@ UITK :
     * [x] UI
     * [x] Binding
 
-* [ ] Lift
+* [-] Lift
   * [ ] Main UI
     * [ ] UI
+    * [-] Profile
   * [ ] Settings
     * [ ] UI
     * [ ] Binding  
@@ -107,7 +108,7 @@ UITK :
     * [ ] UI
     * [ ] Binding  
 
-* [ ] Attitude
+* [ ] Dock
   * [ ] Main UI
     * [ ] UI
     * [ ] Code
@@ -115,8 +116,13 @@ UITK :
     * [ ] UI
     * [ ] Binding  
 
-
-
+* [ ] Attitude
+  * [ ] Main UI
+    * [ ] UI
+    * [ ] Code
+  * [ ] Settings
+    * [ ] UI
+    * [ ] Binding  
 
 ----------------------------
 
