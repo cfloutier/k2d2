@@ -69,8 +69,16 @@ namespace K2UI
         public int value
         {
             get { return main_slider.value; }
-            set { main_slider.value = (int)value; }
+            set { 
+                if (value == main_slider.value) return;
+                main_slider.value = value; 
+                listeners?.Invoke(value);
+            }
         }
+
+        public delegate void OnChanged(int value);
+
+        public event OnChanged listeners;
 
         string _label;
         public string Label
@@ -249,7 +257,7 @@ namespace K2UI
             RegisterCallback<ChangeEvent<int>>(evt => setting.V = evt.newValue);
         }
 
-        public void Bind(ClampSetting<int> setting)
+        public K2SliderInt Bind(ClampSetting<int> setting)
         {
             this.Min = setting.min;
             this.Max = setting.max;
@@ -257,6 +265,7 @@ namespace K2UI
             this.value = setting.V;
             setting.listeners += v => this.value = v;
             RegisterCallback<ChangeEvent<int>>(evt => setting.V = evt.newValue);
+            return this;
         }
     }
 

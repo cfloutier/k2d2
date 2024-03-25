@@ -3,12 +3,12 @@ using UnityEngine.UIElements;
 using System.Collections.Generic;
 using System.Data;
 using KTools;
+using System.Net.Sockets;
 
 namespace K2UI
 {
     public class K2Slider : VisualElement
     {
-
         public new class UxmlFactory : UxmlFactory<K2Slider, UxmlTraits> { }
 
         public new class UxmlTraits : VisualElement.UxmlTraits
@@ -74,8 +74,16 @@ namespace K2UI
         public float value
         {
             get { return main_slider.value; }
-            set { main_slider.value = value; }
+            set { 
+                if (value == main_slider.value) return;
+                main_slider.value = value; 
+                listeners?.Invoke(value);
+            }
         }
+
+        public delegate void OnChanged(float value);
+
+        public event OnChanged listeners;
 
         string _label;
         public string Label
@@ -263,13 +271,14 @@ namespace K2UI
             RegisterCallback<ChangeEvent<float>>(evt => setting.V = evt.newValue);
         }
 
-        public void Bind(ClampSetting<float> setting)
+        public K2Slider Bind(ClampSetting<float> setting)
         {
             this.Min = setting.min;
             this.Max = setting.max;
             this.value = setting.V;
             setting.listeners += v => this.value = v;
             RegisterCallback<ChangeEvent<float>>(evt => setting.V = evt.newValue);
+            return this;
         }
     }
 

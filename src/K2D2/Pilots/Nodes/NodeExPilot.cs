@@ -21,7 +21,7 @@ public class NodeExPilot : Pilot
     public ManeuverNodeData next_maneuver_node = null;
     public ManeuverNodeData execute_node = null;
 
-    public NodeExecuteSettings settings = new NodeExecuteSettings();
+    public NodeExSettings settings = new NodeExSettings();
 
     // Sub Pilots
     TurnTo turn;
@@ -187,75 +187,6 @@ public class NodeExPilot : Pilot
             current_executor.updateUI(st);
     }
 
-    // public override void onGUI()
-    // {
-    //     if (K2D2Plugin.Instance.settings_visible)
-    //     {
-    //         // default Settings UI
-    //         K2D2Settings.onGUI();
-    //         settingsUI();
-    //         return;
-    //     }
-
-    //     // UI_Tools.Console($"mode : {mode}");
-    //     if (!isRunning)
-    //     {
-    //         if (next_maneuver_node == null)
-    //         {
-    //             UI_Tools.Label("No Maneuver node.");
-    //             TestFlightPlan.FPToolsUI();
-    //             return;
-    //         }
-
-    //         if (!valid_maneuver)
-    //         {
-    //             UI_Tools.Label("Invalid Maneuver node.");
-    //             UI_Tools.Console("Actually a KSP2 bug when loading scenaries. Please open map to fix it");
-    //             return;
-    //         }
-    //     }
-
-    //     if (execute_settings.show_node_infos)
-    //     {
-    //         node_infos();
-    //     }
-
-    //     if (!isRunning && !canStart())
-    //     {
-    //         UI_Tools.Label("No valid Maneuver node found");
-    //         return;
-    //     }
-
-    //     GUILayout.BeginHorizontal();
-    //     isRunning = UI_Tools.BigToggleButton(isRunning, "Run", "Stop");
-
-    //     execute_settings.pause_on_end = GUILayout.Toggle(execute_settings.pause_on_end, 
-    //                             new GUIContent(KBaseStyle.pause, "Auto-Pause when the Node is executed"),
-    //                              KBaseStyle.big_button_warning, GUILayout.Width(40));
-
-    //     GUILayout.EndHorizontal();
-    //     // call the current UI
-    //     current_executor.onGUI();
-    // }
-
-      // public FoldOut accordion = new FoldOut();
-
-    // void settingsUI()
-    // {
-    //     if (accordion.Count == 0)
-    //     {
-    //         // accordion.addChapter("Staging", StagingSettings.settings_UI);
-    //         accordion.addChapter("Execute", execute_settings.settings_UI);
-    //         accordion.addChapter("Turn", TurnToSettings.onGUI);
-    //         accordion.addChapter("Warp", execute_settings.warp_ui);
-    //         accordion.addChapter("Burn", BurnManeuverSettings.onGUI);
-
-    //         accordion.singleChapter = true;
-    //     }
-
-    //     accordion.OnGUI();
-    // }
-
     public bool valid_maneuver = false;
 
     public bool checkManeuver()
@@ -310,13 +241,13 @@ public class NodeExPilot : Pilot
             double UT = 0;
             switch (settings.start_mode.V)
             {
-                case NodeExecuteSettings.StartMode.precise:
+                case NodeExSettings.StartMode.precise:
                     UT = execute_node.Time;
                     break;
-                case NodeExecuteSettings.StartMode.half_duration:
+                case NodeExSettings.StartMode.half_duration:
                     UT = execute_node.Time - execute_node.BurnDuration / 2;
                     break;
-                case NodeExecuteSettings.StartMode.constant:
+                case NodeExSettings.StartMode.constant:
                     UT = execute_node.Time - settings.start_before.V;
                     break;
             }

@@ -136,6 +136,15 @@ namespace K2UI.Graph
 
         List<Vector2> points = new();
 
+
+        public void setSegment(Vector2 point_1, Vector2 point_2)
+        {
+            points.Clear();
+            points.Add(point_1);
+            points.Add(point_2);
+            MarkDirtyRepaint();
+        }
+
         public void setPoints(List<Vector2> points)
         {
             this.points = points;

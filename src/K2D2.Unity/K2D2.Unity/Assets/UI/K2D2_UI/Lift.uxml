@@ -6,7 +6,7 @@
     <Style src="project://database/Assets/Runtime/K2UI/USS/K2Slider.uss?fileID=7433441132597879392&amp;guid=3d8e4d9f1386ac94c97e6381ad01c59b&amp;type=3#K2Slider" />
     <K2UI.Tabs.TabPage name="lift" label="Lift" style="display: flex;">
         <ui:Label tabindex="-1" text="It&apos;s time Take-off" display-tooltip-when-elided="true" name="Title" class="unselectedContent" style="display: flex;" />
-        <ui:VisualElement name="page" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); display: flex;">
+        <ui:VisualElement name="page" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); display: none;">
             <ui:Foldout text="Profile" value="true" name="profile">
                 <ui:IntegerField label="Ap Altitude" value="42" name="destination_Ap_km">
                     <ui:Label tabindex="-1" text="km" display-tooltip-when-elided="true" style="width: 28px; min-width: 10px; margin-right: 0; margin-left: 10px;" />
@@ -25,27 +25,20 @@
                 <K2UI.K2ProgressBar name="progress" set-label-to-value="false" value="70.27" max="100" label=" " postfix=" %" style="height: 25px;" />
             </ui:VisualElement>
         </ui:VisualElement>
-        <ui:VisualElement name="settings" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); display: none;">
-            <ui:Label tabindex="-1" text="Settings" display-tooltip-when-elided="true" class="unselectedContent" style="display: flex;" />
-            <K2UI.K2Toggle label="Show Nodes Infos " name="show_node_infos" />
+        <ui:VisualElement name="settings" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); display: flex;">
+            <ui:Label tabindex="-1" text="Lift Settings" display-tooltip-when-elided="true" class="unselectedContent" style="display: flex;" />
+            <K2UI.K2Toggle label="Heading Correction" name="heading_correction" tooltip="Correct the Speed direction to fit wanted heading" />
             <K2UI.ExFoldoutGroup opened-index="3" style="margin-top: 6px;">
-                <ui:Foldout text="Warp" value="true" name="Warp">
-                    <K2UI.K2Toggle label="Auto Warp" name="auto_warp" tooltip="Warp time before burn" />
-                    <ui:VisualElement name="warp_settings" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
-                        <K2UI.K2Slider label-on-top="true" min-max-label="Safe-Quick" print-value="true" min="0" value="1" max="7" name="warp_speed" label="Warp Speed" />
-                        <ui:IntegerField label="Before Burn (s)" value="42" is-delayed="true" name="warp_safe_duration" tooltip="Nb seconds in x1 before next phase (min:5)" />
-                    </ui:VisualElement>
-                </ui:Foldout>
-                <ui:Foldout text="Burn" value="false" name="Burn">
-                    <K2UI.K2Slider label-on-top="true" min-max-label="Precise-Quick" print-value="true" min="0.5" value="0.5" max="2" name="burn_adjust" label="Adjusting rate (m/s)" />
-                    <K2UI.K2Slider label-on-top="true" min-max-label="Precise-Quick" print-value="true" min="0.001" value="0.08" max="0.1" name="max_dv_error" label="Precision (m/s)" />
-                </ui:Foldout>
-                <ui:Foldout text="Experimental" value="false" name="Experimental">
-                    <K2UI.InlineEnum labels="T0;before;Mid-duration" name="start_mode" class="inline_enum" />
-                    <K2UI.K2Slider label-on-top="true" print-value="true" min="0" value="1" max="10" name="start_before" label="Start Before T0 (s)" />
-                    <K2UI.K2Toggle label="Rotate During burn" tooltip="Keep SAS during burn phase." name="rotate_during_burn" />
-                </ui:Foldout>
+                <ui:Label tabindex="-1" text="End Ascent Alt. : " display-tooltip-when-elided="true" name="end_ascent_alt" />
+                <K2UI.K2Slider label="Ap Alt Error (%)" name="end_ascent_pc" print-value="true" label-on-top="true" min-max-label="x" />
+                <K2UI.K2Toggle label="Coasting Warp" name="coasting_warp" tooltip="Auto Warp while waiting for leaving Atm." />
+                <K2UI.K2Toggle label="Fine Tuning" name="adjust" tooltip="Auto Warp while waiting for leaving Atm." />
+                <K2UI.Group name="adjust-group" text="tuning">
+                    <ui:Label tabindex="-1" text="End Adjust Alt : " display-tooltip-when-elided="true" name="end_adjust_alt" />
+                    <K2UI.K2Slider label="Final Alt Error (%)" name="end_adjust_pc" print-value="true" label-on-top="true" min-max-label="x" />
+                </K2UI.Group>
             </K2UI.ExFoldoutGroup>
         </ui:VisualElement>
     </K2UI.Tabs.TabPage>
+    <K2UI.K2Toggle label="Pause on Final" name="pause_on_final" tooltip="Pause when creating final node" />
 </ui:UXML>

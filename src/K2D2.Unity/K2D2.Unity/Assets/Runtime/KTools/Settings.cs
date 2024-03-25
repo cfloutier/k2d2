@@ -9,8 +9,6 @@ using UnityEngine.UIElements;
 using Newtonsoft.Json;
 using K2UI;
 using System.Globalization;
-using JetBrains.Annotations;
-
 
 namespace KTools
 {
@@ -134,14 +132,31 @@ namespace KTools
 
     public class ClampSetting<T> : Setting<T> where T : System.IComparable<T>
     {
-        public T min, max;
+        T _min;
+        public T min
+        {
+            get { return _min; }
+            set { 
+                _min = value;
+                V = Extensions.Clamp(value, min, max);
+            }
+        }
 
+        T _max;
+        public T max
+        {
+            get { return _max; }
+            set { 
+                _max = value;
+                V = Extensions.Clamp(value, min, max);
+            }
+        }
+        
         public ClampSetting(string path, T default_value, T min, T max): base(path, default_value)
         {
             this.min = min;
             this.max = max;     
         }
-
 
         public override T V { 
             get => base.V; 
@@ -154,7 +169,26 @@ namespace KTools
 
     public class ClampedSettingInt : Setting<int>
     {
-        int min, max;
+        
+        int _min;
+        public int min
+        {
+            get { return _min; }
+            set { 
+                _min = value;
+                V = Extensions.Clamp(value, min, max);
+            }
+        }
+
+        int _max;
+        public int max
+        {
+            get { return _max; }
+            set { 
+                _max = value;
+                V = Extensions.Clamp(value, min, max);
+            }
+        }
 
         public ClampedSettingInt(string path, int default_value, int min, int max): base(path, default_value)
         {
@@ -162,18 +196,20 @@ namespace KTools
             this.max = max;     
         }
 
+        int clamp(int value)
+        {
+            if (value < min)
+                value = min;
+            else if (value > max)
+                value = max;
+
+            return value;
+        }
 
         public override int V { 
             get => base.V; 
             set {
-                if (value < min)
-                    value = min;
-                else if (value > max)
-                    value = max;
-
-
-                value = Mathf.Clamp(value, min, max);
-                base.V = value;
+                base.V = clamp(value);
             } 
         }
     }

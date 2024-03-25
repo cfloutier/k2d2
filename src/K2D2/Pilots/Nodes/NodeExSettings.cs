@@ -6,7 +6,7 @@ using UnityEngine.UIElements;
 
 namespace K2D2.Controller;
 
-public class NodeExecuteSettings
+public class NodeExSettings
 {
     public Setting<bool> show_node_infos = new Setting<bool>("execute.show_node_infos", true);
     public Setting<bool> auto_warp = new Setting<bool>("execute.auto_warp", true);

@@ -68,7 +68,7 @@
 }
 
 .k2-slider-main > Label {
-    font-size: 16px;
+    font-size: 13px;
 }
 
 .k2-slider-main #min_max_bar {

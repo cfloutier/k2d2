@@ -9,7 +9,7 @@ using System.Linq;
 using System.Collections.Generic;
 
 [RequireComponent(typeof(UIDocument))]
-public class AtmGraph : MonoBehaviour
+public class TestAtmGraph : MonoBehaviour
 {
     public Color color_background = Color.black;
     public Color color_planet = Color.blue;

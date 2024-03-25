@@ -89,7 +89,12 @@ namespace K2UI
         void ToggleValue()
         {
             value = !value;
+            listeners?.Invoke(value);
         }
+
+        public delegate void OnChanged(bool value);
+
+        public event OnChanged listeners;
 
         // Because ToggleValue() sets the value property, the BaseField class fires a ChangeEvent. This results in a
         // call to SetValueWithoutNotify(). This example uses it to style the toggle based on whether it's currently
@@ -102,11 +107,12 @@ namespace K2UI
             m_Input.EnableInClassList(inputCheckedUssClassName, newValue);
         }
 
-        public void Bind(Setting<bool> setting)
+        public K2Toggle Bind(Setting<bool> setting)
         {
             this.value = setting.V;
             setting.listeners += v => this.value = v;
             RegisterCallback<ChangeEvent<bool>>(evt => setting.V = evt.newValue);
+            return this;
         }
     }
 }
