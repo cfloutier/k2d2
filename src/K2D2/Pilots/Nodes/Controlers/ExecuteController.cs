@@ -36,7 +36,7 @@ namespace K2D2.Controller
             }
         }
 
-        public override void updateUI(FullStatus st) { if (sub_controler != null) sub_controler.updateUI(st); }
+        public override void updateUI(VisualElement root_el, FullStatus st) { if (sub_controler != null) sub_controler.updateUI(root_el, st); }
         public override void Update() { if (sub_controler != null) sub_controler.Update(); }
         public override void LateUpdate() { if (sub_controler != null) sub_controler.LateUpdate(); }
         public override void FixedUpdate() { if (sub_controler != null) sub_controler.FixedUpdate(); }

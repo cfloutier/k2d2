@@ -39,20 +39,22 @@ namespace K2UI
             element.style.display = show ? DisplayStyle.Flex : DisplayStyle.None;
         }
 
-        public static void Bind(this IntegerField element, Setting<int> setting)
+        public static IntegerField Bind(this IntegerField element, Setting<int> setting) 
         {
             element.value = setting.V;
             setting.listeners += v => element.value = v;
             element.RegisterCallback<ChangeEvent<int>>(evt => setting.V = evt.newValue);
             element.isDelayed = true;
+            return element;
         }
 
-        public static void Bind(this FloatField element, Setting<float> setting)
+        public static FloatField Bind(this FloatField element, Setting<float> setting)
         {
             element.value = setting.V;
             setting.listeners += v => element.value = v;
             element.RegisterCallback<ChangeEvent<float>>(evt => setting.V = evt.newValue);
             element.isDelayed = true;
+             return element;
         }
     }
 }

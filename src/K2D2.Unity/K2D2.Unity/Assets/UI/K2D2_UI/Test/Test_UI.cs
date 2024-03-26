@@ -10,7 +10,7 @@ using KTools;
 
 namespace K2D2.UI.Tests
 {
-    public class TimerPanel: K2Panel
+    public class TimerPanel: K2Page
     {
         public TimerPanel()
         {
@@ -38,7 +38,7 @@ namespace K2D2.UI.Tests
         }
     }
 
-    public class DisablePage: K2Panel
+    public class DisablePage: K2Page
     {
         public DisablePage()
         {
@@ -57,7 +57,7 @@ namespace K2D2.UI.Tests
         }
     }
 
-    public class AboutPage: K2Panel
+    public class AboutPage: K2Page
     {
         public AboutPage()
         {
@@ -106,7 +106,7 @@ namespace K2D2.UI.Tests
 
             SettingsFile.Init(this, "settings.json");
 
-            List<K2Panel> panels = new()
+            List<K2Page> panels = new()
             {
                 new TestAllControls(),
                 // new TestSettings(),

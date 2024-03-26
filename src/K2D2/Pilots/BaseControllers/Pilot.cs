@@ -10,10 +10,11 @@ namespace K2D2.Controller
     public class Pilot : ComplexController
     {
         public override bool isRunning
-        { 
+        {
             get => base.isRunning;
 
-            set {
+            set
+            {
                 if (value == base.isRunning)
                     return;
 
@@ -24,12 +25,12 @@ namespace K2D2.Controller
         }
 
         // MUST be build in constructor
-        protected K2Panel _panel = null;
-        
-       public virtual K2Panel panel
-       {
+        protected K2Page _panel = null;
+
+        public virtual K2Page page
+        {
             get => _panel;
-       }
+        }
     }
 
 }

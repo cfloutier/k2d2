@@ -54,7 +54,7 @@ public class K2D2Window : MonoBehaviour
 
     TabbedPage tab_page;
 
-    List<K2Panel> pilots_panels = new();
+    List<K2Page> pilots_panels = new();
 
     /// <summary>
     /// Runs when the window is first created, and every time the window is re-enabled.
@@ -83,7 +83,7 @@ public class K2D2Window : MonoBehaviour
         pilots_panels.Clear();
         foreach(var pilot in K2D2Plugin.Instance.pilots_manager.pilots)
         {
-            var panel = pilot.panel;
+            var panel = pilot.page;
             if (panel != null)
                 pilots_panels.Add(panel);
         }

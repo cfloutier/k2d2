@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using KSP.Game;
 using KSP.Messages;
+using UnityEngine.UIElements;
 
 namespace K2D2.Controller
 {
@@ -18,13 +19,13 @@ namespace K2D2.Controller
                 sub_contollers.Add(single_sub);
         }
 
-        public override void updateUI(FullStatus st)
+        public override void updateUI(VisualElement root_el, FullStatus st)
         {
             // On GUI is used to draw UI in needed, using GUILayout
 
             foreach (BaseController contoller in sub_contollers)
             {
-                contoller.updateUI(st);
+                contoller.updateUI(root_el, st);
             }
         }
 

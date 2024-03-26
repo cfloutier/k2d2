@@ -73,16 +73,7 @@ public class LiftAscentPath
         gradient.AddToClassList("gradient");
         gradient.style.backgroundImage = gradient_Texture;
         el_graph.Add(gradient);
-
-        int nb_lines = 4;
-        // Color color_lines = Color.gray;
-
-        for (int i = 0 ; i < nb_lines ; i++)
-        {
-            
-        }
     }
-
 
     List<GraphLine> _lines = new();
     int index_line = 0;

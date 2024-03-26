@@ -3,6 +3,7 @@ using K2UI;
 using KSP.Sim;
 // using KTools.UI;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace K2D2.Controller;
 
@@ -163,7 +164,7 @@ public class TouchDown : ExecuteController
         current_vessel.SetThrottle(wanted_throttle);
     }
 
-    public override void updateUI(FullStatus st)
+    public override void updateUI(VisualElement el, FullStatus st)
     {
         // need to burn ?
 

@@ -28,7 +28,7 @@ namespace K2D2.UI.Tests
             root.MakeDraggable();
 
             SettingsFile.Init(this, "settings.json");
-            List<K2Panel> panels = new()
+            List<K2Page> panels = new()
             {
                
             };

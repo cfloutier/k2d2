@@ -1,9 +1,17 @@
 
 using K2UI;
+using UnityEngine.UIElements;
 namespace K2D2.Controller;
 
 public class FullStatus
 {
+    public FullStatus(VisualElement group)
+    {
+        status = group.Q<StatusLine>("status_pilot");
+        console = group.Q<K2UI.Console>("pilot_console");
+        progressBar = group.Q<K2UI.K2ProgressBar>("progress");
+    }
+
     public K2UI.Console console;
     public K2UI.StatusLine status;
     public K2UI.K2ProgressBar progressBar;  

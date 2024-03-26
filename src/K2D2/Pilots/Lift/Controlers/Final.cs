@@ -1,10 +1,11 @@
 
 using K2D2.KSPService;
 using KSP.Sim.impl;
-using KTools.UI;
 using KTools;
 using KSP.Sim.Maneuver;
 using UnityEngine;
+using UnityEngine.UIElements;
+using K2UI;
 
 
 namespace K2D2.Controller.Lift.Pilots;
@@ -18,9 +19,9 @@ public class FinalCircularize : ExecuteController
 
     KSPVessel current_vessel;
 
-    LiftController lift;
+    LiftPilot lift;
 
-    public FinalCircularize(LiftController lift, LiftSettings lift_settings)
+    public FinalCircularize(LiftPilot lift, LiftSettings lift_settings)
     {
         current_vessel = K2D2Plugin.Instance.current_vessel;
         this.lift = lift;
@@ -40,7 +41,7 @@ public class FinalCircularize : ExecuteController
             TimeWarpTools.SetIsPaused(true);
 
         if (!K2D2OtherModsInterface.fpLoaded)
-        {        
+        {
             lift.EndLiftPilot(true, "Please install FlightPlan for the final Step...");
         }
 
@@ -75,10 +76,10 @@ public class FinalCircularize : ExecuteController
 
         lift.logger.LogMessage($"Circularize TimeToAp = {orbit.TimeToAp}");
         if (!K2D2OtherModsInterface.instance.Circularize(current_time + orbit.TimeToAp, 0))
-        {    
+        {
             status_msg = "Error Creating Node";
         }
-        
+
         return;
     }
 
@@ -86,50 +87,51 @@ public class FinalCircularize : ExecuteController
     {
         var current_time = GeneralTools.Game.UniverseModel.UniverseTime;
         if (!K2D2OtherModsInterface.instance.Circularize(current_time + 30, 0))
-        {    
+        {
             status_msg = "Error Creating Node";
         }
-        
+
         return;
     }
-    
 
+    internal VisualElement final_grp;
+    Button create_ap, create_now, run;
 
-    public override void updateUI(FullStatus st)
+    public override void updateUI(VisualElement root_el, FullStatus st)
     {
         // if (UI_Tools.BigButton("Pause"))
         // {
         //     TimeWarpTools.SetIsPaused(true);
         // }
-            
 
-        GUILayout.BeginHorizontal();
-
-        if (UI_Tools.Button("Create Node at AP"))
+        if (create_ap == null)
         {
-            removeAllNodes();
-            createApNode();
+            final_grp = root_el.Q<VisualElement>("final_grp");
+            create_ap = root_el.Q<Button>("create_ap");
+
+            create_ap.RegisterCallback<ClickEvent>( evt => {
+                    removeAllNodes();
+                    createApNode();  
+                });
+
+            create_now = root_el.Q<Button>("create_now");
+
+            create_now.RegisterCallback<ClickEvent>( evt => {
+                    removeAllNodes();
+                    createNowNode();  
+                });
+
+            run = root_el.Q<Button>("run");
+            create_now.RegisterCallback<ClickEvent>( evt => {
+                NodeExPilot.Instance.Start();
+            });
         }
 
-        if (UI_Tools.Button("Create Node Now"))
-        {
-            removeAllNodes();
-            createNowNode();
-        }
-
-        GUILayout.EndHorizontal();
-
-        if (NodeExPilot.Instance.next_maneuver_node != null)
-        {
-            if (UI_Tools.Button("Execute"))
-            {        
-                NodeExecute.Instance.Start();
-            }
-        }
+        final_grp.Show(true);
 
         if (!string.IsNullOrEmpty(status_msg))
         {
-            st.Warning(status_msg);
+            st.Status(status_msg, K2UI.StatusLine.Level.Warning);
         }
     }
 
@@ -147,12 +149,12 @@ public class FinalCircularize : ExecuteController
             lift.logger.LogWarning("no ManeuverPlanComponent");
             return;
         }
-            
+
         maneuvers_component.RemoveNodes(nodes);
     }
 
     public override void Update()
     {
-       
+
     }
 }

@@ -4,6 +4,7 @@ using KSP.Sim;
 using KSP.Sim.impl;
 using KTools;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace K2D2.Controller.Lift.Pilots;
 
@@ -132,7 +133,7 @@ public class Ascent : ExecuteController
     }
 
 
-    public override void updateUI(FullStatus st)
+    public override void updateUI(VisualElement root_el, FullStatus st)
     {
         st.Status($"Apoapsis Alt. = {ap_km:n2} km");
         st.Console($"Last delta ap. = {delta_ap_per_second:n2} km/s");

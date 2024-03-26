@@ -4,6 +4,7 @@ using KSP.Sim.Maneuver;
 using KTools;
 // using KTools.UI;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace K2D2.Controller;
 
@@ -216,7 +217,7 @@ public class TurnTo : ExecuteController
         return true;
     }
 
-    public override void updateUI(FullStatus st)
+    public override void updateUI(VisualElement root_el, FullStatus st)
     {
         st.Status("Check Attitude", K2UI.StatusLine.Level.Warning);
         st.Console(status_line);

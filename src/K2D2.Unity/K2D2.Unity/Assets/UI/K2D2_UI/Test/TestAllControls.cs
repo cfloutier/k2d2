@@ -8,7 +8,7 @@ using K2UI.Tabs;
 
 namespace K2D2.UI.Tests
 {
-    public class TestAllControls : K2Panel
+    public class TestAllControls : K2Page
     {
         public TestAllControls()
         {

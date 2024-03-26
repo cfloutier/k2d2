@@ -1,17 +1,12 @@
 using K2D2.Controller.Lift.Pilots;
 using K2D2.KSPService;
-using KSP.Messages.PropertyWatchers;
-using KSP.Sim;
-using KSP.Sim.impl;
 using KTools;
-using KTools.UI;
-using Steamworks;
 using UnityEngine;
 using BepInEx.Logging;
-
+using UnityEngine.UIElements;
 namespace K2D2.Controller;
 
-public class LiftController : ComplexController
+public class LiftPilot : Pilot
 {
     public enum LiftStatus
     {
@@ -24,27 +19,30 @@ public class LiftController : ComplexController
 
     public ManualLogSource logger = BepInEx.Logging.Logger.CreateLogSource("K2D2.Lift");
 
-    public static LiftController Instance { get; set; }
+    public static LiftPilot Instance { get; set; }
+
+    internal  LiftSettings settings;
 
     LiftSettings lift_settings = null;
-    LiftAscentPath ascent_path = null;
+    internal  LiftAscentPath ascent_path = null;
 
     KSPVessel current_vessel;
 
-
     Vector3d direction = Vector3d.zero;
-    bool show_profile = false;
 
     // sub pilots
-    Ascent ascent = null;
+    internal  Ascent ascent = null;
     Adjust adjust = null;
     Coasting coasting = null;   
     FinalCircularize final_circularize;
 
-    ExecuteController current_subpilot = null;
+    public ExecuteController current_subpilot = null;
 
-    public LiftController()
+    public LiftPilot()
     {
+        settings = new LiftSettings();
+        _panel = new LiftUI(this);
+
         current_vessel = K2D2Plugin.Instance.current_vessel;
 
         lift_settings = new LiftSettings();
@@ -67,7 +65,7 @@ public class LiftController : ComplexController
     }
 
     LiftStatus _status = LiftStatus.Off;
-    LiftStatus status
+    internal LiftStatus status
     {
         get { return _status; }
         set
@@ -131,8 +129,8 @@ public class LiftController : ComplexController
         status = LiftStatus.Ascent;
     }
 
-    bool result_ok = false;
-    string end_status;
+    internal bool result_ok = false;
+    internal string end_status;
 
     public void EndLiftPilot(bool result_ok, string end_status)
     {
@@ -167,78 +165,7 @@ public class LiftController : ComplexController
             if (current_subpilot.finished)
                 NextMode();
         }
-
-
     }
 
 
-    public override void onGUI()
-    {
-
-
-        if (show_profile)
-        {
-            lift_settings.destination_Ap_km = UI_Fields.IntFieldLine("lift.destination_Ap_km", "Ap Altitude", lift_settings.destination_Ap_km, 0, Int32.MaxValue, "km");
-
-            GUILayout.BeginHorizontal();
-            // GUILayout.Label("5° Alt");
-            GUILayout.Label($"5° Alt. : {lift_settings.end_rotate_altitude_km:n0} km", KBaseStyle.slider_text);
-            lift_settings.end_rotate_ratio = UI_Tools.FloatSlider(lift_settings.end_rotate_ratio, 0, 1);
-            GUILayout.EndHorizontal();
-
-            GUILayout.BeginHorizontal();
-            GUILayout.Label($"45° Alt. : {lift_settings.mid_rotate_altitude_km:n0} km", KBaseStyle.slider_text);
-            lift_settings.mid_rotate_ratio = UI_Tools.FloatSlider(lift_settings.mid_rotate_ratio, 0, 1);
-            GUILayout.EndHorizontal();
-
-            lift_settings.start_altitude_km = UI_Fields.IntFieldLine("lift.start_altitude_km", "90° Altitude", lift_settings.start_altitude_km, 0, Int32.MaxValue, "km");
-            ascent_path.drawProfile(ascent.current_altitude_km);
-
-            lift_settings.heading = UI_Tools.HeadingControl("lift.heading", lift_settings.heading);
-
-            GUILayout.BeginHorizontal();
-            if (UI_Tools.miniButton("Hide profile"))
-            {
-                show_profile = false;
-            }
-
-            GUILayout.EndHorizontal();
-        }
-        else
-        {
-            GUILayout.BeginHorizontal();
-            if (UI_Tools.miniButton("Show Profile"))
-            {
-                show_profile = true;
-            }
-
-            GUILayout.EndHorizontal();
-        }
-
-        lift_settings.max_throttle = UI_Tools.FloatSliderTxt("Max Throttle", lift_settings.max_throttle, 0, 1);
-
-        isRunning = UI_Tools.BigToggleButton(isRunning, "Start", "Stop");
-
-        if (isRunning)
-        {
-            UI_Tools.Warning($"Status : {status}");
-
-            if (current_subpilot != null)
-                current_subpilot.onGUI();
-        }
-        else
-        {
-            if (!string.IsNullOrEmpty(end_status))
-            {
-                if (result_ok)
-                {
-                    UI_Tools.OK("Final status : " + end_status);
-                }
-                else
-                {
-                    UI_Tools.Warning("Final status : " + end_status);
-                }
-            }
-        }
-    }
 }

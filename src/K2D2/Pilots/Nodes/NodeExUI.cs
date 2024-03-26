@@ -11,7 +11,7 @@ using UnityEngine.UIElements;
 
 namespace K2D2.Controller;
 
-class NodeExUI : K2Panel
+class NodeExUI : K2Page
 {
     NodeExPilot pilot;
     public NodeExUI(NodeExPilot pilot)
@@ -22,7 +22,7 @@ class NodeExUI : K2Panel
     
     public K2UI.Console node_infos_el;
 
-    public FullStatus status_bar = new FullStatus();
+    public FullStatus status_bar;
 
     public ToggleButton run_button, pause_button;
 
@@ -33,17 +33,16 @@ class NodeExUI : K2Panel
         run_button = panel.Q<ToggleButton>("run");
         pause_button = panel.Q<ToggleButton>("pause");
 
-        status_bar = new FullStatus()
-        {
-            status = panel.Q<StatusLine>("status_pilot"),
-            console = panel.Q<K2UI.Console>("pilot_console"),
-            progressBar = panel.Q<K2UI.K2ProgressBar>("progress"),
-        };
+        status_bar = new FullStatus(panel);
 
         pilot.settings.show_node_infos.listen((value) => node_infos_el.Show(value));
 
         pilot.is_running_event += is_running => run_button.value = is_running;
-        run_button.RegisterCallback<ChangeEvent<bool>>(evt => pilot.isRunning = evt.newValue);     
+        run_button.listeners +=  v => 
+        {
+            pilot.isRunning = v;
+            run_button.label = v ? "Stop" : "Start";
+        }; 
         pause_button.Bind(pilot.settings.pause_on_end);
         pilot.settings.setupUI(settings_page);
 

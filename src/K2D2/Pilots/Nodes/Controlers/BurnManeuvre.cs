@@ -198,7 +198,7 @@ public class BurnManeuver : ExecuteController
         needed_throttle = remaining_full_burn_time * BurnManeuverSettings.burn_adjust.V;
     }
 
-    public override void updateUI(FullStatus st)
+    public override void updateUI(VisualElement root_el, FullStatus st)
     {
         switch (mode)
         {

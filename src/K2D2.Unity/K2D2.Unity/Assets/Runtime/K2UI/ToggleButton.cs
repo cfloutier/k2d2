@@ -53,8 +53,13 @@ namespace K2UI
                 EnableInClassList(checkedUssClassName, _value);
                 m_event.target = this; 
                 SendEvent(m_event);
+                listeners?.Invoke(value);
             }
         }
+        
+        public delegate void OnChanged(bool value);
+
+        public event OnChanged listeners;
 
         // In the spirit of the BEM standard, the BigToggleButton has its own block class and two element classes. It also
         // has a class that represents the enabled state of the toggle.

@@ -179,13 +179,13 @@ namespace K2UI.Tabs
             }
         }
 
-        List<K2Panel> panels;
+        List<K2Page> panels;
 
-        public void Init(List<K2Panel> panels)
+        public void Init(List<K2Page> panels)
         {
             BuildButtons();
             this.panels = panels;
-            foreach(K2Panel panel in this.panels)
+            foreach(K2Page panel in this.panels)
                 panel.Init(tabsbar_el, content_el);
         }
 
@@ -199,7 +199,7 @@ namespace K2UI.Tabs
 
         public void Update()
         {
-            foreach(K2Panel panel in this.panels)
+            foreach(K2Page panel in this.panels)
                 panel.onUpdateUI();
         }
 

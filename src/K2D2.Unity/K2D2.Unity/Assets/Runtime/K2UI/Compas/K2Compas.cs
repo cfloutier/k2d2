@@ -48,8 +48,13 @@ namespace K2UI
                 if (_value == value) return;
                 _value = value;
                 UpdateContent();
+                listeners?.Invoke(value);
             }
         }
+
+        public delegate void OnChanged(float value);
+
+        public event OnChanged listeners;
 
         // internal set value,
         // can be called to get the event in return
@@ -352,11 +357,12 @@ namespace K2UI
             painter.Stroke();
         }
 
-        public void Bind(Setting<float> setting)
+        public K2Compass Bind(Setting<float> setting)
         {
             this.value = setting.V;
             setting.listeners += v => this.value = v;
             RegisterCallback<ChangeEvent<float>>(evt => setting.V = evt.newValue);
+            return this;
         }
     }
 }

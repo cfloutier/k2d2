@@ -1,8 +1,9 @@
 
 using K2D2.KSPService;
 using KSP.Sim;
-using KSP.Sim.impl;
-using UnityEngine;
+// using KSP.Sim.impl;
+// using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace K2D2.Controller.Lift.Pilots;
 
@@ -34,7 +35,7 @@ public class Adjust : ExecuteController
         turn_to.StartProGrade(SpeedDisplayMode.Surface);
     }
 
-    public override void updateUI(FullStatus st)
+    public override void updateUI(VisualElement root_el, FullStatus st)
     {
         st.Console($"Altitude = {ascent.current_altitude_km:n2} km");
         st.Console($"Apoapsis Alt. = {ascent.ap_km:n2} km");

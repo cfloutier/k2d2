@@ -80,6 +80,8 @@ public class K2D2Plugin : BaseSpaceWarpPlugin
         new StagingPilot();
 
         pilots_manager.AddPilot(new NodeExPilot());
+        pilots_manager.AddPilot(new LiftPilot());
+        
         pilots_manager.AddPilot(new LandingPilot());
         pilots_manager.AddPilot(new DronePilot());
         pilots_manager.AddPilot(new AttitudePilot());

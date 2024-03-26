@@ -156,7 +156,6 @@ public class NodeExPilot : Pilot
         setMode(next);
     }
 
-
     public void UpdateUI()
     {
         ui.status_bar.Reset();
@@ -184,7 +183,7 @@ public class NodeExPilot : Pilot
             }
         } 
         else
-            current_executor.updateUI(st);
+            current_executor.updateUI(page.panel, st);
     }
 
     public bool valid_maneuver = false;

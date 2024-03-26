@@ -3,7 +3,8 @@ using K2D2.KSPService;
 using KSP.Sim;
 using KSP.Sim.impl;
 using KTools;
-using UnityEngine;
+// using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace K2D2.Controller.Lift.Pilots;
 
@@ -16,9 +17,9 @@ public class Coasting : ExecuteController
 
     KSPVessel current_vessel;
 
-    LiftController lift;
+    LiftPilot lift;
 
-    public Coasting(LiftController lift, LiftSettings lift_settings)
+    public Coasting(LiftPilot lift, LiftSettings lift_settings)
     {
         current_vessel = K2D2Plugin.Instance.current_vessel;
         this.lift = lift;
@@ -45,7 +46,7 @@ public class Coasting : ExecuteController
         turn_to.StartProGrade(SpeedDisplayMode.Surface);
     }
 
-    public override void updateUI(FullStatus st)
+    public override void updateUI(VisualElement root_el, FullStatus st)
     {
         st.Status("Coasting");
 
