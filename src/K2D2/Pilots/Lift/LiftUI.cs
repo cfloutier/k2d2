@@ -19,10 +19,8 @@ class LiftUI : K2Page
     public LiftUI(LiftPilot pilot)
     {
         this.pilot = pilot;
-        code = "node";
+        code = "lift";
     }
-    
-    public K2UI.Console node_infos_el;
 
     public FullStatus status_bar;
 
@@ -31,15 +29,14 @@ class LiftUI : K2Page
     Label heading_label;
     public override bool onInit()
     {
-        node_infos_el = panel.Q<K2UI.Console>("node_infos");
-
         LiftSettings settings = pilot.settings;
        
         status_bar = new FullStatus(panel);
+        var destination_Ap_km = panel.Q<IntegerField>("destination_Ap_km");
+        destination_Ap_km.Bind(settings.destination_Ap_km);
 
-        panel.Q<IntegerField>("destination_Ap_km").Bind(settings.destination_Ap_km);
-
-        end_rotate_ratio = panel.Q<K2Slider>("end_rotate_ratio").Bind(settings.end_rotate_ratio);  
+        end_rotate_ratio = panel.Q<K2Slider>("end_rotate_ratio");
+        end_rotate_ratio.Bind(settings.end_rotate_ratio);  
         end_rotate_ratio.listeners += v => end_rotate_ratio.Label = $"5° Alt. : {settings.end_rotate_altitude_km:n0} km";
             
         mid_rotate_ratio = panel.Q<K2Slider>("mid_rotate_ratio").Bind(settings.mid_rotate_ratio);
@@ -54,7 +51,7 @@ class LiftUI : K2Page
         var graph = panel.Q<VisualElement>("graph");
         pilot.ascent_path.InitUI(graph);
 
-        var max_throttle = panel.Q<K2Compass>("max_throttle").Bind(settings.max_throttle);
+        var max_throttle = panel.Q<K2Slider>("max_throttle").Bind(settings.max_throttle);
 
         var run_button = panel.Q<ToggleButton>("run");
         pilot.is_running_event += is_running => run_button.value = is_running;
@@ -64,6 +61,7 @@ class LiftUI : K2Page
             run_button.label = v ? "Stop" : "Start";
         };
 
+        settings.setupUI(settings_page);
         return true;
     }
 
@@ -73,7 +71,7 @@ class LiftUI : K2Page
             return false;
 
         pilot.ascent_path.updateProfile(pilot.ascent.current_altitude_km);
-
+        
         if (pilot.isRunning)
         {
            status_bar.Reset();

@@ -66,7 +66,7 @@ public class LiftAscentPath
     {
         gradient_Texture = new Texture2D(2,256);
         
-        el_graph = root.Q<VisualElement>("Graph");
+        el_graph = root.Q<VisualElement>("graph");
         el_graph.Clear();
 
         gradient = new VisualElement();

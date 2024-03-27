@@ -12,11 +12,13 @@
                 <ui:IntegerField label="Ap Altitude" value="42" name="destination_Ap_km">
                     <ui:Label tabindex="-1" text="km" display-tooltip-when-elided="true" style="width: 28px; min-width: 10px; margin-right: 0; margin-left: 10px;" />
                 </ui:IntegerField>
-                <K2UI.K2Slider name="end_rotate_altitude_km" label="5° Alt." max="10" print-value="false" label-on-top="false" value="0" min="0.01" />
-                <K2UI.K2Slider name="mid_rotate_altitude_km" label="45° Alt." max="10" print-value="false" label-on-top="false" value="0.98" min="0.01" />
-                <ui:IntegerField label="90° Altitude" value="42" name="start_altitude_km">
+                <K2UI.K2Slider name="end_rotate_ratio" label="5° Alt : 50km" max="10" print-value="false" label-on-top="true" value="0" min="0.01" />
+                <K2UI.K2Slider name="mid_rotate_ratio" label="45° Alt : 50 km" max="10" print-value="false" label-on-top="true" value="0.98" min="0.01" />
+                <ui:IntegerField label="90° Alt. :" value="42" name="start_altitude_km">
                     <ui:Label tabindex="-1" text="km" display-tooltip-when-elided="true" style="width: 28px; min-width: 10px; margin-right: 0; margin-left: 10px;" />
                 </ui:IntegerField>
+                <ui:Label tabindex="-1" text="Heading : 30°" display-tooltip-when-elided="true" name="heading_label" />
+                <K2UI.K2Compass name="heading" />
                 <ui:VisualElement name="graph" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); height: 162px;" />
             </ui:Foldout>
             <K2UI.K2Slider name="max_throttle" label="Max Throttle" max="10" print-value="false" label-on-top="false" value="0" min="0.01" />

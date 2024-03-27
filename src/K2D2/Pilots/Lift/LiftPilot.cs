@@ -23,7 +23,6 @@ public class LiftPilot : Pilot
 
     internal  LiftSettings settings;
 
-    LiftSettings lift_settings = null;
     internal  LiftAscentPath ascent_path = null;
 
     KSPVessel current_vessel;
@@ -41,17 +40,17 @@ public class LiftPilot : Pilot
     public LiftPilot()
     {
         settings = new LiftSettings();
+        ascent_path = new LiftAscentPath(settings);
         _panel = new LiftUI(this);
 
         current_vessel = K2D2Plugin.Instance.current_vessel;
 
-        lift_settings = new LiftSettings();
-        ascent_path = new LiftAscentPath(lift_settings);
-
-        ascent = new Ascent(lift_settings, ascent_path);
-        adjust = new Adjust(lift_settings, ascent);
-        coasting = new Coasting(this, lift_settings);
-        final_circularize = new FinalCircularize(this, lift_settings);
+        settings = new LiftSettings();
+       
+        ascent = new Ascent(settings, ascent_path);
+        adjust = new Adjust(settings, ascent);
+        coasting = new Coasting(this, settings);
+        final_circularize = new FinalCircularize(this, settings);
         
         Instance = this;
         debug_mode_only = false;
