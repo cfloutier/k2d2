@@ -44,8 +44,6 @@ public class LiftPilot : Pilot
         _panel = new LiftUI(this);
 
         current_vessel = K2D2Plugin.Instance.current_vessel;
-
-        settings = new LiftSettings();
        
         ascent = new Ascent(settings, ascent_path);
         adjust = new Adjust(settings, ascent);
@@ -120,6 +118,9 @@ public class LiftPilot : Pilot
                 K2D2Plugin.ResetControllers();
                 OnStartController();
             }
+
+            // send call backs
+            base.isRunning = value; 
         }
     }
 

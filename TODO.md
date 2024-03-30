@@ -53,6 +53,7 @@ UITK :
     * [x] Settings pages + button Settings 
     * [x] Too ways settings
     * [x] reset to default
+    * [x] current_tab
 
 * [ ] Repeat button
 * [ ] Field with repeat button (for the drone)
@@ -84,13 +85,13 @@ UITK :
     * [x] UI
     * [x] Binding
 
-* [-] Lift
-  * [ ] Main UI
-    * [ ] UI
-    * [-] Profile
-  * [ ] Settings
-    * [ ] UI
-    * [ ] Binding  
+* [x] Lift
+  * [x] Main UI
+    * [x] UI
+    * [x] Profile
+  * [x] Settings
+    * [x] UI
+    * [x] Binding  
 
 * [ ] Land
   * [ ] Main UI

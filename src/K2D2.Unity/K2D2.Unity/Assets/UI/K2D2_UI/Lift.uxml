@@ -6,9 +6,8 @@
     <Style src="project://database/Assets/Runtime/K2UI/USS/K2Toggle.uss?fileID=7433441132597879392&amp;guid=a6dc5024ba8ad204e9099eca78c0703f&amp;type=3#K2Toggle" />
     <Style src="project://database/Assets/Runtime/K2UI/USS/K2Slider.uss?fileID=7433441132597879392&amp;guid=3d8e4d9f1386ac94c97e6381ad01c59b&amp;type=3#K2Slider" />
     <K2UI.Tabs.TabPage name="lift" label="Lift" style="display: flex;">
-        <ui:Label tabindex="-1" text="It&apos;s time Take-off" display-tooltip-when-elided="true" name="Title" class="unselectedContent" style="display: flex;" />
         <ui:VisualElement name="page" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); display: flex;">
-            <ui:Foldout text="Profile" value="true" name="profile">
+            <ui:Foldout text="Profile" value="false" name="profile">
                 <ui:IntegerField label="Ap Altitude" value="42" name="destination_Ap_km">
                     <ui:Label tabindex="-1" text="km" display-tooltip-when-elided="true" style="width: 28px; min-width: 10px; margin-right: 0; margin-left: 10px;" />
                 </ui:IntegerField>
@@ -19,29 +18,29 @@
                 </ui:IntegerField>
                 <ui:Label tabindex="-1" text="Heading : 30°" display-tooltip-when-elided="true" name="heading_label" />
                 <K2UI.K2Compass name="heading" />
-                <ui:VisualElement name="graph" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); height: 162px;" />
+                <ui:VisualElement name="graph" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); height: 162px; border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; border-left-color: rgb(71, 75, 175); border-right-color: rgb(71, 75, 175); border-top-color: rgb(71, 75, 175); border-bottom-color: rgb(71, 75, 175); border-top-left-radius: 5px; border-bottom-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px;" />
             </ui:Foldout>
             <K2UI.K2Slider name="max_throttle" label="Max Throttle" max="10" print-value="false" label-on-top="false" value="0" min="0.01" />
             <K2UI.ToggleButton name="run" label="Start" class="big" style="flex-grow: 1;" />
             <ui:Instance template="StatusGroup" name="StatusGroup" />
             <ui:VisualElement name="final_grp" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); flex-direction: column; flex-wrap: wrap; align-self: auto; justify-content: space-between;">
-                <ui:VisualElement style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); flex-direction: row;">
+                <ui:VisualElement style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); flex-direction: row; justify-content: flex-start;">
                     <ui:Button text="Create Node at AP" display-tooltip-when-elided="true" name="create_ap" style="flex-grow: 1; height: 28px;" />
                     <ui:Button text="Create Node Now" display-tooltip-when-elided="true" name="create_now" style="flex-grow: 1; height: 28px;" />
                 </ui:VisualElement>
                 <ui:Button text="Run" display-tooltip-when-elided="true" name="run" style="flex-grow: 1; font-size: 16px; height: 30px; max-width: 184px; align-self: center; width: 121px; margin-top: 9px;" />
             </ui:VisualElement>
         </ui:VisualElement>
-        <ui:VisualElement name="settings" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); display: none;">
+        <ui:VisualElement name="settings" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); display: flex; justify-content: flex-start;">
             <ui:Label tabindex="-1" text="Lift Settings" display-tooltip-when-elided="true" class="unselectedContent" style="display: flex;" />
             <K2UI.K2Toggle label="Heading Correction" name="heading_correction" tooltip="Correct the Speed direction to fit wanted heading" />
+            <K2UI.K2Slider label="Ap Alt Error (%)" name="end_ascent_pc" print-value="true" label-on-top="true" />
             <ui:Label tabindex="-1" text="End Ascent Alt. : " display-tooltip-when-elided="true" name="end_ascent_alt" />
-            <K2UI.K2Slider label="Ap Alt Error (%)" name="end_ascent_pc" print-value="true" label-on-top="true" min-max-label="x" />
             <K2UI.K2Toggle label="Coasting Warp" name="coasting_warp" tooltip="Auto Warp while waiting for leaving Atm." />
             <K2UI.K2Toggle label="Fine Tuning" name="adjust" tooltip="Auto Warp while waiting for leaving Atm." />
-            <K2UI.Group name="adjust-group" text="tuning">
+            <K2UI.Group name="adjust_group" text="tuning">
+                <K2UI.K2Slider label="Final Alt Error (%)" name="end_adjust_pc" print-value="true" label-on-top="true" />
                 <ui:Label tabindex="-1" text="End Adjust Alt : " display-tooltip-when-elided="true" name="end_adjust_alt" />
-                <K2UI.K2Slider label="Final Alt Error (%)" name="end_adjust_pc" print-value="true" label-on-top="true" min-max-label="x" />
             </K2UI.Group>
             <K2UI.K2Toggle label="Pause on Final" name="pause_on_final" tooltip="Pause when creating final node" />
         </ui:VisualElement>

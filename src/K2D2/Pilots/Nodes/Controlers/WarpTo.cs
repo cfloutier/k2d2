@@ -20,9 +20,9 @@ class WarpToSettings
         return TimeWarpTools.ratioToIndex((float)time_ratio);
     }
 
-    public static ClampSetting<float> warp_speed = new("warp.speed", 2, 0, 7);
+    public static ClampSetting<float> warp_speed = new("node_ex.warp.speed", 2, 0, 7);
 
-    public static ClampSetting<float> warp_safe_duration = new("warp.safe_duration", 10, 5, 120);
+    public static ClampSetting<int> warp_safe_duration = new("node_ex.warp.safe_duration", 10, 5, 120);
 }
 
 public class WarpTo : ExecuteController
@@ -41,7 +41,6 @@ public class WarpTo : ExecuteController
     public float max_angle;
 
     public int max_warp_index = -1;
-
 
     public K2D2.KSPService.KSPVessel current_vessel;
 

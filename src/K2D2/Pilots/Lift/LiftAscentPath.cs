@@ -16,7 +16,48 @@ using K2UI;
 
 namespace K2D2.Controller;
 
-public class LiftAscentPath
+
+public class MultiGraphLine
+{
+    protected float x_range = 100;
+    protected float y_range = 100;
+
+    protected VisualElement el_graph;
+
+    List<GraphLine> _lines = new();
+    int index_line = 0;
+
+    protected void reset()
+    {
+        index_line = 0;
+    }
+    
+
+    protected GraphLine get_line()
+    {
+        GraphLine line;
+        if (_lines.Count <= index_line)
+        {
+            line = new GraphLine();
+            line.LineWidth = 1;
+            // line.style.cro
+            
+            el_graph.Add(line);
+            _lines.Add(line);
+       
+        }
+        else
+            line = _lines[index_line++];
+
+        // y is inverted (y up)
+        line.setRanges(0, x_range, y_range, 0);
+        return line;
+    }
+}
+
+
+
+public class LiftAscentPath : MultiGraphLine
 {
     public LiftAscentPath(LiftSettings lift_settings)
     {
@@ -27,7 +68,7 @@ public class LiftAscentPath
 
     public float compute_elevation(float altitude_km)
     {
-        float elevation = 0;
+        float elevation;
         if (altitude_km < lift_settings.start_altitude_km.V)
         {
             elevation = 90;
@@ -48,24 +89,18 @@ public class LiftAscentPath
 
     LiftSettings lift_settings;
 
-    private Texture2D  _pathTexture = new Texture2D(1,1);
     public CelestialBodyComponent lastbody = null;
     public double last_max_alt;
 
     Texture2D gradient_Texture;
 
-    VisualElement el_graph;
-    VisualElement gradient;
-
     
-
-    float x_range = 100;
-    float y_range = 1;
+    VisualElement gradient;
 
     public void InitUI(VisualElement root)
     {
-        gradient_Texture = new Texture2D(2,256);
-        
+        gradient_Texture = new Texture2D(2, 256);
+
         el_graph = root.Q<VisualElement>("graph");
         el_graph.Clear();
 
@@ -75,99 +110,101 @@ public class LiftAscentPath
         el_graph.Add(gradient);
     }
 
-    List<GraphLine> _lines = new();
-    int index_line = 0;
-    GraphLine get_line()
-    {
-        if (_lines.Count <= index_line )
-        {
-            var line =  new GraphLine();
-            // var color = color_lines;
-            // color.a = Mathf.Lerp(1, 0.5f, ((float)i)/nb_lines );
-
-            // line.LineColor = color;
-            line.LineWidth = 1;
-            el_graph.Add(line);
-            _lines.Add(line);
-            line.setRanges(0, x_range, 0, y_range);         
-        }
-
-        return _lines[index_line++];
-    }
-
     public void updateProfile(float current_altitude_km)
     {
         float scale = (float)(lift_settings.destination_Ap_km.V / y_range);
 
-        if (lastbody != K2D2Plugin.Instance.current_vessel.currentBody() || 
+        if (lastbody != K2D2Plugin.Instance.current_vessel.currentBody() ||
             last_max_alt != lift_settings.destination_Ap_km.V)
         {
-            UpdateAtmoTexture( K2D2Plugin.Instance.current_vessel.currentBody(), lift_settings.destination_Ap_km.V );
+            UpdateAtmoTexture(K2D2Plugin.Instance.current_vessel.currentBody(), lift_settings.destination_Ap_km.V);
         }
 
-        index_line = 0;
+        reset();
+        // update range
+        y_range = lift_settings.destination_Ap_km.V;
+        x_range = 2 * y_range * get_line().aspectRatio();
+        reset();
+
         DrawLines(current_altitude_km);
         updatePath();
+        // addSinus();
     }
 
-    private void updatePath()
-    {
+    void addSinus()
+    { 
         GraphLine line = get_line();
-        float alt = 0;
-        float downrange = 0;
-        line.LineColor = Color.yellow;
-
-        List<Vector2> points = new();
-        Vector2 prev_point = Vector2.zero;
-        points.Add(prev_point);
+        line.LineColor = Color.blue;
+        int nb_points = 100;
         Vector2 point = Vector2.zero;
-        
-        while ((alt < lift_settings.destination_Ap_km.V) && (downrange < x_range))
+        List<Vector2> points = new();
+        for (int i = 0 ; i < nb_points; i++)
         {
-            float desiredAngle = (float)(alt < lift_settings.start_altitude_km.V ? 90 : compute_elevation(alt));
-
-            alt       += y_range * Mathf.Sin(desiredAngle * Mathf.Deg2Rad);
-            downrange += y_range * Mathf.Cos(desiredAngle * Mathf.Deg2Rad);
-
-            point.x = downrange / x_range;
-            point.y = alt / y_range;
-
-            if ((prev_point - point).sqrMagnitude >= 1.0)
-            {       
-                points.Add(point);
-                prev_point = point;
-            }
+            point.x = (i * x_range) / nb_points;
+            point.y = y_range* Mathf.Sin(Mathf.PI*i*2/nb_points);
+            points.Add(point);
         }
 
         line.setPoints(points);
     }
 
-    void setHLine(float ypos)
+    private void updatePath()
     {
         GraphLine line = get_line();
-        line.setSegment(new Vector2(0, ypos) , new Vector2(x_range, ypos));
+
+        float alt = 0;
+        float downrange = 0;
+        line.LineColor = Color.yellow;
+        List<Vector2> points = new();
+        Vector2 prev_point = Vector2.zero;
+        points.Add(prev_point);
+        Vector2 point = Vector2.zero;
+
+        float definition = lift_settings.destination_Ap_km.V / 100f;
+
+        while ((alt < lift_settings.destination_Ap_km.V) && (downrange < x_range))
+        {
+            float desiredAngle = (float)(alt < lift_settings.start_altitude_km.V ? 90 : compute_elevation(alt));
+
+            alt += definition * Mathf.Sin(desiredAngle * Mathf.Deg2Rad);
+            downrange += definition * Mathf.Cos(desiredAngle * Mathf.Deg2Rad);
+
+            point.x = downrange;
+            point.y = alt;
+
+            points.Add(point);
+            prev_point = point;     
+        }
+
+        line.setPoints(points);
+    }
+
+    void setHLine(float ypos, Color color)
+    {
+        GraphLine line = get_line();
+        line.LineColor = color;
+        line.setSegment(new Vector2(0, ypos), new Vector2(x_range, ypos));
         line.Show(true);
     }
+
     void HideLine()
     {
-        get_line().Show(false); 
+        get_line().Show(false);
     }
 
     private void DrawLines(float current_altitude_km)
     {
+        setHLine(lift_settings.start_altitude_km.V, Color.gray);
+        setHLine(lift_settings.mid_rotate_altitude_km, Color.gray);
+        setHLine(lift_settings.end_rotate_altitude_km, Color.gray);
 
-        setHLine(lift_settings.start_altitude_km.V / y_range);
-        setHLine(lift_settings.mid_rotate_altitude_km / y_range);
-        setHLine(lift_settings.mid_rotate_altitude_km / y_range);
-        
         if (maxAtmosphereAltitude_km > 0)
-            setHLine( maxAtmosphereAltitude_km / y_range);
+            setHLine(maxAtmosphereAltitude_km, Color.white);
         else
             HideLine();
 
-
         if (current_altitude_km > 0 && current_altitude_km < lift_settings.destination_Ap_km.V)
-            setHLine( current_altitude_km / y_range);
+            setHLine(current_altitude_km, Color.green);
         else
             HideLine();
     }
@@ -182,7 +219,7 @@ public class LiftAscentPath
         double scale = maxAltitude / gradient_Texture.height; //meters per pixel
 
         if (mainBody.hasAtmosphere)
-            maxAtmosphereAltitude_km = (float) (mainBody.atmosphereDepth / 1000);
+            maxAtmosphereAltitude_km = (float)(mainBody.atmosphereDepth / 1000);
         else
             maxAtmosphereAltitude_km = -1;
 
@@ -192,17 +229,14 @@ public class LiftAscentPath
         {
             double alt = scale * y;
 
-            float atmo_ratio = (float)(mainBody.GetPressure(alt*1000) / pressureSeaLevel);
-            float altitude_atm_ratio = mainBody.hasAtmosphere ?  (float)(1.0 - alt / maxAtmosphereAltitude_km) : 0.0f;
+            float atmo_ratio = (float)(mainBody.GetPressure(alt * 1000) / pressureSeaLevel);
+            float altitude_atm_ratio = mainBody.hasAtmosphere ? (float)(1.0 - alt / maxAtmosphereAltitude_km) : 0.0f;
 
-            var c = Color.Lerp(Color.black, Color.cyan, altitude_atm_ratio/2) + new Color(atmo_ratio, atmo_ratio, atmo_ratio, 1);
+            var c = Color.Lerp(Color.black, Color.cyan, altitude_atm_ratio / 2) + new Color(atmo_ratio, atmo_ratio, atmo_ratio, 1);
 
             for (int x = 0; x < gradient_Texture.width; x++)
             {
                 gradient_Texture.SetPixel(x, y, c);
-
-                // if (mainBody.hasAtmosphere && (int)(maxAtmosphereAltitude_km / scale) == y)
-                //     texture.SetPixel(x, y, XKCDColors.LightGreyBlue);
             }
         }
 

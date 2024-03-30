@@ -48,6 +48,7 @@ namespace K2UI.Graph
             }
         }
 
+        // the orther is left, right, top, bottom
         public void setRanges(float min_x, float max_x, float min_y, float max_y)
         {
             MinX = min_x;
@@ -141,6 +142,7 @@ namespace K2UI.Graph
         {
             points.Clear();
             points.Add(point_1);
+            points.Add(point_1);
             points.Add(point_2);
             MarkDirtyRepaint();
         }
@@ -151,13 +153,20 @@ namespace K2UI.Graph
             MarkDirtyRepaint();
         }
 
-        float width, height;
+        
+        public float aspectRatio()
+        {
+            if (height_rect == 0) return 1;
+            return width_rect / height_rect;
+        }
+
+        public float width_rect, height_rect;
 
         void compute_values()
         {
             Rect rect = contentRect;
-            width = rect.width;
-            height = rect.height;
+            width_rect = rect.width;
+            height_rect = rect.height;
         }
 
         Vector2 value_to_pixel(Vector2 value)
@@ -166,7 +175,7 @@ namespace K2UI.Graph
             float ratio_y = (value.y - MinY)  /( MaxY - MinY );
 
             var res = new Vector2(
-                width * ratio_x, height * ratio_y);
+                width_rect * ratio_x, height_rect * ratio_y);
             return res;
         }
 

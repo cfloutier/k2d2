@@ -9,6 +9,7 @@ using UnityEngine.UIElements;
 using Newtonsoft.Json;
 using K2UI;
 using System.Globalization;
+using System.Runtime.CompilerServices;
 
 
 namespace KTools
@@ -34,11 +35,11 @@ namespace KTools
 
         public List<IResettable> reset_register = new();
 
-        public void Reset()
+        public void Reset(string chapter = null)
         {
             foreach(var s in reset_register)
             {
-                s.Reset();
+                s.Reset(chapter);
             }
             needSave = true;
         }
@@ -52,8 +53,6 @@ namespace KTools
         public delegate void onLoaded();
 
         public event onLoaded onloaded_event;
-
-        // public ManualLogSource logger = BepInEx.Logging.Logger.CreateLogSource("K2D2.SettingsFile");
 
         protected void Load(MonoBehaviour main, string file_path)
         {
@@ -72,14 +71,14 @@ namespace KTools
             Thread.CurrentThread.CurrentCulture = previous_culture;
             loaded = true;
             onloaded_event?.Invoke();
-            main.StartCoroutine(this.SaveIfNeeded());
+            main.StartCoroutine(SaveIfNeeded());
         }
 
         IEnumerator SaveIfNeeded()
         {
             while (Application.isPlaying)
             {
-                 if (needSave)
+                if (needSave)
                 {
                     Save();
                 }
@@ -89,6 +88,8 @@ namespace KTools
 
         protected void Save()
         {
+            // Debug.Log("settings saved");
+            
             var previous_culture = Thread.CurrentThread.CurrentCulture;
             Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
             try
@@ -149,7 +150,7 @@ namespace KTools
         }
 
 
-        public void Set<T>(string key, T value)
+        public bool Set<T>(string key, T value)
         {
             Type object_type = typeof(T);
             if (object_type == null)
@@ -158,31 +159,31 @@ namespace KTools
             }
             else if (object_type == typeof(string))
             {
-                SetString(key, (string)(object)value);
+                return SetString(key, (string)(object)value);
             }
             else if (object_type == typeof(bool))
             {
-                SetBool(key, (bool)(object)value);
+                return SetBool(key, (bool)(object)value);
             }
             else if (object_type == typeof(int))
             {
-                SetInt(key, (int)(object)value);
+                return SetInt(key, (int)(object)value);
             }
             else if (object_type == typeof(float))
             {
-                SetFloat(key, (float)(object)value);
+                return SetFloat(key, (float)(object)value);
             }
             else if (object_type == typeof(double))
             {
-                SetDouble(key, (double)(object)value);
+                return SetDouble(key, (double)(object)value);
             }
             else if (object_type == typeof(Color))
             {
-                SetColor(key, (Color)(object)value);
+                return SetColor(key, (Color)(object)value);
             }
             else if (object_type == typeof(Vector3))
             {
-                SetVector3(key, (Vector3)(object)value);
+                return SetVector3(key, (Vector3)(object)value);
             }
             else
             {
@@ -200,20 +201,25 @@ namespace KTools
             return default_value;
         }
 
-        public void SetString(string key, string value)
+        public bool SetString(string key, string value)
         {
             if (data.ContainsKey(key))
             {
+                if (data[key] == value)
+                    return false;
+
                 if (data[key] != value)
                 {
                     data[key] = value;
                     needSave = true;
                 }
+                return true;
             }
             else
             {
                 data[key] = value;
                 needSave = true;
+                return true;
             }
         }
 
@@ -236,10 +242,10 @@ namespace KTools
         /// Set the parameter using bool value
         /// the value is saved at once
         /// </summary>
-        public void SetBool(string key, bool value)
+        public bool SetBool(string key, bool value)
         {
             string value_str = value ? "1" : "0";
-            SetString(key, value_str);
+            return SetString(key, value_str);
         }
 
 
@@ -268,9 +274,9 @@ namespace KTools
         /// Set the parameter using integer value
         /// the value is saved at once
         /// </summary>
-        public void SetInt(string key, int value)
+        public bool SetInt(string key, int value)
         {
-            SetString(key, value.ToString());
+            return SetString(key, value.ToString());
         }
 
         public TEnum GetEnum<TEnum>(string key, TEnum default_value) where TEnum : struct
@@ -287,9 +293,9 @@ namespace KTools
             return default_value;
         }
 
-        public void SetEnum<TEnum>(string key, TEnum value) where TEnum : struct
+        public bool SetEnum<TEnum>(string key, TEnum value) where TEnum : struct
         {
-            SetString(key, value.ToString());
+            return SetString(key, value.ToString());
         }
 
 
@@ -319,9 +325,9 @@ namespace KTools
         /// Set the parameter using float value
         /// the value is saved at once
         /// </summary>
-        public void SetFloat(string key, float value)
+        public bool SetFloat(string key, float value)
         {
-            SetString(key, value.ToStringInvariant());         
+           return SetString(key, value.ToStringInvariant());         
         }
 
         /// <summary>
@@ -349,9 +355,9 @@ namespace KTools
         /// Set the parameter using double value
         /// the value is saved at once
         /// </summary>
-        public void SetDouble(string key, double value)
+        public bool SetDouble(string key, double value)
         {           
-            SetString(key, value.ToStringInvariant());
+            return SetString(key, value.ToStringInvariant());
         }
 
         /// <summary>
@@ -395,10 +401,10 @@ namespace KTools
         /// Set the parameter using Vector3 value
         /// the value is saved at once
         /// </summary>
-        public void SetVector3(string key, Vector3 value)
+        public bool SetVector3(string key, Vector3 value)
         {
             string text = value.x + ";" + value.y + ";" + value.z;
-            SetString(key, text);
+            return SetString(key, text);
         }
 
         /// <summary>
@@ -457,10 +463,10 @@ namespace KTools
             return result;
         }
 
-        public void SetColor(string key, Color value)
+        public bool SetColor(string key, Color value)
         {
             string text = ColorTools.formatColorHtml(value);
-            SetString(key, text);
+            return SetString(key, text);
         }
 
     }

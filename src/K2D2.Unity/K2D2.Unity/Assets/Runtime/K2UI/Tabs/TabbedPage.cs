@@ -3,6 +3,7 @@
 using UnityEngine;
 using UnityEngine.UIElements;
 using System.Collections.Generic;
+using KTools;
 
 
 namespace K2UI.Tabs
@@ -129,9 +130,26 @@ namespace K2UI.Tabs
 
         private void onTabChanged(ChangeEvent<string> evt)
         {
+            if (evt.target != tabsbar_el)
+                return;
+
             // Debug.Log("changed "+evt.newValue);
-            ShowContent(evt.newValue);   
+            ShowContent(evt.newValue);  
+            if (!string.IsNullOrEmpty(this.setting_path))
+                SettingsFile.Instance.SetString(setting_path, evt.newValue);
         }
+
+        string setting_path = "";
+
+        public void Bind(string setting_path, string default_tab)
+        {
+            this.setting_path = setting_path;
+            if (!string.IsNullOrEmpty(this.setting_path))
+            {
+                ShowContent(SettingsFile.Instance.GetString(setting_path, default_tab));
+            }
+        }
+
 
         string current_tab = "";
         public string CurrentTabCode

@@ -201,29 +201,39 @@ namespace K2UI
 
         void setLabelPos()
         {
-            if (_labelOnTop)
+            if (labelOnTop)
             {
-                if (label_element.parent == null) return;
-
-                if (label_element.parent != this)
+                if (label_element.parent == null) 
                 {
-                    label_element.parent.Remove(label_element);
+                    // Debug.Log("no parent el");
+                    return;
+                }
+                
+                if (label_element.parent != this)
+                {          
+                    // Debug.Log("moving to top");
                     Insert(0, label_element);
                 }
             }
             else
             {
-                if (label_element.parent == null) return;
+                if (label_element.parent == null) 
+                {
+                    // Debug.Log("no parent el");
+                    return;
+                }
 
-                label_element.parent.Remove(label_element);
-                main_slider.Insert(0, label_element);
+                if (label_element.parent != main_slider)
+                {
+                    // Debug.Log("moving to line");
+                    main_slider.Insert(0, label_element);
+                }
             }
-
         }
 
         void setLabels()
         {
-            setLabelPos();
+            
 
             if (printValue)
             {
@@ -258,9 +268,9 @@ namespace K2UI
                     else
                         max_element.text = "";
                 }
-
-              
             }
+
+            setLabelPos();
         }
 
         // 2 ways binding

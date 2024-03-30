@@ -5,6 +5,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
 using K2D2;
+using KTools;
 
 namespace K2UI.Tabs
 {
@@ -133,7 +134,7 @@ namespace K2UI.Tabs
             {
                 if (value == _enabled) return;
                 _enabled = value;
-        
+
                 tab_button.Show(_enabled);
 
                 // check if this is the current tab
@@ -142,6 +143,29 @@ namespace K2UI.Tabs
                     tabbed_page.SelectFirst();
                 }
             }
+        }
+
+        public void addSettingsResetButton(string chapter)
+        {
+            if (settings_page == null)
+                return;
+
+            VisualElement group = new VisualElement();
+            group.style.flexDirection = FlexDirection.Row;
+            group.style.justifyContent = Justify.SpaceBetween;
+
+            Button reset_bt = new Button() { text = "Reset" };
+            reset_bt.style.height = 25;
+            Button close = new Button() { text = "Close" };
+            close.style.height = 25;
+
+            settings_page.Add(group);
+
+            group.Add(reset_bt);
+            group.Add(close);
+
+            reset_bt.RegisterCallback<ClickEvent>(evt => SettingsFile.Instance.Reset(chapter));
+            close.RegisterCallback<ClickEvent>(evt => GlobalSetting.settings_visible.V = false);
         }
     }
 }

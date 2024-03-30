@@ -15,9 +15,9 @@ namespace K2D2.Controller;
 
 class BurnManeuverSettings
 {
-    public static Setting<float> burn_adjust = new ("burn.burn_adjust", 1.5f);
-    public static Setting<float> max_dv_error = new ("burn.max_dv_error", 0.1f);
-    public static Setting<bool> rotate_during_burn = new ("burn.rotate_during_burn", false);
+    public static Setting<float> burn_adjust = new ("node_ex.burn.burn_adjust", 1.5f);
+    public static Setting<float> max_dv_error = new ("node_ex.burn.max_dv_error", 0.1f);
+    public static Setting<bool> rotate_during_burn = new ("node_ex.burn.rotate_during_burn", false);
 }
 
 public class BurnManeuver : ExecuteController

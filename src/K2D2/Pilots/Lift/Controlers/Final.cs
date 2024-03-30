@@ -122,7 +122,7 @@ public class FinalCircularize : ExecuteController
                 });
 
             run = root_el.Q<Button>("run");
-            create_now.RegisterCallback<ClickEvent>( evt => {
+            run.RegisterCallback<ClickEvent>( evt => {
                 NodeExPilot.Instance.Start();
             });
         }

@@ -16,40 +16,28 @@ public class LiftSettings
    
     public ClampSetting<float> mid_rotate_ratio = new ("lift.mid_rotate_ratio", 0.2f, 0, 1);
 
-    
     public ClampSetting<float> end_rotate_ratio = new ("lift.end_rotate_ratio", 0.5f, 0, 1);
 
     public LiftSettings()
     {
-        start_altitude_km.listeners += v => reset_altitudes();
-      
-        mid_rotate_ratio.listeners += v => 
-        {
-            end_rotate_ratio.min = v;   
-            reset_altitudes();
-        };
+        start_altitude_km.listeners += v => update_altitudes();    
+        mid_rotate_ratio.listeners += v => update_altitudes();
+        end_rotate_ratio.listeners += v => update_altitudes();
+        destination_Ap_km.listeners += v => update_altitudes();
 
-        end_rotate_ratio.listeners += v => 
-        {
-            mid_rotate_ratio.max = v;
-            reset_altitudes();
-        };
-
-        destination_Ap_km.listeners += v => reset_altitudes();
+        update_altitudes();
     }
 
-    void reset_altitudes()
+    public void update_altitudes()
     {
-        _mid_rotate_altitude_km = -1; 
+        _mid_rotate_altitude_km = Mathf.Lerp(start_altitude_km.V, destination_Ap_km.V, mid_rotate_ratio.V);
+        _end_rotate_altitude_km = Mathf.Lerp(start_altitude_km.V, destination_Ap_km.V, end_rotate_ratio.V);
     }
 
     float _mid_rotate_altitude_km = -1;
     public float mid_rotate_altitude_km
     {
         get {
-            if (_mid_rotate_altitude_km == -1)
-                _mid_rotate_altitude_km = Mathf.Lerp(start_altitude_km.V, destination_Ap_km.V, mid_rotate_ratio.V);
-
             return _mid_rotate_altitude_km;
         }
     }
@@ -57,10 +45,7 @@ public class LiftSettings
     float _end_rotate_altitude_km = -1;
     public float end_rotate_altitude_km
     {
-         get {
-            if (_end_rotate_altitude_km == -1)
-                _end_rotate_altitude_km = Mathf.Lerp(start_altitude_km.V, destination_Ap_km.V, end_rotate_ratio.V);
-
+         get { 
             return _end_rotate_altitude_km;
         }
     }
@@ -88,12 +73,10 @@ public class LiftSettings
 
     public Setting<bool> heading_correction = new ("lift.heading_correction", true);
 
-
     Label end_ascent_alt;
     Label end_adjust_alt;
 
     Group adjust_group;
-
 
     void setLabels()
     {
@@ -105,19 +88,23 @@ public class LiftSettings
     {
         end_ascent_alt =  root.Q<Label>("end_ascent_alt");
         end_adjust_alt = root.Q<Label>("end_adjust_alt");
-        adjust_group = root.Q<Group>("adjust_group");
+        adjust_group = root.Q<K2UI.Group>("adjust_group");
 
         root.Q<K2Toggle>("heading_correction").Bind(heading_correction);  
 
         // bind to settings and add listener on the same line !
-        root.Q<K2Slider>("end_ascent_pc").Bind(end_ascent_pc).listeners += v => setLabels();
+        root.Q<K2Slider>("end_ascent_pc").Bind(end_ascent_pc);
+        end_ascent_pc.listen(v => setLabels());
+
         root.Q<K2Toggle>("coasting_warp").Bind(coasting_warp);
 
         // adjust is binded to setting and to show adjust group 
-        root.Q<K2Toggle>("adjust").Bind(adjust).listeners += v => adjust_group.Show(v);
+        root.Q<K2Toggle>("adjust").Bind(adjust);
+        adjust.listen(v => adjust_group.Show(v));
 
-        root.Q<K2Slider>("end_adjust_pc").Bind(end_adjust_pc).listeners += v => setLabels();
+        root.Q<K2Slider>("end_adjust_pc").Bind(end_adjust_pc);
+        end_adjust_pc.listen(v => setLabels());
 
-        root.Q<K2Toggle>("pause_on_final").Bind(pause_on_final);
+        root.Q<K2Toggle>("pause_on_final").Bind(pause_on_final);   
     }
 }

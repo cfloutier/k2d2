@@ -14,7 +14,7 @@ namespace KTools
 {
     public interface IResettable
     {
-        void Reset();
+        void Reset(string path);
     }
 
     public class EnumSetting <TEnum> : IResettable where TEnum : struct
@@ -34,8 +34,12 @@ namespace KTools
                 SettingsFile.Instance.reset_register.Add(this);
         }
 
-        public void Reset()
+        public void Reset(string path = null)
         {
+            if (path != null)
+                if (!this.path.StartsWith(path))
+                    return;
+                
             this.V = default_value;
         }
 
@@ -68,11 +72,6 @@ namespace KTools
         public delegate void onChanged(TEnum value);
 
         public event onChanged listeners;
-
-        public void Bind(InlineEnum element, string labels = null)
-        {    
-           
-        }
     }
 
     public class Setting<T> : IResettable
@@ -93,14 +92,20 @@ namespace KTools
                 SettingsFile.Instance.reset_register.Add(this);
         }
 
-        public void Reset()
-        {
+        public void Reset(string path = null)
+        {   
+            if (path != null)
+                if (!this.path.StartsWith(path))
+                    return;
+                    
             this.V = default_value;
         }
 
         void loadValue()
         {
             _value = SettingsFile.Instance.Get<T>(path, default_value);
+            if (path == "lift.end_ascent_pc")
+                Debug.Log("load value" + _value);
         }
 
         T _value;
@@ -109,12 +114,16 @@ namespace KTools
             get { return _value; }
             set
             {
-                if (value.Equals(_value)) return;
+                if (value.Equals(_value))
+                    return;
+
+                if (!SettingsFile.Instance.Set<T>(path, value))
+                    return;
 
                 _value = value;
-                listeners?.Invoke(this.V);
-
-                SettingsFile.Instance.Set<T>(path, _value);
+                if (path == "lift.end_ascent_pc")
+                    Debug.Log("set value" + _value);
+                listeners?.Invoke(this.V); 
             }
         }
 
@@ -154,14 +163,15 @@ namespace KTools
         
         public ClampSetting(string path, T default_value, T min, T max): base(path, default_value)
         {
-            this.min = min;
-            this.max = max;     
+            this._min = min;
+            this._max = max;  
+            V = Extensions.Clamp(V, min, max);
         }
 
         public override T V { 
             get => base.V; 
             set {
-                value = Extensions.Clamp(value, min, max);
+                
                 base.V = value;
             } 
         }

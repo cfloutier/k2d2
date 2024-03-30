@@ -8,8 +8,6 @@ using KSP.Sim;
 using KSP.Sim.Maneuver;
 using KTools;
 using UnityEngine.UIElements;
-using UnityEngine.UI;
-
 
 namespace K2D2.Controller;
 
@@ -27,26 +25,36 @@ class LiftUI : K2Page
     K2Slider end_rotate_ratio, mid_rotate_ratio;
 
     Label heading_label;
+
+    VisualElement final_grp;
+
     public override bool onInit()
     {
         LiftSettings settings = pilot.settings;
        
         status_bar = new FullStatus(panel);
-        var destination_Ap_km = panel.Q<IntegerField>("destination_Ap_km");
-        destination_Ap_km.Bind(settings.destination_Ap_km);
-
-        end_rotate_ratio = panel.Q<K2Slider>("end_rotate_ratio");
-        end_rotate_ratio.Bind(settings.end_rotate_ratio);  
-        end_rotate_ratio.listeners += v => end_rotate_ratio.Label = $"5° Alt. : {settings.end_rotate_altitude_km:n0} km";
-            
-        mid_rotate_ratio = panel.Q<K2Slider>("mid_rotate_ratio").Bind(settings.mid_rotate_ratio);
-        mid_rotate_ratio.listeners += v => mid_rotate_ratio.Label = $"45° Alt. : {settings.mid_rotate_altitude_km:n0} km";
-        
         panel.Q<IntegerField>("start_altitude_km").Bind(settings.start_altitude_km);
+        mid_rotate_ratio = panel.Q<K2Slider>("mid_rotate_ratio").Bind(settings.mid_rotate_ratio);
+        end_rotate_ratio = panel.Q<K2Slider>("end_rotate_ratio").Bind(settings.end_rotate_ratio);  
+        panel.Q<IntegerField>("destination_Ap_km").Bind(settings.destination_Ap_km);
 
+
+        final_grp = panel.Q<VisualElement>("final_grp");
+
+        settings.mid_rotate_ratio.listeners += v => 
+        {
+            if (end_rotate_ratio.value < v)
+                end_rotate_ratio.value = v;  
+        };
+  
+        settings.end_rotate_ratio.listeners += v => 
+        {
+            if (mid_rotate_ratio.value > v)
+                mid_rotate_ratio.value = v;       
+        };       
+        
         heading_label = panel.Q<Label>("heading_label");
         var heading = panel.Q<K2Compass>("heading").Bind(settings.heading);
-        heading.listeners += v => heading_label.text = $"Heading : {v:n1} °";
 
         var graph = panel.Q<VisualElement>("graph");
         pilot.ascent_path.InitUI(graph);
@@ -62,6 +70,8 @@ class LiftUI : K2Page
         };
 
         settings.setupUI(settings_page);
+        addSettingsResetButton("lift");
+
         return true;
     }
 
@@ -70,11 +80,19 @@ class LiftUI : K2Page
         if (!base.onUpdateUI())
             return false;
 
+        LiftSettings settings = pilot.settings;
+
         pilot.ascent_path.updateProfile(pilot.ascent.current_altitude_km);
-        
+
+        end_rotate_ratio.Label = $"5° Alt. : {settings.end_rotate_altitude_km:n0} km";
+        mid_rotate_ratio.Label = $"45° Alt. : {settings.mid_rotate_altitude_km:n0} km";
+        heading_label.text = $"Heading : {settings.heading.V:n1} °";
+
+        final_grp.Show(false);
+
+        status_bar.Reset();
         if (pilot.isRunning)
         {
-           status_bar.Reset();
            status_bar.Status($"Status : {pilot.status}", StatusLine.Level.Warning);
 
            if (pilot.current_subpilot != null)
@@ -82,8 +100,9 @@ class LiftUI : K2Page
         }
         else
         {
-            status_bar.Status("Final status : " + pilot.end_status, 
-                pilot.result_ok ? StatusLine.Level.Normal : StatusLine.Level.Warning);
+            if (!string.IsNullOrEmpty(pilot.end_status))
+                status_bar.Status("Final status : " + pilot.end_status, 
+                    pilot.result_ok ? StatusLine.Level.Normal : StatusLine.Level.Warning);
         }
 
         return true;

@@ -90,11 +90,9 @@ public class K2D2Window : MonoBehaviour
 
         tab_page = _rootElement.Q<TabbedPage>();
         tab_page.Init(pilots_panels);
-        // inti current tab from settings
-        tab_page.Select(K2D2Settings.current_tab.V);
         // save the current_tab to settings
-        tab_page.RegisterCallback<ChangeEvent<string>>(evt => K2D2Settings.current_tab.V = evt.newValue);
-
+        tab_page.Bind("main_page", "node");
+        
         var title_bar = _rootElement.Q("title-bar");
 
         var settings_button = title_bar.Q<ToggleButton>("settings-toggle");
@@ -103,6 +101,9 @@ public class K2D2Window : MonoBehaviour
         settings_button.Bind(GlobalSetting.settings_visible);
         staging_toggle.RegisterCallback<ChangeEvent<bool>>( evt => StagingPilot.Instance.Enabled = evt.newValue );
 
+        _rootElement.Query<IntegerField>().ForEach(field => field.DisableGameInputOnFocus());
+        _rootElement.Query<FloatField>().ForEach(field => field.DisableGameInputOnFocus());
+        
         _rootElement.MakeDraggable();
     }
 

@@ -81,15 +81,14 @@ public class K2D2Plugin : BaseSpaceWarpPlugin
 
         pilots_manager.AddPilot(new NodeExPilot());
         pilots_manager.AddPilot(new LiftPilot());
-        
-        pilots_manager.AddPilot(new LandingPilot());
-        pilots_manager.AddPilot(new DronePilot());
-        pilots_manager.AddPilot(new AttitudePilot());
+
+        // pilots_manager.AddPilot(new LandingPilot());
+        // pilots_manager.AddPilot(new DronePilot());
+        // pilots_manager.AddPilot(new AttitudePilot());
         // pilots_manager.AddPilot(new LiftController());
      
         // controllerManager.AddController(new WarpController());
         // pilots_manager.AddPilot(new DockingAssist());
-
 
         // Load the UI from the asset bundle
         var myFirstWindowUxml = AssetManager.GetAsset<VisualTreeAsset>(
@@ -123,10 +122,14 @@ public class K2D2Plugin : BaseSpaceWarpPlugin
             }
         };
 
+
+
         // Create the window
         var k2d2_window = Window.Create(windowOptions, myFirstWindowUxml);
         // Add a controller for the UI to the window's game object
         main_window = k2d2_window.gameObject.AddComponent<K2D2Window>();
+
+        
 
         // Register Flight AppBar button
         Appbar.RegisterAppButton(

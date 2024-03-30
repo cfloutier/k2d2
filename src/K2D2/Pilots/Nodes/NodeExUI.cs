@@ -46,6 +46,8 @@ class NodeExUI : K2Page
         pause_button.Bind(pilot.settings.pause_on_end);
         pilot.settings.setupUI(settings_page);
 
+        addSettingsResetButton("node_ex");
+
         return true;
     }
 
