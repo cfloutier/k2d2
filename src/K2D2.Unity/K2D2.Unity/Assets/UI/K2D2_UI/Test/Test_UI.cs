@@ -102,7 +102,6 @@ namespace K2D2.UI.Tests
         {
             UIDocument menu = GetComponent<UIDocument>();
             VisualElement root = menu.rootVisualElement;
-            root.MakeDraggable();
 
             SettingsFile.Init(this, "settings.json");
 

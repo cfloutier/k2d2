@@ -1,10 +1,13 @@
-using K2D2.Controller.Lift.Pilots;
+
 using K2D2.KSPService;
 using KTools;
 using UnityEngine;
 using BepInEx.Logging;
 using UnityEngine.UIElements;
-namespace K2D2.Controller;
+using K2D2.Controller;
+using K2D2.Node;
+
+namespace K2D2.Lift;
 
 public class LiftPilot : Pilot
 {
@@ -30,7 +33,7 @@ public class LiftPilot : Pilot
     Vector3d direction = Vector3d.zero;
 
     // sub pilots
-    internal  Ascent ascent = null;
+    internal Ascent ascent = null;
     Adjust adjust = null;
     Coasting coasting = null;   
     FinalCircularize final_circularize;
@@ -51,6 +54,7 @@ public class LiftPilot : Pilot
         final_circularize = new FinalCircularize(this, settings);
         
         Instance = this;
+
         debug_mode_only = false;
         name = "Lift";
         K2D2PilotsMgr.Instance.RegisterPilot("Lift", this);
@@ -158,7 +162,6 @@ public class LiftPilot : Pilot
         if (!isRunning)
             return;
 
-
         if (current_subpilot != null)
         {
             current_subpilot.Update();
@@ -166,6 +169,4 @@ public class LiftPilot : Pilot
                 NextMode();
         }
     }
-
-
 }

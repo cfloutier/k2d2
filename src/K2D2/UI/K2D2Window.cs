@@ -2,7 +2,8 @@ using K2D2.Controller;
 using K2UI;
 using K2UI.Tabs;
 using KSP.UI.Binding;
-
+using KTools;
+using RTG;
 using UitkForKsp2.API;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -69,9 +70,6 @@ public class K2D2Window : MonoBehaviour
         // so we need to get the first child of the TemplateContainer to get our actual root VisualElement.
         _rootElement = _window.rootVisualElement[0];
 
-        // Center the window by default
-        _rootElement.CenterByDefault();
-
         IsWindowOpen = false;
 
         // Get the close button from the window
@@ -103,8 +101,9 @@ public class K2D2Window : MonoBehaviour
 
         _rootElement.Query<IntegerField>().ForEach(field => field.DisableGameInputOnFocus());
         _rootElement.Query<FloatField>().ForEach(field => field.DisableGameInputOnFocus());
-        
-        _rootElement.MakeDraggable();
+
+        _rootElement.AddManipulator(new DragManipulator(false, "main_window_pos"));
+
     }
 
     void Update()

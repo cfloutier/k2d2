@@ -21,19 +21,7 @@ namespace K2UI
             }
         }
 
-        /// <summary>
-        /// Make a VisualElement draggable by adding a DragManipulator.
-        /// </summary>
-        /// <param name="element">The element to make draggable.</param>
-        /// <param name="checkScreenBounds">Should the element be draggable only within the screen bounds?</param>
-        /// <typeparam name="T">The type of the element which must be a subclass of VisualElement.</typeparam>
-        /// <returns>The element which was made draggable.</returns>
-        public static VisualElement MakeDraggable(this VisualElement element)
-        {
-            element.AddManipulator(new DragManipulator());
-            return element;
-        }
-
+      
         public static void Show(this VisualElement element, bool show)
         {
             element.style.display = show ? DisplayStyle.Flex : DisplayStyle.None;

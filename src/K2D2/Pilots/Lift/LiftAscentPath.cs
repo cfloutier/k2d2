@@ -14,7 +14,7 @@ using UnityEngine.UIElements;
 using K2UI.Graph;
 using K2UI;
 
-namespace K2D2.Controller;
+namespace K2D2.Lift;
 
 
 public class MultiGraphLine
@@ -211,10 +211,30 @@ public class LiftAscentPath : MultiGraphLine
 
     float maxAtmosphereAltitude_km = -1;
 
+
+    Color colorTable(string body_name)
+    {
+        switch (body_name.ToLower())
+        {
+            case "laythe": return ColorTools.parseColor("#2662af");
+            case "jool": return ColorTools.parseColor("#549324");
+            case "duna": return ColorTools.parseColor("#e47350");
+            case "kerbin": return ColorTools.parseColor("#3f54ff");
+            case "eve": return ColorTools.parseColor("#9152c6");
+        }
+
+        return Color.black;
+    }
+
     public void UpdateAtmoTexture(CelestialBodyComponent mainBody, double maxAltitude)
     {
         lastbody = mainBody;
         last_max_alt = maxAltitude;
+
+        var color_start = colorTable(mainBody.Name); 
+        var color_end = Color.black;
+        
+        //mainBody.oceanFogColorEnd;
 
         double scale = maxAltitude / gradient_Texture.height; //meters per pixel
 
@@ -232,7 +252,7 @@ public class LiftAscentPath : MultiGraphLine
             float atmo_ratio = (float)(mainBody.GetPressure(alt * 1000) / pressureSeaLevel);
             float altitude_atm_ratio = mainBody.hasAtmosphere ? (float)(1.0 - alt / maxAtmosphereAltitude_km) : 0.0f;
 
-            var c = Color.Lerp(Color.black, Color.cyan, altitude_atm_ratio / 2) + new Color(atmo_ratio, atmo_ratio, atmo_ratio, 1);
+            var c = Color.Lerp(color_end, color_start, altitude_atm_ratio / 2) + new Color(atmo_ratio, atmo_ratio, atmo_ratio, 1);
 
             for (int x = 0; x < gradient_Texture.width; x++)
             {

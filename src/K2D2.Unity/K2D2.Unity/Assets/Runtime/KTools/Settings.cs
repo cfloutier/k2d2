@@ -76,12 +76,12 @@ namespace KTools
 
     public class Setting<T> : IResettable
     {
-        public string path;
+        public string key;
         T default_value;
 
         public Setting(string path, T default_value)
         {
-            this.path = path;
+            this.key = path;
             this.default_value = default_value; 
             if (SettingsFile.Instance.loaded)
                 loadValue();
@@ -95,7 +95,7 @@ namespace KTools
         public void Reset(string path = null)
         {   
             if (path != null)
-                if (!this.path.StartsWith(path))
+                if (!this.key.StartsWith(path))
                     return;
                     
             this.V = default_value;
@@ -103,9 +103,9 @@ namespace KTools
 
         void loadValue()
         {
-            _value = SettingsFile.Instance.Get<T>(path, default_value);
-            if (path == "lift.end_ascent_pc")
-                Debug.Log("load value" + _value);
+            _value = SettingsFile.Instance.Get<T>(key, default_value);
+            // if (path == "lift.end_ascent_pc")
+            //     Debug.Log("load value" + _value);
         }
 
         T _value;
@@ -117,12 +117,13 @@ namespace KTools
                 if (value.Equals(_value))
                     return;
 
-                if (!SettingsFile.Instance.Set<T>(path, value))
-                    return;
+                if (!string.IsNullOrEmpty(key))    
+                    if (!SettingsFile.Instance.Set<T>(key, value))
+                        return;
 
                 _value = value;
-                if (path == "lift.end_ascent_pc")
-                    Debug.Log("set value" + _value);
+                // if (path == "lift.end_ascent_pc")
+                //     Debug.Log("set value" + _value);
                 listeners?.Invoke(this.V); 
             }
         }

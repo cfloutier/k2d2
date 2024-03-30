@@ -6,12 +6,14 @@ using KSP.Sim;
 using KSP.Sim.Maneuver;
 using KTools;
 using UitkForKsp2.API;
+using K2D2.UI;
 
 // using KTools.UI;
 using UnityEngine;
 using UnityEngine.UIElements;
+using K2D2.Controller;
 
-namespace K2D2.Controller;
+namespace K2D2.Node;
 
 class BurnManeuverSettings
 {

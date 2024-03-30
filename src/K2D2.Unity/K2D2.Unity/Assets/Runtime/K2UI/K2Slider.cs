@@ -274,11 +274,12 @@ namespace K2UI
         }
 
         // 2 ways binding
-        public void Bind(Setting<float> setting)
+        public K2Slider Bind(Setting<float> setting)
         {
             this.value = setting.V;
             setting.listeners += v => this.value = v;
             RegisterCallback<ChangeEvent<float>>(evt => setting.V = evt.newValue);
+            return this;
         }
 
         public K2Slider Bind(ClampSetting<float> setting)

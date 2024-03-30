@@ -1,7 +1,8 @@
 
 using K2UI;
 using UnityEngine.UIElements;
-namespace K2D2.Controller;
+
+namespace K2D2.UI;
 
 public class FullStatus
 {

@@ -18,6 +18,10 @@ using KSP.Sim.ResourceSystem;
 using KSP.Messages;
 using K2D2.Controller;
 
+using K2D2.Lift;
+using K2D2.Landing;
+using K2D2.Node;
+
 namespace K2D2;
 
 class L
@@ -81,8 +85,9 @@ public class K2D2Plugin : BaseSpaceWarpPlugin
 
         pilots_manager.AddPilot(new NodeExPilot());
         pilots_manager.AddPilot(new LiftPilot());
+         pilots_manager.AddPilot(new LandingPilot());
 
-        // pilots_manager.AddPilot(new LandingPilot());
+
         // pilots_manager.AddPilot(new DronePilot());
         // pilots_manager.AddPilot(new AttitudePilot());
         // pilots_manager.AddPilot(new LiftController());
@@ -121,8 +126,6 @@ public class K2D2Plugin : BaseSpaceWarpPlugin
                 CheckScreenBounds = true
             }
         };
-
-
 
         // Create the window
         var k2d2_window = Window.Create(windowOptions, myFirstWindowUxml);

@@ -1,4 +1,5 @@
 using BepInEx.Logging;
+using K2D2.Controller;
 using K2D2.KSPService;
 using K2UI;
 using KSP.Messages;
@@ -10,7 +11,7 @@ using KTools;
 // using K2D2.InfosPages;
 using UnityEngine;
 
-namespace K2D2.Controller;
+namespace K2D2.Node;
 
 public class NodeExPilot : Pilot
 {

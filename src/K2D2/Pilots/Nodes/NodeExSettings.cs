@@ -4,7 +4,7 @@ using KTools;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace K2D2.Controller;
+namespace K2D2.Node;
 
 public class NodeExSettings
 {

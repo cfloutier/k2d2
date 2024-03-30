@@ -5,8 +5,10 @@ using KSP.Sim.impl;
 using KTools;
 // using UnityEngine;
 using UnityEngine.UIElements;
-
-namespace K2D2.Controller.Lift.Pilots;
+using K2D2.UI;
+using K2D2.Controller;
+using K2D2.Node;
+namespace K2D2.Lift;
 
 /// <summary>
 /// rotation used for docking

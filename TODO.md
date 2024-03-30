@@ -68,12 +68,16 @@ UITK :
     * [x] Fold out background
 
 * [x] draggable 
-  * [ ] and window limit
+  * [x] and window limit
 
-* [ ] bug on size change
-* [ ] Ui is not resizable @munix help
+* [ ] default window pos is centered
+* [?] bug on size change
+* [x] Ui is not resizable @munix help
+
+* [ ] close window on exit of a valid game scene (flight and map only)
 
 * [ ] Tooltips
+
 
 -----------------------------
 * [x] Node ex 
@@ -89,6 +93,7 @@ UITK :
   * [x] Main UI
     * [x] UI
     * [x] Profile
+    * [-] colors for bodies
   * [x] Settings
     * [x] UI
     * [x] Binding  
@@ -125,14 +130,24 @@ UITK :
     * [ ] UI
     * [ ] Binding  
 
+* [ ] Staging
+  * [ ] Main UI
+    * [ ] UI
+    * [ ] Code
+  * [ ] Settings
+    * [ ] UI
+    * [ ] Binding  
+
+* [ ] About
+  * [ ] UI
+  * [ ] Code
+  
 ----------------------------
 
 reminder for next version : 
 
 * [x] Fix the Node ex bug when deleting it while run
 * [x] Look of the Pause Button in Node ex
-
-
 
 * [ ] Lift : setup TWR
 

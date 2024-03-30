@@ -5,8 +5,9 @@ using KTools;
 // using KTools.UI;
 using UnityEngine;
 using UnityEngine.UIElements;
-
-namespace K2D2.Controller;
+using K2D2.UI;
+using K2D2.Controller;
+namespace K2D2.Node;
 
 class TurnToSettings
 {
