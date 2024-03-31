@@ -33,7 +33,7 @@ public class LandingPilot : Pilot
     public LandingPilot()
     {
         settings = new LandingSettings();
-        _panel = new LandingUI(this);
+        _page = new LandingUI(this);
 
         Instance = this;
         debug_mode_only = false;
@@ -272,7 +272,7 @@ public class LandingPilot : Pilot
     Vector SurfaceVelocity;
     public override void Update()
     {
-        if (!ui_visible && !isRunning) return;
+        if (!page.isVisible && !isRunning) return;
         if (current_vessel == null || current_vessel.VesselVehicle == null)
             return;
 

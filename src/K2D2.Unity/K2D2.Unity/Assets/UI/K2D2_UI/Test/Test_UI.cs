@@ -77,7 +77,7 @@ namespace K2D2.UI.Tests
             GlobalSetting.settings_visible.listen(onSettingsChanged);
             
             Button reset_bt = panel.Q<Button>("reset_settings");  
-            reset_bt.RegisterCallback<ClickEvent>( evt => SettingsFile.Instance.Reset());
+            reset_bt.listenClick( () => SettingsFile.Instance.Reset());
 
             return true;
         }

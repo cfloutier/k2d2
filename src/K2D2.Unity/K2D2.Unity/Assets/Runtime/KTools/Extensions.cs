@@ -1,5 +1,7 @@
 using System;
 using UnityEngine;
+
+
 namespace KTools
 {
     public static class Extensions
@@ -17,8 +19,6 @@ namespace KTools
             int j = Array.IndexOf<T>(Arr, src) + 1;
             return (Arr.Length == j) ? Arr[0] : Arr[j];
         }
-
-
         private static IFormatProvider inv
                     = System.Globalization.CultureInfo.InvariantCulture.NumberFormat;
 
@@ -37,8 +37,6 @@ namespace KTools
                 result = min;
             return result;
         }
-    
+   
     }
-
-
 }

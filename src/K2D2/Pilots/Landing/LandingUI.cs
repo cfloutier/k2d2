@@ -1,15 +1,19 @@
 
+
 using BepInEx.Logging;
 using K2D2.KSPService;
-using K2UI.Tabs;
+using K2D2.UI;
 using K2UI;
+using K2UI.Tabs;
+using KSP.Game;
 using KSP.Messages;
 using KSP.Sim;
 using KSP.Sim.Maneuver;
-using KTools;
 using UnityEngine.UIElements;
-using K2D2.UI;
-using KSP.Game;
+using KTools;
+
+
+
 namespace K2D2.Landing;
 
 class LandingUI : K2Page
@@ -21,62 +25,64 @@ class LandingUI : K2Page
         code = "landing";
     }
 
-    public K2UI.Console context_infos;
+    public K2UI.Console landing_infos;
     public FullStatus status_bar;
 
     public ToggleButton run_button;
-    
+
     public Button touch_down;
+
 
     public override bool onInit()
     {
-        context_infos = panel.Q<K2UI.Console>("context_infos");
+        LandingSettings settings = pilot.settings;
+        landing_infos = panel.Q<K2UI.Console>("landing_infos");
+        settings.landing_context.listen(v => landing_infos.Show(v));
+
         run_button = panel.Q<ToggleButton>("run");
         touch_down = panel.Q<Button>("touch_down");
         status_bar = new FullStatus(panel);
 
-        run_button.listeners +=  v => 
+        pilot.is_running_event += is_running => run_button.value = is_running;
+        run_button.listeners += v =>
         {
             pilot.isRunning = v;
             run_button.label = v ? "Stop" : "Brake";
-        }; 
+        };
 
-        touch_down.RegisterCallback<ClickEvent>(evt => {
+        touch_down.listenClick(() =>
+        {
             pilot.isRunning = true;
             pilot.setMode(LandingPilot.Mode.TouchDown);
         });
+
+        pilot.settings.setupUI(pilot, settings_page);
+        addSettingsResetButton("land");
 
         return true;
     }
 
     public void updateContext()
     {
-        string txt = $"Current Fall Speed : {pilot.current_falling_speed:n2} m/s";
+        landing_infos.Set("<b>Landing Context</b>");
+        landing_infos.Add($"Current Fall Speed : {pilot.current_falling_speed:n2} m/s");
 
         LandingSettings settings = pilot.settings;
         if (pilot.collision_detected)
         {
-            txt += "\n<b>   Collision detected !<b>";
+            landing_infos.Add("<b>Collision detected !</b>");
+            landing_infos.Add($" Collision in {StrTool.DurationToString(pilot.adjusted_collision_UT - GeneralTools.Game.UniverseModel.UniverseTime)}");
+            landing_infos.Add($" speed collision {pilot.speed_collision:n2} m/s");
+            landing_infos.Add($" start_burn in <b>{StrTool.DurationToString(pilot.startBurn_UT - GeneralTools.Game.UniverseModel.UniverseTime)}</b>");
+            landing_infos.Add($" burn_duration {pilot.burn_duration:n2} s");
 
-            if (settings.verbose_infos.V)
-            {
-                txt += $"\n Collision in {StrTool.DurationToString(pilot.adjusted_collision_UT - GeneralTools.Game.UniverseModel.UniverseTime)}";
-                txt += $"\n speed collision {pilot.speed_collision:n2} m/s";
-                txt += $"\n start_burn in <b>{StrTool.DurationToString(pilot.startBurn_UT - GeneralTools.Game.UniverseModel.UniverseTime)}</b>";
-                txt += $"\n burn_duration {pilot.burn_duration:n2} s";
-            }
+            // landing_infos.Add( $"\ncurrent_V_speed : {StrTool.DistanceToString(pilot.altitude)}");
+            // landing_infos.Add( $"\nAltitude : {StrTool.DistanceToString(pilot.altitude)}");
         }
         else
         {
-            txt += "\n<b>   No Collision detected<b>";
+            landing_infos.Add("<b>No Collision detected</b>");
         }
-
-        txt += $"current_V_speed : { StrTool.DistanceToString(pilot.altitude)}";
-
-        if (settings.verbose_infos.V)
-             txt +=$"Altitude : { StrTool.DistanceToString(pilot.altitude)}";
-        
-        context_infos.Set(txt);
     }
 
     public override bool onUpdateUI()
@@ -84,7 +90,9 @@ class LandingUI : K2Page
         if (!base.onUpdateUI())
             return false;
 
-        updateContext();
+        if (pilot.settings.landing_context.V)
+            updateContext();
+            
         status_bar.Reset();
 
         if (!pilot.collision_detected)
@@ -134,8 +142,8 @@ class LandingUI : K2Page
 
         if (isRunning && pilot.burn_dV.burned_dV > 0)
             status_bar.Console($"Burned : {pilot.burn_dV.burned_dV:n1} m/s");
-    
-         return true;
+
+        return true;
     }
 
 }

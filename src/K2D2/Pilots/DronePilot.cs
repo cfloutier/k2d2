@@ -206,7 +206,7 @@ public class DronePilot : Pilot
 
     public override void Update()
     {
-        if (!ui_visible && !isRunning) return;
+        if (!page.isVisible && !isRunning) return;
         if (current_vessel == null || current_vessel.VesselVehicle == null)
             return;
 

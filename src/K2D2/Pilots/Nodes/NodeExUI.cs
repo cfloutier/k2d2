@@ -44,9 +44,9 @@ class NodeExUI : K2Page
             pilot.isRunning = v;
             run_button.label = v ? "Stop" : "Start";
         }; 
+
         pause_button.Bind(pilot.settings.pause_on_end);
         pilot.settings.setupUI(settings_page);
-
         addSettingsResetButton("node_ex");
 
         return true;
@@ -54,7 +54,7 @@ class NodeExUI : K2Page
 
     void UpdateNodeInfos()
     {
-        string txt = "<b>Node Infos</b>";
+        node_infos_el.Set("<b>Node Infos</b>");
 
         ManeuverNodeData node = null;
         if (pilot.isRunning)
@@ -69,15 +69,13 @@ class NodeExUI : K2Page
         }
             
         var dt = GeneralTools.remainingStartTime(node);
-        txt += $"\n Node in <b>{StrTool.DurationToString(dt)}</b>";
-        txt += $"\n dV {node.BurnRequiredDV:n2} m/s";
-        txt += $"\n Duration {StrTool.DurationToString(node.BurnDuration)}";
+        node_infos_el.Add($"\n Node in <b>{StrTool.DurationToString(dt)}</b>");
+        node_infos_el.Add($"\n dV {node.BurnRequiredDV:n2} m/s");
+        node_infos_el.Add($"\n Duration {StrTool.DurationToString(node.BurnDuration)}");
         if (dt < 0)
         {
-            txt += $"\n In The Past";
-        }
-        
-        node_infos_el.Set(txt);
+            node_infos_el.Add($"\n In The Past");
+        }  
     }
 
 

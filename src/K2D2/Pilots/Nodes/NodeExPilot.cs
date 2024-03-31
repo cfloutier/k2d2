@@ -41,7 +41,7 @@ public class NodeExPilot : Pilot
         Instance = this;
         debug_mode_only = false;
 
-        _panel = ui = new NodeExUI(this);
+        _page = ui = new NodeExUI(this);
 
         name = "Node";
         K2D2PilotsMgr.Instance.RegisterPilot("Node", this);

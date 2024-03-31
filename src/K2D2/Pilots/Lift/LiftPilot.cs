@@ -44,7 +44,7 @@ public class LiftPilot : Pilot
     {
         settings = new LiftSettings();
         ascent_path = new LiftAscentPath(settings);
-        _panel = new LiftUI(this);
+        _page = new LiftUI(this);
 
         current_vessel = K2D2Plugin.Instance.current_vessel;
        
@@ -153,10 +153,10 @@ public class LiftPilot : Pilot
 
     public override void Update()
     {
-        // if (!isRunning && !ui_visible) return;
+        
         if (current_vessel == null) return;
 
-        if (isRunning || ui_visible)
+        if (isRunning || page.isVisible)
             ascent.computeValues(status == LiftStatus.Ascent);
 
         if (!isRunning)

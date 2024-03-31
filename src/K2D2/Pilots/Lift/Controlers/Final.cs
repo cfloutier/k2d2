@@ -111,20 +111,20 @@ public class FinalCircularize : ExecuteController
             final_grp = root_el.Q<VisualElement>("final_grp");
             create_ap = root_el.Q<Button>("create_ap");
 
-            create_ap.RegisterCallback<ClickEvent>( evt => {
+            create_ap.listenClick( () => {
                     removeAllNodes();
                     createApNode();  
                 });
 
             create_now = root_el.Q<Button>("create_now");
 
-            create_now.RegisterCallback<ClickEvent>( evt => {
+            create_now.listenClick( () => {
                     removeAllNodes();
                     createNowNode();  
                 });
 
             run = root_el.Q<Button>("run");
-            run.RegisterCallback<ClickEvent>( evt => {
+            run.listenClick( () => {
                 NodeExPilot.Instance.Start();
             });
         }

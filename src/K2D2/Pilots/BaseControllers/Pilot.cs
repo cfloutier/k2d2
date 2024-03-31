@@ -20,16 +20,16 @@ namespace K2D2.Controller
 
                 base.isRunning = value;
                 // update the panel
-                _panel.isRunning = isRunning;
+                _page.isRunning = isRunning;
             }
         }
 
-        // MUST be build in constructor
-        protected K2Page _panel = null;
+        // MUST be build in constructor if an UI is needed
+        protected K2Page _page = null;
 
         public virtual K2Page page
         {
-            get => _panel;
+            get => _page;
         }
     }
 

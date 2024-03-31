@@ -1,12 +1,7 @@
-﻿// using System;
-// using System.Collections.Generic;
-// using System.Linq;
+﻿
 using K2D2.UI;
 using KSP.Game;
-using K2D2.UI;
-// using KSP.Messages;
 using UnityEngine.UIElements;
-
 
 namespace K2D2.Controller
 {
@@ -17,9 +12,6 @@ namespace K2D2.Controller
         //private bool _controllerCurrentlyActive = false;
 
         public GameInstance Game => GameManager.Instance == null ? null : GameManager.Instance.Game;
-
-        // set my the main UI, update can be ignore if not active and not visible
-        public bool ui_visible = false;
 
         public bool debug_mode_only = true;
         public string name = "Unamed";
@@ -62,11 +54,6 @@ namespace K2D2.Controller
         public delegate void onRunning(bool is_running);
         public event onRunning is_running_event;
 
-        public bool need_update
-        {
-            get { return ui_visible || isRunning; }
-        }
-
         public virtual bool isActive
         {
             get {
@@ -81,7 +68,6 @@ namespace K2D2.Controller
             } 
         }
 
-        public bool UIVisible { get { return ui_visible; } set { ui_visible = value; } }
 
         public virtual void onReset()
         {

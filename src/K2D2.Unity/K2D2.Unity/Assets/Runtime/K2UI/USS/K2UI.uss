@@ -126,6 +126,8 @@
     -unity-font-definition: url('project://database/Assets/Fonts/Sax%20Mono.asset?fileID=11400000&guid=a6fc3433277ba9741b90d888f9ae4b53&type=2#Sax Mono');
     -unity-font-style: normal;
     white-space: normal;
+    margin-top: 5px;
+    margin-bottom: 5px;
 }
 
 .k2-status-line {

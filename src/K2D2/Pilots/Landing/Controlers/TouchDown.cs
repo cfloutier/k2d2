@@ -7,6 +7,8 @@ using UnityEngine.UIElements;
 using K2D2.UI;
 using K2D2.Controller;
 
+using KTools;
+
 namespace K2D2.Landing;
 
 /// apply the wanted speed in the good direction
@@ -15,6 +17,7 @@ public class TouchDown : ExecuteController
     public bool gravity_compensation;
     public float max_speed = 0;
 
+    public ClampSetting<float> touch_down_max_angle = new("land.touch_down_max_angle", 30,  0, 45);
     KSPVessel current_vessel;
     BurndV burn_dV = new BurndV();
 
@@ -89,11 +92,10 @@ public class TouchDown : ExecuteController
 
     public bool checkDirection()
     {
-        double max_angle = 5;
-
+        
         var telemetry = SASTool.getTelemetry();
 
-        // check that the speed
+        // check that the direction is not over max_angle
         Vector HorizonUp = telemetry.HorizonUp;
         Vector retro_dir = telemetry.SurfaceMovementRetrograde;
 
@@ -119,7 +121,7 @@ public class TouchDown : ExecuteController
         retrograde_angle = (float)Vector3d.Angle(retro_dir.vector, forward_direction);
         status_line = $"Waiting for Vessel rotation\nAngle = {retrograde_angle:n2}°";
 
-        return retrograde_angle < max_angle;
+        return retrograde_angle < touch_down_max_angle.V;
     }
 
     float current_speed;

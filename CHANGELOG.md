@@ -1,3 +1,30 @@
+# v1.0.0
+* UI has been totally rebuilded using Unity Toolkit. 
+bigup to @Munix for the UITK mod (it's now a dependency)
+
+The fonctionnality should be exactly the same. I hope there won't be too much bugs.
+And I will correct any regression as soon as I can in a next version.
+
+this new UI adds some little advantages :
+* it is fully resizable (use the factor in the UITK mod configuration)
+I've not tested it in 4K but I'm quite confident tahts it will be far better than it was with IMGUI as everything is using vector graphics 
+
+* it is no more in front of KSP2 panels and menus.
+
+That was the main motivation for this new version and I know that I couldn't continue with IMGUI. Even if the work to convert it to UITK has been huge (3 months full). And it has been a good time to refactorize the whole code.  
+
+-------------------------
+Other little things :
+
+* Experimental settings for Node Execution has been moved in an "Experimental" Foldout in the settings
+* The Lift profile is now a fold out
+* The planet atmosphere color is visible in the Lift Profile
+* The Landing Pilot have now an option to change the max angle with current speed. The previous value was 5° max and with many Vessels it was far too precise. It's now an option in the ToucDown foldout and it's default value is 30 !
+
+
+
+
+
 # v0.12.3
 * Rebuild with KSP v0.2.1.0 
 
