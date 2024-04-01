@@ -61,7 +61,7 @@ public class DronePilot : Pilot
         K2D2PilotsMgr.Instance.RegisterPilot("Drone", this);
 
         sub_contollers.Add(burn_dV);
-        current_vessel = K2D2Plugin.Instance.current_vessel;
+        current_vessel = K2D2_Plugin.Instance.current_vessel;
 
         Instance = this;
     }
@@ -83,7 +83,7 @@ public class DronePilot : Pilot
             if (!value)
             {
                 // stop
-                var current_vessel = K2D2Plugin.Instance.current_vessel;
+                var current_vessel = K2D2_Plugin.Instance.current_vessel;
                 if (current_vessel != null)
                     current_vessel.SetThrottle(0);
 
@@ -92,7 +92,7 @@ public class DronePilot : Pilot
             else
             {
                 // reset controller to desactivate other controllers.
-                K2D2Plugin.ResetControllers();
+                K2D2_Plugin.ResetControllers();
                 _active = true;
                 changeSASMode( SASMode.SurfaceUp );
                 changeVSpeedMode(VSpeedMode.Direct);

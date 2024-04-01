@@ -114,10 +114,10 @@ public class LiftAscentPath : MultiGraphLine
     {
         float scale = (float)(lift_settings.destination_Ap_km.V / y_range);
 
-        if (lastbody != K2D2Plugin.Instance.current_vessel.currentBody() ||
+        if (lastbody != K2D2_Plugin.Instance.current_vessel.currentBody() ||
             last_max_alt != lift_settings.destination_Ap_km.V)
         {
-            UpdateAtmoTexture(K2D2Plugin.Instance.current_vessel.currentBody(), lift_settings.destination_Ap_km.V);
+            UpdateAtmoTexture(K2D2_Plugin.Instance.current_vessel.currentBody(), lift_settings.destination_Ap_km.V);
         }
 
         reset();

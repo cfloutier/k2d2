@@ -25,7 +25,7 @@ public class FinalCircularize : ExecuteController
 
     public FinalCircularize(LiftPilot lift, LiftSettings lift_settings)
     {
-        current_vessel = K2D2Plugin.Instance.current_vessel;
+        current_vessel = K2D2_Plugin.Instance.current_vessel;
         this.lift = lift;
         this.lift_settings = lift_settings;
     }

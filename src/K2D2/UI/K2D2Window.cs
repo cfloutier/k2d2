@@ -42,7 +42,7 @@ public class K2D2Window : MonoBehaviour
             // gameObject.SetActive(value);
 
             // Update the Flight AppBar button state
-            GameObject.Find(K2D2Plugin.ToolbarFlightButtonID)
+            GameObject.Find(K2D2_Plugin.ToolbarFlightButtonID)
                 ?.GetComponent<UIValue_WriteBool_Toggle>()
                 ?.SetValue(value);
 
@@ -79,7 +79,7 @@ public class K2D2Window : MonoBehaviour
 
         // list all pilot panel
         pilots_panels.Clear();
-        foreach(var pilot in K2D2Plugin.Instance.pilots_manager.pilots)
+        foreach(var pilot in K2D2_Plugin.Instance.pilots_manager.pilots)
         {
             var panel = pilot.page;
             if (panel != null)

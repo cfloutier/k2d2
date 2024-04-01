@@ -47,7 +47,7 @@ public class NodeExPilot : Pilot
         K2D2PilotsMgr.Instance.RegisterPilot("Node", this);
 
         sub_contollers.Add(current_executor);
-        current_vessel = K2D2Plugin.Instance.current_vessel;
+        current_vessel = K2D2_Plugin.Instance.current_vessel;
 
         GeneralTools.Game.Messages.Subscribe<VesselChangedMessage>(OnActiveVesselChanged);
 
@@ -290,7 +290,7 @@ public class NodeExPilot : Pilot
             else
             {
                 // reset controller to desactivate other controllers.
-                K2D2Plugin.ResetControllers();
+                K2D2_Plugin.ResetControllers();
                 TimeWarpTools.SetIsPaused(false);
                 
                 setMode(Mode.Turn);

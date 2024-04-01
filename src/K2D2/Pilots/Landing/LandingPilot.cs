@@ -44,7 +44,7 @@ public class LandingPilot : Pilot
         sub_contollers.Add(current_executor);
 
         // logger.LogMessage("LandingController !");
-        current_vessel = K2D2Plugin.Instance.current_vessel;
+        current_vessel = K2D2_Plugin.Instance.current_vessel;
     }
 
 
@@ -160,7 +160,7 @@ public class LandingPilot : Pilot
                 burn_dV.reset();
 
                 // reset controller to desactivate other controllers.
-                K2D2Plugin.ResetControllers();
+                K2D2_Plugin.ResetControllers();
 
                 _active = true;
                 setMode(Mode.QuickWarp);
@@ -189,7 +189,7 @@ public class LandingPilot : Pilot
     public void computeValues()
     {
         collision_detected = false;
-        var current_vessel = K2D2Plugin.Instance.current_vessel;
+        var current_vessel = K2D2_Plugin.Instance.current_vessel;
         if (current_vessel == null)
         {
             // UI_Tools.Console("no vessel");

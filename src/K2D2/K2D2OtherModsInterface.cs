@@ -83,7 +83,7 @@ public class K2D2OtherModsInterface
         {
             FPInstance = FPPropertyInfo.GetValue(null);
 
-            K2D2Plugin.logger.LogMessage($"Circularize at UT {burnUT} s (+-{burnOffsetFactor})");
+            K2D2_Plugin.logger.LogMessage($"Circularize at UT {burnUT} s (+-{burnOffsetFactor})");
             return (bool) CircularizeMethodInfo!.Invoke(FPInstance, [burnUT, burnOffsetFactor]);
         }
 

@@ -22,7 +22,7 @@ public class Ascent : ExecuteController
 
     public Ascent(LiftSettings lift_settings, LiftAscentPath ascent_path)
     {
-        current_vessel = K2D2Plugin.Instance.current_vessel;
+        current_vessel = K2D2_Plugin.Instance.current_vessel;
         this.settings = lift_settings;
         this.ascent_path = ascent_path;
     }

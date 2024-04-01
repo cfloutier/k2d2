@@ -31,7 +31,7 @@ namespace K2D2.KSPService
 
         public void Update()
         {
-            kspVessel = K2D2Plugin.Instance.current_vessel;
+            kspVessel = K2D2_Plugin.Instance.current_vessel;
             _vesselComponent = kspVessel.GetActiveSimVessel();
         }
 
@@ -249,7 +249,7 @@ namespace K2D2.KSPService
         /// <param name="TrueAnomaly"></param>
         private void CreateManeuverNode(Vector3d burnVector, double TrueAnomaly)
         {
-            K2D2Plugin.Instance.StartCoroutine(CreateManeuverNode_Co(burnVector, TrueAnomaly));
+            K2D2_Plugin.Instance.StartCoroutine(CreateManeuverNode_Co(burnVector, TrueAnomaly));
         }
 
         private IEnumerator CreateManeuverNode_Co(Vector3d burnVector, double TrueAnomaly)

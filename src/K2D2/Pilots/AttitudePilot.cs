@@ -25,7 +25,7 @@ public class AttitudePilot : Pilot
     public AttitudePilot()
     {
         // logger.LogMessage("LandingController !");
-        current_vessel = K2D2Plugin.Instance.current_vessel;
+        current_vessel = K2D2_Plugin.Instance.current_vessel;
 
         Instance = this;
         debug_mode_only = false;
@@ -59,7 +59,7 @@ public class AttitudePilot : Pilot
             else
             {
                 // reset controller to desactivate other controllers.
-                K2D2Plugin.ResetControllers();
+                K2D2_Plugin.ResetControllers();
                 _active = true;
 
                 var autopilot = current_vessel.Autopilot;

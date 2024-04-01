@@ -95,7 +95,7 @@ public class WarpTo : ExecuteController
     public override void Start()
     {
         finished = false;
-        current_vessel = K2D2Plugin.Instance.current_vessel;
+        current_vessel = K2D2_Plugin.Instance.current_vessel;
     }
 
     double dt;

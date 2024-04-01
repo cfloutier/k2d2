@@ -10,12 +10,12 @@ namespace K2D2
     {
         public static VesselAutopilot currentAutoPilot()
         {
-            return K2D2Plugin.Instance.current_vessel?.VesselComponent?.Autopilot;
+            return K2D2_Plugin.Instance.current_vessel?.VesselComponent?.Autopilot;
         }
 
         public static VesselSAS currentSas()
         {
-            return K2D2Plugin.Instance.current_vessel?.VesselComponent?.Autopilot?.SAS;
+            return K2D2_Plugin.Instance.current_vessel?.VesselComponent?.Autopilot?.SAS;
         }
 
         public static double getSasResponsePC()

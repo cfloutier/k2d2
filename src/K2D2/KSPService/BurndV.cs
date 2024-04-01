@@ -14,7 +14,7 @@ public class BurndV : BaseController
 
     public BurndV()
     {
-        current_vessel = K2D2Plugin.Instance.current_vessel;
+        current_vessel = K2D2_Plugin.Instance.current_vessel;
     }
 
     public float burned_dV = 0;

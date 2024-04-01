@@ -23,7 +23,7 @@ public class Coasting : ExecuteController
 
     public Coasting(LiftPilot lift, LiftSettings lift_settings)
     {
-        current_vessel = K2D2Plugin.Instance.current_vessel;
+        current_vessel = K2D2_Plugin.Instance.current_vessel;
         this.lift = lift;
         this.lift_settings = lift_settings;
     }
@@ -69,7 +69,7 @@ public class Coasting : ExecuteController
         current_altitude_km = (float)(current_vessel.GetSeaAltitude() / 1000);
         finished = false;
 
-        CelestialBodyComponent mainBody = K2D2Plugin.Instance.current_vessel.currentBody();
+        CelestialBodyComponent mainBody = K2D2_Plugin.Instance.current_vessel.currentBody();
         var maxAtmosphereAltitude_km = (float)(mainBody.atmosphereDepth / 1000);
         if (lift_settings.destination_Ap_km.V < maxAtmosphereAltitude_km)
         {

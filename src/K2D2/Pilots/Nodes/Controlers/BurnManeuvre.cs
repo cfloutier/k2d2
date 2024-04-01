@@ -31,7 +31,7 @@ public class BurnManeuver : ExecuteController
 
     public BurnManeuver()
     {
-        current_vessel = K2D2Plugin.Instance.current_vessel;
+        current_vessel = K2D2_Plugin.Instance.current_vessel;
     }
 
     double start_dt;

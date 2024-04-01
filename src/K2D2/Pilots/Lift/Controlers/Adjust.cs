@@ -25,7 +25,7 @@ public class Adjust : ExecuteController
 
     public Adjust(LiftSettings lift_settings, Ascent ascent)
     {
-        current_vessel = K2D2Plugin.Instance.current_vessel;
+        current_vessel = K2D2_Plugin.Instance.current_vessel;
         this.lift_settings = lift_settings;
         this.ascent = ascent;
     }

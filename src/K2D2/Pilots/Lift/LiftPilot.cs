@@ -46,7 +46,7 @@ public class LiftPilot : Pilot
         ascent_path = new LiftAscentPath(settings);
         _page = new LiftUI(this);
 
-        current_vessel = K2D2Plugin.Instance.current_vessel;
+        current_vessel = K2D2_Plugin.Instance.current_vessel;
        
         ascent = new Ascent(settings, ascent_path);
         adjust = new Adjust(settings, ascent);
@@ -119,7 +119,7 @@ public class LiftPilot : Pilot
             else
             {
                 // reset controller to desactivate other controllers.
-                K2D2Plugin.ResetControllers();
+                K2D2_Plugin.ResetControllers();
                 OnStartController();
             }
 

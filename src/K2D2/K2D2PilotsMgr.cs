@@ -51,7 +51,7 @@ class K2D2PilotsMgr
     {
         if (pilots.ContainsKey(pilotName)) 
         { 
-            K2D2Plugin.logger.LogWarning($"Registering another pilot named {pilotName}");
+            K2D2_Plugin.logger.LogWarning($"Registering another pilot named {pilotName}");
             return;
         }
 

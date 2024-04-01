@@ -28,7 +28,7 @@ public class TouchDown : ExecuteController
     {
         sub_contollers.Add(burn_dV);
         // logger.LogMessage("LandingController !");
-        current_vessel = K2D2Plugin.Instance.current_vessel;
+        current_vessel = K2D2_Plugin.Instance.current_vessel;
     }
 
     public void computeGravityRatio()

@@ -68,7 +68,7 @@ public class TurnTo : ExecuteController
 
     public override void Start()
     {
-        current_vessel = K2D2Plugin.Instance.current_vessel;
+        current_vessel = K2D2_Plugin.Instance.current_vessel;
         // reset time warp
         TimeWarpTools.SetRateIndex(0, false);
     }

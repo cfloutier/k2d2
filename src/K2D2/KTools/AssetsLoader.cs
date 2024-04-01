@@ -10,7 +10,7 @@ namespace KTools
         // BEPEXVersion
         public static Texture2D loadIcon(string path)
         {
-            var imageTexture = AssetManager.GetAsset<Texture2D>($"{K2D2Plugin.ModGuid}/images/{path}.png");
+            var imageTexture = AssetManager.GetAsset<Texture2D>($"{K2D2_Plugin.ModGuid}/images/{path}.png");
 
             //   Check if the texture is null
             if (imageTexture == null)
@@ -30,7 +30,7 @@ namespace KTools
 
         public static Font loadFont(string path)
         {
-            var font = AssetManager.GetAsset<Font>($"{K2D2Plugin.ModGuid}/k2d2/KtoolBundle/{path}.ttf");
+            var font = AssetManager.GetAsset<Font>($"{K2D2_Plugin.ModGuid}/k2d2/KtoolBundle/{path}.ttf");
 
             //   Check if the font is null
             if (font == null)
@@ -48,7 +48,7 @@ namespace KTools
 
         public static GUISkin loadSkin(string path)
         {
-            var skin = AssetManager.GetAsset<GUISkin>($"{K2D2Plugin.ModGuid}/k2d2/KtoolBundle/{path}.guiskin");
+            var skin = AssetManager.GetAsset<GUISkin>($"{K2D2_Plugin.ModGuid}/k2d2/KtoolBundle/{path}.guiskin");
 
             //   Check if the font is null
             if (skin == null)
@@ -65,7 +65,7 @@ namespace KTools
 
         public static GameObject loadPrefab(string path)
         {
-            var obj = AssetManager.GetAsset<GameObject>($"{K2D2Plugin.ModGuid}/objects/KtoolBundle/{path}.prefab");
+            var obj = AssetManager.GetAsset<GameObject>($"{K2D2_Plugin.ModGuid}/objects/KtoolBundle/{path}.prefab");
 
             //   Check if the font is null
             if (obj == null)

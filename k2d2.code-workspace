@@ -14,6 +14,9 @@
 		},
 		{
 			"path": "../ManeuverNodeController"
+		},
+		{
+			"path": "../FlightPlan"
 		}
 	],
 	"settings": {}
