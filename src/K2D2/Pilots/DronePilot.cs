@@ -57,7 +57,6 @@ public class DronePilot : Pilot
     public DronePilot()
     {
         debug_mode_only = false;
-        name = "Drone";
         K2D2PilotsMgr.Instance.RegisterPilot("Drone", this);
 
         sub_contollers.Add(burn_dV);

@@ -56,7 +56,7 @@ public class LiftPilot : Pilot
         Instance = this;
 
         debug_mode_only = false;
-        name = "Lift";
+
         K2D2PilotsMgr.Instance.RegisterPilot("Lift", this);
     }
 

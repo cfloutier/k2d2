@@ -14,15 +14,9 @@ namespace K2D2.Controller
         public GameInstance Game => GameManager.Instance == null ? null : GameManager.Instance.Game;
 
         public bool debug_mode_only = true;
-        public string name = "Unamed";
+        
 
-        public string Name
-        {
-            get
-            {
-                return name;
-            }
-        }
+   
 
         bool _enabled = true;
 
@@ -53,6 +47,12 @@ namespace K2D2.Controller
 
         public delegate void onRunning(bool is_running);
         public event onRunning is_running_event;
+
+        public void listenIsRunning(onRunning fct)
+        {
+            is_running_event+=fct;
+            fct(isRunning);
+        }
 
         public virtual bool isActive
         {

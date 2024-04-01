@@ -133,7 +133,7 @@ public class FinalCircularize : ExecuteController
 
         if (!string.IsNullOrEmpty(status_msg))
         {
-            st.Status(status_msg, K2UI.StatusLine.Level.Warning);
+            st.Warning(status_msg);
         }
     }
 

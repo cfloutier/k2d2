@@ -375,6 +375,7 @@ class DockingUI
 
         controlLineUI();
         targetLineUI();
+ 
         MainOptionsLine();
 
         if (pilot.target_part != null)

@@ -37,7 +37,7 @@ public class LandingPilot : Pilot
 
         Instance = this;
         debug_mode_only = false;
-        name = "Land";
+
         K2D2PilotsMgr.Instance.RegisterPilot("Land", this);
 
         sub_contollers.Add(burn_dV);

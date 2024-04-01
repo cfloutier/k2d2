@@ -29,7 +29,6 @@ public class AttitudePilot : Pilot
 
         Instance = this;
         debug_mode_only = false;
-        name = "Att.";
         K2D2PilotsMgr.Instance.RegisterPilot("Attitude", this);
     }
 

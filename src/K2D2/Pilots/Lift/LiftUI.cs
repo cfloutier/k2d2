@@ -94,7 +94,7 @@ class LiftUI : K2Page
         status_bar.Reset();
         if (pilot.isRunning)
         {
-           status_bar.Status($"Status : {pilot.status}", StatusLine.Level.Warning);
+           status_bar.Warning($"Status : {pilot.status}");
 
            if (pilot.current_subpilot != null)
                 pilot.current_subpilot.updateUI(panel, status_bar);

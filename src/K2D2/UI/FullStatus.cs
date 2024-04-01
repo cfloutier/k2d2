@@ -33,6 +33,16 @@ public class FullStatus
         console.Add(txt);
     }
 
+    public void Warning(string text)
+    {
+        Status(text, StatusLine.Level.Warning);
+    }
+
+     public void Error(string text)
+    {
+        Status(text, StatusLine.Level.Error);
+    }
+
     public void Status(string text, StatusLine.Level level = StatusLine.Level.Normal)
     {
         status.Set(text, level);

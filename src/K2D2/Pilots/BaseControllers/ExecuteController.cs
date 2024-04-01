@@ -4,7 +4,7 @@ using K2D2.UI;
 
 namespace K2D2.Controller;
 
-public class SingleExecuteController : BaseController
+public class SingleExecuteController : Pilot
 {
     public void setController(ExecuteController controler)
     {
@@ -12,7 +12,6 @@ public class SingleExecuteController : BaseController
     }
 
     public ExecuteController sub_controler;
-
 
     public bool finished
     {

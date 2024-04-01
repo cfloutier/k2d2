@@ -205,11 +205,11 @@ public class BurnManeuver : ExecuteController
         switch (mode)
         {
             case Mode.Waiting:
-                st.Status("Waiting !", StatusLine.Level.Normal);
+                st.Status("Waiting !");
                 st.Console(status_line);
                 break;
             case Mode.Burning:
-                st.Status("Burning !", StatusLine.Level.Warning);
+                st.Warning("Burning !");
                 st.Console(status_line);
                 if (maneuver.BurnRequiredDV >= 0)
                     st.Progess(remaining_dv / maneuver.BurnRequiredDV, $"{remaining_dv:n1} m/s");

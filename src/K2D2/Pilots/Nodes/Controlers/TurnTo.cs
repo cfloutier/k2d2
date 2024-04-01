@@ -220,7 +220,7 @@ public class TurnTo : ExecuteController
 
     public override void updateUI(VisualElement root_el, FullStatus st)
     {
-        st.Status("Check Attitude", K2UI.StatusLine.Level.Warning);
+        st.Warning("Check Attitude");
         st.Console(status_line);
 
         // UI_Tools.Console($"sas.sas_response v {Tools.print_vector(sas_response)}");

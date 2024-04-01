@@ -119,16 +119,16 @@ class LandingUI : K2Page
                     status_bar.Status("Quick Warp");
                     break;
                 case LandingPilot.Mode.RotationWarp:
-                    status_bar.Status("Rotating Warp", StatusLine.Level.Warning);
+                    status_bar.Warning("Rotating Warp");
                     break;
                 case LandingPilot.Mode.Waiting:
                     status_bar.Status($"Waiting : {StrTool.DurationToString(pilot.startBurn_UT - GeneralTools.Game.UniverseModel.UniverseTime)}");
                     break;
                 case LandingPilot.Mode.Brake:
-                    status_bar.Status($"Brake !", StatusLine.Level.Warning);
+                    status_bar.Warning($"Brake !");
                     break;
                 case LandingPilot.Mode.TouchDown:
-                    status_bar.Status($"Touch Down...", StatusLine.Level.Warning);
+                    status_bar.Warning($"Touch Down...");
                     break;
             }
 

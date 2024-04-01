@@ -1,6 +1,4 @@
-/* @import url('project://database/Assets/UI/K2UI/K2UI.uss?fileID=7433441132597879392&guid=d70a8288b6b3eee4a900aa2727eb7499&type=3#K2UI'); */
 .root {
-
 }
 
 #Main_Icon {
@@ -15,4 +13,6 @@
     left: 8px;
 }
 
-
+.big {
+    font-size: 14px;
+}

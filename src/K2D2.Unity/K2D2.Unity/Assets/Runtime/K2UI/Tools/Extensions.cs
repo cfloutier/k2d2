@@ -54,7 +54,7 @@ namespace K2UI
 
 
         public delegate void onClicFct();
-        public static Button listenClick(this Button button, onClicFct on_clic)
+        public static VisualElement listenClick(this VisualElement button, onClicFct on_clic)
         {
             button.RegisterCallback<ClickEvent>(evt =>
             {

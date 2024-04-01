@@ -55,6 +55,7 @@ UITK :
     * [x] reset to default
     * [x] current_tab
 
+* [ ] DropBox
 * [ ] Repeat button
 * [ ] Field with repeat button (for the drone)
 
@@ -77,7 +78,7 @@ UITK :
 * [x] close window on exit of a valid game scene (flight and map only)
 * [ ] Tooltips
 
------------------------------
+--------- Pilots -----------
 * [x] Node ex 
   * [x] Main UI
     * [x] Node info not active on run

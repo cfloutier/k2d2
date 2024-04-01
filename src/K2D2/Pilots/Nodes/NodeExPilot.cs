@@ -43,7 +43,7 @@ public class NodeExPilot : Pilot
 
         _page = ui = new NodeExUI(this);
 
-        name = "Node";
+
         K2D2PilotsMgr.Instance.RegisterPilot("Node", this);
 
         sub_contollers.Add(current_executor);
@@ -166,20 +166,20 @@ public class NodeExPilot : Pilot
         {
             if (next_maneuver_node == null)
             {
-                st.Status("No Maneuver node.", StatusLine.Level.Normal);
+                st.Status("No Maneuver node.");
                 return;
             }
 
             if (!valid_maneuver)
             {
-                st.Status("No Maneuver node.", StatusLine.Level.Warning);
+                st.Warning("No Maneuver node.");
                 st.Console("Actually a KSP2 bug when loading scenaries. Please open map to fix it");               
                 return;
             }
 
             if (!isRunning && !canStart())
             {
-                st.Status("No valid Maneuver node found", StatusLine.Level.Warning);
+                st.Warning("No valid Maneuver node found");
                 return;
             }
         } 

@@ -39,7 +39,6 @@ public class StagingPilot : Pilot
     {
         Instance = this;
         debug_mode_only = false;
-        name = "Staging";
         K2D2PilotsMgr.Instance.RegisterPilot("Staging", this);
     } 
     

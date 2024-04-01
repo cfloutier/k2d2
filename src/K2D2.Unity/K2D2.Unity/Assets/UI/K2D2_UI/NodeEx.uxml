@@ -17,9 +17,9 @@
             </ui:VisualElement>
             <ui:Instance template="StatusGroup" name="StatusGroup" />
             <K2UI.Group text="Flight Plan" name="flight_plan_bar">
-                <ui:Label tabindex="-1" text="&lt;b&gt;Flight Plan&lt;/b&gt; not detected, install this fantastic Mod to create Nodes" display-tooltip-when-elided="true" name="please_install_fp" style="white-space: normal; display: none;" />
+                <ui:Label tabindex="-1" text="&lt;b&gt;Flight Plan&lt;/b&gt; not detected, install this fantastic Mod to create Nodes" display-tooltip-when-elided="true" name="please_install_fp" style="white-space: normal; display: flex;" />
                 <ui:VisualElement name="add_node_buttons_group" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); flex-direction: row;">
-                    <ui:Label tabindex="-1" text="Circle " display-tooltip-when-elided="true" style="-unity-text-align: middle-left;" />
+                    <ui:Label tabindex="-1" text="Circle " display-tooltip-when-elided="true" style="-unity-text-align: middle-left; display: flex;" />
                     <ui:Button text="at Ap" display-tooltip-when-elided="true" name="circle_at_ap" style="flex-grow: 1;" />
                     <ui:Button text="at Pe" display-tooltip-when-elided="true" name="circle_at_pe" style="flex-grow: 1;" />
                     <ui:Button text="in 30s" display-tooltip-when-elided="true" name="circle_now" style="flex-grow: 1;" />

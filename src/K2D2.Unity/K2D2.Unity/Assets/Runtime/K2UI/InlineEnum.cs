@@ -8,7 +8,6 @@ namespace K2UI
 {
     public class InlineEnum : VisualElement
     {
-
         public new class UxmlFactory : UxmlFactory<InlineEnum, UxmlTraits> { }
 
         public new class UxmlTraits : VisualElement.UxmlTraits

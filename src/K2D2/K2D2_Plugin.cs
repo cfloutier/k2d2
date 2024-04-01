@@ -87,7 +87,7 @@ public class K2D2_Plugin : BaseSpaceWarpPlugin
         pilots_manager.AddPilot(new NodeExPilot());
         pilots_manager.AddPilot(new LiftPilot());
         pilots_manager.AddPilot(new LandingPilot());
-
+        pilots_manager.AddPilot(new DockingPilot());
 
         // pilots_manager.AddPilot(new DronePilot());
         // pilots_manager.AddPilot(new AttitudePilot());
@@ -104,7 +104,7 @@ public class K2D2_Plugin : BaseSpaceWarpPlugin
             // - The name of the asset bundle:
             "K2D2_ui/" +
             // - The path to the asset in your Unity project (without the "Assets/" part)
-            "UI/K2D2_UI/Main_K2D2_Window.uxml"
+            "UI/K2D2_UI/K2D2_Window.uxml"
         );
 
         // Create the window options object
