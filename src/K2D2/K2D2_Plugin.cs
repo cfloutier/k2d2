@@ -14,7 +14,7 @@ using KTools;
 using K2D2.KSPService;
 using KSP.Game;
 using KSP.Sim.ResourceSystem;
-
+using UitkForKsp2;
 using KSP.Messages;
 using K2D2.Controller;
 
@@ -39,6 +39,7 @@ class L
 
 [BepInPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
 [BepInDependency(SpaceWarpPlugin.ModGuid, SpaceWarpPlugin.ModVer)]
+[BepInDependency(UitkForKsp2Plugin.ModGuid, UitkForKsp2Plugin.ModVer)]
 public class K2D2_Plugin : BaseSpaceWarpPlugin
 {
     // Useful in case some other mod wants to use this mod a dependency
@@ -85,7 +86,7 @@ public class K2D2_Plugin : BaseSpaceWarpPlugin
 
         pilots_manager.AddPilot(new NodeExPilot());
         pilots_manager.AddPilot(new LiftPilot());
-         pilots_manager.AddPilot(new LandingPilot());
+        pilots_manager.AddPilot(new LandingPilot());
 
 
         // pilots_manager.AddPilot(new DronePilot());
@@ -219,6 +220,11 @@ public class K2D2_Plugin : BaseSpaceWarpPlugin
                 // Update Controllers only if staging is not in progress
                 pilots_manager.UpdateControllers();
             }   
+        }
+        else
+        {
+            if (main_window != null && main_window.IsWindowOpen)
+                main_window.IsWindowOpen = false;
         }
     }
 
