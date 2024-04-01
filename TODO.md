@@ -96,7 +96,15 @@ UITK :
     * [x] UI
     * [x] Binding  
 
-* [ ] Land
+* [x] Land
+  * [x] Main UI
+    * [x] UI
+    * [x] Code
+  * [x] Settings
+    * [x] UI
+    * [x] Binding  
+
+* [ ] Dock
   * [ ] Main UI
     * [ ] UI
     * [ ] Code
@@ -112,13 +120,6 @@ UITK :
     * [ ] UI
     * [ ] Binding  
 
-* [ ] Dock
-  * [ ] Main UI
-    * [ ] UI
-    * [ ] Code
-  * [ ] Settings
-    * [ ] UI
-    * [ ] Binding  
 
 * [ ] Attitude
   * [ ] Main UI
@@ -137,8 +138,7 @@ UITK :
   * [ ] Code
 
 * [x] API interface
-
-* [ ] Test Without FlightPlan
+* [x] Test Without FlightPlan
 
 ----------------------------
 
