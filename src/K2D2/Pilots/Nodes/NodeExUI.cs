@@ -27,6 +27,8 @@ class NodeExUI : K2Page
 
     public ToggleButton run_button, pause_button;
 
+    public FlightPlanCall call_fp;
+
     public override bool onInit()
     {
         node_infos_el = panel.Q<K2UI.Console>("node_infos");
@@ -44,10 +46,15 @@ class NodeExUI : K2Page
             pilot.isRunning = v;
             run_button.label = v ? "Stop" : "Start";
         }; 
-
         pause_button.Bind(pilot.settings.pause_on_end);
+
+        call_fp = new FlightPlanCall(pilot);
+        call_fp.initUI(panel);
+
+        // settings
         pilot.settings.setupUI(settings_page);
         addSettingsResetButton("node_ex");
+
 
         return true;
     }
@@ -69,20 +76,22 @@ class NodeExUI : K2Page
         }
             
         var dt = GeneralTools.remainingStartTime(node);
-        node_infos_el.Add($"\n Node in <b>{StrTool.DurationToString(dt)}</b>");
-        node_infos_el.Add($"\n dV {node.BurnRequiredDV:n2} m/s");
-        node_infos_el.Add($"\n Duration {StrTool.DurationToString(node.BurnDuration)}");
+        node_infos_el.Add($"Node in <b>{StrTool.DurationToString(dt)}</b>");
         if (dt < 0)
         {
-            node_infos_el.Add($"\n In The Past");
+            node_infos_el.Add($"(In The Past)");
         }  
+        node_infos_el.Add($"dV {node.BurnRequiredDV:n2} m/s");
+        node_infos_el.Add($"Duration {StrTool.DurationToString(node.BurnDuration)}");   
     }
-
 
     public override bool onUpdateUI()
     {
         if (!base.onUpdateUI())
             return false;
+
+        // flight plan bar button is shown only if
+        call_fp.updateUI();
 
         if (pilot.settings.show_node_infos.V)
         {

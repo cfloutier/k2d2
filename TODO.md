@@ -74,7 +74,7 @@ UITK :
 * [x] bug on size change
 * [x] Ui is not resizable @munix help
 
-* [ ] close window on exit of a valid game scene (flight and map only)
+* [x] close window on exit of a valid game scene (flight and map only)
 * [ ] Tooltips
 
 -----------------------------
@@ -136,25 +136,30 @@ UITK :
   * [ ] UI
   * [ ] Code
 
-* [ ] API interface
-  
+* [x] API interface
+
+* [ ] Test Without FlightPlan
+
 ----------------------------
+
 
 reminder for next version : 
 
 * [x] Fix the Node ex bug when deleting it while run
 * [x] Look of the Pause Button in Node ex
+* [x] Land : Force retro SAS on start up
+* [x] Land : Adjust the 10° max direction (set in settings)
+
+-------------
 
 * [ ] Lift : setup TWR
+* [ ] Lift : setup roll
 
 -------------
 * [ ] Staging : only use stage with a rocket attached...
 -------------
-* [ ] Lift : setup roll
--------------
-* [ ] Land : Force retro SAS on start up
-* [ ] Land : Adjust the 10° max direction (set in settings)  
--------------
+
+
 
 
  

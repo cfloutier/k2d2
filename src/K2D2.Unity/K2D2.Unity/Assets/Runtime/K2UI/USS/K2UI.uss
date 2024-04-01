@@ -150,7 +150,7 @@
 }
 
 Label {
-    min-width: 93px;
+    min-width: 50px;
     -unity-text-align: upper-left;
 }
 
