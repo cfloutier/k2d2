@@ -316,4 +316,47 @@ public class NodeExPilot : Pilot
         Stop();
     }
 
+    internal string ApiStatus()
+    {
+        string status = "";
+        
+        if (next_maneuver_node == null)
+        {
+            status = "No Maneuver Node";
+        }
+        else
+        {
+            if (!valid_maneuver) status = "Invalid Maneuver Node";
+            // else if (!NodeExecute.Instance.canStart()) status = "No Future Maneuver Node";
+            else if (isRunning)
+            {
+                if (mode == Mode.Off) status = "Off";
+                else if (mode == Mode.Turn)
+                {
+                    status = $"Turning: {current_executor.status_line}";
+                    // report angle deviation?
+                }
+                else if (mode == Mode.Warp)
+                {
+                    status = $"Warping: {current_executor.status_line}";
+                    // report time to node?
+                }
+                else if (mode == Mode.Burn)
+                {
+                    if (Game.UniverseModel.UniverseTime < next_maneuver_node.Time)
+                    {
+                        status = $"Waiting to Burn: {current_executor.status_line}";
+                    }
+                    else
+                    {
+                        status = $"Burning: {current_executor.status_line}";
+                        // report burn remaining (delta-v?)
+                    }
+                }
+            }
+            else status = "Done";
+            // else status = "Unknown";
+        }
+        return status;
+    }
 }

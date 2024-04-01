@@ -47,8 +47,6 @@ class K2D2PilotsMgr
         return pilots.Keys.ToList();
     }
 
-    
-
     internal void RegisterPilot(string pilotName, BaseController controller)
     {
         if (pilots.ContainsKey(pilotName)) 

@@ -274,4 +274,47 @@ public class K2D2Plugin : BaseSpaceWarpPlugin
             ResetControllers();
         });
     }
+
+    // Public API to enable or disable a Pilot / Page
+    public bool isPilotEnabled(string pilotName)
+    {
+       return K2D2PilotsMgr.Instance.isPilotEnabled(pilotName);
+    }
+
+    public void EnableAllPilots(bool enabled)
+    {
+        K2D2PilotsMgr.Instance.EnableAllPilots(enabled);
+    }
+
+    public void EnablePilot(string pilotName, bool enabled)
+    {
+        K2D2PilotsMgr.Instance.EnablePilot(pilotName, enabled);
+    }
+
+    public List<string> GetPilotsNames()
+    {
+        return K2D2PilotsMgr.Instance.GetPilotsNames();
+    }
+
+    // Public API to perform a precision node execution using K2-D2
+    public void FlyNode()
+    {
+        NodeExPilot.Instance.Start();
+    }
+
+    public void StopFlyNode()
+    {
+        NodeExPilot.Instance.Stop();
+    }
+
+    public bool IsFlyNodeRunning()
+    {
+        return NodeExPilot.Instance.isRunning;
+    }
+
+    // Public API to get the status of K2D2 (used by FlightPlan)
+    public string GetStatus()
+    {
+        return NodeExPilot.Instance.ApiStatus();
+    }
 }

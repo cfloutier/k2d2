@@ -229,6 +229,7 @@ public class LiftAscentPath : MultiGraphLine
     public void UpdateAtmoTexture(CelestialBodyComponent mainBody, double maxAltitude)
     {
         lastbody = mainBody;
+        if (mainBody == null) return;
         last_max_alt = maxAltitude;
 
         var color_start = colorTable(mainBody.Name); 

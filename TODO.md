@@ -70,21 +70,19 @@ UITK :
 * [x] draggable 
   * [x] and window limit
 
-* [ ] default window pos is centered
-* [?] bug on size change
+* [-] default window pos is centered
+* [x] bug on size change
 * [x] Ui is not resizable @munix help
 
 * [ ] close window on exit of a valid game scene (flight and map only)
-
 * [ ] Tooltips
-
 
 -----------------------------
 * [x] Node ex 
   * [x] Main UI
     * [x] Node info not active on run
     * [x] button binding on active
-    * [x] add Node using Flight Plan
+    * [ ] add Node using Flight Plan
   * [x] Settings
     * [x] UI
     * [x] Binding
@@ -131,16 +129,14 @@ UITK :
     * [ ] Binding  
 
 * [ ] Staging
-  * [ ] Main UI
-    * [ ] UI
-    * [ ] Code
-  * [ ] Settings
-    * [ ] UI
-    * [ ] Binding  
+  * [ ] UI
+  * [ ] Code
 
 * [ ] About
   * [ ] UI
   * [ ] Code
+
+* [ ] API interface
   
 ----------------------------
 

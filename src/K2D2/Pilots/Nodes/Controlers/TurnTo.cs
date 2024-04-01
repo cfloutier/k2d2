@@ -12,7 +12,7 @@ namespace K2D2.Node;
 class TurnToSettings
 {
     // Need a clamp !!!! 
-    public static ClampSetting<float> max_angle_maneuver = new ("node_ex.turn.max_angle_maneuver", 0.3f, 0, 7);
+    public static ClampSetting<float> max_angle_maneuver = new ("node_ex.turn.max_angle_maneuver", 0.5f, 0, 7);
 
     public static ClampSetting<float> max_angular_speed = new ("node_ex.turn.max_angular_speed", 1f, 0, 7);
    
