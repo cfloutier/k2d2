@@ -49,6 +49,7 @@ namespace KTools
         }
 
         TEnum _value;
+
         public TEnum V
         {
             get { return _value; }
@@ -72,6 +73,14 @@ namespace KTools
         public delegate void onChanged(TEnum value);
 
         public event onChanged listeners;
+
+        // add listener and call it once
+        public void listen(onChanged listener)
+        {
+            
+            listeners+= listener;
+            listener(V);
+        }
     }
 
     public class Setting<T> : IResettable
@@ -132,6 +141,7 @@ namespace KTools
 
         public event onChanged listeners;
 
+        // add listener and call it once
         public void listen(onChanged listener)
         {
             listeners+= listener;
@@ -217,6 +227,7 @@ namespace KTools
             return value;
         }
 
+        
         public override int V { 
             get => base.V; 
             set {

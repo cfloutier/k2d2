@@ -12,19 +12,9 @@ public class DockTools
         public string name;
         public PartComponent component;
 
-        public NamedComponent(PartComponent part, string name)
+        public NamedComponent(PartComponent part)
         {
             this.component = part;
-            this.name = name;
-        }
-    }
-
-    public class ListPart 
-    {
-        public List<NamedComponent> Parts = new List<NamedComponent>();
-        public void Add(PartComponent part)
-        {
-            L.Log($"part add + {part.Name}");
 
             string name = "";
             var category = part.PartData.category;
@@ -45,8 +35,17 @@ public class DockTools
             {
                 name = category.ToString();
             }
+            this.name = name;
+        }
+    }
 
-            Parts.Add(new NamedComponent(part, name));
+    public class ListPart 
+    {
+        public List<NamedComponent> Parts = new List<NamedComponent>();
+        public void Add(PartComponent part)
+        {
+            L.Log($"part add + {part.Name}");
+            Parts.Add(new NamedComponent(part));
         }
 
         int num_pod = 1;

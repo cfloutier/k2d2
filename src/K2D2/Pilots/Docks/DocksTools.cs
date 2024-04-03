@@ -1,3 +1,4 @@
+using AsmResolver.PE.DotNet.StrongName;
 using KSP.Sim.Definitions;
 using KSP.Sim.impl;
 using MoonSharp.Interpreter.Tree.Statements;
@@ -12,50 +13,61 @@ public class DockTools
         public string name;
         public PartComponent component;
 
-        public NamedComponent(PartComponent part, string name)
+        public NamedComponent(PartComponent part)
         {
             this.component = part;
-            this.name = name;
-        }
-    }
-
-    public class ListPart 
-    {
-        public List<NamedComponent> Parts = new List<NamedComponent>();
-        public void Add(PartComponent part)
-        {
-            L.Log($"part add + {part.Name}");
 
             string name = "";
             var category = part.PartData.category;
             
             if (category == PartCategories.Coupling)
             {
-                name = "Dock #" + num_dock++ + "-" + part.PartData.sizeCategory;
+                name = $"Dock ({part.PartData.sizeCategory})" ;
             }
             else if (category == PartCategories.Pods)
             {
-                name = "Pod #" + num_pod++;
+                name = $"Pod";
             }
             else if (category == PartCategories.Control)
             {
-                name = "Control #" + num_pod++;
+                name = "Control" ;
             }
             else
             {
                 name = category.ToString();
             }
+            this.name = name;
+        }
+    }
 
-            Parts.Add(new NamedComponent(part, name));
+    public class ListPart 
+    {
+        public static string formatComponent(VesselComponent vessel, NamedComponent component)
+        {
+            if (vessel == null)
+                return "-";
+            
+            string res = vessel.Name;
+
+            if (component == null) return res;
+
+            return res +" " +component.name;
         }
 
-        int num_pod = 1;
-        int num_dock = 1;
+        public List<NamedComponent> Parts = new List<NamedComponent>();
+        public void Add(PartComponent part)
+        {
+            L.Log($"part add + {part.Name}");
+            Parts.Add(new NamedComponent(part));
+        }
+
+        // int num_pod = 1;
+        // int num_dock = 1;
 
         public void Clear()
         {
             Parts.Clear();
-            num_pod = num_dock = 1;
+            // num_pod = num_dock = 1;
         }
 
         public int Count

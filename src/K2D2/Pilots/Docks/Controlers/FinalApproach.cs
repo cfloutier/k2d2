@@ -7,6 +7,7 @@ using KSP.Sim.impl;
 using KTools;
 using UnityEngine;
 using UnityEngine.UIElements;
+using static K2D2.Controller.Docks.DockTools;
 
 namespace K2D2.Controller.Docks.Pilots;
 
@@ -25,20 +26,20 @@ public class FinalApproach : ExecuteController
     private DockingPilot pilot;
     DockingTurnTo turnTo = null;
 
-    public PartComponent control_component = null;
+    public NamedComponent control = null;
 
-    public PartComponent target_part;
+    public NamedComponent target_part;
 
-    public void StartPilot(PartComponent target_part, PartComponent control_component)
+    public void StartPilot(NamedComponent target, NamedComponent control)
     {
         base.Start();
-        this.target_part = target_part;
-        this.control_component = control_component;
+        this.target_part = target;
+        this.control = control;
         current_vessel = K2D2_Plugin.Instance.current_vessel;
         turnTo.StartDockAlign();
 
         sub_mode.V = SubMode.Manual;
-        
+
         finished = false;
     }
 
@@ -56,11 +57,9 @@ public class FinalApproach : ExecuteController
     public Vector3 local_target_pos = new Vector3();
     public Vector3 vessel_to_target = new Vector3();
 
-
     public Setting<bool> Kill_X_Speed = new Setting<bool>("", false);
     public Setting<bool> Kill_Y_Speed = new Setting<bool>("", false);
     public Setting<bool> Kill_Z_Speed = new Setting<bool>("", false);
-
 
     public override void Update()
     {
@@ -94,13 +93,21 @@ public class FinalApproach : ExecuteController
             current_vessel.Z = -local_speed.z * pilot.pilot_power.V;
     }
 
+    void RCKillSpeed_UI(FullStatus st)
+    {
+        st.Console("<b>Kill Speed using RCS</b>");
+
+        st.Console($"Horizontal {local_speed.x:n2} " + (Kill_X_Speed.V ? "[X]":"[ ]"));
+        st.Console($"Vertical {local_speed.x:n2} " + (Kill_Z_Speed.V ? "[X]":"[ ]"));
+        st.Console($"Depth {local_speed.x:n2} " + (Kill_Y_Speed.V ? "[X]":"[ ]"));
+    }
 
     Setting<bool> auto_forward = new("", false);
 
     Setting<bool> center_axis = new("", false);
-    ClampSetting<float> forward_speed = new ("", 0, -10, 10);
+    ClampSetting<float> forward_speed = new("", 0, -10, 10);
 
-    ClampSetting<float> center_power = new ("", 1, 0, 5);
+    ClampSetting<float> center_power = new("", 1, 0, 5);
 
     float forward_wanted_speed;
 
@@ -109,8 +116,6 @@ public class FinalApproach : ExecuteController
 
     void AutoMode()
     {
-        current_vessel.Y = (forward_speed.V - local_speed.y) * pilot.pilot_power.V;
-
         float max_speed = 1 + vessel_to_target.magnitude / 10;
 
         if (auto_forward.V)
@@ -119,6 +124,11 @@ public class FinalApproach : ExecuteController
             forward_wanted_speed += 0.05f; // final touch speed !!
             forward_wanted_speed = Mathf.Clamp(forward_wanted_speed, -max_speed, max_speed);
             current_vessel.Y = (forward_wanted_speed - local_speed.y) * pilot.pilot_power.V;
+        }
+        else
+        {
+            forward_wanted_speed = forward_speed.V;
+            current_vessel.Y = (forward_speed.V - local_speed.y) * pilot.pilot_power.V;
         }
 
         if (center_axis.V)
@@ -133,8 +143,21 @@ public class FinalApproach : ExecuteController
         }
     }
 
+    void AutoMode_UI(FullStatus st)
+    {  
+        if (center_axis.V)
+        {
+            st.Console($"<b>Horizontal</b>- ctr:{right_wanted_speed:n2} ms ~ cur:{local_speed.x:n2} ms");
+            st.Console($"<b>Vertical</b>- ctr:{up_wanted_speed:n2} ms ~ cur:{local_speed.z:n2} ms");
+        }
+        st.Console($"<b>Forward</b> - ctr:{forward_wanted_speed:n2} ms ~ cur:{local_speed.y:n2} ms");
+    }
+
     void UpdatePosition()
     {
+        if (control == null)
+            return;
+
         if (target_part != null)
         {
             var vessel = current_vessel.VesselComponent;
@@ -144,13 +167,13 @@ public class FinalApproach : ExecuteController
             }
 
             // diff_Position = Position.Delta(target_part.CenterOfMass, control_component.CenterOfMass);
-            var curent_vessel_frame = control_component.transform.coordinateSystem;
+            var curent_vessel_frame = control.component.transform.coordinateSystem;
 
             var vessel_to_control = Matrix4x4D.TRS(
-                curent_vessel_frame.ToLocalPosition(control_component.transform.Position),
-                curent_vessel_frame.ToLocalRotation(control_component.transform.Rotation)).GetInverse();
+                curent_vessel_frame.ToLocalPosition(control.component.transform.Position),
+                curent_vessel_frame.ToLocalRotation(control.component.transform.Rotation)).GetInverse();
 
-            vessel_to_target = vessel_to_control.TransformPoint(curent_vessel_frame.ToLocalPosition(target_part.CenterOfMass));
+            vessel_to_target = vessel_to_control.TransformPoint(curent_vessel_frame.ToLocalPosition(target_part.component.CenterOfMass));
 
             local_speed = vessel_to_control.TransformVector(curent_vessel_frame.ToLocalVector(vessel.TargetVelocity));
 
@@ -168,23 +191,22 @@ public class FinalApproach : ExecuteController
     Vector3 last_TargetSpeed;
     Vector3 current_acc;
 
-    void computeRCSThrust()
-    {
-        // Why do X Y Z does not fit the speed direction ? rotation of 90° X ...
-        if (current_vessel.X != 0)
-        {
-            rcsThrust.x = Mathf.Lerp(rcsThrust.x, current_acc.x / current_vessel.X, Time.deltaTime * 1);
-        }
-        if (current_vessel.Y != 0)
-        {
-            rcsThrust.y = Mathf.Lerp(rcsThrust.y, current_acc.y / current_vessel.Y, Time.deltaTime * 1);
-        }
-        if (current_vessel.Z != 0)
-        {
-            rcsThrust.z = Mathf.Lerp(rcsThrust.z, current_acc.z / current_vessel.Z, Time.deltaTime * 1);
-        }
-    }
-
+    // void computeRCSThrust()
+    // {
+    //     // Why do X Y Z does not fit the speed direction ? rotation of 90° X ...
+    //     if (current_vessel.X != 0)
+    //     {
+    //         rcsThrust.x = Mathf.Lerp(rcsThrust.x, current_acc.x / current_vessel.X, Time.deltaTime * 1);
+    //     }
+    //     if (current_vessel.Y != 0)
+    //     {
+    //         rcsThrust.y = Mathf.Lerp(rcsThrust.y, current_acc.y / current_vessel.Y, Time.deltaTime * 1);
+    //     }
+    //     if (current_vessel.Z != 0)
+    //     {
+    //         rcsThrust.z = Mathf.Lerp(rcsThrust.z, current_acc.z / current_vessel.Z, Time.deltaTime * 1);
+    //     }
+    // }
 
     VisualElement final_approach_group;
     InlineEnum final_mode;
@@ -192,61 +214,89 @@ public class FinalApproach : ExecuteController
     Group manual_group;
     Group auto_group;
 
-    K2Toggle kill_all_speed;
+    void UpdateKillAll()
+    {
+        bool all = Kill_X_Speed.V && Kill_Y_Speed.V && Kill_Z_Speed.V;
+        kill_all_speed.value = all;
+    }
+
+    ToggleButton kill_all_speed;
     K2Slider center_power_el, forward_speed_el;
     private VisualElement reset_fspeed;
 
+    public void Hide()
+    {
+        final_approach_group.Show(false);
+    }
+
+    public void onInitUI(VisualElement root_el)
+    {
+        final_approach_group = root_el.Q<VisualElement>("final_approach_group");
+        final_approach_group.Show(false);
+
+        final_mode = final_approach_group.Q<InlineEnum>("final_mode");
+        final_mode.Bind(sub_mode);
+
+        manual_group = final_approach_group.Q<Group>("manual_group");
+        auto_group = final_approach_group.Q<Group>("auto_group");
+
+        // reset forward speed when going to Auto
+        sub_mode.listen((v) =>
+        {
+            if (v == SubMode.Auto)
+            {
+                manual_group.Show(false);
+                auto_group.Show(true);
+                forward_speed.V = 0;
+            }
+            else
+            {
+                manual_group.Show(true);
+                auto_group.Show(false);
+                Kill_X_Speed.V = Kill_Y_Speed.V = Kill_Z_Speed.V = false;
+            }
+        });
+
+        manual_group.Q<ToggleButton>("horizontal_bt").Bind(Kill_X_Speed);
+        manual_group.Q<ToggleButton>("vertical_bt").Bind(Kill_Z_Speed);
+        manual_group.Q<ToggleButton>("depth_bt").Bind(Kill_Y_Speed);
+
+        kill_all_speed = manual_group.Q<ToggleButton>("all_bt");
+        kill_all_speed.listenClick(() =>
+            {
+                Kill_X_Speed.V = Kill_Y_Speed.V = Kill_Z_Speed.V = kill_all_speed.value;
+            }
+        );
+
+        Kill_X_Speed.listen((v) => UpdateKillAll());
+        Kill_Y_Speed.listen((v) => UpdateKillAll());
+        Kill_Z_Speed.listen((v) => UpdateKillAll());
+
+        auto_group.Q<K2Toggle>("center_axis").Bind(center_axis);
+        auto_group.Q<K2Toggle>("auto_forward").Bind(auto_forward);
+        center_power_el = auto_group.Q<K2Slider>("center_power").Bind(center_power);
+        forward_speed_el = auto_group.Q<K2Slider>("forward_speed").Bind(forward_speed);
+        reset_fspeed = auto_group.Q<Button>("reset_fspeed").listenClick(() => forward_speed.V = 0);
+    }
+
     public override void updateUI(VisualElement root_el, FullStatus st)
     {
-        if (final_approach_group == null)
-        {
-            final_approach_group = root_el.Q<VisualElement>("final_approach_group");
-            final_mode = final_approach_group.Q<InlineEnum>("final_mode");
-            final_mode.Bind(sub_mode);
-
-            // reset forward speed when going to Auto
-            sub_mode.listeners += v =>
-            {
-                if (v == SubMode.Auto)
-                {
-                    manual_group.Show(false);
-                    auto_group.Show(true);
-                    forward_speed.V = 0;
-                }
-                else
-                {
-                    manual_group.Show(true);
-                    auto_group.Show(false);
-                    Kill_X_Speed.V = Kill_Y_Speed.V = Kill_Z_Speed.V = false;
-                }
-            };
-
-            manual_group = final_approach_group.Q<Group>("manual_group");
-            auto_group = final_approach_group.Q<Group>("auto_group");
-
-            manual_group.Q<K2Toggle>("horizontal_bt").Bind(Kill_X_Speed);
-            manual_group.Q<K2Toggle>("vertical_bt").Bind(Kill_Z_Speed);
-            manual_group.Q<K2Toggle>("depth_bt").Bind(Kill_Y_Speed);
-
-            kill_all_speed = manual_group.Q<K2Toggle>("all_bt");
-            kill_all_speed.listenClick(() =>
-                {
-                    Kill_X_Speed.V = Kill_Y_Speed.V = Kill_Z_Speed.V = kill_all_speed.value;
-                }
-            );
-
-            auto_group.Q<K2Toggle>("center_axis").Bind(center_axis);
-            auto_group.Q<K2Toggle>("auto_forward").Bind(auto_forward);
-            center_power_el  = auto_group.Q<K2Slider>("center_power").Bind(center_power);
-            forward_speed_el = auto_group.Q<K2Slider>("forward_speed").Bind(forward_speed);
-            reset_fspeed = auto_group.Q<Button>("reset_fspeed").listenClick(() => forward_speed.V = 0);
-        }
-
+        final_approach_group.Show(true);
         st.Warning("Final Approach");
 
         center_power_el.Show(center_axis.V || auto_forward.V);
         forward_speed_el.Show(!auto_forward.V);
         reset_fspeed.Show(!auto_forward.V);
+
+        switch (sub_mode.V)
+        {
+            case SubMode.Manual:
+                RCKillSpeed_UI(st);
+                break;
+            case SubMode.Auto:
+                AutoMode_UI(st);
+                break;
+        }
 
         if (K2D2Settings.debug_mode.V)
         {

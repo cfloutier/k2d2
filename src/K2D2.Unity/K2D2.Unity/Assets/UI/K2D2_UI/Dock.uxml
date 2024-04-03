@@ -7,12 +7,13 @@
     <Style src="project://database/Assets/Runtime/K2UI/USS/K2Slider.uss?fileID=7433441132597879392&amp;guid=3d8e4d9f1386ac94c97e6381ad01c59b&amp;type=3#K2Slider" />
     <K2UI.Tabs.TabPage name="dock" label="Docking" style="display: flex;">
         <ui:VisualElement name="page" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); display: flex;">
-            <ui:Label tabindex="-1" text="Docking Assistant" display-tooltip-when-elided="true" name="Title" class="unselectedContent" style="display: flex;" />
-            <ui:VisualElement name="select_group" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
+            <ui:Label tabindex="-1" text="Docking Assistant" display-tooltip-when-elided="true" name="Title" class="unselectedContent" style="display: none;" />
+            <ui:VisualElement name="select_group" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); display: none;">
                 <ui:DropdownField label="Control From :" index="-1" choices="a,b,c" name="control_from_drop" />
                 <ui:DropdownField label="Target :" index="-1" choices="Duna,Mun,Kerbal,Too" name="target_drop" class="fixed" />
                 <ui:DropdownField label="Dock :" index="-1" choices="Duna,Mun,Kerbal,Too" name="dock_drop" class="fixed" />
             </ui:VisualElement>
+            <K2UI.Console tabindex="-1" name="context" text="Ctrl: VesselX Dock#2 (Small)&#10;Target: VesselY Dock#2 (X-Small)" />
             <ui:VisualElement name="button_bars" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); flex-direction: column;">
                 <K2UI.K2Toggle label="Align Dock" name="align_dock" />
                 <K2UI.ToggleButton label="Stop" name="run" class="big" style="display: none;" />
@@ -20,7 +21,6 @@
                 <ui:Button text="RCS Final Approach" display-tooltip-when-elided="true" name="rcs_final_approach" class="big" />
                 <ui:Button text="Cheat" display-tooltip-when-elided="true" name="cheat" class="big" />
             </ui:VisualElement>
-            <ui:Instance template="StatusGroup" name="StatusGroup" />
             <ui:VisualElement name="final_approach_group" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
                 <K2UI.InlineEnum name="final_mode" labels="Manual;Auto" />
                 <K2UI.Group name="manual_group" text="Manual Mode">
@@ -32,7 +32,7 @@
                     </ui:VisualElement>
                     <ui:Label tabindex="-1" text="RCS - Kill Speed" display-tooltip-when-elided="true" />
                 </K2UI.Group>
-                <K2UI.Group name="auto_mode" text="Automatic Mode&#10;">
+                <K2UI.Group name="auto_group" text="Automatic Mode&#10;">
                     <ui:Label tabindex="-1" text="Axis :" display-tooltip-when-elided="true" />
                     <K2UI.K2Toggle label="Center axis" name="center_axis" />
                     <K2UI.K2Slider name="center_power" label="Pilot - speed adapt" print-value="true" max="5" value="1" label-on-top="true" min-max-label="x" />
@@ -43,6 +43,7 @@
                         <ui:Button text="R." display-tooltip-when-elided="true" name="reset_fspeed" style="height: 40%; top: 27px;" />
                     </ui:VisualElement>
                 </K2UI.Group>
+                <ui:Instance template="StatusGroup" name="StatusGroup" />
             </ui:VisualElement>
         </ui:VisualElement>
         <ui:VisualElement name="settings" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); display: none;">

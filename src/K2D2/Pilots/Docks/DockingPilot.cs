@@ -1,15 +1,11 @@
-
 using K2D2.KSPService;
 using BepInEx.Logging;
-using UnityEngine;
-
 using KSP.Sim.impl;
-using KSP.Sim;
-using K2D2.Controller.Docks;
 
+using K2D2.Controller.Docks;
 using static K2D2.Controller.Docks.DockTools;
 using K2D2.Controller.Docks.Pilots;
-using static KSP.Api.UIDataPropertyStrings.View;
+
 using KTools;
 
 namespace K2D2.Controller;
@@ -20,14 +16,14 @@ public class DockingPilot : SingleExecuteController
     public ManualLogSource logger = BepInEx.Logging.Logger.CreateLogSource("K2D2.DockingTool");
 
     public KSPVessel current_vessel;
-    public PartComponent control_component = null;
+    public NamedComponent control_component = null;
     public VesselComponent target_vessel;
-    public PartComponent target_part;
+    public NamedComponent target_part;
 
-    public int target_dock_num = -1;
+    // public int target_dock_num = -1;
     public SimulationObjectModel last_target;
 
-    public ListPart docks = new ListPart();
+    // public ListPart docks = new ListPart();
     
     public ClampSetting<float> pilot_power = new ClampSetting<float>("docks.pilot_power", 1, 0 , 10);
 
@@ -47,26 +43,30 @@ public class DockingPilot : SingleExecuteController
         }
         set
         {
+            if (_mode == value) return;
             _mode = value;
             switch(_mode)
             {
                 case PilotMode.MainThrustKillSpeed:
                     setController(kill_speed_pilot);
                     kill_speed_pilot.Start();
+                    isRunning = true;
                     break;
                 case PilotMode.RCSFinalApproach:
                     setController(final_approach_pilot);
                     final_approach_pilot.StartPilot(target_part, control_component);
+                    isRunning = true;
                     break;
                 case PilotMode.Off:
                     setController(null);
+                    isRunning = false;
                     break;
             }
         }
     }
 
-    MainThrustKillSpeed kill_speed_pilot = null;
-    FinalApproach final_approach_pilot = null;
+    public MainThrustKillSpeed kill_speed_pilot = null;
+    public FinalApproach final_approach_pilot = null;
 
     public override bool isRunning
     {
@@ -85,6 +85,9 @@ public class DockingPilot : SingleExecuteController
 
                 Mode = PilotMode.Off;
             }
+
+            // send call backs
+            base.isRunning = value; 
         }
     }
 
@@ -105,14 +108,16 @@ public class DockingPilot : SingleExecuteController
 
         kill_speed_pilot = new MainThrustKillSpeed(turnTo);
         final_approach_pilot = new FinalApproach(this, turnTo);
+
+
     }
 
     public DockingTurnTo turnTo = new DockingTurnTo();
 
-    public void listDocks()
-    {
-        docks = FindParts(target_vessel, false, true);
-    }
+    // public void listDocks()
+    // {
+    //     docks = FindParts(target_vessel, false, true);
+    // }
 
     public override void Update()
     {
@@ -134,41 +139,43 @@ public class DockingPilot : SingleExecuteController
             }
         }
 
-        control_component = current_vessel.VesselComponent.GetControlOwner();
+        control_component = new NamedComponent(current_vessel.VesselComponent.GetControlOwner());
 
-        // update the dock list when target change
+        // update the dock  when target change
         if (last_target != current_vessel.VesselComponent.TargetObject)
         {
             // logger.LogInfo($"changed target is {current_vessel.VesselComponent.TargetObject}");
 
             last_target = current_vessel.VesselComponent.TargetObject;
             target_part = null;
-            target_dock_num = -1;
+            // target_dock_num = -1;
 
             if (last_target == null)
             {
                 target_vessel = null;
-                docks.Clear();
+                
+                //docks.Clear();
             }
             else if (last_target.IsCelestialBody)
             {
-                docks.Clear();
+                //docks.Clear();
             }
             else if (last_target.IsVessel)
             {
                 // logger.LogInfo(last_target);
                 target_vessel = last_target.Vessel;
+                target_part = new NamedComponent(target_vessel.GetControlOwner());
             }
             else if (last_target.IsPart)
             {
                 // dock selected
-                target_part = last_target.Part;
-                if (docks.Count == 0 && target_vessel != null)
-                    listDocks();
+                target_part = new NamedComponent(last_target.Part);
+                // if (docks.Count == 0 && target_vessel != null)
+                //     listDocks();
 
-                target_dock_num = docks.IndexOf(last_target.Part) + 1;
+                // target_dock_num = docks.IndexOf(last_target.Part) + 1;
 
-                PartOwnerComponent owner = target_part.PartOwner;
+                PartOwnerComponent owner = target_part.component.PartOwner;
                 if (owner.SimulationObject.IsVessel)
                 {
                     target_vessel = owner.SimulationObject.Vessel;

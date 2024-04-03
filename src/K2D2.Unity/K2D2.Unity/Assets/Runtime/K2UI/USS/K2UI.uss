@@ -65,7 +65,7 @@
     font-size: var(--k2-font-size);
     letter-spacing: var(--k2-spacing);
     word-spacing: var(--k2-spacing);
-    width: 351px;
+    width: 350px;
     min-height: auto;
     background-color: var(--k2-color-background);
     -unity-background-image-tint-color: var(--k2-color-background);
