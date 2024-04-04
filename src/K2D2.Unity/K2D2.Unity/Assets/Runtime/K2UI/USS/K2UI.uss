@@ -250,6 +250,7 @@ Label {
     border-bottom-left-radius: 0;
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
+    transform-origin: left;
 }
 
 .k2-progress-bar #label {

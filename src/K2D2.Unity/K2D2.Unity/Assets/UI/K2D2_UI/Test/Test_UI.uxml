@@ -29,7 +29,7 @@
                             <K2UI.K2ProgressBar name="MyBar" />
                             <K2UI.K2Slider name="MySlider" label-on-top="false" />
                             <K2UI.K2Compass />
-                            <K2UI.K2ProgressBar name="MyBar" />
+                            <K2UI.K2ProgressBar name="CenterBar" centered="false" label="Centered " set-label-to-value="true" postfix=" m" min="-10" max="10" value="4.02" />
                         </ui:Foldout>
                         <ui:Foldout text="Graph" value="false">
                             <K2UI.K2Slider name="tuning" label="Tuning..." min="1" value="1" max="10" />

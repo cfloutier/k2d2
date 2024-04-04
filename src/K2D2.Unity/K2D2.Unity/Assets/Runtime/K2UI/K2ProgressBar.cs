@@ -138,6 +138,7 @@ namespace K2UI
                     var len = new StyleLength(Length.Percent(Mathf.InverseLerp(Min, Max, value) * 100));
                     el_progress.style.width = len;
                     el_progress.style.rotate = new StyleRotate(new Rotate(0));
+                    el_progress.style.left = new StyleLength(Length.Percent(0));
                 }
             }
             if (el_label != null)
