@@ -22,15 +22,16 @@
         <K2UI.Tabs.TabbedPage selected-tab-Name="controls" style="margin-top: 4px;">
             <K2UI.Tabs.TabPage name="controls" label="Controls test" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); display: flex;">
                 <ui:VisualElement name="page" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); display: flex;">
-                    <K2UI.ExFoldoutGroup opened-index="1" style="margin-top: 6px;">
+                    <K2UI.ExFoldoutGroup opened-index="0" style="margin-top: 6px;">
                         <ui:Foldout text="Progress &amp; Compas" value="true">
                             <ui:IntegerField label="Integer Field" value="42" />
                             <ui:FloatField label="Float Field" value="42,2" />
                             <K2UI.K2ProgressBar name="MyBar" />
                             <K2UI.K2Slider name="MySlider" label-on-top="false" />
                             <K2UI.K2Compass />
+                            <K2UI.K2ProgressBar name="MyBar" />
                         </ui:Foldout>
-                        <ui:Foldout text="Graph" value="true">
+                        <ui:Foldout text="Graph" value="false">
                             <K2UI.K2Slider name="tuning" label="Tuning..." min="1" value="1" max="10" />
                             <ui:VisualElement name="graph" style="flex-grow: 1; background-color: rgb(0, 12, 31); width: 100%; height: 300px; overflow: hidden;">
                                 <K2UI.Graph.GraphLine test-seed="0.53" line-width="2.53" max-y="1" max-x="100" line-color="#007D7CFF" name="line_1" min-y="0" />
