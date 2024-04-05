@@ -1,8 +1,9 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <ui:Template name="NodeEx" src="project://database/Assets/UI/K2D2_UI/NodeEx.uxml?fileID=9197481963319205126&amp;guid=f15f79d82752d7446bce3054802d8872&amp;type=3#NodeEx" />
-    <ui:Template name="Lift" src="project://database/Assets/UI/K2D2_UI/Lift.uxml?fileID=9197481963319205126&amp;guid=aee8281d46c73a74087b6974fd1bcded&amp;type=3#Lift" />
-    <ui:Template name="Landing" src="project://database/Assets/UI/K2D2_UI/Landing.uxml?fileID=9197481963319205126&amp;guid=96cfe8a25c13a104d9596b015d87af6e&amp;type=3#Landing" />
-    <ui:Template name="Dock" src="project://database/Assets/UI/K2D2_UI/Dock.uxml?fileID=9197481963319205126&amp;guid=9dde88f98d182054bb92a217fa7bd7f1&amp;type=3#Dock" />
+    <ui:Template name="NodeEx" src="project://database/Assets/UI/K2D2_UI/node.uxml?fileID=9197481963319205126&amp;guid=f15f79d82752d7446bce3054802d8872&amp;type=3#node" />
+    <ui:Template name="Lift" src="project://database/Assets/UI/K2D2_UI/lift.uxml?fileID=9197481963319205126&amp;guid=aee8281d46c73a74087b6974fd1bcded&amp;type=3#lift" />
+    <ui:Template name="Landing" src="project://database/Assets/UI/K2D2_UI/landing.uxml?fileID=9197481963319205126&amp;guid=96cfe8a25c13a104d9596b015d87af6e&amp;type=3#landing" />
+    <ui:Template name="Dock" src="project://database/Assets/UI/K2D2_UI/dock.uxml?fileID=9197481963319205126&amp;guid=9dde88f98d182054bb92a217fa7bd7f1&amp;type=3#dock" />
+    <ui:Template name="About" src="project://database/Assets/UI/K2D2_UI/about.uxml?fileID=9197481963319205126&amp;guid=16d4c53a22570084499af3b95b5a9aa6&amp;type=3#about" />
     <Style src="project://database/Assets/UI/K2D2_UI/K2D2.uss?fileID=7433441132597879392&amp;guid=f49119c0dc6aec7469a0374f7f606ceb&amp;type=3#K2D2" />
     <Style src="project://database/Assets/Runtime/K2UI/USS/K2UI.uss?fileID=7433441132597879392&amp;guid=d70a8288b6b3eee4a900aa2727eb7499&amp;type=3#K2UI" />
     <Style src="project://database/Assets/Runtime/K2UI/USS/ToggleButton.uss?fileID=7433441132597879392&amp;guid=1b6a73cd9e0a617469e5d501d696c7be&amp;type=3#ToggleButton" />
@@ -12,21 +13,22 @@
         <ui:VisualElement name="title-bar" style="margin-bottom: 0; margin-top: -10px; background-color: rgba(76, 79, 188, 0.23); border-top-left-radius: 12px; border-bottom-left-radius: 0; border-top-right-radius: 12px; border-bottom-right-radius: 0; margin-right: -10px; margin-left: -10px; border-left-color: rgb(76, 79, 188); border-right-color: rgb(76, 79, 188); border-top-color: rgb(76, 79, 188); border-bottom-color: rgb(76, 79, 188);">
             <ui:VisualElement name="Main_Icon" style="width: 40px; height: 30px; top: -23px; left: 14px; background-image: url(&apos;project://database/Assets/Images/cropped_40px.png?fileID=2800000&amp;guid=6a5fd6f51e722db49a3b2c207a7e7a73&amp;type=3#cropped_40px&apos;);" />
             <ui:Label text="K2-D2" style="-unity-font-definition: url(&apos;project://database/Assets/Fonts/Caravan.asset?fileID=11400000&amp;guid=9e9be541f4b684c4eb71cf35fcc59555&amp;type=2#Caravan&apos;); font-size: 21px; margin-left: 8px; flex-grow: 1;" />
-            <K2UI.ToggleButton label=" " name="staging-toggle" value="false" class="mini-toggle" style="margin-right: 1px;">
-                <ui:VisualElement name="icon" style="background-image: url(&apos;project://database/Assets/Images/Staging.png?fileID=2800000&amp;guid=fd127b2a5598d0e468cb9d651c90d84a&amp;type=3#Staging&apos;);" />
+            <K2UI.ToggleButton label=" " name="staging-toggle" value="false" class="mini-toggle" style="margin-right: 1px; width: 25px; height: 25px; margin-top: 0;">
+                <ui:VisualElement name="icon" style="background-image: url(&apos;project://database/Assets/Images/Staging.png?fileID=2800000&amp;guid=fd127b2a5598d0e468cb9d651c90d84a&amp;type=3#Staging&apos;); width: 21px; height: 21px;" />
             </K2UI.ToggleButton>
-            <K2UI.ToggleButton label=" " name="settings-toggle" value="false" class="mini-toggle" style="margin-right: 4px;">
-                <ui:VisualElement name="icon" />
+            <K2UI.ToggleButton label=" " name="settings-toggle" value="false" class="mini-toggle" style="margin-right: 4px; width: 25px; height: 25px; margin-top: 0;">
+                <ui:VisualElement name="icon" style="height: 20px; width: 21px;" />
             </K2UI.ToggleButton>
-            <ui:Button name="close-button" style="width: 20px; border-top-left-radius: 5px; border-bottom-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px;">
+            <ui:Button name="close-button" style="width: 25px; border-top-left-radius: 5px; border-bottom-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; height: 25px;">
                 <ui:VisualElement name="Icon" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); position: absolute; left: 2px; top: 2px; right: 2px; bottom: 2px; background-image: url(&apos;project://database/Assets/Images/Cross.png?fileID=2800000&amp;guid=4514c86ca5e842041a595323be7f8293&amp;type=3#Cross&apos;);" />
             </ui:Button>
         </ui:VisualElement>
         <K2UI.Tabs.TabbedPage selected-tab-Name="controls">
-            <ui:Instance template="NodeEx" name="node" style="display: flex;" />
+            <ui:Instance template="NodeEx" name="node" style="display: none;" />
             <ui:Instance template="Lift" name="lift" style="display: none;" />
-            <ui:Instance template="Landing" name="landing" />
-            <ui:Instance template="Dock" name="dock" />
+            <ui:Instance template="Landing" name="landing" style="display: none;" />
+            <ui:Instance template="Dock" name="dock" style="display: none;" />
+            <ui:Instance template="About" name="about" />
         </K2UI.Tabs.TabbedPage>
     </ui:VisualElement>
 </ui:UXML>

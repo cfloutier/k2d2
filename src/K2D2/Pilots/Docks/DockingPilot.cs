@@ -68,14 +68,14 @@ public class DockingPilot : SingleExecuteController
     public MainThrustKillSpeed kill_speed_pilot = null;
     public FinalApproach final_approach_pilot = null;
 
+
+
     public override bool isRunning
     {
-        get { return Mode != PilotMode.Off; }
+        get { return base.isRunning; }
         set
         {
-            if (isRunning && value)
-                return;
-
+            if (value == base.isRunning)  return;
             if (!value)
             {
                 current_vessel = K2D2_Plugin.Instance.current_vessel;

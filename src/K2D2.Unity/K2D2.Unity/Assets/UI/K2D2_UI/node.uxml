@@ -1,0 +1,55 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:Template name="StatusGroup" src="project://database/Assets/UI/K2D2_UI/StatusGroup.uxml?fileID=9197481963319205126&amp;guid=6d8db5aba9b53334ca8e1489f83a4ba3&amp;type=3#StatusGroup" />
+    <Style src="project://database/Assets/UI/K2D2_UI/K2D2.uss?fileID=7433441132597879392&amp;guid=f49119c0dc6aec7469a0374f7f606ceb&amp;type=3#K2D2" />
+    <Style src="project://database/Assets/Runtime/K2UI/USS/K2UI.uss?fileID=7433441132597879392&amp;guid=d70a8288b6b3eee4a900aa2727eb7499&amp;type=3#K2UI" />
+    <Style src="project://database/Assets/Runtime/K2UI/USS/ToggleButton.uss?fileID=7433441132597879392&amp;guid=1b6a73cd9e0a617469e5d501d696c7be&amp;type=3#ToggleButton" />
+    <Style src="project://database/Assets/Runtime/K2UI/USS/K2Toggle.uss?fileID=7433441132597879392&amp;guid=a6dc5024ba8ad204e9099eca78c0703f&amp;type=3#K2Toggle" />
+    <Style src="project://database/Assets/Runtime/K2UI/USS/K2Slider.uss?fileID=7433441132597879392&amp;guid=3d8e4d9f1386ac94c97e6381ad01c59b&amp;type=3#K2Slider" />
+    <K2UI.Tabs.TabPage name="node" label="Node" style="display: flex;">
+        <ui:Label tabindex="-1" text="Node Auto-Executor" display-tooltip-when-elided="true" name="Title" class="unselectedContent" style="display: flex;" />
+        <ui:VisualElement name="page" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); display: flex;">
+            <K2UI.Console tabindex="-1" name="node_infos" text="Node Infos ..." />
+            <ui:VisualElement name="button_bars" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); flex-direction: row;">
+                <K2UI.ToggleButton name="run" label="Start" class="big" style="flex-grow: 1;" />
+                <K2UI.ToggleButton name="pause" class="big icon yellow" style="flex-shrink: 0; margin-left: 3px; margin-right: 0;">
+                    <ui:VisualElement name="icon" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); background-image: url(&apos;project://database/Assets/Images/pause.png?fileID=2800000&amp;guid=02fa898692f9898449b2e0582c422977&amp;type=3#pause&apos;); -unity-background-scale-mode: scale-to-fit;" />
+                </K2UI.ToggleButton>
+            </ui:VisualElement>
+            <ui:Instance template="StatusGroup" name="StatusGroup" />
+            <K2UI.Group text="Flight Plan" name="flight_plan_bar">
+                <ui:Label tabindex="-1" text="&lt;b&gt;Flight Plan&lt;/b&gt; not detected, install this fantastic Mod to create Nodes" display-tooltip-when-elided="true" name="please_install_fp" style="white-space: normal; display: flex;" />
+                <ui:VisualElement name="add_node_buttons_group" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); flex-direction: row;">
+                    <ui:Label tabindex="-1" text="Circle " display-tooltip-when-elided="true" style="-unity-text-align: middle-left; display: flex;" />
+                    <ui:Button text="at Ap" display-tooltip-when-elided="true" name="circle_at_ap" style="flex-grow: 1;" />
+                    <ui:Button text="at Pe" display-tooltip-when-elided="true" name="circle_at_pe" style="flex-grow: 1;" />
+                    <ui:Button text="in 30s" display-tooltip-when-elided="true" name="circle_now" style="flex-grow: 1;" />
+                </ui:VisualElement>
+            </K2UI.Group>
+        </ui:VisualElement>
+        <ui:VisualElement name="settings" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); display: none;">
+            <K2UI.K2Toggle label="Show Nodes Infos " name="show_node_infos" />
+            <K2UI.ExFoldoutGroup opened-index="3" style="margin-top: 6px;">
+                <ui:Foldout text="Turn" value="true" name="Turn">
+                    <K2UI.K2Slider name="max_angle_maneuver" label="Max Angle" max="10" print-value="true" label-on-top="true" value="0" min="0.01" />
+                    <K2UI.K2Slider name="max_angular_speed" label="Max Angular Speed" max="10" print-value="true" label-on-top="true" value="0.98" min="0.01" />
+                </ui:Foldout>
+                <ui:Foldout text="Warp" value="true" name="Warp">
+                    <K2UI.K2Toggle label="Auto Warp" name="auto_warp" tooltip="Warp time before burn" />
+                    <ui:VisualElement name="warp_settings" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
+                        <K2UI.K2Slider label-on-top="true" min-max-label="Safe-Quick" print-value="true" min="0" value="1" max="7" name="warp_speed" label="Warp Speed" />
+                        <ui:IntegerField label="Before Burn (s)" value="42" is-delayed="true" name="warp_safe_duration" tooltip="Nb seconds in x1 before next phase (min:5)" />
+                    </ui:VisualElement>
+                </ui:Foldout>
+                <ui:Foldout text="Burn" value="true" name="Burn">
+                    <K2UI.K2Slider label-on-top="true" min-max-label="Precise-Quick" print-value="true" min="0.5" value="0.5" max="2" name="burn_adjust" label="Adjusting rate (m/s)" />
+                    <K2UI.K2Slider label-on-top="true" print-value="true" min="0.001" value="0.08" max="0.1" name="max_dv_error" label="Precision (m/s)" />
+                </ui:Foldout>
+                <ui:Foldout text="Experimental" value="false" name="Experimental">
+                    <K2UI.InlineEnum labels="T0;before;Mid-duration" name="start_mode" class="inline_enum" />
+                    <K2UI.K2Slider label-on-top="true" print-value="true" min="0" value="1" max="10" name="start_before" label="Start Before T0 (s)" />
+                    <K2UI.K2Toggle label="Rotate During burn" tooltip="Keep SAS during burn phase." name="rotate_during_burn" />
+                </ui:Foldout>
+            </K2UI.ExFoldoutGroup>
+        </ui:VisualElement>
+    </K2UI.Tabs.TabPage>
+</ui:UXML>

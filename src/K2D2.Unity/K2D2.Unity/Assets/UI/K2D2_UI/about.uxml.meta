@@ -1,0 +1,11 @@
+fileFormatVersion: 2
+guid: 16d4c53a22570084499af3b95b5a9aa6
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: K2D2_ui.bundle
+  assetBundleVariant: 
+  script: {fileID: 13804, guid: 0000000000000000e000000000000000, type: 0}
+

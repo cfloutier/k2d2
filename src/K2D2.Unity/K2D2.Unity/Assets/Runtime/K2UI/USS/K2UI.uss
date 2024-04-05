@@ -31,6 +31,12 @@
     --k2-color-invalid: rgb(123, 0, 0);
 }
 
+.separator {
+    border-color: var(--k2-color-border);
+    border-top-width: 2px;
+}
+
+
 .unity-button {
     height: 20px;
     padding: 0;
@@ -57,7 +63,7 @@
 }
 
 .unity-button.big {
-    height: 40px;
+    height: 35px;
     font-size: 16px;
 }
 

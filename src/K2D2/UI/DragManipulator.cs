@@ -8,11 +8,6 @@ using K2UI;
 using KTools;
 namespace K2D2.UI
 {
-    public static class Extensions
-    {
-
-    }
-
     /// <summary>
     /// A manipulator to make UI Toolkit elements draggable within the screen bounds.
     /// </summary>

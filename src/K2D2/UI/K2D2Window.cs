@@ -55,7 +55,7 @@ public class K2D2Window : MonoBehaviour
 
     TabbedPage tab_page;
 
-    List<K2Page> pilots_panels = new();
+    List<K2Page> all_panels = new();
 
     /// <summary>
     /// Runs when the window is first created, and every time the window is re-enabled.
@@ -78,16 +78,18 @@ public class K2D2Window : MonoBehaviour
         closeButton.clicked += () => IsWindowOpen = false; 
 
         // list all pilot panel
-        pilots_panels.Clear();
+        all_panels.Clear();
         foreach(var pilot in K2D2_Plugin.Instance.pilots_manager.pilots)
         {
             var panel = pilot.page;
             if (panel != null)
-                pilots_panels.Add(panel);
+                all_panels.Add(panel);
         }
 
+        all_panels.Add(new AboutUI());
+
         tab_page = _rootElement.Q<TabbedPage>();
-        tab_page.Init(pilots_panels);
+        tab_page.Init(all_panels);
         // save the current_tab to settings
         tab_page.Bind("main_page", "node");
         
@@ -103,7 +105,6 @@ public class K2D2Window : MonoBehaviour
         _rootElement.Query<FloatField>().ForEach(field => field.DisableGameInputOnFocus());
 
         _rootElement.AddManipulator(new DragManipulator(false, "main_window_pos"));
-
     }
 
     void Update()

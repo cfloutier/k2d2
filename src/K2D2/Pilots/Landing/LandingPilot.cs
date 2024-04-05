@@ -142,8 +142,7 @@ public class LandingPilot : Pilot
         get { return _active; }
         set
         {
-            if (value == _active)
-                return;
+            if (value == _active)  return;
 
             if (!value)
             {

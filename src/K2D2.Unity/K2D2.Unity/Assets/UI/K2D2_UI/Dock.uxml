@@ -16,10 +16,10 @@
             <K2UI.Console tabindex="-1" name="context" text="Ctrl: VesselX Dock#2 (Small)&#10;Target: VesselY Dock#2 (X-Small)" />
             <ui:VisualElement name="button_bars" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); flex-direction: column;">
                 <K2UI.K2Toggle label="Align Dock" name="align_dock" />
-                <K2UI.ToggleButton label="Stop" name="run" class="big" style="display: none;" />
+                <K2UI.ToggleButton label="Stop" name="run" class="big" style="display: flex;" />
                 <ui:Button text="Main Thrust Brake" display-tooltip-when-elided="true" name="main_brake" class="big" />
                 <ui:Button text="RCS Final Approach" display-tooltip-when-elided="true" name="rcs_final_approach" class="big" />
-                <ui:Button text="Cheat" display-tooltip-when-elided="true" name="cheat" class="big" />
+                <ui:Button text="Cheat" display-tooltip-when-elided="true" name="cheat" class="big" style="display: flex;" />
             </ui:VisualElement>
             <ui:VisualElement name="final_approach_group" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
                 <K2UI.InlineEnum name="final_mode" labels="Manual;Auto" />

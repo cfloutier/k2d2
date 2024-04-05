@@ -1,0 +1,24 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/K2D2_UI/K2D2.uss?fileID=7433441132597879392&amp;guid=f49119c0dc6aec7469a0374f7f606ceb&amp;type=3#K2D2" />
+    <Style src="project://database/Assets/Runtime/K2UI/USS/K2UI.uss?fileID=7433441132597879392&amp;guid=d70a8288b6b3eee4a900aa2727eb7499&amp;type=3#K2UI" />
+    <Style src="project://database/Assets/Runtime/K2UI/USS/ToggleButton.uss?fileID=7433441132597879392&amp;guid=1b6a73cd9e0a617469e5d501d696c7be&amp;type=3#ToggleButton" />
+    <Style src="project://database/Assets/Runtime/K2UI/USS/K2Toggle.uss?fileID=7433441132597879392&amp;guid=a6dc5024ba8ad204e9099eca78c0703f&amp;type=3#K2Toggle" />
+    <Style src="project://database/Assets/Runtime/K2UI/USS/K2Slider.uss?fileID=7433441132597879392&amp;guid=3d8e4d9f1386ac94c97e6381ad01c59b&amp;type=3#K2Slider" />
+    <K2UI.Tabs.TabPage name="about" label="About" style="display: flex;">
+        <ui:Label tabindex="-1" text="K2-D2. the droid astropilot." display-tooltip-when-elided="true" name="Title" class="unselectedContent" style="display: flex;" />
+        <ui:VisualElement name="page" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);" />
+        <ui:VisualElement name="settings" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
+            <ui:VisualElement name="top" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); flex-direction: row;">
+                <ui:VisualElement name="logo" style="flex-grow: 0; background-color: rgba(0, 0, 0, 0); background-image: url(&apos;project://database/Assets/Images/k2d2_big_icon.png?fileID=2800000&amp;guid=8ef988e0f43beb149a76620d7ba3ed65&amp;type=3#k2d2_big_icon&apos;); width: 130px; height: 130px; margin-left: 5px; margin-right: 5px;" />
+                <ui:VisualElement style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); padding-left: 4px;">
+                    <ui:Label tabindex="-1" text="Version" display-tooltip-when-elided="true" name="version" />
+                    <ui:Label tabindex="-1" text="Thanks to ....&#10;...&#10;...&#10;...&#10;...&#10;...&#10;...&#10;...&#10;...&#10;...&#10;...&#10;...&#10;..&#10;" display-tooltip-when-elided="true" name="thanks" style="white-space: normal;" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="buttons_bar" class="separator" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); flex-direction: row; padding-top: 6px;">
+                <ui:Button text="Reset All Settings" display-tooltip-when-elided="true" name="reset_all" class="big" style="flex-grow: 1;" />
+                <K2UI.ToggleButton name="debug" label="Debug Mode" class="big" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </K2UI.Tabs.TabPage>
+</ui:UXML>

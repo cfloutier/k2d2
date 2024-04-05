@@ -20,7 +20,8 @@ namespace K2D2.Controller
 
                 base.isRunning = value;
                 // update the panel
-                _page.isRunning = isRunning;
+                if (_page != null)
+                    _page.isRunning = isRunning;
             }
         }
 
