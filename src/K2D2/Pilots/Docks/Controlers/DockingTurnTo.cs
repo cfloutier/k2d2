@@ -28,6 +28,11 @@ public class DockingTurnTo : ExecuteController
 
     public Mode mode = Mode.Off;
 
+    public bool isDockAlign
+    {
+        get { return mode==Mode.TargetDock; }
+    }
+
     public void StartRetroSpeed(float max_angle = 3)
     {
         mode = Mode.RetroSpeed;
@@ -181,10 +186,6 @@ public class DockingTurnTo : ExecuteController
 
         if (K2D2Settings.debug_mode.V)
         {
-            var telemetry = SASTool.getTelemetry();
-            if (!telemetry.HasManeuver)
-                return;
-
             var autopilot = current_vessel.Autopilot;
 
             // var angulor_vel_coord = VesselInfos.GetAngularSpeed().coordinateSystem;

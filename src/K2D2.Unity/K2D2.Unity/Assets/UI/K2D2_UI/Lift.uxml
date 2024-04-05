@@ -7,6 +7,7 @@
     <Style src="project://database/Assets/Runtime/K2UI/USS/K2Slider.uss?fileID=7433441132597879392&amp;guid=3d8e4d9f1386ac94c97e6381ad01c59b&amp;type=3#K2Slider" />
     <K2UI.Tabs.TabPage name="lift" label="Lift" style="display: flex;">
         <ui:VisualElement name="page" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); display: flex;">
+            <ui:Label tabindex="-1" text="Lift - the Ascent autopilot" display-tooltip-when-elided="true" name="Title" class="unselectedContent" style="display: flex;" />
             <ui:Foldout text="Profile" value="false" name="profile">
                 <ui:IntegerField label="Ap Altitude" value="42" name="destination_Ap_km">
                     <ui:Label tabindex="-1" text="km" display-tooltip-when-elided="true" style="width: 28px; min-width: 10px; margin-right: 0; margin-left: 10px;" />
@@ -32,7 +33,7 @@
             </ui:VisualElement>
         </ui:VisualElement>
         <ui:VisualElement name="settings" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); display: flex; justify-content: flex-start;">
-            <ui:Label tabindex="-1" text="Lift Settings" display-tooltip-when-elided="true" class="unselectedContent" style="display: flex;" />
+            <ui:Label tabindex="-1" text="Lift Settings" display-tooltip-when-elided="true" name="Title" class="unselectedContent" style="display: flex;" />
             <K2UI.K2Toggle label="Heading Correction" name="heading_correction" tooltip="Correct the Speed direction to fit wanted heading" />
             <K2UI.K2Slider label="Ap Alt Error (%)" name="end_ascent_pc" print-value="true" label-on-top="true" />
             <ui:Label tabindex="-1" text="End Ascent Alt. : " display-tooltip-when-elided="true" name="end_ascent_alt" />

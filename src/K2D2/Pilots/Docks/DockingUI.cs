@@ -78,8 +78,13 @@ class DockingUI : K2Page
 
             // update the main button states
             run_button.Show(is_running);
-            run_button.value = is_running;
+            run_button.Value = is_running;
             run_button.label = is_running ? "Stop" : "Start";
+        });
+
+        run_button.listen((v) => {
+            if (!v)
+                pilot.isRunning = false;
         });
 
         main_brake.listenClick(() =>
@@ -92,7 +97,9 @@ class DockingUI : K2Page
             pilot.Mode = DockingPilot.PilotMode.RCSFinalApproach;
         });
 
-        pilot.final_approach_pilot.onInitUI(panel);
+        pilot.final_approach_pilot.onInitUI(panel, settings_page);
+
+        addSettingsResetButton("lift");
 
         return true;
     }
@@ -110,6 +117,8 @@ class DockingUI : K2Page
             return false;
 
         st.Reset();
+        // update the align_dock
+        align_dock.value = pilot.turnTo.isDockAlign;
 
         updateContext();
         pilot.final_approach_pilot.Hide();
@@ -119,7 +128,6 @@ class DockingUI : K2Page
         return true;
     }
 
-  
     void onCheat()
     {
         if (pilot.target_vessel == null) return;

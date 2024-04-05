@@ -40,7 +40,7 @@ class NodeExUI : K2Page
 
         pilot.settings.show_node_infos.listen((value) => node_infos_el.Show(value));
 
-        pilot.is_running_event += is_running => run_button.value = is_running;
+        pilot.is_running_event += is_running => run_button.Value = is_running;
         run_button.listeners +=  v => 
         {
             pilot.isRunning = v;

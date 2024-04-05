@@ -23,7 +23,7 @@ namespace K2UI
                 var ate = ve as ToggleButton;
 
                 ate.label = m_String.GetValueFromBag(bag, cc);
-                ate.value = m_Bool.GetValueFromBag(bag, cc);
+                ate.Value = m_Bool.GetValueFromBag(bag, cc);
             }
         }
 
@@ -42,7 +42,7 @@ namespace K2UI
             }
         }
         bool _value;
-        public bool value
+        public bool Value
         {
             get { return _value; }
             set
@@ -60,6 +60,12 @@ namespace K2UI
         public delegate void OnChanged(bool value);
 
         public event OnChanged listeners;
+
+        public void listen(OnChanged fct)
+        {
+            listeners += fct;
+            fct(Value);
+        }
 
         // In the spirit of the BEM standard, the BigToggleButton has its own block class and two element classes. It also
         // has a class that represents the enabled state of the toggle.
@@ -83,7 +89,7 @@ namespace K2UI
         // All three callbacks call this method.
         void ToggleValue()
         {
-            value = !value;
+            Value = !Value;
         }
 
         // // Because ToggleValue() sets the value property, the BaseField class fires a ChangeEvent. This results in a
@@ -100,8 +106,8 @@ namespace K2UI
 
         public void Bind(Setting<bool> setting)
         {
-            this.value = setting.V;
-            setting.listeners += v => this.value = v;
+            this.Value = setting.V;
+            setting.listeners += v => this.Value = v;
             RegisterCallback<ChangeEvent<bool>>(evt => setting.V = evt.newValue);
         }
         

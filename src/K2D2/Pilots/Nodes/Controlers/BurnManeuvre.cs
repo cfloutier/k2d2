@@ -212,7 +212,7 @@ public class BurnManeuver : ExecuteController
                 st.Warning("Burning !");
                 st.Console(status_line);
                 if (maneuver.BurnRequiredDV >= 0)
-                    st.Progess(remaining_dv / maneuver.BurnRequiredDV, $"{remaining_dv:n1} m/s");
+                    st.Progress(remaining_dv / maneuver.BurnRequiredDV, $"{remaining_dv:n1} m/s");
                     
                 st.Console(StrTool.DurationToString(remaining_full_burn_time));
                 break;

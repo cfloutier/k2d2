@@ -6,8 +6,8 @@
     <Style src="project://database/Assets/Runtime/K2UI/USS/K2Toggle.uss?fileID=7433441132597879392&amp;guid=a6dc5024ba8ad204e9099eca78c0703f&amp;type=3#K2Toggle" />
     <Style src="project://database/Assets/Runtime/K2UI/USS/K2Slider.uss?fileID=7433441132597879392&amp;guid=3d8e4d9f1386ac94c97e6381ad01c59b&amp;type=3#K2Slider" />
     <K2UI.Tabs.TabPage name="landing" label="Landing" style="display: flex;">
-        <ui:Label tabindex="-1" text="Node Execution" display-tooltip-when-elided="true" name="Title" class="unselectedContent" style="display: none;" />
         <ui:VisualElement name="page" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); display: flex;">
+            <ui:Label tabindex="-1" text="Safe Landing" display-tooltip-when-elided="true" name="Title" class="unselectedContent" style="display: flex;" />
             <K2UI.Console tabindex="-1" name="landing_infos" text="Landing infos&#10;&#10;&#10;....." />
             <ui:VisualElement name="button_bars" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); flex-direction: row;">
                 <K2UI.ToggleButton name="run" label="Brake" class="big" style="flex-grow: 1;" />
@@ -16,6 +16,7 @@
             <ui:Instance template="StatusGroup" name="StatusGroup" />
         </ui:VisualElement>
         <ui:VisualElement name="settings" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); display: flex;">
+            <ui:Label tabindex="-1" text="Landing Settings" display-tooltip-when-elided="true" name="Title" class="unselectedContent" style="display: flex;" />
             <K2UI.ExFoldoutGroup opened-index="-1" style="margin-top: 6px;">
                 <K2UI.K2Toggle label="Show Landing Context" name="landing_context" />
                 <ui:Foldout text="Warp" value="true" name="Warp">

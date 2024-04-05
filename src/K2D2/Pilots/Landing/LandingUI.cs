@@ -43,7 +43,7 @@ class LandingUI : K2Page
         touch_down = panel.Q<Button>("touch_down");
         status_bar = new FullStatus(panel);
 
-        pilot.is_running_event += is_running => run_button.value = is_running;
+        pilot.is_running_event += is_running => run_button.Value = is_running;
         run_button.listeners += v =>
         {
             pilot.isRunning = v;

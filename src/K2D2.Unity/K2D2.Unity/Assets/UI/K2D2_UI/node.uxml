@@ -6,8 +6,8 @@
     <Style src="project://database/Assets/Runtime/K2UI/USS/K2Toggle.uss?fileID=7433441132597879392&amp;guid=a6dc5024ba8ad204e9099eca78c0703f&amp;type=3#K2Toggle" />
     <Style src="project://database/Assets/Runtime/K2UI/USS/K2Slider.uss?fileID=7433441132597879392&amp;guid=3d8e4d9f1386ac94c97e6381ad01c59b&amp;type=3#K2Slider" />
     <K2UI.Tabs.TabPage name="node" label="Node" style="display: flex;">
-        <ui:Label tabindex="-1" text="Node Auto-Executor" display-tooltip-when-elided="true" name="Title" class="unselectedContent" style="display: flex;" />
         <ui:VisualElement name="page" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); display: flex;">
+            <ui:Label tabindex="-1" text="Node Auto-Executor" display-tooltip-when-elided="true" name="Title" class="unselectedContent" style="display: flex;" />
             <K2UI.Console tabindex="-1" name="node_infos" text="Node Infos ..." />
             <ui:VisualElement name="button_bars" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); flex-direction: row;">
                 <K2UI.ToggleButton name="run" label="Start" class="big" style="flex-grow: 1;" />
@@ -17,7 +17,7 @@
             </ui:VisualElement>
             <ui:Instance template="StatusGroup" name="StatusGroup" />
             <K2UI.Group text="Flight Plan" name="flight_plan_bar">
-                <ui:Label tabindex="-1" text="&lt;b&gt;Flight Plan&lt;/b&gt; not detected, install this fantastic Mod to create Nodes" display-tooltip-when-elided="true" name="please_install_fp" style="white-space: normal; display: flex;" />
+                <ui:Label tabindex="-1" text="&lt;b&gt;Flight Plan&lt;/b&gt; not detected, install the great Mod to create Nodes." display-tooltip-when-elided="true" name="please_install_fp" style="white-space: normal; display: flex;" />
                 <ui:VisualElement name="add_node_buttons_group" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); flex-direction: row;">
                     <ui:Label tabindex="-1" text="Circle " display-tooltip-when-elided="true" style="-unity-text-align: middle-left; display: flex;" />
                     <ui:Button text="at Ap" display-tooltip-when-elided="true" name="circle_at_ap" style="flex-grow: 1;" />
@@ -27,6 +27,7 @@
             </K2UI.Group>
         </ui:VisualElement>
         <ui:VisualElement name="settings" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); display: none;">
+            <ui:Label tabindex="-1" text="Node Auto-Executor Settings" display-tooltip-when-elided="true" name="Title" class="unselectedContent" style="display: flex;" />
             <K2UI.K2Toggle label="Show Nodes Infos " name="show_node_infos" />
             <K2UI.ExFoldoutGroup opened-index="3" style="margin-top: 6px;">
                 <ui:Foldout text="Turn" value="true" name="Turn">

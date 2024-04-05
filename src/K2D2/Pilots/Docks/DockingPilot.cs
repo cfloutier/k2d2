@@ -23,9 +23,6 @@ public class DockingPilot : SingleExecuteController
     // public int target_dock_num = -1;
     public SimulationObjectModel last_target;
 
-    // public ListPart docks = new ListPart();
-    
-    public ClampSetting<float> pilot_power = new ClampSetting<float>("docks.pilot_power", 1, 0 , 10);
 
     public enum PilotMode
     {
@@ -44,15 +41,17 @@ public class DockingPilot : SingleExecuteController
         set
         {
             if (_mode == value) return;
-            _mode = value;
-            switch(_mode)
+            switch(value)
             {
                 case PilotMode.MainThrustKillSpeed:
+                    if (target_vessel == null) return;
                     setController(kill_speed_pilot);
                     kill_speed_pilot.Start();
                     isRunning = true;
                     break;
                 case PilotMode.RCSFinalApproach:
+                    if (target_vessel == null) return;
+
                     setController(final_approach_pilot);
                     final_approach_pilot.StartPilot(target_part, control_component);
                     isRunning = true;
@@ -62,13 +61,13 @@ public class DockingPilot : SingleExecuteController
                     isRunning = false;
                     break;
             }
+
+            _mode = value;
         }
     }
 
     public MainThrustKillSpeed kill_speed_pilot = null;
     public FinalApproach final_approach_pilot = null;
-
-
 
     public override bool isRunning
     {
@@ -76,6 +75,9 @@ public class DockingPilot : SingleExecuteController
         set
         {
             if (value == base.isRunning)  return;
+            // send call backs
+            base.isRunning = value; 
+
             if (!value)
             {
                 current_vessel = K2D2_Plugin.Instance.current_vessel;
@@ -84,10 +86,7 @@ public class DockingPilot : SingleExecuteController
                     current_vessel.SetThrottle(0);
 
                 Mode = PilotMode.Off;
-            }
-
-            // send call backs
-            base.isRunning = value; 
+            } 
         }
     }
 
@@ -108,8 +107,6 @@ public class DockingPilot : SingleExecuteController
 
         kill_speed_pilot = new MainThrustKillSpeed(turnTo);
         final_approach_pilot = new FinalApproach(this, turnTo);
-
-
     }
 
     public DockingTurnTo turnTo = new DockingTurnTo();
@@ -121,6 +118,9 @@ public class DockingPilot : SingleExecuteController
 
     public override void Update()
     {
+        if (!isRunning && ! page.isVisible)
+            return;
+
         turnTo.Update();
 
         // logger.LogInfo($"target is {current_vessel.VesselComponent.TargetObject}");
@@ -141,7 +141,7 @@ public class DockingPilot : SingleExecuteController
 
         control_component = new NamedComponent(current_vessel.VesselComponent.GetControlOwner());
 
-        // update the dock  when target change
+        // update the dock when target change
         if (last_target != current_vessel.VesselComponent.TargetObject)
         {
             // logger.LogInfo($"changed target is {current_vessel.VesselComponent.TargetObject}");

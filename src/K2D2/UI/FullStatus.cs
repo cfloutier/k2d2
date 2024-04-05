@@ -11,16 +11,19 @@ public class FullStatus
         status = group.Q<StatusLine>("status_pilot");
         console = group.Q<K2UI.Console>("pilot_console");
         progressBar = group.Q<K2UI.K2ProgressBar>("progress");
+        main_group = status.parent;
     }
 
+    VisualElement main_group;
     public K2UI.Console console;
     public K2UI.StatusLine status;
     public K2UI.K2ProgressBar progressBar;  
 
     public void Reset()
     {
+        main_group.Show(true);
         console.Show(false);
-        console.text = "";
+        console.text = "??????????????";
 
         status.Show(false);
         status.text = "";
@@ -49,7 +52,7 @@ public class FullStatus
         status.Show(true);
     }
 
-    public void Progess(double ratio, string label = null)
+    public void Progress(double ratio, string label = null)
     {
         progressBar.value = (float)(ratio * 100);
         progressBar.Show(true);

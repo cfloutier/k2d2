@@ -7,7 +7,7 @@
     <Style src="project://database/Assets/Runtime/K2UI/USS/K2Slider.uss?fileID=7433441132597879392&amp;guid=3d8e4d9f1386ac94c97e6381ad01c59b&amp;type=3#K2Slider" />
     <K2UI.Tabs.TabPage name="dock" label="Docking" style="display: flex;">
         <ui:VisualElement name="page" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); display: flex;">
-            <ui:Label tabindex="-1" text="Docking Assistant" display-tooltip-when-elided="true" name="Title" class="unselectedContent" style="display: none;" />
+            <ui:Label tabindex="-1" text="Docking Assistant" display-tooltip-when-elided="true" name="Title" class="unselectedContent" style="display: flex;" />
             <ui:VisualElement name="select_group" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); display: none;">
                 <ui:DropdownField label="Control From :" index="-1" choices="a,b,c" name="control_from_drop" />
                 <ui:DropdownField label="Target :" index="-1" choices="Duna,Mun,Kerbal,Too" name="target_drop" class="fixed" />
@@ -24,13 +24,13 @@
             <ui:VisualElement name="final_approach_group" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
                 <K2UI.InlineEnum name="final_mode" labels="Manual;Auto" />
                 <K2UI.Group name="manual_group" text="Manual Mode">
+                    <ui:Label tabindex="-1" text="RCS - Kill Speed" display-tooltip-when-elided="true" />
                     <ui:VisualElement name="rcs_kill_speed" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); flex-direction: row;">
                         <K2UI.ToggleButton label="Hor." name="horizontal_bt" style="flex-grow: 1;" />
                         <K2UI.ToggleButton label="Vert." name="vertical_bt" style="flex-grow: 1;" />
                         <K2UI.ToggleButton label="Depth" name="depth_bt" style="flex-grow: 1;" />
                         <K2UI.ToggleButton label="All" name="all_bt" style="flex-grow: 1;" />
                     </ui:VisualElement>
-                    <ui:Label tabindex="-1" text="RCS - Kill Speed" display-tooltip-when-elided="true" />
                 </K2UI.Group>
                 <K2UI.Group name="auto_group" text="Automatic Mode&#10;">
                     <ui:Label tabindex="-1" text="Axis :" display-tooltip-when-elided="true" />
@@ -39,16 +39,17 @@
                     <ui:Label tabindex="-1" text="Forward :" display-tooltip-when-elided="true" />
                     <K2UI.K2Toggle label="Auto Approach" name="auto_forward" />
                     <ui:VisualElement style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); flex-direction: row;">
-                        <K2UI.K2Slider name="forward_speed" label="Forward Speed" print-value="true" max="10" value="0" label-on-top="true" min-max-label="x" min="-10" style="flex-grow: 1;" />
+                        <K2UI.K2Slider name="forward_speed" label="Forward Speed" print-value="true" max="10" value="0" label-on-top="true" min-max-label="x" min="-10" style="flex-grow: 1; margin-bottom: 7px;" />
                         <ui:Button text="R." display-tooltip-when-elided="true" name="reset_fspeed" style="height: 40%; top: 27px;" />
                     </ui:VisualElement>
                 </K2UI.Group>
-                <ui:Instance template="StatusGroup" name="StatusGroup" />
             </ui:VisualElement>
+            <ui:Instance template="StatusGroup" name="StatusGroup" style="display: flex;" />
         </ui:VisualElement>
         <ui:VisualElement name="settings" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); display: none;">
             <ui:Label tabindex="-1" text="Docking Settings" display-tooltip-when-elided="true" name="Title" class="unselectedContent" style="display: flex;" />
-            <K2UI.K2Slider name="pilot_power" label="Pilot Power" print-value="true" label-on-top="true" min-max-label="x" />
+            <K2UI.K2Slider name="rcs_power" label="RCS Power" print-value="true" label-on-top="true" min-max-label="x" />
+            <ui:Label tabindex="-1" text="For the moment, the real vessel rcs power is not computed.&#10;It should be computed for each direction depending on the RCS thust are localized&#10;Use This slider to adapt to your vessel." display-tooltip-when-elided="true" style="white-space: normal;" />
         </ui:VisualElement>
     </K2UI.Tabs.TabPage>
 </ui:UXML>

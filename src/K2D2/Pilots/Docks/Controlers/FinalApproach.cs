@@ -51,15 +51,19 @@ public class FinalApproach : ExecuteController
 
 
     public EnumSetting<SubMode> sub_mode = new("dock.final_mode", SubMode.Manual);
+    public ClampSetting<float> rcs_power = new ClampSetting<float>("dock.rc_kill_power", 1, 0 , 10);
 
-    public Vector diff_Position = new Vector();
-    public Vector3 local_speed = new Vector3();
-    public Vector3 local_target_pos = new Vector3();
-    public Vector3 vessel_to_target = new Vector3();
+    ClampSetting<float> forward_speed = new("", 0, -10, 10);
 
     public Setting<bool> Kill_X_Speed = new Setting<bool>("", false);
     public Setting<bool> Kill_Y_Speed = new Setting<bool>("", false);
     public Setting<bool> Kill_Z_Speed = new Setting<bool>("", false);
+
+    ClampSetting<float> center_power = new("", 1, 0, 5);
+
+    public Vector3 local_speed = new Vector3();
+    
+    public Vector3 vessel_to_target = new Vector3();
 
     public override void Update()
     {
@@ -84,30 +88,31 @@ public class FinalApproach : ExecuteController
     void RCKillSpeed()
     {
         if (Kill_X_Speed.V && current_vessel.X == 0)
-            current_vessel.X = -local_speed.x * pilot.pilot_power.V;
+            current_vessel.X = -local_speed.x * rcs_power.V;
 
         if (Kill_Y_Speed.V && current_vessel.Y == 0)
-            current_vessel.Y = -local_speed.y * pilot.pilot_power.V;
+            current_vessel.Y = -local_speed.y * rcs_power.V;
 
         if (Kill_Z_Speed.V && current_vessel.Z == 0)
-            current_vessel.Z = -local_speed.z * pilot.pilot_power.V;
+            current_vessel.Z = -local_speed.z * rcs_power.V;
     }
 
     void RCKillSpeed_UI(FullStatus st)
     {
         st.Console("<b>Kill Speed using RCS</b>");
 
-        st.Console($"Horizontal {local_speed.x:n2} " + (Kill_X_Speed.V ? "[X]":"[ ]"));
-        st.Console($"Vertical {local_speed.x:n2} " + (Kill_Z_Speed.V ? "[X]":"[ ]"));
-        st.Console($"Depth {local_speed.x:n2} " + (Kill_Y_Speed.V ? "[X]":"[ ]"));
+        if (K2D2Settings.debug_mode.V)
+        {
+            st.Console($"Horizontal {local_speed.x:n2} " + (Kill_X_Speed.V ? "[X]":"[ ]"));
+            st.Console($"Vertical {local_speed.x:n2} " + (Kill_Z_Speed.V ? "[X]":"[ ]"));
+            st.Console($"Depth {local_speed.x:n2} " + (Kill_Y_Speed.V ? "[X]":"[ ]"));
+        } 
     }
 
     Setting<bool> auto_forward = new("", false);
 
     Setting<bool> center_axis = new("", false);
-    ClampSetting<float> forward_speed = new("", 0, -10, 10);
 
-    ClampSetting<float> center_power = new("", 1, 0, 5);
 
     float forward_wanted_speed;
 
@@ -123,34 +128,40 @@ public class FinalApproach : ExecuteController
             forward_wanted_speed = Mathf.Sign(vessel_to_target.y) * Mathf.Sqrt(Mathf.Abs(center_power.V / 20 * vessel_to_target.y));
             forward_wanted_speed += 0.05f; // final touch speed !!
             forward_wanted_speed = Mathf.Clamp(forward_wanted_speed, -max_speed, max_speed);
-            current_vessel.Y = (forward_wanted_speed - local_speed.y) * pilot.pilot_power.V;
+            current_vessel.Y = (forward_wanted_speed - local_speed.y) * rcs_power.V;
         }
         else
         {
             forward_wanted_speed = forward_speed.V;
-            current_vessel.Y = (forward_speed.V - local_speed.y) * pilot.pilot_power.V;
+            current_vessel.Y = (forward_speed.V - local_speed.y) * rcs_power.V;
         }
 
         if (center_axis.V)
         {
             right_wanted_speed = Mathf.Sign(vessel_to_target.x) * Mathf.Sqrt(Mathf.Abs(center_power.V / 10 * vessel_to_target.x));
             right_wanted_speed = Mathf.Clamp(right_wanted_speed, -max_speed, max_speed);
-            current_vessel.X = (right_wanted_speed - local_speed.x) * pilot.pilot_power.V;
+            current_vessel.X = (right_wanted_speed - local_speed.x) * rcs_power.V;
 
             up_wanted_speed = Mathf.Sign(vessel_to_target.z) * Mathf.Sqrt(Mathf.Abs(center_power.V / 10 * vessel_to_target.z));
             up_wanted_speed = Mathf.Clamp(up_wanted_speed, -max_speed, max_speed);
-            current_vessel.Z = (up_wanted_speed - local_speed.z) * pilot.pilot_power.V;
+            current_vessel.Z = (up_wanted_speed - local_speed.z) * rcs_power.V;
         }
     }
 
     void AutoMode_UI(FullStatus st)
     {  
-        if (center_axis.V)
+        st.Console("<b>Semi-Auto Dock pilot</b>");
+
+        if (K2D2Settings.debug_mode.V)
         {
-            st.Console($"<b>Horizontal</b>- ctr:{right_wanted_speed:n2} ms ~ cur:{local_speed.x:n2} ms");
-            st.Console($"<b>Vertical</b>- ctr:{up_wanted_speed:n2} ms ~ cur:{local_speed.z:n2} ms");
+            if (center_axis.V)
+            {
+                st.Console($"<b>Horizontal</b>- ctr:{right_wanted_speed:n2} ms ~ cur:{local_speed.x:n2} ms");
+                st.Console($"<b>Vertical</b>- ctr:{up_wanted_speed:n2} ms ~ cur:{local_speed.z:n2} ms");
+            }
+            st.Console($"<b>Forward</b> - ctr:{forward_wanted_speed:n2} ms ~ cur:{local_speed.y:n2} ms");
         }
-        st.Console($"<b>Forward</b> - ctr:{forward_wanted_speed:n2} ms ~ cur:{local_speed.y:n2} ms");
+     
     }
 
     void UpdatePosition()
@@ -217,7 +228,7 @@ public class FinalApproach : ExecuteController
     void UpdateKillAll()
     {
         bool all = Kill_X_Speed.V && Kill_Y_Speed.V && Kill_Z_Speed.V;
-        kill_all_speed.value = all;
+        kill_all_speed.Value = all;
     }
 
     ToggleButton kill_all_speed;
@@ -229,9 +240,9 @@ public class FinalApproach : ExecuteController
         final_approach_group.Show(false);
     }
 
-    public void onInitUI(VisualElement root_el)
+    public void onInitUI(VisualElement panel, VisualElement settings_page)
     {
-        final_approach_group = root_el.Q<VisualElement>("final_approach_group");
+        final_approach_group = panel.Q<VisualElement>("final_approach_group");
         final_approach_group.Show(false);
 
         final_mode = final_approach_group.Q<InlineEnum>("final_mode");
@@ -264,7 +275,7 @@ public class FinalApproach : ExecuteController
         kill_all_speed = manual_group.Q<ToggleButton>("all_bt");
         kill_all_speed.listenClick(() =>
             {
-                Kill_X_Speed.V = Kill_Y_Speed.V = Kill_Z_Speed.V = kill_all_speed.value;
+                Kill_X_Speed.V = Kill_Y_Speed.V = Kill_Z_Speed.V = kill_all_speed.Value;
             }
         );
 
@@ -277,6 +288,10 @@ public class FinalApproach : ExecuteController
         center_power_el = auto_group.Q<K2Slider>("center_power").Bind(center_power);
         forward_speed_el = auto_group.Q<K2Slider>("forward_speed").Bind(forward_speed);
         reset_fspeed = auto_group.Q<Button>("reset_fspeed").listenClick(() => forward_speed.V = 0);
+
+        settings_page.Q<K2Slider>("rcs_power").Bind(rcs_power);
+
+
     }
 
     public override void updateUI(VisualElement root_el, FullStatus st)

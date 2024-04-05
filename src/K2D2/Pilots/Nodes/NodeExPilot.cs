@@ -43,7 +43,6 @@ public class NodeExPilot : Pilot
 
         _page = ui = new NodeExUI(this);
 
-
         K2D2PilotsMgr.Instance.RegisterPilot("Node", this);
 
         sub_contollers.Add(current_executor);
@@ -159,6 +158,8 @@ public class NodeExPilot : Pilot
 
     public void UpdateUI()
     {
+        if (!ui.isVisible) return;
+
         ui.status_bar.Reset();
 
         var st = ui.status_bar;

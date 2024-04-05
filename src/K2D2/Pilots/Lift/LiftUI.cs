@@ -63,7 +63,7 @@ class LiftUI : K2Page
         var max_throttle = panel.Q<K2Slider>("max_throttle").Bind(settings.max_throttle);
 
         var run_button = panel.Q<ToggleButton>("run");
-        pilot.is_running_event += is_running => run_button.value = is_running;
+        pilot.is_running_event += is_running => run_button.Value = is_running;
         run_button.listeners +=  v => 
         {
             pilot.isRunning = v;
