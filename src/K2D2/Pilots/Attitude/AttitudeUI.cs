@@ -1,14 +1,7 @@
 // using System.Reflection.Emit;
-using BepInEx.Logging;
-using K2D2.KSPService;
 using K2UI.Tabs;
 using K2UI;
-using KSP.Messages;
-using KSP.Sim;
-using KSP.Sim.Maneuver;
-using KTools;
 using UnityEngine.UIElements;
-using K2D2.UI;
 
 namespace K2D2.Controller;
 
@@ -21,12 +14,6 @@ class AttitudeUI : K2Page
         code = "attitude";
     }
     
-    public FullStatus st;
-
-    // public RepeatButton run_button, pause_button;
-
-    // public FlightPlanCall call_fp;
-
     long repeat_delay = 500;
     long repeat_interval = 100;
 
@@ -45,10 +32,11 @@ class AttitudeUI : K2Page
             () => elevation_field.value += 1, repeat_delay, repeat_interval);
 
         panel.Q<K2Slider>("elevation_slider").Bind(AttitudeSettings.elevation);
+        var heading_label = panel.Q<Label>("heading_label");
+        panel.Q<K2Compass>("heading").Bind(AttitudeSettings.heading);
+        AttitudeSettings.heading.listen(v => heading_label.text = $"Heading : {v:n1}");
 
         run_button = panel.Q<ToggleButton>("run");
-        st = new FullStatus(panel);
-
     
         pilot.is_running_event += is_running => run_button.Value = is_running;
         run_button.listeners +=  v => 
@@ -65,7 +53,6 @@ class AttitudeUI : K2Page
         if (!base.onUpdateUI())
             return false;
 
-        st.Reset();
         return true;
     }
 }

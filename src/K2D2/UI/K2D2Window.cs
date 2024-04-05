@@ -103,6 +103,7 @@ public class K2D2Window : MonoBehaviour
 
         _rootElement.Query<IntegerField>().ForEach(field => field.DisableGameInputOnFocus());
         _rootElement.Query<FloatField>().ForEach(field => field.DisableGameInputOnFocus());
+        _rootElement.Query<RepeatButton>().ForEach(field => field.DisableGameInputOnFocus());
 
         _rootElement.AddManipulator(new DragManipulator(false, "main_window_pos"));
     }

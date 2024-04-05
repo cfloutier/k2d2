@@ -99,7 +99,7 @@ class DockingUI : K2Page
 
         pilot.final_approach_pilot.onInitUI(panel, settings_page);
 
-        addSettingsResetButton("lift");
+        addSettingsResetButton("dock");
 
         return true;
     }
