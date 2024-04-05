@@ -16,6 +16,9 @@ namespace K2UI
             UxmlFloatAttributeDescription m_Value =
                 new() { name = "value", defaultValue = 0 };
 
+            UxmlBoolAttributeDescription m_Centered =
+                new() { name = "centered", defaultValue = false };
+
             UxmlFloatAttributeDescription m_Min =
                 new() { name = "min", defaultValue = 0 };
 
@@ -35,6 +38,7 @@ namespace K2UI
 
                 ate.Label = m_Label.GetValueFromBag(bag, cc);
                 ate.value = m_Value.GetValueFromBag(bag, cc);
+                ate.Centered = m_Centered.GetValueFromBag(bag, cc);
                 ate.Min = m_Min.GetValueFromBag(bag, cc);
                 ate.Max = m_Max.GetValueFromBag(bag, cc);
 
@@ -60,6 +64,13 @@ namespace K2UI
             get { return _value; }
             set { _value = value; updateRender(); }
         }
+
+        bool _centered;
+        public bool Centered
+        {
+            get { return _centered; }
+            set { _centered = value; updateRender(); }
+        }       
 
         float _min;
         public float Min
@@ -92,10 +103,43 @@ namespace K2UI
 
         void updateRender()
         {
+
+
             if (el_progress != null)
             {
-                var len = new StyleLength(Length.Percent(Mathf.InverseLerp(Min, Max, value) * 100));
-                el_progress.style.width = len;
+                // el_progress.style.transformOrigin = new StyleTransformOrigin(new TransformOrigin(Length.Percent(50f), Length.Percent(50f)));
+
+
+                if (Centered)
+                {
+                    float range = Max-Min;
+                    float center_value = (Min + Max)/2;
+                    // float width = 0;
+
+
+                    el_progress.style.left = new StyleLength(Length.Percent(50));
+                    float width = Mathf.Abs((center_value - value)/range);        
+                    
+                    if (value < center_value)
+                        el_progress.style.rotate = new StyleRotate(new Rotate(180));
+                    else
+                        el_progress.style.rotate = new StyleRotate(new Rotate(0));
+
+
+                    // width = (value - center_value)/half_range;
+                        
+
+                    var len = new StyleLength(Length.Percent(width * 100));
+                    el_progress.style.width = len;
+                    //.x
+                }
+                else
+                {
+                    var len = new StyleLength(Length.Percent(Mathf.InverseLerp(Min, Max, value) * 100));
+                    el_progress.style.width = len;
+                    el_progress.style.rotate = new StyleRotate(new Rotate(0));
+                    el_progress.style.left = new StyleLength(Length.Percent(0));
+                }
             }
             if (el_label != null)
             {

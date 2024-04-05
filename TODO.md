@@ -55,6 +55,8 @@ UITK :
     * [x] reset to default
     * [x] current_tab
 
+
+* [ ] Centered level
 * [ ] DropBox
 * [ ] Repeat button
 * [ ] Field with repeat button (for the drone)
@@ -83,7 +85,7 @@ UITK :
   * [x] Main UI
     * [x] Node info not active on run
     * [x] button binding on active
-    * [ ] add Node using Flight Plan
+    * [x] add Node using Flight Plan
   * [x] Settings
     * [x] UI
     * [x] Binding
@@ -92,7 +94,7 @@ UITK :
   * [x] Main UI
     * [x] UI
     * [x] Profile
-    * [-] colors for bodies
+    * [-] colors for bodies (need to adjust colors)
   * [x] Settings
     * [x] UI
     * [x] Binding  
@@ -105,15 +107,15 @@ UITK :
     * [x] UI
     * [x] Binding  
 
-* [ ] Dock
-  * [ ] Main UI
-    * [ ] UI
-    * [ ] Code
-  * [ ] Settings
-    * [ ] UI
-    * [ ] Binding  
+* [x] Dock
+  * [x] Main UI
+    * [-] UI : need to check buttons sizes and console content
+    * [x] Code
+  * [-] Settings
+    * [x] UI
+    * [x] Binding  
 
-* [ ] Drone
+* [ ] Drone : for next version
   * [ ] Main UI
     * [ ] UI
     * [ ] Code
@@ -130,7 +132,7 @@ UITK :
     * [ ] UI
     * [ ] Binding  
 
-* [ ] Staging
+* [ ] Staging : for next version ?
   * [ ] UI
   * [ ] Code
 
@@ -142,7 +144,6 @@ UITK :
 * [x] Test Without FlightPlan
 
 ----------------------------
-
 
 reminder for next version : 
 
