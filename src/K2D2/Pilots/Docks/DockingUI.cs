@@ -63,10 +63,9 @@ class DockingUI : K2Page
         });
 
         cheat = button_bars.Q<Button>("cheat");
+        K2D2Settings.debug_mode.listen(v=>cheat.Show(v));
         cheat.listenClick(() => onCheat());
-
         rcs_final_approach = button_bars.Q<Button>("rcs_final_approach");
-
         st = new FullStatus(panel);
 
         pilot.listenIsRunning(is_running =>
