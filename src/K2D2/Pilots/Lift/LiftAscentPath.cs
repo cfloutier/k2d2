@@ -123,7 +123,7 @@ public class LiftAscentPath : MultiGraphLine
         reset();
         // update range
         y_range = lift_settings.destination_Ap_km.V;
-        x_range = 2 * y_range * get_line().aspectRatio();
+        x_range = 1 * y_range * get_line().aspectRatio();
         reset();
 
         DrawLines(current_altitude_km);
@@ -216,11 +216,11 @@ public class LiftAscentPath : MultiGraphLine
     {
         switch (body_name.ToLower())
         {
-            case "laythe": return ColorTools.parseColor("#2662af");
-            case "jool": return ColorTools.parseColor("#549324");
-            case "duna": return ColorTools.parseColor("#e47350");
-            case "kerbin": return ColorTools.parseColor("#3f54ff");
-            case "eve": return ColorTools.parseColor("#9152c6");
+            case "laythe": return ColorTools.parseColor("#1C76E9");
+            case "jool": return ColorTools.parseColor("#9FF911");
+            case "duna": return ColorTools.parseColor("#FF4F18");
+            case "kerbin": return ColorTools.parseColor("#5EAAFE");
+            case "eve": return ColorTools.parseColor("#A63CFF");
         }
 
         return Color.black;

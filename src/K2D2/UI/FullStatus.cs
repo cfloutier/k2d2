@@ -23,7 +23,7 @@ public class FullStatus
     {
         main_group.Show(true);
         console.Show(false);
-        console.text = "??????????????";
+        console.text = "";
 
         status.Show(false);
         status.text = "";
@@ -41,7 +41,7 @@ public class FullStatus
         Status(text, StatusLine.Level.Warning);
     }
 
-     public void Error(string text)
+    public void Error(string text)
     {
         Status(text, StatusLine.Level.Error);
     }

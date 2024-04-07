@@ -58,8 +58,8 @@ UITK :
 
 * [ ] Centered level
 * [ ] DropBox
-* [ ] Repeat button
-* [ ] Field with repeat button (for the drone)
+* [x] Repeat button
+* [x] Field with repeat button (for the drone and attitude pilot)
 
 * [x] Compass
 * [x] Curve Panel
@@ -124,21 +124,21 @@ UITK :
     * [ ] Binding  
 
 
-* [ ] Attitude
-  * [ ] Main UI
-    * [ ] UI
-    * [ ] Code
-  * [ ] Settings
-    * [ ] UI
-    * [ ] Binding  
+* [x] Attitude
+  * [x] Main UI
+    * [x] UI
+    * [x] Code
+  * [x] Settings
+    * [x] UI
+    * [x] Binding  
 
 * [ ] Staging : for next version ?
   * [ ] UI
   * [ ] Code
 
-* [ ] About
-  * [ ] UI
-  * [ ] Code
+* [x] About
+  * [x] UI
+  * [x] Code
 
 * [x] API interface
 * [x] Test Without FlightPlan
