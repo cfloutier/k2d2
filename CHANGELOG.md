@@ -13,7 +13,7 @@ I've not tested it in 4K but I'm quite confident tahts it will be far better tha
 * it is no more in front of KSP2 panels and menus.
 * I think it is nicer, and more ergonomic.
 
-That was the main motivation for this new version and I know that I couldn't continue with IMGUI. Even if the work to convert it to UITK has been huge (3 full months of work). And it has been a good time to refactorize the whole code.  
+That was the main motivation for this new version and I know that I couldn't continue with IMGUI. Even if the work to convert it to UITK has been huge (4 full months of work). And it has been a good time to refactorize the whole code.  
 
 -------------------------
 Other little things that is new :
@@ -28,8 +28,6 @@ and What is missing
 * Drone : it has not been added in this version, cause I'd like to rework the whole pilot. and I wanted to release this version the sooner. I'll propose it back in a new version
 * Dock : we can't select target using UI : it will be back soon
 * Staging : I've not tested it with this version and içn case of a bug I prefered to remove it temporary. It will be back soon
-
-
 
 # v0.12.3
 * Rebuild with KSP v0.2.1.0 
