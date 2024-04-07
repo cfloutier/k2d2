@@ -47,6 +47,16 @@ public class K2D2_Plugin : BaseSpaceWarpPlugin
     [PublicAPI] public const string ModName = MyPluginInfo.PLUGIN_NAME;
     [PublicAPI] public const string ModVer = MyPluginInfo.PLUGIN_VERSION;
 
+
+     private static string _assemblyFolder;
+    private static string AssemblyFolder =>
+        _assemblyFolder ?? (_assemblyFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
+
+    private static string _settingsPath;
+    private static string SettingsPath =>
+        _settingsPath ?? (_settingsPath = Path.Combine(AssemblyFolder, "k2d2_settings.json"));
+
+
     /// Singleton instance of the plugin class
     [PublicAPI] public static K2D2_Plugin Instance { get; set; }
 
@@ -75,7 +85,7 @@ public class K2D2_Plugin : BaseSpaceWarpPlugin
         // Load all the other assemblies used by this mod
         LoadAssemblies();
         new K2D2PilotsMgr();
-        SettingsFile.Init(this, "k2d2_settings.json");
+        SettingsFile.Init(this, SettingsPath);
         
         gameObject.hideFlags = HideFlags.HideAndDontSave;
         DontDestroyOnLoad(gameObject);

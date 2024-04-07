@@ -48,7 +48,7 @@
 
 .k2-tab-button--active > Label {
     -unity-font-style: bold;
-    font-size: 14px;
+    font-size: 16px;
 }
 
 .k2-tab-button:hover {
@@ -60,7 +60,7 @@
 }
 
 .k2-tab-button #tab_light {
-    top: -3px;
+    top: -5px;
     right: -19px;
     width: auto;
     height: 10px;

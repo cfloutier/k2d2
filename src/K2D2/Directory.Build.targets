@@ -46,7 +46,7 @@
             <!-- Compressing build directory for release -->
             <Message Text="Compressing built plugin folder" Condition="$(ConfigurationName) == Release"/>
             <Delete Condition="$(ConfigurationName) == Release" Files="$(SolutionDir)/dist/$(SolutionName)-$(Version).zip"/>
-            <Exec Condition="$(ConfigurationName) == Release" Command="$(PowerShellExecutable) -Command &quot;&amp; {Push-Location '$(SolutionDir)/dist/$(ConfigurationName)'; Compress-Archive -Path './*' -DestinationPath '$(SolutionDir)/dist/$(SolutionName)-$(Version).zip'; Pop-Location}&quot;"/>
+            <Exec Condition="$(ConfigurationName) == Release" Command="$(PowerShellExecutable) -Command &quot;&amp; {Push-Location '$(SolutionDir)/dist/$(ConfigurationName)'; Compress-Archive -Path './*' -DestinationPath '$(SolutionDir)/releases/$(SolutionName)-$(Version).zip'; Pop-Location}&quot;"/>
 
             <!-- Deploying plugin to game folder -->
             <Message Text="Clean up the game's plugin folder" Condition="$(ConfigurationName) == Deploy Or $(ConfigurationName) == DeployAndRun"/>
@@ -57,7 +57,7 @@
                   <DistFolder Include="$(SolutionDir)/dist/$(ConfigurationName)/BepInEx/**/*.*"/>
             </ItemGroup>
             <Message Text="Deploy plugin to game folder" Condition="$(ConfigurationName) == Deploy Or $(ConfigurationName) == DeployAndRun"/>
-            <Copy Condition="$(ConfigurationName) == Deploy Or $(ConfigurationName) == DeployAndRun" SourceFiles="@(DistFolder)" DestinationFolder="$(KSP2DIR)/BepInEx/%(RecursiveDir)"/>
+            <Copy Condition="$(ConfigurationName) == Deploy Or $(ConfigurationName) == DeployAndRun" SourceFBiles="@(DistFolder)" DestinationFolder="$(KSP2DIR)/BepInEx/%(RecursiveDir)"/>
 
             <!-- Run game after deploy -->
             <Message Text="Deploy plugin and run game" Condition="$(ConfigurationName) == DeployAndRun"/>

@@ -1,6 +1,11 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/Runtime/K2UI/USS/K2UI.uss?fileID=7433441132597879392&amp;guid=d70a8288b6b3eee4a900aa2727eb7499&amp;type=3#K2UI" />
+    <Style src="project://database/Assets/Runtime/K2UI/USS/K2Tabs.uss?fileID=7433441132597879392&amp;guid=51945eb7b64f1ab4986c6d98dc37254e&amp;type=3#K2Tabs" />
     <ui:VisualElement class="main-frame" style="flex-grow: 1;">
         <ui:DropdownField label="Dropdown" index="-1" choices="System.Collections.Generic.List`1[System.String]" />
+        <K2UI.Tabs.TabsBar>
+            <K2UI.Tabs.TabButton lighted="true" active="false" />
+            <K2UI.Tabs.TabButton active="true" lighted="true" />
+        </K2UI.Tabs.TabsBar>
     </ui:VisualElement>
 </ui:UXML>

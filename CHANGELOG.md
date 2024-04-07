@@ -1,4 +1,6 @@
 # v1.0.0
+[Full Documentation](https://github.com/cfloutier/k2d2/wiki)
+
 * UI has been totally rebuilded using Unity Toolkit. 
 bigup to @Munix for the UITK mod (it's now a dependency)
 
@@ -26,6 +28,7 @@ and What is missing
 * Drone : it has not been added in this version, cause I'd like to rework the whole pilot. and I wanted to release this version the sooner. I'll propose it back in a new version
 * Dock : we can't select target using UI : it will be back soon
 * Staging : I've not tested it with this version and içn case of a bug I prefered to remove it temporary. It will be back soon
+
 
 
 # v0.12.3
