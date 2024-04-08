@@ -87,7 +87,7 @@
 }
 
 .k2-tab-button #tab_light.tab_light--lighted {
-    background-image: url('project://database/Assets/Images/Light_Button.png?fileID=2800000&guid=778643882f96ecd47990fd5c8764fd03&type=3#Light_Button');
+    background-image: url('project://database/Assets/Runtime/K2UI/Images/Light_Button.png?fileID=2800000&guid=778643882f96ecd47990fd5c8764fd03&type=3#Light_Button');
     -unity-background-image-tint-color: rgb(33, 183, 0);
 }
 

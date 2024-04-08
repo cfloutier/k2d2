@@ -14,8 +14,8 @@
 @import url('project://database/Assets/Runtime/K2UI/USS/K2Tabs.uss?fileID=7433441132597879392&guid=51945eb7b64f1ab4986c6d98dc37254e&type=3#K2Tabs');
 @import url('project://database/Assets/Runtime/K2UI/USS/ToggleButton.uss?fileID=7433441132597879392&guid=1b6a73cd9e0a617469e5d501d696c7be&type=3#ToggleButton');
 :root {
-    --k2-font-regular: url('project://database/Assets/Fonts/LiberationSans-Regular%20SDF.asset?fileID=11400000&guid=1aa6f9b14a5b16b42ab66d521ba3157c&type=2#LiberationSans-Regular SDF');
-    --k2-font-title: url('project://database/Assets/Fonts/Orbitron-Black%20SDF.asset?fileID=11400000&guid=5239ed64b02a55342a920e51ecef2971&type=2#Orbitron-Black SDF');
+    --k2-font-regular: url('project://database/Assets/Runtime/K2UI/Fonts/LiberationSans-Regular%20SDF.asset?fileID=11400000&guid=1aa6f9b14a5b16b42ab66d521ba3157c&type=2#LiberationSans-Regular SDF');
+    --k2-font-title: url('project://database/Assets/Runtime/K2UI/Fonts/Orbitron-Black%20SDF.asset?fileID=11400000&guid=5239ed64b02a55342a920e51ecef2971&type=2#Orbitron-Black SDF');
     --k2-color-background: rgb(0, 0, 0);
     --k2-color-button-text: rgb(242, 242, 242);
     --k2-color-button-background: rgb(12, 12, 27);
@@ -35,7 +35,6 @@
     border-color: var(--k2-color-border);
     border-top-width: 2px;
 }
-
 
 .unity-button {
     height: 20px;
@@ -129,7 +128,7 @@
 .console {
     font-size: 14px;
     color: rgb(185, 207, 219);
-    -unity-font-definition: url('project://database/Assets/Fonts/Sax%20Mono.asset?fileID=11400000&guid=a6fc3433277ba9741b90d888f9ae4b53&type=2#Sax Mono');
+    -unity-font-definition: url('project://database/Assets/Runtime/K2UI/Fonts/Sax%20Mono.asset?fileID=11400000&guid=a6fc3433277ba9741b90d888f9ae4b53&type=2#Sax Mono');
     -unity-font-style: normal;
     white-space: normal;
     margin-top: 5px;

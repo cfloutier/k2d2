@@ -20,13 +20,14 @@
 }
 
 .toggle-button.checked {
-    background-image: url('project://database/Assets/Images/Light_Button.png?fileID=2800000&guid=778643882f96ecd47990fd5c8764fd03&type=3#Light_Button');
+    background-image: url('project://database/Assets/Runtime/K2UI/Images/Light_Button.png?fileID=2800000&guid=778643882f96ecd47990fd5c8764fd03&type=3#Light_Button');
     -unity-background-image-tint-color: rgb(106, 255, 6);
     color: rgb(0, 0, 0);
+    background-color: rgba(0, 0, 0, 0);
 }
 
 .toggle-button.yellow.checked {
-    background-image: url('project://database/Assets/Images/Light_Button.png?fileID=2800000&guid=778643882f96ecd47990fd5c8764fd03&type=3#Light_Button');
+    background-image: url('project://database/Assets/Runtime/K2UI/Images/Light_Button.png?fileID=2800000&guid=778643882f96ecd47990fd5c8764fd03&type=3#Light_Button');
     -unity-background-image-tint-color: rgb(255, 238, 0);
 }
 
@@ -66,6 +67,7 @@
 
 .toggle-button.checked #icon {
     -unity-background-image-tint-color: rgb(0, 0, 0);
+    background-image: url('project://database/Assets/Runtime/K2UI/Images/gear.png?fileID=2800000&guid=bd484c54c438af246961db5758fe20b6&type=3#gear');
 }
 
 .toggle-button.mini-toggle {
@@ -89,7 +91,7 @@
 }
 
 .toggle-button.mini-toggle #icon {
-    background-image: url('project://database/Assets/Images/gear.png?fileID=2800000&guid=bd484c54c438af246961db5758fe20b6&type=3#gear');
+    background-image: url('project://database/Assets/Runtime/K2UI/Images/gear.png?fileID=2800000&guid=bd484c54c438af246961db5758fe20b6&type=3#gear');
     max-height: none;
     max-width: none;
     position: absolute;

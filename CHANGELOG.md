@@ -20,11 +20,11 @@ Other little things that is new :
 
 * Node : Experimental settings for Node Execution has been moved in an "Experimental" Foldout in the settings
 * Lift : The Lift profile is now a fold out
-* Lift :The planet atmosphere color is visible in the Lift Profile
+* Lift : The planet atmosphere color is visible in the Lift Profile
 * Land : The Landing Pilot have now an option to change the max angle with current speed. The previous value was 5° max and with many Vessels it was far too precise. It's now an option in the ToucDown foldout and it's default value is 30 !
 * Dock :
 
-and What is missing
+and What is missing : 
 * Drone : it has not been added in this version, cause I'd like to rework the whole pilot. and I wanted to release this version the sooner. I'll propose it back in a new version
 * Dock : we can't select target using UI : it will be back soon
 * Staging : I've not tested it with this version and içn case of a bug I prefered to remove it temporary. It will be back soon
