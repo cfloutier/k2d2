@@ -102,7 +102,7 @@
       "url": "https://packages.unity.com"
     },
     "k2ui.controls": {
-      "version": "file:k2ui.controls",
+      "version": "file:K2UI",
       "depth": 0,
       "source": "embedded",
       "dependencies": {}
