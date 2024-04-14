@@ -5,6 +5,9 @@
 		},
 		{
 			"path": "../../../Program Files (x86)/Steam/steamapps/common/Kerbal Space Program 2"
+		},
+		{
+			"path": "src/K2D2.Unity/K2D2.Unity/Packages/K2UI"
 		}
 	],
 	"settings": {}

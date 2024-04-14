@@ -1,4 +1,0 @@
-
-[submodule "src/K2D2.Unity/K2D2.Unity/Packages/K2UI"]
-	path = src/K2D2.Unity/K2D2.Unity/Packages/K2UI
-	url = https://github.com/cfloutier/K2UI.git
