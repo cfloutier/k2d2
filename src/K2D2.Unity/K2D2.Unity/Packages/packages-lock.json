@@ -101,6 +101,12 @@
       },
       "url": "https://packages.unity.com"
     },
+    "k2ui.controls": {
+      "version": "file:k2ui.controls",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "uitkforksp2.controls": {
       "version": "https://github.com/UitkForKsp2/UitkForKsp2.Unity.git",
       "depth": 0,
@@ -350,12 +356,6 @@
         "com.unity.modules.jsonserialize": "1.0.0",
         "com.unity.modules.subsystems": "1.0.0"
       }
-    },
-    "K2UI": {
-      "version": "file:K2UI",
-      "depth": 0,
-      "source": "embedded",
-      "dependencies": {}
     }
   }
 }
